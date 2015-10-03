@@ -1,14 +1,22 @@
 __author__ = 'DGriffith'
+__project__ = 'MORTICIA'
+
+"""
+.. module:: optics
+    :platform: Windows, Unix
+    :synopsis: The optics module includes all code related to imaging optics as spatial and spectral filters. It also
+               includes everything related to light propagation within such imaging optics. It does not include the
+               atmospheric radiative transfer code.
+"""
 
 import numpy as np
 # Import global units registry if it exists
 # from . import ureg, Q_
 
 
-
-def MTF(spf, wvl, fno):
-    '''
-    MTF : Computes the simple (optimally focussed) diffraction Modulation Transfer Function of a prefect lens with an
+def mtf(spf, wvl, fno):
+    """
+    mtf : Computes the simple (optimally focussed) diffraction Modulation Transfer Function of a prefect lens with an
     unobscured circular aperture
     :param spf: Spatial frequencies in the image at which to compute the MTF
     :param wvl: Wavelength in units consistent with the spatial frequencies f
@@ -22,26 +30,27 @@ def MTF(spf, wvl, fno):
     be squeezed out.
 
     :See Also: PMTF, PMTF, PMTFobs
-    '''
+    """
     wvl, spf, fno = np.meshgrid(np.asarray(wvl, dtype=np.float64).ravel(), np.asarray(spf, dtype=np.float64).ravel(),
                                 np.asarray(fno, dtype=np.float64).ravel())
     # Compute the cutoff frequencies
-    Cutoff = 1.0 / (wvl * fno)
+    cutoff = 1.0 / (wvl * fno)
     # Any spatial frequencies above the cutoff are set to the cutoff frequency
-    spf = np.minimum(spf, Cutoff)
+    spf = np.minimum(spf, cutoff)
     phi = np.arccos(fno * spf * wvl)
     csphi = np.cos(phi) * np.sin(phi)
-    theMTF = 2.0 * (phi - csphi) / np.pi
-    return theMTF.squeeze()
+    the_mtf = 2.0 * (phi - csphi) / np.pi
+    return the_mtf.squeeze()
 
-def ACCircle(e, w):
-    '''
-    ACCircle(e,w) - Autocorrelation of a circular aperture of radius e
+
+def ac_circle(e, w):
+    """
+    ac_circle(e,w) - Autocorrelation of a circular aperture of radius e
     Computes the autocorrelation of a circular aperture of radius e with centre-to-centre displacements of w
     :param e: Radius of circle
     :param w: Centre-to-centre displacements at which to compute the autocorrelation
     :return: Autocorrelation magnitude
-    '''
+    """
     e = np.asarray(e, dtype=np.complex128)
     w = np.asarray(w, dtype=np.complex128)
     w = np.minimum(w, 2.0*e) # Calculation only valid up to w = 2 * e
@@ -50,15 +59,15 @@ def ACCircle(e, w):
     return np.abs(auto)
 
 
-def CCCircle(e, w):
-    '''
-    CCCircle(e,w) - Cross correlation of unit circle with circle of radius e.
+def cc_circle(e, w):
+    """
+    cc_circle(e,w) - Cross correlation of unit circle with circle of radius e.
     Computes the cross-correlation of a circular aperture of unit radius at the origin,
     with a circular aperture of radius e, with centre-to-centre displacements of w.
     :param e: Radius of circle to cross-correlate with unit circle (scalar numeric)
     :param w: Centre-to-centre displacements at which to compute the cross-correlation
     :return: Cross-correlation magnitude
-    '''
+    """
     e = np.asarray(e, dtype=np.complex128)
     w = np.asarray(w, dtype=np.complex128)
     # Formula only valid for w between 1-e and 1+e
@@ -69,30 +78,33 @@ def CCCircle(e, w):
                      np.log((w**2.0 - e**2.0 + sigma + 1.0)/(2.0*w)) - sigma/2.0)
     return np.abs(cross)
 
-def MTFobs(spf, wvl, fno, obs=0.0):
-    '''
-    MTF : Computes the optimally focussed diffraction Modulation Transfer Function of a prefect lens with an
+
+def mtf_obs(spf, wvl, fno, obs=0.0):
+    """
+    mtf_obs : Computes the optimally focussed diffraction Modulation Transfer Function of a prefect lens with an
     circular aperture having a centred circular obscuration
     :param spf: Spatial frequencies in the image at which to compute the MTF
     :param wvl: Wavelength in units consistent with the spatial frequencies f
     :param fno: Focal ratio (working focal ratio) of the lens
     :param obs: The obscuration ratio (ratio of obscuration diameter to total aperture diameter)
                 The obs input must be a scalar numeric
-    :return:
-    '''
+    :return: MTF with respect to spatial frequency, wavelength, focal ratio and obscuration ratio
+             Singleton dimensions are squeezed out
+    """
     if obs == 0.0:  # just calculate the unobscured diffraction MTF
-        return MTF(spf, wvl, fno)
+        return mtf(spf, wvl, fno)
 
     # Otherwise mesh things up and do it the hard way
     wvl, spf, fno = np.meshgrid(np.asarray(wvl, dtype=np.float64).ravel(), np.asarray(spf, dtype=np.float64).ravel(),
                                 np.asarray(fno, dtype=np.float64).ravel())
     # Calculate w at each matrix site
     w = 2.0 * fno * spf * wvl
-    theMTF = (ACCircle(1.0, w) - 2.0*CCCircle(obs, w) + ACCircle(obs, w)) / (np.pi*(1.0 - obs**2))
+    theMTF = (ac_circle(1.0, w) - 2.0*cc_circle(obs, w) + ac_circle(obs, w)) / (np.pi*(1.0 - obs**2))
     return np.maximum(theMTF.squeeze(), 0.0)
 
+
 def n_air(wvl, T, P):
-    '''
+    """
     n_air(wvl, T, P) : Returns the refractive index of air computed using the same formula used by ZEMAX
     See the section on Index of Refraction Computation in the Thermal Analysis chapter of the ZEMAX manual.
 
@@ -104,7 +116,7 @@ def n_air(wvl, T, P):
     singleton dimensions.
     Reference :
     F. Kohlrausch, Praktische Physik, 1968, Vol 1, page 408
-    '''
+    """
     wvl = np.array(wvl, dtype=np.float)
     if np.all(wvl >= 100.0):
         wvl = wvl / 1000.0
@@ -112,5 +124,5 @@ def n_air(wvl, T, P):
     # Compute the reference refractive indices across all wavelengths
     n_ref = 1. + (6432.8 + (2949810. * wvl**2) / (146. * wvl**2 - 1) + (25540. * wvl**2) / (41. * wvl**2 - 1.)) * 1e-8
     # Compute the full data set (potentially 3D)
-    n_air = 1. + ((n_ref - 1.) * P) / (1. + (T - 15.) * 3.4785e-3)
-    return np.squeeze(n_air)
+    air_rin = 1. + ((n_ref - 1.) * P) / (1. + (T - 15.) * 3.4785e-3)
+    return np.squeeze(air_rin)
