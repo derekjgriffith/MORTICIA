@@ -1,4 +1,6 @@
 # MORTICIA
+Note : MORTICIA is in the very early stages of development. The following description is based on the desired result.
+## Introduction
 MORTICIA is Monte-carlo Optical Rendering for Theatre Investigations of Capability under the Influence of the Atmosphere, 
 an open-source optical surveillance modelling framework written mainly in Python.
 
@@ -14,7 +16,7 @@ the atmosphere plays a key role in determining the range at which targets can be
  + Statistically valid Monte-carlo simulations of the Detect, Recognition and Identification (DRI) ranges of such targets
  in the theatre of operations.
  
- ## Theatre Climatology
+## Theatre Climatology
  The climatology within the theatre must be taken into account in order to obtain statistically valid results. Some of the
  most important elements are:
  
@@ -25,12 +27,26 @@ the atmosphere plays a key role in determining the range at which targets can be
  In addition, there are certain fixed geometrical aspects relevant to surveillance that are defined by selection of the
  theatre. These include solar/lunar azimuth and elevation statistics and surface topography.
  
- ## Outputs
+## Outputs
  The main output of MORTICIA takes the form of a database of results that define target appearance and DRI, having chosen
  a sensor position and a target position within the theatre at a particular time of day and day of year. The atmospheric 
  conditions can be chosen explicitly or generated randomly on the basis of the theatre climatology.
  
+## Tools
+ MORTICIA tools include utilities for building 
+ + theatre boundaries and climatologies,
+ + theatre topography
+ + target geometry and optical characteristics
+ + sensor characteristics
  
+ 
+## Documentation
+ Code documentation for MORTICIA is generated using [Sphinx](http://sphinx-doc.org).
+ 
+ 
+## Repository
+ The master repository for MORTICIA is publicly hosted on [GitHub](http://www.github.org) at 
+ [https://github.com/derekjgriffith/MORTICIA](https://github.com/derekjgriffith/MORTICIA).
  
  
  
