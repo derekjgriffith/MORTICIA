@@ -6,7 +6,8 @@ __project__ = 'MORTICIA'
     :platform: Windows, Unix
     :synopsis: The optics module includes all code related to imaging optics as spatial and spectral filters. It also
                includes everything related to light propagation within such imaging optics. It does not include the
-               atmospheric radiative transfer code.
+               atmospheric radiative transfer code. Functions related to the optical characteristics of the human
+               eye are included in this module.
 """
 
 import numpy as np
@@ -126,3 +127,58 @@ def n_air(wvl, T, P):
     # Compute the full data set (potentially 3D)
     air_rin = 1. + ((n_ref - 1.) * P) / (1. + (T - 15.) * 3.4785e-3)
     return np.squeeze(air_rin)
+
+
+# Functions related to the human eye, namely contrast transfer function (CTF) and modulation transfer function (MTF)
+def ctf_eye(spf, lum, w, num_eyes=2, formula=1):
+    """
+    ctf_eye : The contrast transfer function of the eye.
+    By default, uses the condensed version of the Barten CTF
+
+    :param spf: spatial frequencies in eye-space in cycles per milliradian (scalar or vector numpy input)
+    :param lum: mean luminance of the viewing area in $cd/m^2$ (scalar or vector numpy input)
+    :param w: the angular width of the viewing area, or the square root of the angular viewing area in square degrees
+    (scalar or vector numpy input)
+    :param num_eyes: The number of eyes used for viewing (2 for binocular viewing or 1 for monocular viewing). The
+    default is num_eyes=2.
+    :param Formula: The formula variant used for the computation. Defaults (formula=1) to the simple formula first
+     published by Barten in SPIE 2003. Other options are formula=11 and formula=14, which are slight variations.
+    :return: The CTF with respect to spf, L and w (up to a 3D numpy array). Singular dimensions are squeezed out
+     using numpy.squeeze().
+    """
+    spf = np.array(spf, dtype=np.float)
+    spf, lum, w = np.meshgrid(spf, lum, w)
+    # Convert spatial frequencies to cycles per degree
+    u = 1000.0 * np.pi * spf / 180.0
+    if formula==1:
+        num = (540.0 * (1.0 + 0.7 / lum)**-0.2)
+        denom = (1.0 + 12.0 / (w  * (1.0 + u / 3.0)))
+        c = 0.06
+        b = 0.3 * (1.0 + 100.0 / lum)**0.15
+        a = num / denom
+        thresh = 1.0 / (a * u * np.exp(-b * u) * np.sqrt(1.0 + c * np.exp(b * u)))
+    elif formula==14:
+        num = (540.0 * (1.0 + 0.7 / lum)**-0.2)
+        denom = (1.0 + 12.0 / (w  * (1.0 + u / 3.0)**2))  # Notice squre on 1+u/3 factor
+        c = 0.06
+        b = 0.3 * (1.0 + 100.0 / lum)**0.15
+        a = num / denom
+        thresh = 1.0 / (a * u * np.exp(-b * u) * np.sqrt(1.0 + c * np.exp(b * u)))
+    elif formula==11:  # A more complex formula that also only uses the viewing size and mean luminance
+        m_opt = np.exp(-0.0016 * u**2 * (1.0 + 100.0 / lum)**0.08)
+        num = 5200.0 * m_opt
+        denom = np.sqrt((1.0 + 144. / w**2 + 0.64 * u**2)*(63. / lum**0.83 + 1.0 / (1.0 - np.exp(-0.02 * u**2))))
+        thresh = denom / num
+    else:  # create array of nans
+        thresh = np.zeros(shape=spf.shape)
+        thresh[:] = np.nan
+    thresh = np.squeeze(thresh)
+    if num_eyes == 1:
+        thresh *= np.sqrt(2.0)
+    thresh[thresh > 1.0] = np.nan # Threshold greater than 1 is meaningless
+    return thresh
+
+
+
+
+
