@@ -16,6 +16,9 @@ Contents:
 Indices and tables
 ==================
 
+Test Heading
+============
+
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
