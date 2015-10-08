@@ -3,7 +3,7 @@ __project__ = 'MORTICIA'
 
 """
 .. module:: optics
-    :platform: Windows, Unix
+    :platform: Windows, Unix, Linux
     :synopsis: The optics module includes all code related to imaging optics as spatial and spectral filters. It also
                includes everything related to light propagation within such imaging optics. It does not include the
                atmospheric radiative transfer code. Functions related to the optical characteristics of the human
@@ -18,7 +18,7 @@ import logging
 
 def mtf(spf, wvl, fno):
     """
-    mtf : Computes the simple (optimally focussed) diffraction Modulation Transfer Function of a prefect lens with an
+    mtf : Computes the simple (optimally focused) diffraction Modulation Transfer Function of a prefect lens with an
     unobscured circular aperture
     :param spf: Spatial frequencies in the image at which to compute the MTF
     :param wvl: Wavelength in units consistent with the spatial frequencies f
