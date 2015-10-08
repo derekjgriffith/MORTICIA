@@ -1,6 +1,9 @@
 __author__ = 'Ari Ramkilowan'
 __project__ = 'MORTICIA'
 
+# My comment for the Merge Test - Ari
+# My comment takes two lines.
+
 """
 .. module:: optics
     :platform: Windows, Unix
