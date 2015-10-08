@@ -18,14 +18,14 @@ import logging
 
 def mtf(spf, wvl, fno):
     """
-    mtf : Computes the simple (optimally focussed) diffraction Modulation Transfer Function of a prefect lens with an
+    Computes the simple (optimally focussed) diffraction Modulation Transfer Function (MTF) of a prefect lens with an
     unobscured circular aperture
+
     :param spf: Spatial frequencies in the image at which to compute the MTF
     :param wvl: Wavelength in units consistent with the spatial frequencies f
     :param fno: Focal ratio (working focal ratio) of the lens
     :return: Modulation Transfer Function, with spatial frequency (spf) varying down columns and wavelength across rows
-
-    If the frequencies are given in cycles per millimetre, the wavelengths must be in mm.
+        If the frequencies are given in cycles per millimetre, the wavelengths must be in mm.
 
     Any of the inputs can be a vector. The spatial frequencies are assigned to the rows of the output array, the
     wavelengths vary from column to column and Fno will vary in the third dimension, but singleton dimensions will
@@ -47,8 +47,9 @@ def mtf(spf, wvl, fno):
 
 def ac_circle(e, w):
     """
-    ac_circle(e,w) - Autocorrelation of a circular aperture of radius e
-    Computes the autocorrelation of a circular aperture of radius e with centre-to-centre displacements of w
+    Autocorrelation of a circular aperture of radius *e*
+    Computes the autocorrelation of a circular aperture of radius e with centre-to-centre displacements of w.
+
     :param e: Radius of circle
     :param w: Centre-to-centre displacements at which to compute the autocorrelation
     :return: Autocorrelation magnitude
@@ -64,9 +65,10 @@ def ac_circle(e, w):
 
 def cc_circle(e, w):
     """
-    cc_circle(e,w) - Cross correlation of unit circle with circle of radius e.
+    Cross correlation of unit circle with circle of radius *e*.
     Computes the cross-correlation of a circular aperture of unit radius at the origin,
     with a circular aperture of radius e, with centre-to-centre displacements of w.
+
     :param e: Radius of circle to cross-correlate with unit circle (scalar numeric)
     :param w: Centre-to-centre displacements at which to compute the cross-correlation
     :return: Cross-correlation magnitude
@@ -85,8 +87,9 @@ def cc_circle(e, w):
 
 def mtf_obs(spf, wvl, fno, obs=0.0):
     """
-    mtf_obs : Computes the optimally focussed diffraction Modulation Transfer Function of a prefect lens with an
-    circular aperture having a centred circular obscuration
+    Computes the optimally focussed diffraction Modulation Transfer Function of a prefect lens with an
+    circular aperture having a centred circular obscuration.
+
     :param spf: Spatial frequencies in the image at which to compute the MTF
     :param wvl: Wavelength in units consistent with the spatial frequencies f
     :param fno: Focal ratio (working focal ratio) of the lens
@@ -109,9 +112,10 @@ def mtf_obs(spf, wvl, fno, obs=0.0):
 
 def atf(wvl, fno, rms_wavefront_error, spf):
     """
-    atf : Compute the MTF degradation factor for a lens operating at the given wavelengths and and with the given
+    Compute the MTF degradation factor for a lens operating at the given wavelengths and and with the given
     focal ratios, RMS wavefront errors at the the specified spatial frequencies in the image plane.
     ATF stands for Aberration Transfer Function.
+
     :param wvl: Wavelengths at which to compute the ATF
     :param fno: Focal ratios at which to compute the ATF
     :param rms_wavefront_error: RMS wavefront error magnitudes at which to compute the ATF
@@ -131,7 +135,7 @@ def atf(wvl, fno, rms_wavefront_error, spf):
 
 def n_air(wvl, temperature, pressure):
     """
-    n_air(wvl, T, P) : Returns the refractive index of air computed using the same formula used by ZEMAX
+    Returns the refractive index of air computed using the same formula used by ZEMAX
     See the section on Index of Refraction Computation in the Thermal Analysis chapter of the ZEMAX manual.
 
     :param wvl:  Wavelength(s) in microns. If all values of wvl exceed 100, then wavelengths are assumed to be in nm
@@ -157,11 +161,11 @@ def n_air(wvl, temperature, pressure):
 # Functions related to the human eye, namely contrast transfer function (CTF) and modulation transfer function (MTF)
 def ctf_eye(spf, lum, w, num_eyes=2, formula=1):
     """
-    ctf_eye : The contrast transfer function of the eye.
+    The contrast transfer function of the human eye.
     By default, uses the condensed version of the Barten CTF
 
     :param spf: spatial frequencies in eye-space in cycles per milliradian (scalar or vector numpy input)
-    :param lum: mean luminance of the viewing area in $cd/m^2$ (scalar or vector numpy input)
+    :param lum: mean luminance of the viewing area in :math:`cd/m^2` (scalar or vector numpy input)
     :param w: the angular width of the viewing area, or the square root of the angular viewing area in square degrees
     (scalar or vector numpy input)
     :param num_eyes: The number of eyes used for viewing (2 for binocular viewing or 1 for monocular viewing). The
