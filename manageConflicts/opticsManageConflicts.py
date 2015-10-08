@@ -5,7 +5,7 @@ __project__ = 'MORTICIA'
 # My comment takes two lines.
 
 """
-.. module:: optical
+.. module:: optical systems
     :platform: Windows, Unix, Linux
     :synopsis: The optics module includes all code related to imaging optics as spatial and spectral filters. It also
                includes everything related to light propagation within such imaging optics. It does not include the
