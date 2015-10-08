@@ -1,4 +1,5 @@
-# MORTICIA
+# MORTICIA - I chose to edit this file (Ari), Derek deleted it. 
+
 Note : MORTICIA is in the very early stages of development. The following description is based on the desired result.
 ## Introduction
 MORTICIA is Monte-carlo Optical Rendering for Theatre Investigations of Capability under the Influence of the Atmosphere, 
