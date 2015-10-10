@@ -154,6 +154,36 @@ def pmtf(spf, wvl, fno, wvl_weights):
     return the_poly_mtf.squeeze()
 
 
+def pmtf_obs(spf, wvl, fno, wvl_weights, obs=0.0):
+    """
+    Compute polychromatic MTF of obscaured lens at given spatial frequencies (in the image plane) for specified wavelengths
+    and wavelength weighting factors. The lens may have a circular obcuration of specific ratio.
+
+    :param spf: Spatial frequencies in the image at which to compute the polychromatic MTF (numpy vector).
+    :param wvl: Wavelength in units consistent with the spatial frequencies **spf** (numpy vector)
+    :param fno: Focal ratio (working focal ratio) of the lens (numpy vector).
+    :param wvl_weights: A numpy vector having the same length as the wvl vector, providing the relative weights of each
+        of the wavelengths.
+    :param obs: Obscuration ratio
+    :return:
+    """
+    if obs == 0.0:  # Just return the unobscured polychromatic MTF
+        return pmtf(spf, wvl, fno, wvl_weights)
+        # size of weights MUST be the same size as the wvl
+    if wvl.size != wvl_weights.size:
+        logging.error('Number of wavelength weights must be equal to number of wavelengths in call to optics.pmtf_obs()')
+    # Tile the weights up to the same size as the meshgridded arrays
+    wvl_weights_1 = np.reshape(wvl_weights, (1, wvl_weights.size, 1))
+    wvl_weights_2 = np.tile(wvl_weights_1, (spf.size, 1, fno.size))
+    # Calculate the obscured, monochromatic MTFs
+    wvl, spf, fno = np.meshgrid(np.asarray(wvl, dtype=np.float64).ravel(), np.asarray(spf, dtype=np.float64).ravel(),
+                                np.asarray(fno, dtype=np.float64).ravel())
+    # Calculate w at each matrix site
+    w = 2.0 * fno * spf * wvl
+    the_mono_mtf = (ac_circle(1.0, w) - 2.0*cc_circle(obs, w) + ac_circle(obs, w)) / (np.pi*(1.0 - obs**2))
+    the_poly_mtf = np.sum(the_mono_mtf * wvl_weights_2, axis=1) / np.sum(wvl_weights_2, axis=1)
+    return the_poly_mtf.squeeze()
+
 def atf(spf, wvl, fno, rms_wavefront_error):
     """
     Compute the MTF degradation factor for a lens operating at the given wavelengths and and with the given
@@ -173,7 +203,7 @@ def atf(spf, wvl, fno, rms_wavefront_error):
 
     .. seealso:: pmtf_obs_wfe
     """
-    rms_wavefront_error = np.max(rms_wavefront_error)  # Force positive
+    rms_wavefront_error = np.abs(rms_wavefront_error)  # Force positive
     if np.max(rms_wavefront_error) > 0.3:
         logging.warning('optics.atf function generally only valid up to RMS wavefront error of 0.3. Called with'
                         'maximum value of %f.', np.max(rms_wavefront_error))
