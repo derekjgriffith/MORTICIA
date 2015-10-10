@@ -15,10 +15,18 @@ import logging
 # Import global units registry if it exists
 # from . import ureg, Q_
 
+# As a general rule, where relevant and present, optical parameters are passed in in the order
+#   spatial frequency (spf), wavelength (wvl), focal ratio (fno) followed by any other parameters.
+# Returned functions of these parameters are generally multi-dimensional numpy arrays with spatial
+# frequencies varying down columns, wavelength varying across rows and focal ratio varying in the depth
+# dimension. However, singleton dimensions are squeezed out using the numpy.squeeze() function. For example,
+# if spf and fno are both vectors, but wvl is a scalar, then spf will vary down columns as before, but fno will
+# vary along rows rather than in the third dimension.
+
 
 def mtf(spf, wvl, fno):
     """
-    Computes the simple (optimally focussed) diffraction Modulation Transfer Function (MTF) of a prefect lens with an
+    Compute the simple (optimally focussed) diffraction Modulation Transfer Function (MTF) of a prefect lens with an
     unobscured circular aperture
 
     :param spf: Spatial frequencies in the image at which to compute the MTF
@@ -47,12 +55,13 @@ def mtf(spf, wvl, fno):
 
 def ac_circle(e, w):
     """
-    Autocorrelation of a circular aperture of radius *e*
-    Computes the autocorrelation of a circular aperture of radius e with centre-to-centre displacements of w.
+    Compute autocorrelation of a circular aperture of radius **e** with centre-to-centre sample
+    displacements of **w**.
 
     :param e: Radius of circle
     :param w: Centre-to-centre displacements at which to compute the autocorrelation
     :return: Autocorrelation magnitude
+
     .. seealso:: optics.cc_circle
     """
     e = np.asarray(e, dtype=np.complex128)
@@ -66,12 +75,13 @@ def ac_circle(e, w):
 def cc_circle(e, w):
     """
     Cross correlation of unit circle with circle of radius *e*.
-    Computes the cross-correlation of a circular aperture of unit radius at the origin,
+    Compute the cross-correlation of a circular aperture of unit radius at the origin,
     with a circular aperture of radius e, with centre-to-centre displacements of w.
 
     :param e: Radius of circle to cross-correlate with unit circle (scalar numeric)
     :param w: Centre-to-centre displacements at which to compute the cross-correlation
     :return: Cross-correlation magnitude
+
     .. seealso:: optics.ac_circle
     """
     e = np.asarray(e, dtype=np.complex128)
@@ -87,16 +97,18 @@ def cc_circle(e, w):
 
 def mtf_obs(spf, wvl, fno, obs=0.0):
     """
-    Computes the optimally focussed diffraction Modulation Transfer Function of a prefect lens with an
-    circular aperture having a centred circular obscuration.
+    Compute the optimally focussed diffraction Modulation Transfer Function of a perfect lens with an
+    circular aperture having a centred circular obscuration. This is the monochromatic MTF computed at
+    a number of discrete given wavelengths.
 
-    :param spf: Spatial frequencies in the image at which to compute the MTF
-    :param wvl: Wavelength in units consistent with the spatial frequencies f
-    :param fno: Focal ratio (working focal ratio) of the lens
-    :param obs: The obscuration ratio (ratio of obscuration diameter to total aperture diameter)
-                The obs input must be a scalar numeric
-    :return: MTF with respect to spatial frequency, wavelength, focal ratio and obscuration ratio
-             Singleton dimensions are squeezed out
+    :param spf: Spatial frequencies in the image at which to compute the MTF (numpy vector).
+    :param wvl: Wavelength in units consistent with the spatial frequencies **spf** (numpy vector)
+    :param fno: Focal ratio (working focal ratio) of the lens (numpy vector).
+    :param obs: The obscuration ratio (ratio of obscuration diameter to total aperture diameter).
+                The obs input must be a scalar numeric.
+    :return: MTF with respect to spatial frequency, wavelength, focal ratio and obscuration ratio.
+             Singleton dimensions are squeezed out.
+
     """
     if obs == 0.0:  # just calculate the unobscured diffraction MTF
         return mtf(spf, wvl, fno)
@@ -110,16 +122,49 @@ def mtf_obs(spf, wvl, fno, obs=0.0):
     return np.maximum(the_mtf.squeeze(), 0.0)
 
 
-def atf(wvl, fno, rms_wavefront_error, spf):
+def pmtf(spf, wvl, fno, wvl_weights):
+    """
+    Compute polychromatic MTF of lens at given spatial frequencies (in the image plane) for specified wavelengths
+    and wavelength weighting factors.
+
+    :param spf: Spatial frequencies in the image at which to compute the polychromatic MTF (numpy vector).
+    :param wvl: Wavelength in units consistent with the spatial frequencies **spf** (numpy vector)
+    :param fno: Focal ratio (working focal ratio) of the lens (numpy vector).
+    :param wvl_weights: A numpy vector having the same length as the wvl vector, providing the relative weights of each
+        of the wavelengths.
+    :return: Polychromatic MTF with respect to spatial frequency, wavelength and focal ratio.
+        Singleton dimensions are squeezed out of the returned numpy array.
+    """
+    # size of weights MUST be the same size as the wvl
+    if wvl.size != wvl_weights.size:
+        logging.error('Number of wavelength weights must be equal to number of wavelengths in call to optics.pmtf()')
+    # Tile the weights up to the same size as the meshgridded arrays
+    wvl_weights_1 = np.reshape(wvl_weights, (1, wvl_weights.size, 1))
+    wvl_weights_2 = np.tile(wvl_weights_1, (spf.size, 1, fno.size))
+    wvl, spf, fno = np.meshgrid(np.asarray(wvl, dtype=np.float64).ravel(), np.asarray(spf, dtype=np.float64).ravel(),
+                                np.asarray(fno, dtype=np.float64).ravel())
+    # Compute the cutoff frequencies
+    cutoff = 1.0 / (wvl * fno)
+    # Any spatial frequencies above the cutoff are set to the cutoff frequency
+    spf = np.minimum(spf, cutoff)
+    phi = np.arccos(fno * spf * wvl)
+    csphi = np.cos(phi) * np.sin(phi)
+    the_mono_mtf = 2.0 * (phi - csphi) / np.pi
+    the_poly_mtf = np.sum(the_mono_mtf * wvl_weights_2, axis=1) / np.sum(wvl_weights_2, axis=1)
+    return the_poly_mtf.squeeze()
+
+
+def atf(spf, wvl, fno, rms_wavefront_error):
     """
     Compute the MTF degradation factor for a lens operating at the given wavelengths and and with the given
     focal ratios, RMS wavefront errors at the the specified spatial frequencies in the image plane.
     ATF stands for Aberration Transfer Function.
 
+    :param spf: Spatial frequencies in the image plane at which to compute the ATF. Spatial frequencies must be in
+        reciprocal units to wavelengths i.e. if wavelengths are in mm, spatial frequencies must be in cycles per mm.
     :param wvl: Wavelengths at which to compute the ATF
     :param fno: Focal ratios at which to compute the ATF
-    :param rms_wavefront_error: RMS wavefront error magnitudes at which to compute the ATF
-    :param spf: Spatial frequencies in the image plane at which to compute the ATF
+    :param rms_wavefront_error: RMS wavefront error magnitudes (in waves) at which to compute the ATF
     :return: A numpy array with
 
     Reference : Shannon, R.R., Handbook of Optics, Volume 1, 2nd Edition, Chapter 35 - Optical
@@ -128,22 +173,37 @@ def atf(wvl, fno, rms_wavefront_error, spf):
 
     .. seealso:: pmtf_obs_wfe
     """
+    rms_wavefront_error = np.max(rms_wavefront_error)  # Force positive
     if np.max(rms_wavefront_error) > 0.3:
         logging.warning('optics.atf function generally only valid up to RMS wavefront error of 0.3. Called with'
                         'maximum value of %f.', np.max(rms_wavefront_error))
+    wvl, spf, fno, rms_wavefront_error = np.meshgrid(np.asarray(wvl, dtype=np.float64).ravel(),
+                                                     np.asarray(spf, dtype=np.float64).ravel(),
+                                                     np.asarray(fno, dtype=np.float64).ravel(),
+                                                     np.asarray(rms_wavefront_error, dtype=np.float64).ravel())
+    # Find the cutoff frequencies
+    cutoff = 1.0 / (fno * wvl)
+    # Compute the spatial frequencies as a fraction of the cutoff
+    nu = spf / cutoff
+    # Compute the ATF according to Shannon
+    the_atf = 1.0 - ((rms_wavefront_error / 0.18)**2.0) * (1.0 - 4.0 * (nu - 0.5)**2.0)
+    # Values above 1.0 are not possible, so set those to 1.0
+    the_atf[the_atf > 1.0] = 1.0
+    return the_atf.squeeze()
 
 
 def n_air(wvl, temperature, pressure):
     """
-    Returns the refractive index of air computed using the same formula used by ZEMAX
+    Return the refractive index of air computed using the same formula used by ZEMAX
     See the section on Index of Refraction Computation in the Thermal Analysis chapter of the ZEMAX manual.
 
     :param wvl:  Wavelength(s) in microns. If all values of wvl exceed 100, then wavelengths are assumed to be in nm
     :param temperature: Temperature in Celsius.
     :param pressure: Relative air pressure (atmospheres, with 1 atm = 101 325 Pa).
     :return: This function returns a matrix with wvl varying from row to row, temperature varying from column to column
-    and pressure varying in the depth dimension. The returned matrix is subject to np.squeeze() to remove any
-    singleton dimensions.
+        and pressure varying in the depth dimension. The returned matrix is subject to np.squeeze() to remove any
+        singleton dimensions.
+
     Reference :
     F. Kohlrausch, Praktische Physik, 1968, Vol 1, page 408
     """
@@ -155,23 +215,26 @@ def n_air(wvl, temperature, pressure):
     n_ref = 1. + (6432.8 + (2949810. * wvl**2) / (146. * wvl**2 - 1) + (25540. * wvl**2) / (41. * wvl**2 - 1.)) * 1e-8
     # Compute the full data set (potentially 3D)
     air_rin = 1. + ((n_ref - 1.) * pressure) / (1. + (temperature - 15.) * 3.4785e-3)
-    return np.squeeze(air_rin)
+    return air_rin.squeeze()
+
+
+
 
 
 # Functions related to the human eye, namely contrast transfer function (CTF) and modulation transfer function (MTF)
 def ctf_eye(spf, lum, w, num_eyes=2, formula=1):
     """
-    The contrast transfer function of the human eye.
+    Compute the contrast transfer function of the human eye.
     By default, uses the condensed version of the Barten CTF
 
-    :param spf: spatial frequencies in eye-space in cycles per milliradian (scalar or vector numpy input)
-    :param lum: mean luminance of the viewing area in :math:`cd/m^2` (scalar or vector numpy input)
+    :param spf: spatial frequencies in eye-space in cycles per milliradian (scalar or vector numpy array input)
+    :param lum: mean luminance of the viewing area in :math:`cd/m^2` (scalar or vector numpy array input)
     :param w: the angular width of the viewing area, or the square root of the angular viewing area in square degrees
-    (scalar or vector numpy input)
+        (scalar or vector numpy input).
     :param num_eyes: The number of eyes used for viewing (2 for binocular viewing or 1 for monocular viewing). The
-    default is num_eyes=2.
+        default is num_eyes=2.
     :param formula: The formula variant used for the computation. Defaults (formula=1) to the simple formula first
-     published by Barten in SPIE 2003. Other options are formula=11 and formula=14, which are slight variations.
+        published by Barten in SPIE 2003. Other options are formula=11 and formula=14, which are slight variations.
     :return: The CTF with respect to spf, lum and w (up to a 3D numpy array). Singular dimensions are squeezed out
      using numpy.squeeze().
     """
