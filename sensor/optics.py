@@ -232,12 +232,14 @@ def atf(spf, wvl, fno, rms_wavefront_error):
 def patf(spf, wvl, fno, rms_wavefront_error, wvl_weights):
     """
     Compute the polychromatic aberration transfer function
-    :param spf:
-    :param wvl:
-    :param fno:
-    :param rms_wavefront_error:
-    :param wvl_weights:
-    :return:
+    :param spf: Spatial frequencies in the image plane at which to compute the ATF. Spatial frequencies must be in
+        reciprocal units to wavelengths i.e. if wavelengths are in mm, spatial frequencies must be in cycles per mm.
+    :param wvl: Wavelengths at which to compute the ATF
+    :param fno: Focal ratios at which to compute the ATF
+    :param rms_wavefront_error: RMS wavefront error magnitudes (in waves) at which to compute the ATF
+    :param wvl_weights: A numpy vector having the same length as the wvl vector, providing the relative weights of each
+        of the wavelengths.
+    :return: Polychromatic Aberration Transfer Function in a numpy array.
 
     .. seealso:: optics.atf
     """
@@ -250,8 +252,8 @@ def patf(spf, wvl, fno, rms_wavefront_error, wvl_weights):
     if wvl.size != wvl_weights.size:
         logging.error('Number of wavelength weights must be equal to number of wavelengths in call to optics.pmtf_obs()')
     # Tile the weights up to the same size as the meshgridded arrays
-    wvl_weights_1 = np.reshape(wvl_weights, (1, wvl_weights.size, 1))
-    wvl_weights_2 = np.tile(wvl_weights_1, (spf.size, 1, fno.size))
+    wvl_weights_1 = np.reshape(wvl_weights, (1, wvl_weights.size, 1, 1))
+    wvl_weights_2 = np.tile(wvl_weights_1, (spf.size, 1, fno.size, rms_wavefront_error.size))
     rms_wavefront_error = np.abs(rms_wavefront_error)  # Force positive
     if np.max(rms_wavefront_error) > 0.3:
         logging.warning('optics.atf function generally only valid up to RMS wavefront error of 0.3. Called with'
@@ -267,6 +269,7 @@ def patf(spf, wvl, fno, rms_wavefront_error, wvl_weights):
     # Values above 1.0 are not possible, so set those to 1.0
     the_poly_atf[the_poly_atf > 1.0] = 1.0
     return the_poly_atf.squeeze()
+
 
 
 def pmtf_obs_wfe(spf, wvl, fno, rms_wavefront_error, wvl_weights, obs=0.0):
