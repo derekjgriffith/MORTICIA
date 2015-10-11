@@ -136,13 +136,16 @@ def pmtf(spf, wvl, fno, wvl_weights):
         Singleton dimensions are squeezed out of the returned numpy array.
     """
     # size of weights MUST be the same size as the wvl
+    wvl = np.asarray(wvl, dtype=np.float64).ravel()
+    wvl_weights = np.asarray(wvl_weights, dtype=np.float64).ravel()
+    spf = np.asarray(spf, dtype=np.float64).ravel()
+    fno = np.asarray(fno, dtype=np.float64).ravel()
     if wvl.size != wvl_weights.size:
         logging.error('Number of wavelength weights must be equal to number of wavelengths in call to optics.pmtf()')
     # Tile the weights up to the same size as the meshgridded arrays
     wvl_weights_1 = np.reshape(wvl_weights, (1, wvl_weights.size, 1))
     wvl_weights_2 = np.tile(wvl_weights_1, (spf.size, 1, fno.size))
-    wvl, spf, fno = np.meshgrid(np.asarray(wvl, dtype=np.float64).ravel(), np.asarray(spf, dtype=np.float64).ravel(),
-                                np.asarray(fno, dtype=np.float64).ravel())
+    wvl, spf, fno = np.meshgrid(wvl, spf, fno)
     # Compute the cutoff frequencies
     cutoff = 1.0 / (wvl * fno)
     # Any spatial frequencies above the cutoff are set to the cutoff frequency
@@ -165,8 +168,13 @@ def pmtf_obs(spf, wvl, fno, wvl_weights, obs=0.0):
     :param wvl_weights: A numpy vector having the same length as the wvl vector, providing the relative weights of each
         of the wavelengths.
     :param obs: Obscuration ratio
-    :return:
+    :return: Polychromatic obscured MTF with respect to spatial frequency, wavelength and focal ratio.
+        Singleton dimensions are squeezed out of the returned numpy array.
     """
+    wvl = np.asarray(wvl, dtype=np.float64).ravel()
+    wvl_weights = np.asarray(wvl_weights, dtype=np.float64).ravel()
+    spf = np.asarray(spf, dtype=np.float64).ravel()
+    fno = np.asarray(fno, dtype=np.float64).ravel()
     if obs == 0.0:  # Just return the unobscured polychromatic MTF
         return pmtf(spf, wvl, fno, wvl_weights)
         # size of weights MUST be the same size as the wvl
@@ -176,8 +184,7 @@ def pmtf_obs(spf, wvl, fno, wvl_weights, obs=0.0):
     wvl_weights_1 = np.reshape(wvl_weights, (1, wvl_weights.size, 1))
     wvl_weights_2 = np.tile(wvl_weights_1, (spf.size, 1, fno.size))
     # Calculate the obscured, monochromatic MTFs
-    wvl, spf, fno = np.meshgrid(np.asarray(wvl, dtype=np.float64).ravel(), np.asarray(spf, dtype=np.float64).ravel(),
-                                np.asarray(fno, dtype=np.float64).ravel())
+    wvl, spf, fno = np.meshgrid(wvl, spf, fno)
     # Calculate w at each matrix site
     w = 2.0 * fno * spf * wvl
     the_mono_mtf = (ac_circle(1.0, w) - 2.0*cc_circle(obs, w) + ac_circle(obs, w)) / (np.pi*(1.0 - obs**2))
@@ -195,13 +202,13 @@ def atf(spf, wvl, fno, rms_wavefront_error):
     :param wvl: Wavelengths at which to compute the ATF
     :param fno: Focal ratios at which to compute the ATF
     :param rms_wavefront_error: RMS wavefront error magnitudes (in waves) at which to compute the ATF
-    :return: A numpy array with
+    :return: A numpy array with the aberration transfer function.
 
     Reference : Shannon, R.R., Handbook of Optics, Volume 1, 2nd Edition, Chapter 35 - Optical
     Specifications. "This is an approximation, however, and it becomes progressively less accurate as
     the amount of the rms wavefront error exceeds about 0.18 wavelength."
 
-    .. seealso:: pmtf_obs_wfe
+    .. seealso:: optics.pmtf_obs_wfe
     """
     rms_wavefront_error = np.abs(rms_wavefront_error)  # Force positive
     if np.max(rms_wavefront_error) > 0.3:
@@ -220,6 +227,72 @@ def atf(spf, wvl, fno, rms_wavefront_error):
     # Values above 1.0 are not possible, so set those to 1.0
     the_atf[the_atf > 1.0] = 1.0
     return the_atf.squeeze()
+
+
+def patf(spf, wvl, fno, rms_wavefront_error, wvl_weights):
+    """
+    Compute the polychromatic aberration transfer function
+    :param spf:
+    :param wvl:
+    :param fno:
+    :param rms_wavefront_error:
+    :param wvl_weights:
+    :return:
+
+    .. seealso:: optics.atf
+    """
+    wvl = np.asarray(wvl, dtype=np.float64).ravel()
+    wvl_weights = np.asarray(wvl_weights, dtype=np.float64).ravel()
+    spf = np.asarray(spf, dtype=np.float64).ravel()
+    fno = np.asarray(fno, dtype=np.float64).ravel()
+    rms_wavefront_error = np.asarray(rms_wavefront_error, dtype=np.float64).ravel()
+    # size of weights MUST be the same size as the wvl
+    if wvl.size != wvl_weights.size:
+        logging.error('Number of wavelength weights must be equal to number of wavelengths in call to optics.pmtf_obs()')
+    # Tile the weights up to the same size as the meshgridded arrays
+    wvl_weights_1 = np.reshape(wvl_weights, (1, wvl_weights.size, 1))
+    wvl_weights_2 = np.tile(wvl_weights_1, (spf.size, 1, fno.size))
+    rms_wavefront_error = np.abs(rms_wavefront_error)  # Force positive
+    if np.max(rms_wavefront_error) > 0.3:
+        logging.warning('optics.atf function generally only valid up to RMS wavefront error of 0.3. Called with'
+                        'maximum value of %f.', np.max(rms_wavefront_error))
+    wvl, spf, fno, rms_wavefront_error = np.meshgrid(wvl, spf, fno, rms_wavefront_error)
+    # Find the cutoff frequencies
+    cutoff = 1.0 / (fno * wvl)
+    # Compute the spatial frequencies as a fraction of the cutoff
+    nu = spf / cutoff
+    # Compute the ATF according to Shannon
+    the_mono_atf = 1.0 - ((rms_wavefront_error / 0.18)**2.0) * (1.0 - 4.0 * (nu - 0.5)**2.0)
+    the_poly_atf = np.sum(the_mono_atf * wvl_weights_2, axis=1) / np.sum(wvl_weights_2, axis=1)
+    # Values above 1.0 are not possible, so set those to 1.0
+    the_poly_atf[the_poly_atf > 1.0] = 1.0
+    return the_poly_atf.squeeze()
+
+
+def pmtf_obs_wfe(spf, wvl, fno, rms_wavefront_error, wvl_weights, obs=0.0):
+    """
+    Compute polychromatic modulation transfer function for lens having circular pupil with centred circular obscuration
+    and with aberrations expressed in terms of RMS wavefront error.
+
+    :param spf: Spatial frequencies in the image at which to compute the polychromatic MTF (numpy vector).
+    :param wvl: Wavelength in units consistent with the spatial frequencies **spf** (numpy vector)
+    :param fno: Focal ratio (working focal ratio) of the lens (numpy vector).
+    :param rms_wavefront_error:
+    :param wvl_weights: A numpy vector having the same length as the wvl vector, providing the relative weights of each
+        of the wavelengths.
+    :param obs: Obscuration ratio (centred circular obscuration in circular pupil), ratio of obscuration diameter to
+        aperture diameter.
+    :return: Numpy array with polychromatic modulation transfer function.
+
+    .. seealso:: optics.atf, optics.pmtf_obs, optics.pmtf
+    """
+    # Compute the obscured polychromatic MTF
+    poly_mtf_obs = pmtf_obs(spf, wvl, fno, wvl_weights, obs)
+    # Compute the polychromatic aberration transfer function
+    poly_atf = patf(spf, wvl, fno, rms_wavefront_error, wvl_weights)
+    # Compute the return result as an element-wise product
+    poly_mtf_obs_wfe = poly_mtf_obs * poly_atf
+    return poly_mtf_obs_wfe.squeeze()
 
 
 def n_air(wvl, temperature, pressure):
