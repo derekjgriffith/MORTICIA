@@ -191,6 +191,7 @@ def pmtf_obs(spf, wvl, fno, wvl_weights, obs=0.0):
     the_poly_mtf = np.sum(the_mono_mtf * wvl_weights_2, axis=1) / np.sum(wvl_weights_2, axis=1)
     return the_poly_mtf.squeeze()
 
+
 def atf(spf, wvl, fno, rms_wavefront_error):
     """
     Compute the MTF degradation factor for a lens operating at the given wavelengths and and with the given
@@ -250,21 +251,28 @@ def patf(spf, wvl, fno, rms_wavefront_error, wvl_weights):
     rms_wavefront_error = np.asarray(rms_wavefront_error, dtype=np.float64).ravel()
     # size of weights MUST be the same size as the wvl
     if wvl.size != wvl_weights.size:
-        logging.error('Number of wavelength weights must be equal to number of wavelengths in call to optics.pmtf_obs()')
+        logging.error('Number of wavelength weights must be equal to number of wavelengths in call to optics.patf()')
+    if wvl.size != rms_wavefront_error.size:
+        logging.error('Number of wavefront error elements must be equal to number of wavelengths in'
+                      ' call to optics.patf()')
     # Tile the weights up to the same size as the meshgridded arrays
-    wvl_weights_1 = np.reshape(wvl_weights, (1, wvl_weights.size, 1, 1))
-    wvl_weights_2 = np.tile(wvl_weights_1, (spf.size, 1, fno.size, rms_wavefront_error.size))
+    wvl_weights_1 = np.reshape(wvl_weights, (1, wvl_weights.size, 1))
+    wvl_weights_2 = np.tile(wvl_weights_1, (spf.size, 1, fno.size))
+    # Also tile up the wavefront errors to the same size
     rms_wavefront_error = np.abs(rms_wavefront_error)  # Force positive
+    rms_wavefront_error_1 = np.reshape(rms_wavefront_error, (1, rms_wavefront_error.size, 1))
+    rms_wavefront_error_2 = np.tile(rms_wavefront_error_1, (spf.size, 1, fno.size))
+
     if np.max(rms_wavefront_error) > 0.3:
         logging.warning('optics.atf function generally only valid up to RMS wavefront error of 0.3. Called with'
                         'maximum value of %f.', np.max(rms_wavefront_error))
-    wvl, spf, fno, rms_wavefront_error = np.meshgrid(wvl, spf, fno, rms_wavefront_error)
+    wvl, spf, fno = np.meshgrid(wvl, spf, fno)
     # Find the cutoff frequencies
     cutoff = 1.0 / (fno * wvl)
     # Compute the spatial frequencies as a fraction of the cutoff
     nu = spf / cutoff
     # Compute the ATF according to Shannon
-    the_mono_atf = 1.0 - ((rms_wavefront_error / 0.18)**2.0) * (1.0 - 4.0 * (nu - 0.5)**2.0)
+    the_mono_atf = 1.0 - ((rms_wavefront_error_2 / 0.18)**2.0) * (1.0 - 4.0 * (nu - 0.5)**2.0)
     the_poly_atf = np.sum(the_mono_atf * wvl_weights_2, axis=1) / np.sum(wvl_weights_2, axis=1)
     # Values above 1.0 are not possible, so set those to 1.0
     the_poly_atf[the_poly_atf > 1.0] = 1.0
@@ -322,9 +330,6 @@ def n_air(wvl, temperature, pressure):
     # Compute the full data set (potentially 3D)
     air_rin = 1. + ((n_ref - 1.) * pressure) / (1. + (temperature - 15.) * 3.4785e-3)
     return air_rin.squeeze()
-
-
-
 
 
 # Functions related to the human eye, namely contrast transfer function (CTF) and modulation transfer function (MTF)
