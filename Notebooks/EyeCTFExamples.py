@@ -24,7 +24,7 @@ import optics
 # <codecell>
 
 SpatialFrequencies = Q_(np.arange(0.0, 4.0, 0.01), '1/milliradian')  # Spatial frequencies up to 4 cycles per mrad
-Luminance = Q_([0.1, 1, 10, 100, 1000], 'candela/m**2')  # Luminance levvels
+Luminance = Q_([0.1, 1, 10, 100, 1000], 'candela/m**2')  # Luminance levels
 DisplaySize = Q_(10, 'degrees')  # Square display of width 10 degrees at eye
 theCTF = optics.ctf_eye(SpatialFrequencies, Luminance, DisplaySize, 2)  # Compute CTF for 2 eyes at all
                                                                  # spatial frequencies and luminance levels.

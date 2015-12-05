@@ -25,8 +25,7 @@ import logging
 
 
 def mtf(spf, wvl, fno):
-    """
-    Compute the simple (optimally focussed) diffraction Modulation Transfer Function (MTF) of a prefect lens with an
+    """ Compute the simple (optimally focussed) diffraction Modulation Transfer Function (MTF) of a prefect lens with an
     unobscured circular aperture
 
     :param spf: Spatial frequencies in the image at which to compute the MTF
@@ -54,8 +53,7 @@ def mtf(spf, wvl, fno):
 
 
 def ac_circle(e, w):
-    """
-    Compute autocorrelation of a circular aperture of radius **e** with centre-to-centre sample
+    """ Compute autocorrelation of a circular aperture of radius **e** with centre-to-centre sample
     displacements of **w**.
 
     :param e: Radius of circle
@@ -73,8 +71,7 @@ def ac_circle(e, w):
 
 
 def cc_circle(e, w):
-    """
-    Cross correlation of unit circle with circle of radius *e*.
+    """ Cross correlation of unit circle with circle of radius *e*.
     Compute the cross-correlation of a circular aperture of unit radius at the origin,
     with a circular aperture of radius e, with centre-to-centre displacements of w.
 
@@ -96,8 +93,7 @@ def cc_circle(e, w):
 
 
 def mtf_obs(spf, wvl, fno, obs=0.0):
-    """
-    Compute the optimally focussed diffraction Modulation Transfer Function of a perfect lens with an
+    """ Compute the optimally focussed diffraction Modulation Transfer Function of a perfect lens with an
     circular aperture having a centred circular obscuration. This is the monochromatic MTF computed at
     a number of discrete given wavelengths.
 
@@ -123,8 +119,7 @@ def mtf_obs(spf, wvl, fno, obs=0.0):
 
 
 def pmtf(spf, wvl, fno, wvl_weights):
-    """
-    Compute polychromatic MTF of lens at given spatial frequencies (in the image plane) for specified wavelengths
+    """ Compute polychromatic MTF of lens at given spatial frequencies (in the image plane) for specified wavelengths
     and wavelength weighting factors.
 
     :param spf: Spatial frequencies in the image at which to compute the polychromatic MTF (numpy vector).
@@ -158,8 +153,7 @@ def pmtf(spf, wvl, fno, wvl_weights):
 
 
 def pmtf_obs(spf, wvl, fno, wvl_weights, obs=0.0):
-    """
-    Compute polychromatic MTF of obscaured lens at given spatial frequencies (in the image plane) for specified wavelengths
+    """ Compute polychromatic MTF of obscaured lens at given spatial frequencies (in the image plane) for specified wavelengths
     and wavelength weighting factors. The lens may have a circular obcuration of specific ratio.
 
     :param spf: Spatial frequencies in the image at which to compute the polychromatic MTF (numpy vector).
@@ -193,8 +187,7 @@ def pmtf_obs(spf, wvl, fno, wvl_weights, obs=0.0):
 
 
 def atf(spf, wvl, fno, rms_wavefront_error):
-    """
-    Compute the MTF degradation factor for a lens operating at the given wavelengths and and with the given
+    """ Compute the MTF degradation factor for a lens operating at the given wavelengths and and with the given
     focal ratios, RMS wavefront errors at the the specified spatial frequencies in the image plane.
     ATF stands for Aberration Transfer Function.
 
@@ -231,8 +224,7 @@ def atf(spf, wvl, fno, rms_wavefront_error):
 
 
 def patf(spf, wvl, fno, rms_wavefront_error, wvl_weights):
-    """
-    Compute the polychromatic aberration transfer function
+    """ Compute the polychromatic aberration transfer function
     :param spf: Spatial frequencies in the image plane at which to compute the ATF. Spatial frequencies must be in
         reciprocal units to wavelengths i.e. if wavelengths are in mm, spatial frequencies must be in cycles per mm.
     :param wvl: Wavelengths at which to compute the ATF
@@ -281,8 +273,7 @@ def patf(spf, wvl, fno, rms_wavefront_error, wvl_weights):
 
 
 def pmtf_obs_wfe(spf, wvl, fno, rms_wavefront_error, wvl_weights, obs=0.0):
-    """
-    Compute polychromatic modulation transfer function for lens having circular pupil with centred circular obscuration
+    """ Compute polychromatic modulation transfer function for lens having circular pupil with centred circular obscuration
     and with aberrations expressed in terms of RMS wavefront error.
 
     :param spf: Spatial frequencies in the image at which to compute the polychromatic MTF (numpy vector).
@@ -307,8 +298,7 @@ def pmtf_obs_wfe(spf, wvl, fno, rms_wavefront_error, wvl_weights, obs=0.0):
 
 
 def n_air(wvl, temperature, pressure):
-    """
-    Return the refractive index of air computed using the same formula used by ZEMAX
+    """ Return the refractive index of air computed using the same formula used by ZEMAX
     See the section on Index of Refraction Computation in the Thermal Analysis chapter of the ZEMAX manual.
 
     :param wvl:  Wavelength(s) in microns. If all values of wvl exceed 100, then wavelengths are assumed to be in nm
@@ -334,8 +324,7 @@ def n_air(wvl, temperature, pressure):
 
 # Functions related to the human eye, namely contrast transfer function (CTF) and modulation transfer function (MTF)
 def ctf_eye(spf, lum, w, num_eyes=2, formula=1):
-    """
-    Compute the contrast transfer function of the human eye.
+    """ Compute the contrast transfer function of the human eye.
     By default, uses the condensed version of the Barten CTF
 
     :param spf: spatial frequencies in eye-space in cycles per milliradian (scalar or vector numpy array input)
@@ -380,6 +369,30 @@ def ctf_eye(spf, lum, w, num_eyes=2, formula=1):
         thresh *= np.sqrt(2.0)
     thresh[thresh > 1.0] = np.nan  # Threshold greater than 1 is meaningless
     return thresh
+
+
+class Lens:
+    """ The Lens class encapsulates information and behaviour related to imaging lens systems.
+    The chief characteristics of a lens are its spectral through-field , through-focus and
+    through-frequency MTF, as well as the spectral transmission.
+    In order to transform spatial frequencies in the image plane to angular spatial frequencies
+    in object space, the effective focal length of the lens (efl) must also be known.
+    The basic lens model is a near diffraction-limited system with a centred circular aperture
+    having a centred circular obscuration (which may be absent), where the MTF is constant over
+    the entire field of view (FOV).
+    The most basic lens model implemented here, from which more complicated lens models inherit
+    their properties have the following attributes
+    :param efl: The effective focal length in mm
+    :param fno: The focal ratio (or f-number) which is th ratio of focal length to aperture diameter
+    :param spectrans: The spectral transmission function, a function of wavelength in microns
+    :param obs: The obscuration ratio, being the ratio of the circular obscuration diameter to the
+    full circular aperture aperture diameter
+    :param spectno: The spectral T-number, being the equivalent unobscured circular aperture
+    of unity (perfect) transmission
+    :param mtf: The MTF of the lens, which can be calculated from inputs,
+    """
+    def __init__(self, efl, fno, spectrans, obs=0.0, wfe=0.0, fmt=1):
+        pass
 
 
 
