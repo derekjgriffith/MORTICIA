@@ -1,5 +1,7 @@
 __author__ = 'DGriffith, ARamkilowan'
 import numpy as np
+import StringIO
+import matplotlib.pyplot as plt
 
 """ This module provides much of functionality related radiometry required by MORTICIA.
 Included here is functionality for :
@@ -12,7 +14,8 @@ _micronsymbol = u"\u00B5"
 _micrometres = _micronsymbol + u"m"
 
 
-def srfgen(center, fwhm, n=101, shape='gauss', yedge=0.001, wvmin=None, wvmax=None, centerflat=0.0, oob=np.nextafter(0.0, 1), peakval=1.0):
+def srfgen(center, fwhm, n=101, shape='gauss', yedge=0.001, wvmin=None, wvmax=None, centerflat=0.0,
+           oob=np.nextafter(0.0, 1), peakval=1.0, units='nm'):
     """ Generate a spectral filter or spectral response function of various shapes
     :param center: center wavelength of the filter in nm
     :param fwhm: full width at half maximum of the filter  in nm
@@ -24,8 +27,9 @@ def srfgen(center, fwhm, n=101, shape='gauss', yedge=0.001, wvmin=None, wvmax=No
     :param centerflat: opens a flat region in the centre of filter having a width of centerflat nm
     :param oob: out-of-band leakage, default 0.0, must be <= yedge
     :param peakval: simply scales the peak of the filter function to this value (default 1.0)
+    :param units: spectral axis units, either 'nm', 'cm^-1' or 'um' (nanometers, wavenumber per cm or microns)
     will be returned
-    :return: wvl, y, wvn (wavelengths, filter values and wavenumbers)
+    :return: wvlnm, y, wvn, wvlum (wavelengths in nm, filter values, wavenumbers per cm and wavelengths in microns)
     """
     if n < 3:
         raise ValueError('Input parameter n to rad.srfgen must be greater than 3.')
@@ -76,18 +80,31 @@ def srfgen(center, fwhm, n=101, shape='gauss', yedge=0.001, wvmin=None, wvmax=No
     if centerflat:  # Open a central flat region simply by shifting the wvl-coordinates
         wvl = np.hstack((wvl[:n2+1]-centerflat/2.0, wvl[n2:]+centerflat/2.0))
         y = np.hstack((y[:n2+1], y[n2:]))
-    if wvmin and wvmin < wvl[0]:
+    if wvmin and wvmin < wvl[0]:  # insert a point at lower wavelength extremity
         wvl = np.hstack((wvmin, wvl))
         y = np.hstack((oob, y))
-    if wvmax and wvmax > wvl[-1]:
+    if wvmax and wvmax > wvl[-1]:  # insert a point at upper wavelength extremity
         wvl = np.hstack((wvl, wvmax))
         y = np.hstack((y, oob))
-    wvn = 1.0e7 / wvl
+    if units == 'cm^-1':  # wavenumber per cm
+        wvn = wvl
+        wvlnm = 1.0e7 / wvn
+        wvlum = wvlnm / 1000.0
+    elif units == 'nm':  # wavelength in nm
+        wvlnm = wvl
+        wvn = 1.0e7 / wvlnm
+        wvlum = wvlnm / 1000.0
+    elif units == 'um' or units == _micrometres:  # wavelength in microns
+        wvlum = wvl
+        wvlnm = 1000.0 * wvlum
+        wvn = 1e7 / wvlnm
+    else:
+        raise ValueError('Wavelength/wavenumber units for MODTRAN .flt definitions must be "cm^1", "nm" or "um".')
     y *= peakval  # finally, scale the peak value
-    return wvl, y, wvn
+    return wvlnm, y, wvn, wvlum
 
 
-def tophat(center, fwhm, delta=0.0, wvmin=None, wvmax=None, oob=0.0):
+def tophat(center, fwhm, delta=0.0, wvmin=None, wvmax=None, oob=0.0, units='nm'):
     """ Return tophat/box filter defined by 6 points
     Can also specify out-of-band values and extreme limits, which adds upper and lower bound points
     :param center: center wavelength in nm
@@ -96,7 +113,9 @@ def tophat(center, fwhm, delta=0.0, wvmin=None, wvmax=None, oob=0.0):
     :param wvmin: minimum wavelength to reach default None
     :param wvmax: maximum wavelength to reach default None
     :param oob: out-of-band leakage
-    :return: wvl, y, wvn
+    :param units: spectral axis units, either 'nm', 'cm^-1' or 'um' (nanometers, wavenumber per cm or microns)
+    will be returned
+    :return: wvlnm, y, wvn, wvlum (wavelengths in nm, filter values, wavenumbers per cm and wavelengths in microns)
     """
     edgelo = center - fwhm/2.0
     edgehi = center + fwhm/2.0
@@ -112,8 +131,21 @@ def tophat(center, fwhm, delta=0.0, wvmin=None, wvmax=None, oob=0.0):
     if wvmax:
         wvl = np.hstack((wvl, wvmax))
         y = np.hstack((y, oob))
-    wvn = 1.0e7 / wvl
-    return wvl, y, wvn
+    if units == 'cm^-1':  # wavenumber per cm
+        wvn = wvl
+        wvlnm = 1.0e7 / wvn
+        wvlum = wvlnm / 1000.0
+    elif units == 'nm':  # wavelength in nm
+        wvlnm = wvl
+        wvn = 1.0e7 / wvlnm
+        wvlum = wvlnm / 1000.0
+    elif units == 'um' or units == _micrometres:  # wavelength in microns
+        wvlum = wvl
+        wvlnm = 1000.0 * wvlum
+        wvn = 1e7 / wvlnm
+    else:
+        raise ValueError('Wavelength/wavenumber units for MODTRAN .flt definitions must be "cm^1", "nm" or "um".')
+    return wvl, y, wvn, wvlum
 
 
 class flt:
@@ -138,8 +170,8 @@ class flt:
         :param units: Spectral coordinate units for the filter, 'nm', 'um' or 'cm^-1'
         :param filterheaders: List of strings, one header for each filter/SRF in the set.
         :param filters: A list of numpy arrays. Each list element must comprise a 2-column numpy array with the
-        spectral coordinate (wavelength or wavenumber) in the first column and the filter magnitude in the second
-        column.
+        spectral coordinate (wavelength in nm ire micron or wavenumer per cm) in the first column and the filter
+        magnitude in the second column.
         :param centres: rather than provide filters, the inputs to rad.srfgen can be provided, this is a list of center
         wavelengths in nm
         :param fwhms: list of full width at half maximum in nm
@@ -169,13 +201,25 @@ class flt:
         #if len(filterheaders) != len(filters):
         #    raise ValueError('Number of filterheaders must equal number of filters when creating .flt objects.')
         self.filterheaders = filterheaders
-        self.filters = filters
         if filters and centers:
             raise ValueError('Do not give both explicit filter definitions and rad.srfgen definitions for rad.flt.')
         nfilters = len(filterheaders)
+        self.nfilters = nfilters
         if filters:
             if len(filters) != nfilters:
                 raise ValueError('Number of filters must equal number of filter headers in rad.flt instantiation.')
+            self.filters = filters  # now fix the filters into the correct column order
+            for ifilt in range(nfilters):
+                if self.unitsheader == 'W':  # wavenumber
+                    # column order is wvnm, y, wvn, wvum
+                    self.filters[ifilt] = np.vstack((1.0e7/filters[ifilt][:,0], filters[ifilt][:,1],
+                                                     filters[ifilt][:,0], 1.0e7/filters[ifilt][:,0] / 1000.0)).T
+                elif self.unitsheader == 'N':
+                    self.filters[ifilt] = np.vstack((filters[ifilt][:,0], filters[ifilt][:,1],
+                                                     1.0e7 / filters[ifilt][:,0], filters[ifilt][:,0]/1000.0)).T
+                elif self.unitsheader == 'M':
+                    self.filters[ifilt] = np.vstack((1000.0*filters[ifilt][:,0], filters[ifilt][:,1],
+                                                     1.0e10 /filters[ifilt][:,0], filters[ifilt][:,0])).T
             return  # filter definitions have been given explicitly
         # Check that parameters are scalar or multiply them up to size
         checklist = ['centers', 'fwhms', 'shapes', 'yedges', 'centerflats', 'peakvals', 'oobs']
@@ -186,26 +230,26 @@ class flt:
             use_wvmins = wvmins * nfilters
         elif wvmins and len(wvmins) != nfilters:
             raise ValueError('Number of wvmins must equal number of filterheaders in rad.flt instantiation')
-         # Check wvmaxs
+        else:
+            use_wvmins = [[] for ie in range(nfilters)]
+        # Check wvmaxs
         use_filters = []
         if wvmaxs and len(wvmaxs) == 1:
             use_wvmaxs = wvmaxs * nfilters
         elif wvmaxs and len(wvmaxs) != nfilters:
             raise ValueError('Number of wvmaxs must equal number of filterheaders in rad.flt instantiation')
-        for ifilt in range(1, len(filterheaders)):
-            wvl, y, wvn = srfgen(center=use_centers[ifilt], fwhm=use_fwhms[ifilt], shape=use_shapes[ifilt],
+        else:
+            use_wvmaxs = [[] for ie in range(nfilters)]
+        for ifilt in range(nfilters):
+            wvl, y, wvn, wu = srfgen(center=use_centers[ifilt], fwhm=use_fwhms[ifilt], shape=use_shapes[ifilt],
                                  yedge=use_yedges[ifilt], wvmin=use_wvmins[ifilt], wvmax=use_wvmaxs[ifilt],
                                  centerflat=use_centerflats[ifilt], oob=use_oobs[ifilt], peakval=use_peakvals[ifilt])
-            use_filters.append(np.vstack((wvl, y, wvn)).T)
-
+            use_filters.append(np.vstack((wvl, y, wvn, wu)).T)
         self.filters = use_filters
-
-
 
         # Convert the wavelengths to microns or wavenumbers
 
-
-    def readflt(filename):
+    def read(filename):
         """ Read a .flt format spectral band filter definitions file (MODTRAN format)
         :param filename:
         :return:
@@ -218,8 +262,55 @@ class flt:
         selfrep = self.fileheader + '\n'
         for (ifilt, filter) in enumerate(self.filters):
             selfrep = selfrep + self.filterheaders[ifilt] + '\n'
+            # Create a string buffer
+            strbuff = StringIO.StringIO()
+            # column ordering depends on original unit specification
+            if self.unitsheader == 'W':
+                np.savetxt(strbuff, self.filters[ifilt][:,[2,1,0]])
+            elif self.unitsheader == 'N':
+                np.savetxt(strbuff, self.filters[ifilt][:,[0,1,2]])
+            elif self.unitsheader == 'M':
+                np.savetxt(strbuff, self.filters[ifilt][:,[3,1,2]])
+            selfrep = selfrep + strbuff.getvalue()
+            strbuff.close()  # delete the buffer
         return selfrep
 
+    def write(self, filename=None):
+        """ Write a MODTRAN-style .flt file for this filter/SRF set
+        :param filename: Optional filename without extension. If not given, the filter name will be used with
+        extension .flt
+        :return: None
+        """
+        selfrep = self.__repr__()
+        # Write the string to the file
+        if filename:
+            filename = filename + '.flt'
+        else:
+            filename = self.filename
+        with open(filename, 'wt') as fltfile:
+            fltfile.write(selfrep)
+
+    def plot(self):
+        """ Plot a MODTRAN-style set of filter/SRF curves
+        :return: None
+        """
+        plt.hold(True)
+        for ifilt in range(self.nfilters):
+            if self.unitsheader == 'W':
+                plt.plot(self.filters[ifilt][:, 2], self.filters[ifilt][:,1])
+            elif self.unitsheader == 'N':
+                plt.plot(self.filters[ifilt][:, 0], self.filters[ifilt][:,1])
+            elif self.unitsheader == 'M':
+                plt.plot(self.filters[ifilt][:, 3], self.filters[ifilt][:,1])
+        plt.title(self.name)
+        plt.ylabel('Spectral Response/Transmission')
+        if self.units == 'cm^-1':
+            plt.xlabel('Wavenumber [' + self.units + ']')
+        else:
+            plt.xlabel('Wavelength [' + self.units + ']')
+        plt.legend(self.filterheaders, loc=0)
+        plt.grid()
+        plt.hold(False)
 
 
 
