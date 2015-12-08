@@ -2,16 +2,24 @@ __author__ = 'DGriffith, ARamkilowan'
 import numpy as np
 import StringIO
 import matplotlib.pyplot as plt
+import easygui  # for simple file/open dialogs and such
+import re
 
 """ This module provides much of functionality related radiometry required by MORTICIA.
 Included here is functionality for :
 1) Interfacing to radiative transfer codes.
 2) Dealing with spectral filtering and convolution
 3) Creation, reading and writing of MODTRAN-style flt filter/SRF definitions
+
+TO DO : Check that MODTRAN can read the .flt files created using the Flt class here
 """
 
-_micronsymbol = u"\u00B5"
-_micrometres = _micronsymbol + u"m"
+#_micronsymbol = u"\u00B5"
+# _micrometres = _micronsymbol + u"m"
+
+# Micron symbol can be encoded in UTF-8 with
+_micronsymbol = u'\xB5'.encode('UTF-8')
+_micrometres = _micronsymbol + "m"
 
 
 def srfgen(center, fwhm, n=101, shape='gauss', yedge=0.001, wvmin=None, wvmax=None, centerflat=0.0,
@@ -148,8 +156,8 @@ def tophat(center, fwhm, delta=0.0, wvmin=None, wvmax=None, oob=0.0, units='nm')
     return wvl, y, wvn, wvlum
 
 
-class flt:
-    @staticmethod
+class Flt:
+    @staticmethod  # Some input parameter checking for Flt constructor
     def checkparm(parmname, parm, nfilters):
         if len(parm) == 1:
             parm *= nfilters
@@ -166,18 +174,20 @@ class flt:
         a list of filter definitions are provided for use with rad.srfgen().
         If not empty, inputs centers through to oobs must be either scalar or have the same number of list elements as
         the filterheaders list. If scalar, the value will be replicated up to the number of filterheader values.
-        :param name: Name of the set of filters
+        :param name: Name of the set of filters. If the filterheaders input to this constructor function
+        is empty, an attempt will be made to read the data from a file called name + '.flt'
         :param units: Spectral coordinate units for the filter, 'nm', 'um' or 'cm^-1'
         :param filterheaders: List of strings, one header for each filter/SRF in the set.
         :param filters: A list of numpy arrays. Each list element must comprise a 2-column numpy array with the
-        spectral coordinate (wavelength in nm ire micron or wavenumer per cm) in the first column and the filter
+        spectral coordinate (wavelength in nm or micron or wavenumber per cm) in the first column and the filter
         magnitude in the second column.
         :param centres: rather than provide filters, the inputs to rad.srfgen can be provided, this is a list of center
         wavelengths in nm
         :param fwhms: list of full width at half maximum in nm
         :param shapes: list of strings providing the shapes of the filters (see rad.srfgen for alternatives)
         :param yedges: list of yedge values (see rad.srfgen)
-        :param centerflats: list of centerflat values (see rad.srfgen)
+        :param centerflats: list of centerflat values (see rad.srfgen). Note that giving a centerflat value adds this
+        amount ot the fwhm of the filters (broadens the resulting width to centerflat + fwhm)
         :param peakvals: list of peak values of the filters
         :param wvmins: list of minimum wavelength limits in nm
         :param wvmaxs: list of maximum wavelength limits in nm
@@ -187,7 +197,14 @@ class flt:
         :return: MODTRAN-style filter/SRF object
         """
         self.name = name
-        self.filename = name + '.flt'
+        if name[-4:].lower() != '.flt':
+            self.filename = name + '.flt'
+        else:
+            self.filename = name
+        if not filterheaders:  # Attempt to read from a file
+            self.read(self.filename)
+            return
+        # Check the units input and set up the file header
         if units == 'cm^-1':
             self.unitsheader = 'W' # wavenumber
         elif units == 'nm':
@@ -224,7 +241,7 @@ class flt:
         # Check that parameters are scalar or multiply them up to size
         checklist = ['centers', 'fwhms', 'shapes', 'yedges', 'centerflats', 'peakvals', 'oobs']
         for checkitem in checklist:
-            checkcall = 'use_' + checkitem + ' = flt.checkparm("' + checkitem + '", ' + checkitem + ', nfilters)'
+            checkcall = 'use_' + checkitem + ' = Flt.checkparm("' + checkitem + '", ' + checkitem + ', nfilters)'
             exec(checkcall)
         if wvmins and len(wvmins) == 1:
             use_wvmins = wvmins * nfilters
@@ -249,14 +266,72 @@ class flt:
 
         # Convert the wavelengths to microns or wavenumbers
 
-    def read(filename):
+    def read(self, filename, name='Unknown'):
         """ Read a .flt format spectral band filter definitions file (MODTRAN format)
         :param filename:
-        :return:
+        :return: object of class Flt, if the file is a well-formatted MODTRAN-style .flt file
         """
-    def __repr__(self):
+        isfloatnum = '^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$'  # regular expression to match a floating point number
+        if filename == '.flt':
+            filename = easygui.fileopenbox(msg='Please select a .flt file.', filetypes=["*.flt"])
+        self.filename = filename
+        self.name = name
+        with open(filename, 'rt') as fltfil:
+            fileheader = fltfil.readline()
+            self.unitsheader = fileheader[0].upper()  # Must be W, N or M for wavenumber per cm, nm or microns
+            if self.unitsheader == 'W':
+                self.units = 'cm^-1'
+            elif self.unitsheader == 'N':
+                self.units = 'nm'
+            elif self.unitsheader == 'M':
+                self.units = _micrometres
+            else:
+                raise ValueError('File header for ' + filename + ' does not start with N, M or W as required for'
+                                                                 ' .flt files.')
+            self.name = fileheader[1:].strip()
+            self.fileheader = fileheader.strip()
+            self.filterheaders = []
+            self.filters = []
+            ifilter = 0  # count the filters
+            nexlin = fltfil.readline()
+            while nexlin:
+                self.filterheaders.append(nexlin.strip())
+                nexlin = fltfil.readline()
+                if not nexlin:
+                    break  # all done
+                slin = nexlin.split()  # split line up into a list of tokens at whitespace
+                thisfilterdata = np.array([])
+                self.filters.append([])
+                # if all tokens match
+                while all([re.match(isfloatnum, tok) for tok in slin]):  # all tokens a are numbers-this is a line of data
+                    # accumulate the data
+                    thelinedata = np.array(slin).astype(np.float)
+                    if len(thisfilterdata) != 0:
+                        thisfilterdata = np.vstack((thisfilterdata, thelinedata))
+                    else:
+                        thisfilterdata = thelinedata
+                    nexlin = fltfil.readline()
+                    if not nexlin:
+                        break  # all done
+                    slin = nexlin.split()  # split line up into a list of tokens at whitespace
+                # process the accumulated data depending on what the units are
+                if self.unitsheader == 'W':
+                    self.filters[ifilter] = np.vstack((1e7/thisfilterdata[:,1], thisfilterdata[:,1],
+                                                       thisfilterdata[:,0], 1e9/thisfilterdata[:,1])).T
+                elif self.unitsheader == 'N':
+                    self.filters[ifilter] = np.vstack((thisfilterdata[:,0], thisfilterdata[:,1],
+                                                       1e7/thisfilterdata[:,0], thisfilterdata[:,0]/1000.0)).T
+                elif self.unitsheader == 'M':
+                    self.filters[ifilter] = np.vstack((thisfilterdata[:,0]*1000.0, thisfilterdata[:,1],
+                                                       1e9/thisfilterdata[:,0], thisfilterdata[:,0])).T
+                ifilter += 1
+            self.nfilters = ifilter
+
+
+    def __repr__(self, format='  %f'):
         """ Return representation of a .flt MODTRAN-style spectral filter or SRF. This is the same as the format in
          the .flt file is written.
+        :param format: format in which to present the numeric data, default is '  %f'
         :return: File representation of .flt object
         """
         selfrep = self.fileheader + '\n'
@@ -266,25 +341,27 @@ class flt:
             strbuff = StringIO.StringIO()
             # column ordering depends on original unit specification
             if self.unitsheader == 'W':
-                np.savetxt(strbuff, self.filters[ifilt][:,[2,1,0]])
+                np.savetxt(strbuff, self.filters[ifilt][:,[2,1,0]], fmt=format)
             elif self.unitsheader == 'N':
-                np.savetxt(strbuff, self.filters[ifilt][:,[0,1,2]])
+                np.savetxt(strbuff, self.filters[ifilt][:,[0,1,2]], fmt=format)
             elif self.unitsheader == 'M':
-                np.savetxt(strbuff, self.filters[ifilt][:,[3,1,2]])
+                np.savetxt(strbuff, self.filters[ifilt][:,[3,1,2]], fmt=format)
             selfrep = selfrep + strbuff.getvalue()
             strbuff.close()  # delete the buffer
         return selfrep
 
-    def write(self, filename=None):
+    def write(self, filename=None, format='  %f'):
         """ Write a MODTRAN-style .flt file for this filter/SRF set
         :param filename: Optional filename without extension. If not given, the filter name will be used with
+        :param format: Format specifier as for np.savetext for writing the data, default is '  %f'
         extension .flt
         :return: None
         """
-        selfrep = self.__repr__()
+        selfrep = self.__repr__(format=format)
         # Write the string to the file
         if filename:
-            filename = filename + '.flt'
+            if filename[-4:].lower != '.flt':
+                filename = filename + '.flt'
         else:
             filename = self.filename
         with open(filename, 'wt') as fltfile:
@@ -308,7 +385,8 @@ class flt:
             plt.xlabel('Wavenumber [' + self.units + ']')
         else:
             plt.xlabel('Wavelength [' + self.units + ']')
-        plt.legend(self.filterheaders, loc=0)
+        if len(self.filterheaders) <= 12:
+            plt.legend(self.filterheaders, loc=2)
         plt.grid()
         plt.hold(False)
 
