@@ -179,14 +179,14 @@ class Case():
             self.phi = np.array(tokens).astype(np.float)
         if keyword == 'output_user':
             self.output_user = [token.replace('lambda', 'wvl') for token in tokens]  # lambda is a keyword
-            self.output_user = [token.replace('wavenumber', 'wvn') for token in tokens]  # abbreviate wavenumber
-            self.output_user = [token.replace('wavelength', 'wvl') for token in tokens]  # abbreviate wavelength
+            self.output_user = [token.replace('wavenumber', 'wvn') for token in self.output_user]  # abbreviate wavenumber
+            self.output_user = [token.replace('wavelength', 'wvl') for token in self.output_user]  # abbreviate wavelength
             self.fluxline = []
         if keyword == 'polradtran' and tokens[0] == 'nstokes':
             self.nstokes = int(tokens[1])
             self.prepare_for_polradtran()
         if keyword == 'zout' or keyword == 'zout_sea':  # Determine number of output levels
-            if all([re.match(Case.re_isSingleOutputLevel, token) for token in tokens]):
+            if all([re.match(Case.re_isSingleOutputLevel, token.lower()) for token in tokens]):
                 self.n_zout = len(tokens)
             else:  # Number of output levels is not known, will have to auto-detect
                 self.n_zout = '?'
@@ -405,11 +405,14 @@ class Case():
             fields = self.output_user
         else:
             fields = self.fluxline
-        linecount = fluxdata.shape
-        if len(linecount) == 1:  # Need some special cases to deal with single line output files
+        datashape = fluxdata.shape
+        if len(datashape) == 1:  # Need some special cases to deal with single line output files
             linecount = 1
         else:
-            linecount = linecount[1]
+            linecount = datashape[1]
+        if len(datashape) == 2:
+            if datashape[1] != len(fields):  # number of fields in data does not match number of fields
+                print datashape[1], ' not the same as ', len(fields) #TODO try to deal with this
         if fields[0] == 'zout':  # output level is the primary variable
             if self.n_zout == '?':  # Unknown number of output levels
                 # Try just using the number of unique values in the first column
@@ -473,6 +476,14 @@ class Case():
         elif (self.n_phi == 0 and self.n_umu == 0) or self.solver == 'sslidar':  # There are no radiance blocks
             fluxdata = np.loadtxt(filename)
             self.distribute_flux_data(fluxdata)
+        elif self.n_phi == 0:
+            fluxdata = np.loadtext(filename)
+            # Take away the radiance data
+            raddata = fluxdata[len(self.fluxline):]
+            fluxdata = fluxdata[:len(self.fluxline)]
+            self.raddata = raddata
+            self.fluxdata = fluxdata
+            self.distribute_flux_data(fluxdata)
         else:  # radiance blocks  #TODO polradtran has different format
             rad3D = []  # full 3D radiance data is here (umu, phi and wavelength)
             with open(filename, 'rt') as uvOUT:
@@ -490,7 +501,7 @@ class Case():
                         phicheck = np.array(philine.split()).astype(np.float)
                     # Read the lines for the umu values
                     raddata = []
-                    for i_umuline in range(self.n_umu):
+                    for i_umuline in range(self.n_umu):  #TODO this is wrong if there is no phi specified - see manual
                         umuline = uvOUT.readline()
                         radline = np.array(umuline.split()).astype(np.float)
                         if len(raddata) > 0:
@@ -507,8 +518,8 @@ class Case():
             self.rad3D = rad3D  # all the data
             self.phi_check = phicheck
             self.u0u = rad3D[:,1]
-            if self.u0u.shape[1] / self.n_wvl > 1:  #TODO problem here with single wavelength data
-                self.u0u = self.u0u.reshape((self.n_umu, self.n_wvl, -1), order='F')
+            #if self.u0u.shape[1] / self.n_wvl > 1:  #TODO problem here with single wavelength data
+            #    self.u0u = self.u0u.reshape((self.n_umu, self.n_wvl, -1), order='F')
             if rad3D.ndim == 3:
                 self.uu = rad3D[:,2:,:]
                 # If there are multiple zout levels, must reshape self.uu
