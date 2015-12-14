@@ -37,10 +37,13 @@ The relevant code here is taken from libRadtran version 2.0
 
 """
 
+_isfloatnum = '^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$'  # regular expression for matching tokens to floating point
+
 import writeLex  # This imports all the libradtran option definitions
 import os
 import easygui  # For file open dialogs
 import numpy as np
+import re
 
 uvsOptions = writeLex.loadOptions()  # Load all options into a global dictionary of option specifications.
 
@@ -54,8 +57,9 @@ class Case():
     """
     # Definitions of some of the possible uvspec output variables
     uvspecOutVars = {
-        'lambda': 'Output wavelengths [nm]',
-        'wavelength': 'Presumably also wavelengths [nm]',
+        'lambda': 'Output wavelengths [nm]',  # Cannot be used in Python because lambda is a keyword use 'wvl
+        'wavenumber': 'Wavenumber [cm^1]',  # abbreviate to wvn
+        'wvl': 'Short name for wavelengths [nm]',
         'edir': 'Direct beam irradiance (same unit as extraterrestrial irradiance, e.g mW/m^2/nm if using the "atlas3" spectrum in the /data/solar_flux/ directory.)',
         'edn': 'Diffuse downwelling irradiance, i.e. total minus direct beam (same unit as edir).',
         'eup': 'Diffuse upwelling irradiance (same unit as edir).',
@@ -92,6 +96,11 @@ class Case():
         'heat': 'Heating rate in K/day'
     }
 
+    # Define a regexp for determining if a token of the zout keyword is a single level
+    # It is a single level if it is either a floating point number or the words sur, cpt or toa (for surface,
+    # cold point tropopause and top of atmosphere)
+    re_isSingleOutputLevel = '(^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$)|(^sur$)|(^cpt$)|(^toa$)'
+
     def __init__(self, casename='', filename=None, optiondict=None):
         """ A libRadtran/uvspec case
         :param casename: A user-defined name for the libRadtran/uvspec case
@@ -108,15 +117,25 @@ class Case():
         self.optionobj = []
         self.filorigin = []
         self.solver = 'disort'  # default, modified b y the rte_solver option keyword
-        self.fluxline = ['lambda', 'edir', 'edn', 'eup', 'uavgdir', 'uavgdn', 'uavgup']  # default output
+        self.fluxline = ['wvl', 'edir', 'edn', 'eup', 'uavgdir', 'uavgdn', 'uavgup']  # default output
+        self.wvl = []  # wavelengths, wavenumbers and output levels difficult to ascertain to start with
+        self.wvn = []
+        self.zout = []
         self.output_user = ''  # set with the output_user keyword
         self.output_quantity = '' # default is radiances and irradiances
         self.n_umu = 0
+        self.umu = []  # zenith angles for radiance calculations
         self.n_phi = 0
+        self.phi = []  # azimuth angles for radiance calculations
+        self.n_zout = 1  # Assume only one output level, unless zout keyword is used.
+        self.n_wvl = '?'  # number of wavelengths is difficult to ascertain to start with
         self.nstokes = 1  # default number of stokes parameters for polradtran
         if filename is not None:
-            if filename[-4:].lower() != '.inp':
-                filename = filename + '.INP'
+            if not filename:
+                # Open a dialog to get the filename
+                filename = easygui.fileopenbox(msg='Please select a uvspec input file.', filetypes=["*.INP"])
+            elif filename[-4:].lower() != '.inp':
+                filename += '.INP'
             data, line_nos, path = Case.read(path=filename)
             self.infile = path
             self.outfile = self.infile[:-4] + '.OUT'
@@ -129,6 +148,7 @@ class Case():
                 self.optionobj.append(uvsOptions[self.options[optnumber]])  # The option object
                 # Make any possible preparations for occurance of this keyword
                 self.prepare_for(option[0],option[1:])
+        #TODO Build the case from the dictionary ?
 
 
     def prepare_for(self, keyword, tokens):
@@ -141,33 +161,42 @@ class Case():
         # Prepare for different output formats, depending on the solver
         if keyword == 'rte_solver':
             self.solver = tokens[0]  # First token gives the solver
-        if any([self.solver == thesolver for thesolver in ['disort', 'disort2', 'sdisort',
-                                                           'spsdisort', 'fdisort1', 'fdisort2']]):
-            self.fluxline = ['lambda', 'edir', 'edn', 'eup', 'uavgdir', 'uavgdn', 'uavgup']  # default output
-        elif any([self.solver == thesolver for thesolver in ['twostr','rodents']]):
-            self.fluxline = ['lambda', 'edir', 'edn', 'eup', 'uavg']
-        elif self.solver == 'polradtran':
-            self.prepare_for_polradtran()
-        elif self.solver == 'sslidar':
-            self.fluxline = ['center_of_range', 'number_of_photons', 'lidar-ratio']
+            if any([self.solver == thesolver for thesolver in ['disort', 'disort2', 'sdisort',
+                                                               'spsdisort', 'fdisort1', 'fdisort2']]):
+                self.fluxline = ['wvl', 'edir', 'edn', 'eup', 'uavgdir', 'uavgdn', 'uavgup']  # default output
+            elif any([self.solver == thesolver for thesolver in ['twostr','rodents']]):
+                self.fluxline = ['wvl', 'edir', 'edn', 'eup', 'uavg']
+            elif self.solver == 'polradtran':
+                self.prepare_for_polradtran()
+            elif self.solver == 'sslidar':
+                self.fluxline = ['center_of_range', 'number_of_photons', 'lidar_ratio']
         # Prepare for radiances
         if keyword == 'umu':
             self.n_umu = len(tokens)  # The number of umu values
+            self.umu = np.array(tokens).astype(np.float)
         if keyword == 'phi':
             self.n_phi = len(tokens)
+            self.phi = np.array(tokens).astype(np.float)
         if keyword == 'output_user':
-            self.output_user = tokens
+            self.output_user = [token.replace('lambda', 'wvl') for token in tokens]  # lambda is a keyword
+            self.output_user = [token.replace('wavenumber', 'wvn') for token in tokens]  # abbreviate wavenumber
+            self.output_user = [token.replace('wavelength', 'wvl') for token in tokens]  # abbreviate wavelength
             self.fluxline = []
         if keyword == 'polradtran' and tokens[0] == 'nstokes':
             self.nstokes = int(tokens[1])
             self.prepare_for_polradtran()
+        if keyword == 'zout' or keyword == 'zout_sea':  # Determine number of output levels
+            if all([re.match(Case.re_isSingleOutputLevel, token) for token in tokens]):
+                self.n_zout = len(tokens)
+            else:  # Number of output levels is not known, will have to auto-detect
+                self.n_zout = '?'
 
     def prepare_for_polradtran(self):
         """ Prepare for output from the polradtran solver
         :return:
         """
         stokescomps = ['I', 'Q', 'U', 'V']
-        self.fluxline = ['lambda']
+        self.fluxline = ['wvl']
         for istokes in range(self.nstokes):
             self.fluxline.extend(['down_flux' + stokescomps[istokes], 'up_flux' + stokescomps[istokes]])
 
@@ -179,14 +208,20 @@ class Case():
         '''
 
     @staticmethod
-    def read(path='', includes=[]):
+    def read(path, includes=[]):
         """ Reads a libRadtran input file. This will construct the libRadtran case from the contents of the .INP file
         Adapted from code by libRadtran developers.
 
+        :param path: File path from which to read the uvspec input
+        :param includes: List of files already included (for recursion purposes)
+        :return: data, line_nos, path
+          where data is the full data in the file with includes, line_nos shows the source of every line and
+          path is the path to the main input file.
+
         """
-        if not path:
-            # Open a dialog
-            path = easygui.fileopenbox(msg='Please select a uvspec input file.', filetypes=["*.INP"])
+        # Get the full path
+        path = os.path.abspath(path)
+        folder = os.path.dirname(path)
         with open(path, 'rt') as INPfile:
             data = INPfile.readlines()
         data = [line.split() for line in data]
@@ -231,17 +266,20 @@ class Case():
         this_includes = []
         for line in xrange(len(data)):
             if (data[line + buff][0] == "include" and len(data[line + buff]) == 2):
-                this_includes.append(data.pop(line + buff)[1])
+                include_file = data.pop(line + buff)[1]
+                include_file = os.path.normpath(os.path.join(folder, include_file))
+                this_includes.append(include_file)
                 line_nos.pop(line + buff)
                 buff -= 1
         for include_path in this_includes:
-            if not os.path.exists(path):
+            if not os.path.exists(include_path):
                 msg = "Include file '%s' in '%s' does not exist." % (include_path, path)
-                # self.error_txt.append(msg)
+                raise IOError(msg)
                 #print " " * len(includes) + msg
             # If the file has been included before.
             elif (this_includes + includes).count(include_path) != 1:
                 msg = "File %s included more than once in %s. Please fix this." % (include_path, path)
+                raise IOError(msg)
                 #self.error_txt.append(msg)
                 #print " " * len(includes) + msg
             else:
@@ -345,7 +383,7 @@ class Case():
 
         'output sum'
 
-        The keyword diretive 'header' should not be used at all. This
+        The keyword directive 'header' should not be used at all. This
         produces some header information in the output that will cause
         errors. An error is issued of the 'header' keyword is used in the
         input.
@@ -353,10 +391,72 @@ class Case():
         """
         pass
 
+    def distribute_flux_data(self, fluxdata):
+        """ Distribute flux data read from uvspec output file to various fields
 
+        :param fluxdata: Flux (irradiance) data read from uvspec output file
+        :return:
+        """
+        # First split the data amongst output levels or output wavelengths/wavenumbers
+        # We assume and handle only those cases of output_user where the primary variable is
+        # zout, lambda (wvl) or wavenumber (wvn)
+
+        if self.output_user:  # distribute to user-defined output variables
+            fields = self.output_user
+        else:
+            fields = self.fluxline
+        linecount = fluxdata.shape
+        if len(linecount) == 1:  # Need some special cases to deal with single line output files
+            linecount = 1
+        else:
+            linecount = linecount[1]
+        if fields[0] == 'zout':  # output level is the primary variable
+            if self.n_zout == '?':  # Unknown number of output levels
+                # Try just using the number of unique values in the first column
+                self.n_zout = len(np.unique(fluxdata[:,0]))
+            fluxdata = fluxdata.reshape((self.n_zout, -1, linecount), order='F')
+        elif fields[0] == 'wvl' or fields[0] == 'wvn':  # wavelength/wavenumber is the primary variable
+            if self.n_zout == '?':  # Don't know number of output levels
+                self.n_wvl = len(np.unique(fluxdata[:,0]))  # Try to determine number of wavelengths/wavenumbers
+                fluxdata = fluxdata.reshape((self.n_wvl, -1, linecount), order='F')
+            else:
+                fluxdata = fluxdata.reshape((-1, self.n_zout, linecount), order='F')
+        else:  # Assume secondary variable is zout
+            fluxdata = fluxdata.reshape((-1, self.n_zout, linecount), order='F')  #TODO provide warning or something
+        self.fluxdata = fluxdata  # retain the flux data in the instance
+        if linecount == 1:
+            for (ifield, field) in enumerate(fields):
+                setattr(self, field, np.squeeze(fluxdata[ifield]))
+        else:
+            for (ifield, field) in enumerate(fields):
+                setattr(self, field, np.squeeze(fluxdata[:, :, ifield]))
+        # Clean up zout and wavelength/wavenumber data
+        self.zout = np.unique(self.zout)
+        if len(self.zout) > 0:
+            self.n_zout = len(self.zout)
+        self.wvn = np.unique(self.wvn)
+        self.wvl = np.unique(self.wvl)
+        if len(self.wvl) > 0 and len(self.wvn) == 0:  # Calculate wavenumbers if wavelengths available
+            self.wvn = 1e7 / self.wvl
+        if len(self.wvn) > 0 and len(self.wvl) == 0:  # Calculate wavelengths if wavenumbers available
+            self.wvl = 1e7 / self.wvn
+        self.n_wvl = len(self.wvl)
 
     def readout(self, filename=None):
         """ Read uvspec output. The result is placed into a dictionary called self.out
+
+         The general process of reading is:
+          1) If the user has specified output_user, just assume a flat file and read using
+             np.loadtxt or np.genfromtxt.
+          2) If not user_output and the solver has no radiance blocks, assume a flat file and
+             read using np.loadtxt. The variables to be read should be contained in the self.fluxline attribute.
+          3) Otherwise, if the output has radiance blocks, read those depending on the radiance block
+             format for the specific solver. Keep reading flux and radiance blocks until the file is exhausted.
+
+         Once the data has all been read, the data is split up between the number of output levels and number
+         of wavelengths. For radiance data, the order of numpy dimensions is umu, phi, wavelength and zout. That is,
+         if a case has multiple zenith angles, multiple azimuth angles, multiple wavelengths and multiple output
+         levels, the radiance property uu will have 4 dimensions.
 
         :param filename: File from which to read the output. Defaults to name of input file, but with the .OUT
         extension.
@@ -366,7 +466,58 @@ class Case():
             filename = self.outfile
         elif filename == '':
             filename = easygui.fileopenbox(msg='Please select the uvspec output file.', filetypes=["*.OUT"])
+        fluxdata = []
         if self.output_user:
-            data = np.loadtxt(filename)  #TODO sutff here
-            self.data = data
-        elif:  #TODO
+            fluxdata = np.loadtxt(filename)
+            self.distribute_flux_data(fluxdata)
+        elif (self.n_phi == 0 and self.n_umu == 0) or self.solver == 'sslidar':  # There are no radiance blocks
+            fluxdata = np.loadtxt(filename)
+            self.distribute_flux_data(fluxdata)
+        else:  # radiance blocks  #TODO polradtran has different format
+            rad3D = []  # full 3D radiance data is here (umu, phi and wavelength)
+            with open(filename, 'rt') as uvOUT:
+                # Read and append a line of flux data
+                txtline = uvOUT.readline();
+                while txtline:
+                    fluxline = np.array(txtline.split()).astype(np.float)
+                    if len(fluxdata) > 0:
+                        fluxdata = np.vstack((fluxdata, fluxline))
+                    else:
+                        fluxdata = fluxline
+                    # Read the radiance block
+                    if self.n_phi > 0:  # There is a line of phi angles
+                        philine = uvOUT.readline()  #TODO check that phi angles are correct
+                        phicheck = np.array(philine.split()).astype(np.float)
+                    # Read the lines for the umu values
+                    raddata = []
+                    for i_umuline in range(self.n_umu):
+                        umuline = uvOUT.readline()
+                        radline = np.array(umuline.split()).astype(np.float)
+                        if len(raddata) > 0:
+                            raddata = np.vstack((raddata, radline))
+                        else:
+                            raddata = radline
+                    if len(rad3D) > 0:
+                        rad3D = np.dstack((rad3D, raddata))
+                    else:
+                        rad3D = raddata
+                    txtline = uvOUT.readline()  # Read what should be the next line of flux data
+            self.distribute_flux_data(fluxdata)  # distribute the flux data, which should also determine
+                                                 # the number of wavelengths definitively
+            self.rad3D = rad3D  # all the data
+            self.phi_check = phicheck
+            self.u0u = rad3D[:,1]
+            if self.u0u.shape[1] / self.n_wvl > 1:  #TODO problem here with single wavelength data
+                self.u0u = self.u0u.reshape((self.n_umu, self.n_wvl, -1), order='F')
+            if rad3D.ndim == 3:
+                self.uu = rad3D[:,2:,:]
+                # If there are multiple zout levels, must reshape self.uu
+                if self.uu.shape[2] / self.n_wvl > 1:
+                    self.uu = self.uu.reshape((self.n_umu, self.n_phi, self.n_wvl, -1), order='F')
+            else:
+                self.uu = rad3D[:,2:]
+                if self.uu.shape[1] / self.n_wvl > 1:  # if multiple output levels, reshape the radiance data appropriately
+                    self.uu = self.uu.reshape((self.n_umu, self.n_wvl, -1), order='F')
+
+
+
