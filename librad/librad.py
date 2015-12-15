@@ -45,7 +45,110 @@ import easygui  # For file open dialogs
 import numpy as np
 import re
 
-uvsOptions = writeLex.loadOptions()  # Load all options into a global dictionary of option specifications.
+uvsOptions = writeLex.loadOptions()  # Load all options into a global dictionary of uvspec option specifications.
+
+# The following dictionary provides units for some of the source solar files provided with libRadtran
+sourceSolarUnits = {
+    'apm_0_5nm': ['mW', 'm^2', 'nm'],
+    'apm_1nm': ['mW', 'm^2', 'nm'],
+    'atlas_plus_modtran': ['mW', 'm^2', 'nm'],
+    'atlas_plus_modtran_ph': ['photons/s', 'cm^2', 'nm'],
+    'atlas2': ['mW', 'm^2', 'nm'],
+    'atlas3': ['mW', 'm^2', 'nm'],
+    'fu': ['W', 'm^2', ''],  # in band
+    'kato': ['W', 'm^2', ''],  # in band
+    'kurudz_0.1nm.dat': ['mW', 'm^2', 'nm'],
+    'kurudz_1.0nm.dat': ['mW', 'm^2', 'nm'],
+    'NewGuey2003.dat': ['mW', 'm^2', 'nm'],
+    'Thekaekara.dat': ['mW', 'm^2', 'nm']
+}
+
+# Units generally depend on the units in the solar flux file, but may be dictated by the correlated-k band model
+uvspecOutVars = {
+    'lambda': 'Wavelength [nm]',  # Cannot be used in Python because lambda is a keyword use 'wvl
+    'wavelength': 'Wavelength [nm]', # scalar per line
+    'wavenumber': 'Wavenumber [cm^1]',  # abbreviate to wvn
+    'wvn': 'Wavenumber [cm^-1]',
+    'wvl': 'Wavelength [nm]',
+    'edir': 'Direct beam irradiance (same unit as extraterrestrial irradiance, e.g mW/m^2/nm if using the "atlas3" spectrum in the /data/solar_flux/ directory.)',
+    'edn': 'Diffuse downwelling irradiance, i.e. total minus direct beam (same unit as edir).',
+    'eup': 'Diffuse upwelling irradiance (same unit as edir).',
+    'uavg': 'The mean intensity. Proportional to the actinic flux: To obtain the actinic flux, multiply the mean intensity by 4 pi (same unit as edir).',
+    'uavgdir': 'Direct beam contribution to the mean intensity. (same unit as edir).',
+    'uavgdn': 'Diffuse downward radiation contribution to the mean intensity. (same unit as edir).',
+    'uavgup': 'Diffuse upward radiation contribution to the mean intensity. (same unit as edir).',
+    'umu': 'Cosine of the zenith angles for sightline radiance (intensity) calculations.',  # This is a vector of values
+    'u0u': 'The azimuthally averaged intensity at n_umu user specified angles umu. (units of e.g. mW/m^2/nm/sr if using the "atlas3" spectrum in the /data/solar_flux/ directory.)', # vector
+    'uu': 'The radiance (intensity) at umu and phi user specified angles (unit e.g. mW/m^2/nm/sr if using the "atlas3" spectrum in the /data/solar_flux/ directory.)', # vector
+    'uu_down': 'The downwelling radiances (intensity) at cmu and phi angles (unit e.g. mW/m^2/nm/sr if using the "atlas3" spectrum in the /data/solar_flux? directory.)', # vector
+    'uu_up': 'The upwelling radiances (intensity) at cmu and phi angles (unit e.g. mW/m^2/nm/sr if using the "atlas3" spectrum in the /data/solar_flux/ directory.)', # vector
+    'cmu': 'Computational polar angles from polradtran',
+    'down_fluxI': 'The total (direct+diffuse) downward (down flux) irradiances (Stokes I component). Same units as extraterrestrial irradiance.',
+    'up_fluxI': 'The total (direct+diffuse) upward (up flux) irradiances (Stokes I component). Same units as extraterrestrial irradiance.',
+    'down_fluxQ': 'The total (direct+diffuse) downward (down flux) irradiances (Stokes Q component). Same units as extraterrestrial irradiance.',
+    'up_fluxQ': 'The total (direct+diffuse) upward (up flux) irradiances (Stokes Q component). Same units as extraterrestrial irradiance.',
+    'down_fluxU': 'The total (direct+diffuse) downward (down flux) irradiances (Stokes U component). Same units as extraterrestrial irradiance.',
+    'up_fluxU': 'The total (direct+diffuse) upward (up flux) irradiances (Stokes U component). Same units as extraterrestrial irradiance',
+    'down_fluxV': 'The total (direct+diffuse) downward (down flux) irradiances (Stokes V component). Same units as extraterrestrial irradiance.',
+    'up_fluxV': 'The total (direct+diffuse) upward (up flux) irradiances (Stokes V component). Same units as extraterrestrial irradiance.',
+    'eglo': 'Global downwelling irradiance',
+    'enet': 'Global downwelling minus upwelling (net downward irradiance)',
+    'esum': 'Global downwelling plus upwelling',
+    'fdir': 'Direct actinic flux (scalar irradiance)',
+    'fglo': 'Global actinic flux (scalar irradiance)',
+    'fdn': 'Downwelling actinic flux (scalar irradiance)',
+    'fup': 'Upwelling actinic flux (scalar irradiance)',
+    'uavgglo': 'Total (global) mean diffuse intensity (radiance) = actinic flux/4pi',
+    'f': 'Actinic flux (scalar irradiance)',
+    'sza': 'Solar zenith angle [deg]',
+    'n_air': 'Air refractive index',
+    'zout': 'Output altitude [km]',
+    'sph_alb': 'Spherical albedo of the complete atmosphere',
+    'albedo': 'Albedo',
+    'heat': 'Heating rate in K/day',
+    'n_xxx': 'Number density of gas xxx [cm^-3]',
+    'rho_xxx': 'Mass density of gas xxx [kg/m^3]',
+    'mmr_xxx': 'Mass mixing ratio of gas xxx [kg/kg]',
+    'vmr_xxx': 'Volume mixing ratio of gas xxx [m^3/m^3]',
+    'p': 'Pressure [hPa]',
+    'T': 'Temperature [K]',
+    'T_d': 'Dewpoint temperature [K]',
+    'T_sur': 'Surface temperature [K]',
+    'theta': 'Potential temperature [K]',
+    'theta_e': 'Equivalent potential temperature [K]',
+    'rh': 'Relative humidity over water [%]',
+    'rh_ice': 'Relative humidity over ice [%]',
+    'c_p': 'Specific heat capacity of the air',
+    'CLWC': 'Cloud liquid water content [kg/kg]',
+    'CLWD': 'Cloud liquid water density [g/m^3]',
+    'CIWC': 'Cloud ice water content [kg/kg]',
+    'CIWD': 'Cloud ice water density [g/m^3]',
+    'TCC': 'Total cloud cover [0-1]',
+    'cth': 'Clout top height'
+}
+#  the following gas species can appear for _xxx in the above list of output variables.
+gasSpecies = ['air', 'O3', 'O2', 'H2O', 'CO2', 'NO2', 'BRO', 'OCLO', 'HCHO', 'O4']
+
+# Insert the additional items programatically
+outVars = uvspecOutVars.copy()  # first make a copy
+for thisVar in uvspecOutVars:
+    if thisVar[-4:] == '_xxx':
+        for gas in gasSpecies:
+            outVars[thisVar.replace('xxx', gas)] = outVars[thisVar].replace('xxx', gas)  # insert in copy
+        del outVars[thisVar]  # delete the template entry
+uvspecOutVars = outVars  # copy the updated dict back to the original
+
+# For the output_user option, only certain variables are allowed as first and second index variables,
+# These are wavelength (lambda, wvn), zout, zout_sea, p (pressure)
+# The only two index variables that are allowed together is one height variable and one wavelength/number variable
+# A height as well as a wavelength/number output should only be specified if there are both multiple
+# wavelengths and multiple output heights.
+indexVars = ['lambda', 'wavelength', 'wvl', 'wvn', 'zout', 'zout_sea', 'p']
+
+# Define a regexp for determining if a token of the zout keyword is a single level
+# It is a single level if it is either a floating point number or the words sur, cpt or toa (for surface,
+# cold point tropopause and top of atmosphere)
+re_isSingleOutputLevel = '(^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$)|(^sur$)|(^surface$)|(^cpt$)|(^toa$)'
 
 class Case():
     """ Class which encapsulates a run case of libRadtran/uvspec.
@@ -56,83 +159,6 @@ class Case():
     Construction of radiant environment maps typically requires running an array of librad.Case instances.
     """
     # Definitions of some of the possible uvspec output variables
-    # Units generally depend on the units in the solar flux file, but may be dictated by the correlated-k band model
-    uvspecOutVars = {
-        'lambda': 'Wavelength [nm]',  # Cannot be used in Python because lambda is a keyword use 'wvl
-        'wavelength': 'Wavelength [nm]', # scalar per line
-        'wavenumber': 'Wavenumber [cm^1]',  # abbreviate to wvn
-        'wvn': 'Wavenumber [cm^-1]',
-        'wvl': 'Wavelength [nm]',
-        'edir': 'Direct beam irradiance (same unit as extraterrestrial irradiance, e.g mW/m^2/nm if using the "atlas3" spectrum in the /data/solar_flux/ directory.)',
-        'edn': 'Diffuse downwelling irradiance, i.e. total minus direct beam (same unit as edir).',
-        'eup': 'Diffuse upwelling irradiance (same unit as edir).',
-        'uavg': 'The mean intensity. Proportional to the actinic flux: To obtain the actinic flux, multiply the mean intensity by 4 pi (same unit as edir).',
-        'uavgdir': 'Direct beam contribution to the mean intensity. (same unit as edir).',
-        'uavgdn': 'Diffuse downward radiation contribution to the mean intensity. (same unit as edir).',
-        'uavgup': 'Diffuse upward radiation contribution to the mean intensity. (same unit as edir).',
-        'umu': 'Cosine of the zenith angles for sightline radiance (intensity) calculations.',  # This is a vector of values
-        'u0u': 'The azimuthally averaged intensity at n_umu user specified angles umu. (units of e.g. mW/m^2/nm/sr if using the "atlas3" spectrum in the /data/solar_flux/ directory.)', # vector
-        'uu': 'The radiance (intensity) at umu and phi user specified angles (unit e.g. mW/m^2/nm/sr if using the "atlas3" spectrum in the /data/solar_flux/ directory.)', # vector
-        'uu_down': 'The downwelling radiances (intensity) at cmu and phi angles (unit e.g. mW/m^2/nm/sr if using the "atlas3" spectrum in the /data/solar_flux? directory.)', # vector
-        'uu_up': 'The upwelling radiances (intensity) at cmu and phi angles (unit e.g. mW/m^2/nm/sr if using the "atlas3" spectrum in the /data/solar_flux/ directory.)', # vector
-        'cmu': 'Computational polar angles from polradtran',
-        'down_fluxI': 'The total (direct+diffuse) downward (down flux) irradiances (Stokes I component). Same units as extraterrestrial irradiance.',
-        'up_fluxI': 'The total (direct+diffuse) upward (up flux) irradiances (Stokes I component). Same units as extraterrestrial irradiance.',
-        'down_fluxQ': 'The total (direct+diffuse) downward (down flux) irradiances (Stokes Q component). Same units as extraterrestrial irradiance.',
-        'up_fluxQ': 'The total (direct+diffuse) upward (up flux) irradiances (Stokes Q component). Same units as extraterrestrial irradiance.',
-        'down_fluxU': 'The total (direct+diffuse) downward (down flux) irradiances (Stokes U component). Same units as extraterrestrial irradiance.',
-        'up_fluxU': 'The total (direct+diffuse) upward (up flux) irradiances (Stokes U component). Same units as extraterrestrial irradiance',
-        'down_fluxV': 'The total (direct+diffuse) downward (down flux) irradiances (Stokes V component). Same units as extraterrestrial irradiance.',
-        'up_fluxV': 'The total (direct+diffuse) upward (up flux) irradiances (Stokes V component). Same units as extraterrestrial irradiance.',
-        'eglo': 'Global downwelling irradiance',
-        'enet': 'Global downwelling minus upwelling (net downward irradiance)',
-        'esum': 'Global downwelling plus upwelling',
-        'fdir': 'Direct actinic flux (scalar irradiance)',
-        'fglo': 'Global actinic flux (scalar irradiance)',
-        'fdn': 'Downwelling actinic flux (scalar irradiance)',
-        'fup': 'Upwelling actinic flux (scalar irradiance)',
-        'uavgglo': 'Total (global) mean diffuse intensity (radiance) = actinic flux/4pi',
-        'f': 'Actinic flux (scalar irradiance)',
-        'sza': 'Solar zenith angle [deg]',
-        'n_air': 'Air refractive index',
-        'zout': 'Output altitude [km]',
-        'sph_alb': 'Spherical albedo of the complete atmosphere',
-        'albedo': 'Albedo',
-        'heat': 'Heating rate in K/day',
-        'n_xxx': 'Number density of gas xxx [cm^-3]',
-        'rho_xxx': 'Mass density of gas xxx [kg/m^3]',
-        'mmr_xxx': 'Mass mixing ratio of gas xxx [kg/kg]',
-        'vmr_xxx': 'Volume mixing ratio of gas xxx [m^3/m^3]',
-        'p': 'Pressure [hPa]',
-        'T': 'Temperature [K]',
-        'T_d': 'Dewpoint temperature [K]',
-        'T_sur': 'Surface temperature [K]',
-        'theta': 'Potential temperature [K]',
-        'theta_e': 'Equivalent potential temperature [K]',
-        'rh': 'Relative humidity over water [%]',
-        'rh_ice': 'Relative humidity over ice [%]',
-        'c_p': 'Specific heat capacity of the air',
-        'CLWC': 'Cloud liquid water content [kg/kg]',
-        'CLWD': 'Cloud liquid water density [g/m^3]',
-        'CIWC': 'Cloud ice water content [kg/kg]',
-        'CIWD': 'Cloud ice water density [g/m^3]',
-        'TCC': 'Total cloud cover [0-1]',
-        'cth': 'Clout top height'
-    }
-    #  the following gas species can appear for _xxx in the above list of output variables.
-    gasSpecies = ['air', 'O3', 'O2', 'H2O', 'CO2', 'NO2', 'BRO', 'OCLO', 'HCHO', 'O4']
-
-    # For the output_user option, only certain variables are allowed as first and second index variables,
-    # These are wavelength (lambda, wvn), zout, zout_sea, p (pressure)
-    # The only two index variables that are allowed together is one height variable and one wavelength/number variable
-    # A height as well as a wavelength/number output should only be specified if there are both multiple
-    # wavelengths and multiple output heights.
-    indexVars = ['lambda', 'wavelength', 'wvl', 'wvn', 'zout', 'zout_sea', 'p']
-
-    # Define a regexp for determining if a token of the zout keyword is a single level
-    # It is a single level if it is either a floating point number or the words sur, cpt or toa (for surface,
-    # cold point tropopause and top of atmosphere)
-    re_isSingleOutputLevel = '(^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$)|(^sur$)|(^surface$)|(^cpt$)|(^toa$)'
 
     def __init__(self, casename='', filename=None, optionlist=None):
         """ A libRadtran/uvspec case
@@ -145,8 +171,8 @@ class Case():
         self.name = casename
         self.error_txt = []
         self.options = []  # options is a list [option_name (string), option_tokens (list of strings),
-        self.tokens = []
-        self.optionobj = []
+        self.tokens = []  # option keyword parameters (tokens)
+        self.optionobj = []  # option object from writeLex
         self.filorigin = []
         self.solver = 'disort'  # default, modified b y the rte_solver option keyword
         self.fluxline = ['wvl', 'edir', 'edn', 'eup', 'uavgdir', 'uavgdn', 'uavgup']  # default output
@@ -155,13 +181,16 @@ class Case():
         self.zout = []
         self.output_user = ''  # set with the output_user keyword
         self.output_quantity = '' # default is radiances and irradiances in units determined by input solar file
-        self.n_umu = 0
+        self.source = ''  # 'solar' or 'thermal'
+        self.source_file = ''
+        self.n_umu = 0  # number of zenith angles (actually cosine of zenith angle)
         self.umu = []  # zenith angles for radiance calculations
-        self.n_phi = 0
+        self.n_phi = 0  # number of azimuth radiance angles
         self.phi = []  # azimuth angles for radiance calculations
         self.n_zout = 1  # Assume only one output level, unless zout keyword is used.
         self.n_wvl = '?'  # number of wavelengths is difficult to ascertain to start with
         self.nstokes = 1  # default number of stokes parameters for polradtran
+        self.rad_units = []  # radiance/irradiance units, could be K for brightness temperatures
         if filename is not None:
             if not filename:
                 # Open a dialog to get the filename
@@ -182,26 +211,45 @@ class Case():
                 self.prepare_for(option[0],option[1:])
         #TODO Build the case from the option list ?
 
+    def prepare_for_solver(self, keyword, tokens):
+        self.solver = tokens[0]  # First token gives the solver
+        if any([self.solver == thesolver for thesolver in ['disort', 'disort2', 'sdisort',
+                                                           'spsdisort', 'fdisort1', 'fdisort2']]):
+            self.fluxline = ['wvl', 'edir', 'edn', 'eup', 'uavgdir', 'uavgdn', 'uavgup']  # default output
+        elif any([self.solver == thesolver for thesolver in ['twostr','rodents']]):
+            self.fluxline = ['wvl', 'edir', 'edn', 'eup', 'uavg']
+        elif self.solver == 'polradtran':
+            self.prepare_for_polradtran()
+        elif self.solver == 'sslidar':
+            self.fluxline = ['center_of_range', 'number_of_photons', 'lidar_ratio']
+
+    def prepare_for_source(self, keyword, tokens):
+        """ Prepare for source, particularly units of various kinds, depending on the source
+        :param keyword: uvspec option keyword
+        :param tokens: uvspec option parameters (tokens)
+        :return:
+        """
+        if tokens[0] == 'solar':  # dealing with solar spectrum
+            self.source = 'solar'
+            if len(tokens) > 1:  # solar source file provided
+                self.source_file = os.path.basename(tokens[1])  # extract the filename only
+                # try to establish the radiometric units based on the filename
+                if self.source_file in sourceSolarUnits:
+                    self.rad_units = sourceSolarUnits[self.source_file]
+        elif tokens[0] == 'thermal':
+            self.source = 'thermal'
 
     def prepare_for(self, keyword, tokens):
         """ Make any possible preparations for occurrences of particular keywords
-
         :param keyword: The uvspec option keyword (string)
         :param tokens: The parameters (tokens) for the keyword as a list of strings
         :return:
         """
         # Prepare for different output formats, depending on the solver
         if keyword == 'rte_solver':
-            self.solver = tokens[0]  # First token gives the solver
-            if any([self.solver == thesolver for thesolver in ['disort', 'disort2', 'sdisort',
-                                                               'spsdisort', 'fdisort1', 'fdisort2']]):
-                self.fluxline = ['wvl', 'edir', 'edn', 'eup', 'uavgdir', 'uavgdn', 'uavgup']  # default output
-            elif any([self.solver == thesolver for thesolver in ['twostr','rodents']]):
-                self.fluxline = ['wvl', 'edir', 'edn', 'eup', 'uavg']
-            elif self.solver == 'polradtran':
-                self.prepare_for_polradtran()
-            elif self.solver == 'sslidar':
-                self.fluxline = ['center_of_range', 'number_of_photons', 'lidar_ratio']
+            self.prepare_for_solver(keyword, tokens)
+        if keyword == 'source':
+            self.prepare_for_source(keyword, tokens)
         # Prepare for radiances
         if keyword == 'umu':
             self.n_umu = len(tokens)  # The number of umu values
@@ -218,7 +266,7 @@ class Case():
             self.nstokes = int(tokens[1])
             self.prepare_for_polradtran()
         if keyword == 'zout' or keyword == 'zout_sea' or keyword == 'pressure_out':  # Determine number of output levels
-            if all([re.match(Case.re_isSingleOutputLevel, token.lower()) for token in tokens]):
+            if all([re.match(re_isSingleOutputLevel, token.lower()) for token in tokens]):
                 self.n_zout = len(tokens)
             else:  # Number of output levels is not known, will have to auto-detect
                 self.n_zout = '?'
@@ -260,7 +308,6 @@ class Case():
     def alter_option(self, option, origin=('user', None)):
         """ Alter the parameters of a uvspec input option. If the option is not found, the option is appended with
         append_option instead.
-
         :param option: List of keyword and tokens (parameters) to provide to the option keyword (list of strings).
         :param origin: A 2-tuple noting the "origin" of the change to this keyword. Default ('user', None)
         :return:
@@ -275,13 +322,11 @@ class Case():
 
     def del_option(self, option, all=True):
         """ Delete a uvspec input option matching the given option.
-
         :param option: Keyword of option to be deleted
         :param all: A flag indicating if all matching options must be deleted or only the first occurrence. The
         default is to delete all matching occurrences.
         :return: True if an option was deleted or False if not
         """
-
         #TODO consider providing warning if options does not exist
         deletedsomething = False
         while option in self.options:
@@ -301,13 +346,11 @@ class Case():
     def read(path, includes_seen=[]):
         """ Reads a libRadtran input file. This will construct the libRadtran case from the contents of the .INP file
         Adapted from code by libRadtran developers.
-
         :param path: File path from which to read the uvspec input
         :param includes_seen: List of files already included (for recursion purposes to avoid infinite include loops)
         :return: data, line_nos, path
           where data is the full data in the file with includes, line_nos shows the source of every line and
           path is the path to the main input file.
-
         """
         # Get the full path
         path = os.path.abspath(path)
@@ -361,7 +404,7 @@ class Case():
                 include_file = opdata[line][1]  # Obtain the filename
                 include_file = os.path.normpath(os.path.join(folder, include_file))  # Extend to full path name
                 if this_includes.count(include_file):  # This file has been included before
-                    raise IOError('Attempted to include the same uvspec input file more than once. The included files are ', this_includes)
+                    raise IOError('Attempted to include the same uvspec input file more than once in parent.')
                 this_includes.append(include_file)  # Add the filename to the list of included files already seen
                 # Read the data from the included file
                 inc_opdata, inc_line_nos, x = Case.read(include_file, this_includes)  # Recursion
@@ -430,14 +473,13 @@ class Case():
 
     def distribute_flux_data(self, fluxdata):
         """ Distribute flux data read from uvspec output file to various fields
-
         :param fluxdata: Flux (irradiance) data read from uvspec output file
         :return:
         """
+        #TODO rename this function to just distribute_data ?
         # First split the data amongst output levels or output wavelengths/wavenumbers
         # We assume and handle only those cases of output_user where the primary variable is
         # zout, lambda (wvl) or wavenumber (wvn)
-
         if self.output_user:  # distribute to user-defined output variables
             fields = self.output_user
         else:
