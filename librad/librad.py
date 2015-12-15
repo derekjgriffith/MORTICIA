@@ -105,9 +105,8 @@ class Case():
         """ A libRadtran/uvspec case
         :param casename: A user-defined name for the libRadtran/uvspec case
         :param filename: An optional filename from which to read the libRadtran/uvspec input
-        :param optiondict: A dictionary of uvspec option names, with a list of text tokens for each option.
-        e.g. {'sza': ['25.0']} will define the solar zenith angle option at 25 degrees. Options that are not found in
-        the current dictionary will return errors. Besides that, no error checking is performed automatically.
+        :param optionlist: A list of option keywords and parameteres (tokens). The keyword existence
+         is verified. Besides that, no error checking is performed automatically (yet).
         :return:
         """
         self.name = casename
@@ -136,16 +135,16 @@ class Case():
                 filename = easygui.fileopenbox(msg='Please select a uvspec input file.', filetypes=["*.INP"])
             elif filename[-4:].lower() != '.inp':
                 filename += '.INP'
-            data, line_nos, path = Case.read(path=filename)
+            opdata, line_nos, path = Case.read(path=filename)
             self.infile = path
             self.outfile = self.infile[:-4] + '.OUT'
             # option_object, source_file_nos (filename, line_number)]
             # Process the results into lists of options
-            for (optnumber, option) in enumerate(data):
+            for (optnumber, option) in enumerate(opdata):
                 self.options.append(option[0])  # the option keyword (string)
                 self.tokens.append(option[1:])  # The tokens following the keyword (list of strings)
                 self.filorigin.append(line_nos[optnumber])  # The file origin of this keyword
-                self.optionobj.append(uvsOptions[self.options[optnumber]])  # The option object
+                self.optionobj.append(uvsOptions[self.options[optnumber]])  # The option object (dict lookup)
                 # Make any possible preparations for occurance of this keyword
                 self.prepare_for(option[0],option[1:])
         #TODO Build the case from the dictionary ?
@@ -200,20 +199,67 @@ class Case():
         for istokes in range(self.nstokes):
             self.fluxline.extend(['down_flux' + stokescomps[istokes], 'up_flux' + stokescomps[istokes]])
 
-    def addoption(self, optiondict):
-        ''' Add libRadtran/uvspec options to this uvspec case.
-        :param optiondict: A dictionary of options to add to the case. The dict keys must be valid names of libRadtran/
+    def append_option(self, option, origin=('user', None)):
+        ''' Append a libRadtran/uvspec options to this uvspec case. It will be appended at the end of the file
+        :param option: A list containing the keyword and keyword parameters (tokens)
+        :param origin: A 2-tuple giving the origin of the option and a "line number" reference. Default ('user', None)
         uvspec options.
         :return:
         '''
+        self.options.append(option[0])  # the option keyword (string)
+        self.tokens.append(option[1:])  # The tokens following the keyword (list of strings)
+        self.filorigin.append(origin)  # The origin of this keyword
+        self.optionobj.append(uvsOptions[option[0]])  # The option object
+        # Make any possible preparations for occurance of this keyword
+        self.prepare_for(option[0],option[1:])
+
+    def alter_option(self, option, origin=('user', None)):
+        """ Alter the parameters of a uvspec input option. If the option is not found, the option is appended with
+        append_option instead.
+
+        :param option: List of keyword and tokens (parameters) to provide to the option keyword (list of strings).
+        :param origin: A 2-tuple noting the "origin" of the change to this keyword. Default ('user', None)
+        :return:
+        """
+        ioption = self.options.index(option[0])
+        if ioption:
+            self.tokens[ioption] = option[1:]  # The tokens following the keyword (list of strings)
+            self.filorigin[ioption] = origin  # The origin of this keyword
+            self.prepare_for(option[0], option[1:])
+        else:
+            self.append_option(option, origin)  # just append the option if not found
+
+    def del_option(self, option, all=True):
+        """ Delete a uvspec input option matching the given option.
+
+        :param option: Keyword of option to be deleted
+        :param all: A flag indicating if all matching options must be deleted or only the first occurrence. The
+        default is to delete all matching occurrences.
+        :return: True if an option was deleted or False if not
+        """
+
+        #TODO consider providing warning if options does not exist
+        deletedsomething = False
+        while option in self.options:
+            deletedsomething = True
+            ioption = self.options.index(option)
+            self.options.pop(ioption)
+            self.tokens.pop(ioption)
+            self.filorigin.pop(ioption)
+            self.optionobj.pop(ioption)
+        if deletedsomething:
+            # Run through all options and reconstruct preparations
+            for (ioption, option) in enumerate(self.options):
+                self.prepare_for(self.options[ioption], self.tokens[ioption])
+        return deletedsomething
 
     @staticmethod
-    def read(path, includes=[]):
+    def read(path, includes_seen=[]):
         """ Reads a libRadtran input file. This will construct the libRadtran case from the contents of the .INP file
         Adapted from code by libRadtran developers.
 
         :param path: File path from which to read the uvspec input
-        :param includes: List of files already included (for recursion purposes)
+        :param includes_seen: List of files already included (for recursion purposes to avoid infinite include loops)
         :return: data, line_nos, path
           where data is the full data in the file with includes, line_nos shows the source of every line and
           path is the path to the main input file.
@@ -222,27 +268,28 @@ class Case():
         # Get the full path
         path = os.path.abspath(path)
         folder = os.path.dirname(path)
+        # print includes_seen
         with open(path, 'rt') as INPfile:
-            data = INPfile.readlines()
-        data = [line.split() for line in data]
-        line_nos = [(path, i) for i in xrange(1, len(data)+1)]
+            opdata = INPfile.readlines()  # read in the entire file and process in memory afterwards
+        opdata = [line.split() for line in opdata]  # Split lines into keywords and option parameters (tokens)
+        line_nos = [(path, i) for i in xrange(1, len(opdata)+1)]
         # Remove lines with comments and merge continuous lines
         line = 0
-        while line < len(data):
+        while line < len(opdata):  # Remove empty lines, comments and merge options split over multiple file lines
             # Skip empty lines
-            if not data[line]:
-                data.pop(line)
+            if not opdata[line]:
+                opdata.pop(line)
                 line_nos.pop(line)
                 continue
-            # Skip comments
-            if data[line][0].startswith("#"):
-                data.pop(line)
+            # Skip comments  #TODO save comments as well in the librad.Case
+            if opdata[line][0].startswith("#"):
+                opdata.pop(line)
                 line_nos.pop(line)
                 continue
             # Remove comments from the line  #TODO save comments into the librad.Case
-            elif [True for word in data[line] if (word.find("#") != -1)]:
+            elif [True for word in opdata[line] if (word.find("#") != -1)]:
                 tmp = []
-                for word in data[line]:
+                for word in opdata[line]:
                     pos = word.find("#")
                     if pos != -1:
                         if word != "#":
@@ -250,45 +297,69 @@ class Case():
                         break
                     else:
                         tmp.append(word)
-                data[line] = tmp
-            # continous line
-            elif data[line][-1].endswith("\\"):
-                data[line][-1] = data[pos][-1][:-1] # remove the \
+                opdata[line] = tmp
+            # continuous line
+            elif opdata[line][-1].endswith("\\"):
+                opdata[line][-1] = opdata[pos][-1][:-1] # remove the \
                     # if the \ was preceded and continued by whitespace
-                if data[line][-1] == "":
-                    data[line].pop()
+                if opdata[line][-1] == "":
+                    opdata[line].pop()
                     line_nos.pop()
-                data[line].extend(data[line + 1])
+                opdata[line].extend(opdata[line + 1])
             else:
                 line += 1
-        # Get the includes and include them
-        buff = 0
-        this_includes = []
-        for line in xrange(len(data)):
-            if (data[line + buff][0] == "include" and len(data[line + buff]) == 2):
-                include_file = data.pop(line + buff)[1]
-                include_file = os.path.normpath(os.path.join(folder, include_file))
-                this_includes.append(include_file)
-                line_nos.pop(line + buff)
-                buff -= 1
-        for include_path in this_includes:
-            if not os.path.exists(include_path):
-                msg = "Include file '%s' in '%s' does not exist." % (include_path, path)
-                raise IOError(msg)
-                #print " " * len(includes) + msg
-            # If the file has been included before.
-            elif (this_includes + includes).count(include_path) != 1:
-                msg = "File %s included more than once in %s. Please fix this." % (include_path, path)
-                raise IOError(msg)
-                #self.error_txt.append(msg)
-                #print " " * len(includes) + msg
-            else:
-                include_data = Case.read(include_path, includes + this_includes)
-                # The include file might contain errors and return None.
-                if include_data:
-                    data.extend(include_data[0])
-                    line_nos.extend(include_data[1])
-        return data, line_nos, path
+        # Get the includes and include them at the point where the include keyword appears
+        all_opdata = []
+        all_line_nos = []
+        this_includes = includes_seen # These are the include files seen up to this point in the recursion
+        for line in xrange(len(opdata)):  # Run through all lines in the file and perform include substitutions
+            if opdata[line][0] == 'include':  # Have found an include file, read it and append to all_opdata
+                include_file = opdata[line][1]  # Obtain the filename
+                include_file = os.path.normpath(os.path.join(folder, include_file))  # Extend to full path name
+                if this_includes.count(include_file):  # This file has been included before
+                    raise IOError('Attempted to include the same uvspec input file more than once. The included files are ', this_includes)
+                this_includes.append(include_file)  # Add the filename to the list of included files already seen
+                # Read the data from the included file
+                inc_opdata, inc_line_nos, x = Case.read(include_file, this_includes)  # Recursion
+                # Insert the data at this point in the file option and line number lists
+                all_opdata.extend(inc_opdata)
+                all_line_nos.extend(inc_line_nos)
+            else:  # Not an include option, just append
+                all_opdata.append(opdata[line])
+                all_line_nos.append(line_nos[line])
+        return all_opdata, all_line_nos, path
+
+        # The following is the old code that inserted all include files at the end, which is not the same
+        # behaviour as a C #INCLUDE statement, which inserts at the point where the #INCLUDE appears.
+        # buff = 0
+        # this_includes = []
+        # for line in xrange(len(opdata)):
+        #     if (opdata[line + buff][0] == "include" and len(opdata[line + buff]) == 2):
+        #         include_file = opdata.pop(line + buff)[1]  # Obtain the filename of the included file and pop option
+        #         include_file = os.path.normpath(os.path.join(folder, include_file))  # Extend to full path name
+        #         this_includes.append(include_file)  # Add the filename to the list of included files at this level
+        #         line_nos.pop(line + buff)  # Also pop the line numbers from the list of line numbers
+        #         buff -= 1  # Take into account that a line has been removed
+        # for include_path in this_includes:
+        #     if not os.path.exists(include_path):
+        #         msg = "Include file '%s' in '%s' does not exist." % (include_path, path)
+        #         raise IOError(msg)
+        #         #print " " * len(includes) + msg
+        #     # If the file has been included before.
+        #     elif (this_includes + includes_seen).count(include_path) != 1:  # Count number of times file is included
+        #         msg = "File %s included more than once in %s. Please fix this." % (include_path, path)
+        #         raise IOError(msg)
+        #         #self.error_txt.append(msg)
+        #         #print " " * len(includes) + msg
+        #     else:
+        #         include_data = Case.read(include_path, includes_seen + this_includes)
+        #         # The include file might contain errors and return None.
+        #         if include_data:
+        #             opdata.extend(include_data[0])  #TODO surely an insert rather than extend ?
+        #             line_nos.extend(include_data[1])
+        # print opdata
+        # print line_nos
+        # return opdata, line_nos, path
 
     def __repr__(self):
         """ libRadtran/uvspec input data
@@ -313,8 +384,76 @@ class Case():
             alldata = self.__repr__()
             uvINP.write(alldata)
 
-    def determine_out_fmt(self):
-        """ Runs through all input options and determines the output format
+    def distribute_flux_data(self, fluxdata):
+        """ Distribute flux data read from uvspec output file to various fields
+
+        :param fluxdata: Flux (irradiance) data read from uvspec output file
+        :return:
+        """
+        # First split the data amongst output levels or output wavelengths/wavenumbers
+        # We assume and handle only those cases of output_user where the primary variable is
+        # zout, lambda (wvl) or wavenumber (wvn)
+
+        if self.output_user:  # distribute to user-defined output variables
+            fields = self.output_user
+        else:
+            fields = self.fluxline
+        datashape = fluxdata.shape
+        if len(datashape) == 1:  # Need some special cases to deal with single line output files
+            linecount = 1
+        else:
+            linecount = datashape[1]
+        if len(datashape) == 2:
+            if datashape[1] != len(fields):  # number of fields in data does not match number of fields
+                print datashape[1], ' not the same as ', len(fields) #TODO try to deal with this
+        if fields[0] == 'zout':  # output level is the primary variable
+            if self.n_zout == '?':  # Unknown number of output levels
+                # Try just using the number of unique values in the first column
+                self.n_zout = len(np.unique(fluxdata[:,0]))
+            fluxdata = fluxdata.reshape((self.n_zout, -1, linecount), order='F')
+        elif fields[0] == 'wvl' or fields[0] == 'wvn':  # wavelength/wavenumber is the primary variable
+            if self.n_zout == '?':  # Don't know number of output levels
+                self.n_wvl = len(np.unique(fluxdata[:,0]))  # Try to determine number of wavelengths/wavenumbers
+                fluxdata = fluxdata.reshape((self.n_wvl, -1, linecount), order='F')
+            else:
+                fluxdata = fluxdata.reshape((-1, self.n_zout, linecount), order='F')
+        else:  # Assume secondary variable is zout
+            fluxdata = fluxdata.reshape((-1, self.n_zout, linecount), order='F')  #TODO provide warning or something
+        self.fluxdata = fluxdata  # retain the flux data in the instance
+        if linecount == 1:
+            for (ifield, field) in enumerate(fields):
+                setattr(self, field, np.squeeze(fluxdata[ifield]))
+        else:
+            for (ifield, field) in enumerate(fields):
+                setattr(self, field, np.squeeze(fluxdata[:, :, ifield]))
+        # Clean up zout and wavelength/wavenumber data
+        self.zout = np.unique(self.zout)
+        if len(self.zout) > 0:
+            self.n_zout = len(self.zout)
+        self.wvn = np.unique(self.wvn)
+        self.wvl = np.unique(self.wvl)
+        if len(self.wvl) > 0 and len(self.wvn) == 0:  # Calculate wavenumbers if wavelengths available
+            self.wvn = 1e7 / self.wvl
+        if len(self.wvn) > 0 and len(self.wvl) == 0:  # Calculate wavelengths if wavenumbers available
+            self.wvl = 1e7 / self.wvn
+        self.n_wvl = len(self.wvl)
+
+    def readout(self, filename=None):
+        """ Read uvspec output. The result is placed into a dictionary called self.out
+
+         The general process of reading is:
+          1) If the user has specified output_user, just assume a flat file and read using
+             np.loadtxt or np.genfromtxt.
+          2) If not user_output and the solver has no radiance blocks, assume a flat file and
+             read using np.loadtxt. The variables to be read should be contained in the self.fluxline attribute.
+          3) Otherwise, if the output has radiance blocks, read those depending on the radiance block
+             format for the specific solver. Keep reading flux and radiance blocks until the file is exhausted.
+
+         Once the data has all been read, the data is split up between the number of output levels and number
+         of wavelengths. For radiance data, the order of numpy dimensions is umu, phi, wavelength and zout. That is,
+         if a case has multiple zenith angles, multiple azimuth angles, multiple wavelengths and multiple output
+         levels, the radiance property uu will have 4 dimensions.
+
         Output from uvspec depends on the solver and a number of other
         inputs, including the directive 'output_user'.
         For the solvers disort, sdisort, spsdisort and presumably also
@@ -387,79 +526,6 @@ class Case():
         produces some header information in the output that will cause
         errors. An error is issued of the 'header' keyword is used in the
         input.
-        :return:
-        """
-        pass
-
-    def distribute_flux_data(self, fluxdata):
-        """ Distribute flux data read from uvspec output file to various fields
-
-        :param fluxdata: Flux (irradiance) data read from uvspec output file
-        :return:
-        """
-        # First split the data amongst output levels or output wavelengths/wavenumbers
-        # We assume and handle only those cases of output_user where the primary variable is
-        # zout, lambda (wvl) or wavenumber (wvn)
-
-        if self.output_user:  # distribute to user-defined output variables
-            fields = self.output_user
-        else:
-            fields = self.fluxline
-        datashape = fluxdata.shape
-        if len(datashape) == 1:  # Need some special cases to deal with single line output files
-            linecount = 1
-        else:
-            linecount = datashape[1]
-        if len(datashape) == 2:
-            if datashape[1] != len(fields):  # number of fields in data does not match number of fields
-                print datashape[1], ' not the same as ', len(fields) #TODO try to deal with this
-        if fields[0] == 'zout':  # output level is the primary variable
-            if self.n_zout == '?':  # Unknown number of output levels
-                # Try just using the number of unique values in the first column
-                self.n_zout = len(np.unique(fluxdata[:,0]))
-            fluxdata = fluxdata.reshape((self.n_zout, -1, linecount), order='F')
-        elif fields[0] == 'wvl' or fields[0] == 'wvn':  # wavelength/wavenumber is the primary variable
-            if self.n_zout == '?':  # Don't know number of output levels
-                self.n_wvl = len(np.unique(fluxdata[:,0]))  # Try to determine number of wavelengths/wavenumbers
-                fluxdata = fluxdata.reshape((self.n_wvl, -1, linecount), order='F')
-            else:
-                fluxdata = fluxdata.reshape((-1, self.n_zout, linecount), order='F')
-        else:  # Assume secondary variable is zout
-            fluxdata = fluxdata.reshape((-1, self.n_zout, linecount), order='F')  #TODO provide warning or something
-        self.fluxdata = fluxdata  # retain the flux data in the instance
-        if linecount == 1:
-            for (ifield, field) in enumerate(fields):
-                setattr(self, field, np.squeeze(fluxdata[ifield]))
-        else:
-            for (ifield, field) in enumerate(fields):
-                setattr(self, field, np.squeeze(fluxdata[:, :, ifield]))
-        # Clean up zout and wavelength/wavenumber data
-        self.zout = np.unique(self.zout)
-        if len(self.zout) > 0:
-            self.n_zout = len(self.zout)
-        self.wvn = np.unique(self.wvn)
-        self.wvl = np.unique(self.wvl)
-        if len(self.wvl) > 0 and len(self.wvn) == 0:  # Calculate wavenumbers if wavelengths available
-            self.wvn = 1e7 / self.wvl
-        if len(self.wvn) > 0 and len(self.wvl) == 0:  # Calculate wavelengths if wavenumbers available
-            self.wvl = 1e7 / self.wvn
-        self.n_wvl = len(self.wvl)
-
-    def readout(self, filename=None):
-        """ Read uvspec output. The result is placed into a dictionary called self.out
-
-         The general process of reading is:
-          1) If the user has specified output_user, just assume a flat file and read using
-             np.loadtxt or np.genfromtxt.
-          2) If not user_output and the solver has no radiance blocks, assume a flat file and
-             read using np.loadtxt. The variables to be read should be contained in the self.fluxline attribute.
-          3) Otherwise, if the output has radiance blocks, read those depending on the radiance block
-             format for the specific solver. Keep reading flux and radiance blocks until the file is exhausted.
-
-         Once the data has all been read, the data is split up between the number of output levels and number
-         of wavelengths. For radiance data, the order of numpy dimensions is umu, phi, wavelength and zout. That is,
-         if a case has multiple zenith angles, multiple azimuth angles, multiple wavelengths and multiple output
-         levels, the radiance property uu will have 4 dimensions.
 
         :param filename: File from which to read the output. Defaults to name of input file, but with the .OUT
         extension.
@@ -476,15 +542,17 @@ class Case():
         elif (self.n_phi == 0 and self.n_umu == 0) or self.solver == 'sslidar':  # There are no radiance blocks
             fluxdata = np.loadtxt(filename)
             self.distribute_flux_data(fluxdata)
-        elif self.n_phi == 0:
-            fluxdata = np.loadtext(filename)
-            # Take away the radiance data
-            raddata = fluxdata[len(self.fluxline):]
-            fluxdata = fluxdata[:len(self.fluxline)]
-            self.raddata = raddata
-            self.fluxdata = fluxdata
-            self.distribute_flux_data(fluxdata)
+        # elif self.n_phi == 0:   # Not sure about format for n_umu > 0, n_phi == 0
+        #  Look at example UVSPEC_FILTER_SOLAR.INP, which indicates manual is not correct
+        #     fluxdata = np.loadtext(filename)
+        #     # Take away the radiance data
+        #     raddata = fluxdata[len(self.fluxline):]
+        #     fluxdata = fluxdata[:len(self.fluxline)]
+        #     self.raddata = raddata
+        #     self.fluxdata = fluxdata
+        #     self.distribute_flux_data(fluxdata)
         else:  # radiance blocks  #TODO polradtran has different format
+            phicheck = []
             rad3D = []  # full 3D radiance data is here (umu, phi and wavelength)
             with open(filename, 'rt') as uvOUT:
                 # Read and append a line of flux data
