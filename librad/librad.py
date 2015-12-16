@@ -124,7 +124,7 @@ uvspecOutVars = {
     'CIWC': 'Cloud ice water content [kg/kg]',
     'CIWD': 'Cloud ice water density [g/m^3]',
     'TCC': 'Total cloud cover [0-1]',
-    'cth': 'Clout top height'
+    'cth': 'Cloud top height [km]'
 }
 #  the following gas species can appear for _xxx in the above list of output variables.
 gasSpecies = ['air', 'O3', 'O2', 'H2O', 'CO2', 'NO2', 'BRO', 'OCLO', 'HCHO', 'O4']
@@ -142,8 +142,8 @@ uvspecOutVars = outVars  # copy the updated dict back to the original
 # These are wavelength (lambda, wvn), zout, zout_sea, p (pressure)
 # The only two index variables that are allowed together is one height variable and one wavelength/number variable
 # A height as well as a wavelength/number output should only be specified if there are both multiple
-# wavelengths and multiple output heights.
-indexVars = ['lambda', 'wavelength', 'wvl', 'wvn', 'zout', 'zout_sea', 'p']
+# wavelengths and multiple output heights. FOr the TZS solver, the cloud top height (cth) may be index.
+indexVars = ['lambda', 'wavelength', 'wvl', 'wvn', 'zout', 'zout_sea', 'p', 'cth']
 
 # Define a regexp for determining if a token of the zout keyword is a single level
 # It is a single level if it is either a floating point number or the words sur, cpt or toa (for surface,
@@ -190,6 +190,8 @@ class Case():
         self.n_zout = 1  # Assume only one output level, unless zout keyword is used.
         self.n_wvl = '?'  # number of wavelengths is difficult to ascertain to start with
         self.nstokes = 1  # default number of stokes parameters for polradtran
+        self.stokes = ['I']  # default is to compute intensity component only (all solvers, including polradtran)
+        self.radND = []  # N-dimensional radiance data (umu, phi, wvn, zout, stokes)
         self.rad_units = []  # radiance/irradiance units, could be K for brightness temperatures
         if filename is not None:
             if not filename:
@@ -211,7 +213,7 @@ class Case():
                 self.prepare_for(option[0],option[1:])
         #TODO Build the case from the option list ?
 
-    def prepare_for_solver(self, keyword, tokens):
+    def prepare_for_solver(self, tokens):
         self.solver = tokens[0]  # First token gives the solver
         if any([self.solver == thesolver for thesolver in ['disort', 'disort2', 'sdisort',
                                                            'spsdisort', 'fdisort1', 'fdisort2']]):
@@ -223,9 +225,8 @@ class Case():
         elif self.solver == 'sslidar':
             self.fluxline = ['center_of_range', 'number_of_photons', 'lidar_ratio']
 
-    def prepare_for_source(self, keyword, tokens):
+    def prepare_for_source(self, tokens):
         """ Prepare for source, particularly units of various kinds, depending on the source
-        :param keyword: uvspec option keyword
         :param tokens: uvspec option parameters (tokens)
         :return:
         """
@@ -247,9 +248,9 @@ class Case():
         """
         # Prepare for different output formats, depending on the solver
         if keyword == 'rte_solver':
-            self.prepare_for_solver(keyword, tokens)
+            self.prepare_for_solver(tokens)
         if keyword == 'source':
-            self.prepare_for_source(keyword, tokens)
+            self.prepare_for_source(tokens)
         # Prepare for radiances
         if keyword == 'umu':
             self.n_umu = len(tokens)  # The number of umu values
@@ -264,8 +265,17 @@ class Case():
             self.fluxline = []
         if keyword == 'polradtran' and tokens[0] == 'nstokes':
             self.nstokes = int(tokens[1])
+            if self.nstokes == 1:
+                self.stokes = ['I']
+            elif self.nstokes == 3:
+                self.stokes = ['I', 'Q', 'U']
+            elif self.nstokes == 4:
+                self.stokes = ['I', 'Q', 'U', 'V']
+            else:
+                raise ValueError('uvspec input polradtran nstokes must be 1, 3 or 4.')
             self.prepare_for_polradtran()
-        if keyword == 'zout' or keyword == 'zout_sea' or keyword == 'pressure_out':  # Determine number of output levels
+        if (keyword == 'zout' or keyword == 'zout_sea' or keyword == 'pressure_out' or
+            keyword == 'tzs_cloud_top_height'):  # Determine number of output levels
             if all([re.match(re_isSingleOutputLevel, token.lower()) for token in tokens]):
                 self.n_zout = len(tokens)
             else:  # Number of output levels is not known, will have to auto-detect
@@ -281,15 +291,17 @@ class Case():
             elif self.output_quantity == 'transmittance':
                 self.rad_units = ''
                 self.irrad_units = ''
+        if keyword == 'heating_rate':
+            self.output_user = ['zout', 'heat']
+            self.fluxline = []  #TODO note that heating rate outputs for multiple wavelengths have a header line
 
     def prepare_for_polradtran(self):
         """ Prepare for output from the polradtran solver
         :return:
         """
-        stokescomps = ['I', 'Q', 'U', 'V']
         self.fluxline = ['wvl']
-        for istokes in range(self.nstokes):
-            self.fluxline.extend(['down_flux' + stokescomps[istokes], 'up_flux' + stokescomps[istokes]])
+        for stokes in self.stokes:
+            self.fluxline.extend(['down_flux' + stokes, 'up_flux' + stokes])
 
     def append_option(self, option, origin=('user', None)):
         ''' Append a libRadtran/uvspec options to this uvspec case. It will be appended at the end of the file
@@ -398,12 +410,13 @@ class Case():
         # Get the includes and include them at the point where the include keyword appears
         all_opdata = []
         all_line_nos = []
-        this_includes = includes_seen # These are the include files seen up to this point in the recursion
+        this_includes = includes_seen[:] # These are the include files seen up to this point in the recursion
         for line in xrange(len(opdata)):  # Run through all lines in the file and perform include substitutions
             if opdata[line][0] == 'include':  # Have found an include file, read it and append to all_opdata
                 include_file = opdata[line][1]  # Obtain the filename
                 include_file = os.path.normpath(os.path.join(folder, include_file))  # Extend to full path name
                 if this_includes.count(include_file):  # This file has been included before
+                    # print(this_includes, include_file)
                     raise IOError('Attempted to include the same uvspec input file more than once in parent.')
                 this_includes.append(include_file)  # Add the filename to the list of included files already seen
                 # Read the data from the included file
@@ -489,10 +502,14 @@ class Case():
             linecount = 1
         else:
             linecount = datashape[1]
-        if len(datashape) == 2:
-            if datashape[1] != len(fields):  # number of fields in data does not match number of fields
-                print datashape[1], ' not the same as ', len(fields) #TODO try to deal with this
-        if fields[0] == 'zout':  # output level is the primary variable
+
+        # Deal with the sahpe of the data output and try to reshape, depending on the number of
+        # wavelengths and output levels (zout, zout_sea or pressure)
+        #if len(datashape) == 2:
+        #    if datashape[1] != len(fields):  # number of fields in data does not match number of fields
+                # print datashape[1], ' not the same as ', len(fields) #TODO try to deal with this
+        if (fields[0] == 'zout' or fields[0] == 'zout_sea' or fields[0] == 'p' or
+            fields[0] == 'cth'):  # output level or pressure level is the primary variable
             if self.n_zout == '?':  # Unknown number of output levels
                 # Try just using the number of unique values in the first column
                 self.n_zout = len(np.unique(fluxdata[:,0]))
@@ -505,15 +522,41 @@ class Case():
                 fluxdata = fluxdata.reshape((-1, self.n_zout, linecount), order='F')
         else:  # Assume secondary variable is zout
             fluxdata = fluxdata.reshape((-1, self.n_zout, linecount), order='F')  #TODO provide warning or something
-        self.fluxdata = fluxdata  # retain the flux data in the instance
-        if linecount == 1:
+        self.fluxdata = fluxdata  # retain the flux data in the instance, reshaped as well as possible
+        if linecount == 1:  # here the data is actually distributed, single line a special case
+            # Some output fields, such as umu, uu, u0u, uu_down, uu_up, cmu(?) are vectors and therefore occupy
+            # multiple columns, so keep track of columns and try to
+            colstart = 0  # keep track of starting column
             for (ifield, field) in enumerate(fields):
-                setattr(self, field, np.squeeze(fluxdata[ifield]))
+                if field == 'uu' or field == 'uu_up' or field == 'uu_down':  # Do uu_up and uu_down actually exist ?
+                    # Number of columns is n_umu * n_phi
+                    ncols = max(self.n_umu, 1) * max(self.n_phi, 1)
+                elif field == 'u0u':  #TODO does this exist and if so, what is the size ?
+                    pass
+                elif field == 'umu':
+                    ncols = self.n_umu
+                else:  # All other output variables are assumed to occupy only one column
+                    ncols = 1
+                setattr(self, field, np.squeeze(fluxdata[colstart:(colstart + ncols)]))
+                colstart = colstart + ncols
         else:
+            # Some output fields, such as umu, uu, u0u, uu_down, uu_up, cmu(?) are vectors and therefore occupy
+            # multiple columns, so keep track of columns and try to
+            colstart = 0  # keep track of starting column
             for (ifield, field) in enumerate(fields):
-                setattr(self, field, np.squeeze(fluxdata[:, :, ifield]))
+                if field == 'uu' or field == 'uu_up' or field == 'uu_down':  # Do uu_up and uu_down actually exist ?
+                    # Number of columns is n_umu * n_phi
+                    ncols = max(self.n_umu, 1) * max(self.n_phi, 1)
+                elif field == 'u0u':  #TODO does this exist and if so, what is the size ?
+                    pass
+                elif field == 'umu':
+                    ncols = self.n_umu
+                else:  # All other output variables are assumed to occupy only one column
+                    ncols = 1
+                setattr(self, field, np.squeeze(fluxdata[:, :, colstart:(colstart + ncols)]))
+                colstart = colstart + ncols
         # Clean up zout and wavelength/wavenumber data
-        self.zout = np.unique(self.zout)
+        self.zout = np.unique(self.zout)  #TODO check that this does not reorder the zout values (especially pressure)
         if len(self.zout) > 0:
             self.n_zout = len(self.zout)
         self.wvn = np.unique(self.wvn)
@@ -639,10 +682,10 @@ class Case():
         #     self.distribute_flux_data(fluxdata)
         else:  # radiance blocks  #TODO polradtran has different format
             phicheck = []
-            rad3D = []  # full 3D radiance data is here (umu, phi and wavelength)
+            radND = []  # full 3D/4D radiance data is here (umu, phi and wavelength)
             with open(filename, 'rt') as uvOUT:
                 # Read and append a line of flux data
-                txtline = uvOUT.readline();
+                txtline = uvOUT.readline()
                 while txtline:
                     fluxline = np.array(txtline.split()).astype(np.float)
                     if len(fluxdata) > 0:
@@ -653,36 +696,67 @@ class Case():
                     if self.n_phi > 0:  # There is a line of phi angles
                         philine = uvOUT.readline()  #TODO check that phi angles are correct
                         phicheck = np.array(philine.split()).astype(np.float)
-                    # Read the lines for the umu values
-                    raddata = []
-                    for i_umuline in range(self.n_umu):  #TODO this is wrong if there is no phi specified - see manual
-                        umuline = uvOUT.readline()
-                        radline = np.array(umuline.split()).astype(np.float)
-                        if len(raddata) > 0:
-                            raddata = np.vstack((raddata, radline))
-                        else:
-                            raddata = radline
-                    if len(rad3D) > 0:
-                        rad3D = np.dstack((rad3D, raddata))
+                    # Read the lines for the umu values (radiances in radiance block)
+                    raddata = []  # All polarisation blocks are vstacked
+                    for polComp in self.stokes:  # read a radiances block for each polarisation component
+                        if self.solver == 'polradtran':  # Read the polarisation block header
+                            polBlockHeader = uvOUT.readline().strip()
+                            # print polBlockHeader + '}'
+                            if not re.match('^Stokes vector ' + polComp + '$', polBlockHeader):
+                                raise IOError('Stokes vector header not found for component ' + polComp)
+                        # raddata = []
+                        for i_umuline in range(self.n_umu):  #TODO this is possibly wrong if there is no phi specified - see manual
+                            umuline = uvOUT.readline()
+                            radline = np.array(umuline.split()).astype(np.float)
+                            if len(raddata) == 0:
+                                raddata = radline
+                            else:
+                                raddata = np.vstack((raddata, radline))
+                    if len(radND) == 0:
+                        radND = raddata
                     else:
-                        rad3D = raddata
+                        radND = np.dstack((radND, raddata))
                     txtline = uvOUT.readline()  # Read what should be the next line of flux data
+
             self.distribute_flux_data(fluxdata)  # distribute the flux data, which should also determine
                                                  # the number of wavelengths definitively
-            self.rad3D = rad3D  # all the data
+            self.radND = radND
             self.phi_check = phicheck
-            self.u0u = rad3D[:,1]
-            #if self.u0u.shape[1] / self.n_wvl > 1:  #TODO problem here with single wavelength data
-            #    self.u0u = self.u0u.reshape((self.n_umu, self.n_wvl, -1), order='F')
-            if rad3D.ndim == 3:
-                self.uu = rad3D[:,2:,:]
-                # If there are multiple zout levels, must reshape self.uu
-                if self.uu.shape[2] / self.n_wvl > 1:
-                    self.uu = self.uu.reshape((self.n_umu, self.n_phi, self.n_wvl, -1), order='F')
-            else:
-                self.uu = rad3D[:,2:]
-                if self.uu.shape[1] / self.n_wvl > 1:  # if multiple output levels, reshape the radiance data appropriately
-                    self.uu = self.uu.reshape((self.n_umu, self.n_wvl, -1), order='F')
+
+            # See if one size fits all
+            self.u0u = radND[:,1].reshape(self.n_umu, self.nstokes, self.n_wvl, -1, order='F').squeeze()  # should actually all be zero
+            self.uu = radND[:,2:]
+            self.uu = self.uu.reshape((self.n_umu, self.nstokes, max(self.n_phi, 1), self.n_wvl, -1), order='F')
+            self.uu = self.uu.transpose([0, 2, 3, 4, 1])  # transpose so that the nstokes axis is last
+            while self.uu.shape[-1] == 1:  # Remove any hanging singleton dimensions at the end
+                self.uu = self.uu.squeeze(axis=self.uu.ndim-1)
+            # Put stokes last ?
+
+            # if self.solver == 'polradtran':
+            #     self.u0u = radND[:,1].reshape(self.n_umu, self.nstokes, self.n_wvl, -1, order='F').squeeze()  # should actually all be zero
+            #     if radND.ndim == 3:  # There are multiple n_phi values
+            #         self.uu = radND[:,2:,:]
+            #         # Reshape to multiple nstokes values, multiple wavelengths and multiple zout levels
+            #         self.uu = self.uu.reshape((self.n_umu, self.nstokes, self.n_phi, self.n_wvl, -1), order='F').squeeze()
+            #
+            #     else: # There are only different umu values, no different phi values
+            #         self.uu = radND[:,2:]
+            #         # reshape to multiple nstokes
+            #         self.uu = self.uu.reshape((self.n_umu, self.nstokes, max(self.n_phi, 1), self.n_wvl, -1), order='F').squeeze()
+            #
+            # else:
+            #     self.u0u = radND[:,1].reshape(self.n_umu, self.nstokes, self.n_wvl, -1, order='F').squeeze()
+            #     #if self.u0u.shape[1] / self.n_wvl > 1:  #TODO problem here with single wavelength data
+            #     #    self.u0u = self.u0u.reshape((self.n_umu, self.n_wvl, -1), order='F')
+            #     if radND.ndim == 3:
+            #         self.uu = radND[:,2:,:]
+            #         # If there are multiple zout levels, must reshape self.uu
+            #         if self.uu.shape[2] / self.n_wvl > 1:
+            #             self.uu = self.uu.reshape((self.n_umu, self.n_phi, self.n_wvl, -1), order='F')
+            #     else:
+            #         self.uu = radND[:,2:]
+            #         if self.uu.shape[1] / self.n_wvl > 1:  # if multiple output levels, reshape the radiance data appropriately
+            #             self.uu = self.uu.reshape((self.n_umu, self.n_wvl, -1), order='F')
 
 
 
