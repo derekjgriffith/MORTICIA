@@ -25,488 +25,501 @@
 
 from option_definition import *
 
+
 class setup_mc_group():
-	
-	group_name = 'Monte Carlo'
+    group_name = 'Monte Carlo'
 
-	def __init__(self):
-		documentation = get_mc_documentation()
+    def __init__(self):
+        documentation = get_mc_documentation()
 
-		mc_escape = not_yet_lex2py_option(  #TODO: bad implementation in lex_starter.l 
-			name='mc_escape',
-			group='mc',
-			helpstr='Calculate MYSTIC radiances via escape probabilities.', 
-			documentation=documentation['mc_escape'],
-			gui_inputs=(ListInput(name='on/off',valid_range=['on','off']),),
-			tokens=addToken(name="", datatype=str),
-			parents=['uvspec'],
-			speaker='rte_solver',
-			enable_values=("mystic","montecarlo"),
-			mystic =True
-		)
-		
-		mc_vroom = option(
-			name='mc_vroom',
-			group='mc',
-			helpstr='Use Variance Reduction Methods in MYSTIC.', 
-			documentation=documentation['mc_vroom'],
-			gui_inputs=(ListInput(name='on/off',valid_range=['on','off'],optional=True),),
-			tokens= [ addSetting(name="Input.rte.mc.vroom", setting=1),
-				addLogical(name='Input.rte.mc.vroom', logicals=['on','off'], setting='SWITCH_', optional=True) ],
-			parents=['uvspec'],
-			speaker='rte_solver',
-			enable_values=("mystic","montecarlo"),
-			mystic =True
-		)
-				
-		mc_visualize = option(
-			name='mc_visualize',
-			group='mc',
-			helpstr='Switch on OpenGL visualization for MYSTIC.', 
-			documentation=documentation['mc_visualize'],
-			gui_inputs=(ListInput(name='hiddenline',valid_range = ['hiddenline'],optional=True),),
-			tokens= [ addSetting(name="Input.rte.mc.visualize", setting=1),
-				addLogical(name="GLmystic_hiddenline",logicals=['hiddenline'], optional=True) ],
-			parents=['uvspec'],
-			speaker='rte_solver',
-			enable_values=("mystic","montecarlo"),
-			threedmystic =True
-		)
-				
-		mc_truncate = option(  
-			name='mc_truncate',
-			group='mc',
-			helpstr='Truncate phase function at the specified polar angle mu.', 
-			documentation=documentation['mc_truncate'],
-			tokens = [ addSetting(name="Input.rte.mc.truncate", setting=0.99),
-				addToken(name="Input.rte.mc.truncate", datatype=float, optional=True) ], 
-			gui_inputs=( FloatInput(name='Polar angle mu',optional=True, default=0.99), ) ,
-			parents=['uvspec'],
-			speaker='rte_solver',
-			enable_values=("mystic","montecarlo"),
-			threedmystic =True,
-			showInGui =False,
-                        islidar = True
-		)
-				
-		mc_backward = option(
-			name='mc_backward',
-			group='mc',
-			helpstr='Backward tracing of photons.', 
-			documentation=documentation['mc_backward'],
-			gui_inputs=(IntegerInput(name='mc_backward_islower',optional=True),IntegerInput(name='mc_backward_jslower',optional=True),IntegerInput(name='mc_backward_isupper',optional=True),IntegerInput(name='mc_backward_jsupper',optional=True),),
-			tokens = [ addSetting( name="Input.rte.mc.backward.yes", setting=1),
-				addToken(name="Input.rte.mc.backward.islower", datatype=int, optional=True, default='NOT_DEFINED_INTEGER'),
-				addToken(name="Input.rte.mc.backward.jslower", datatype=int, optional=True, default='NOT_DEFINED_INTEGER'),
-				addToken(name="Input.rte.mc.backward.isupper", datatype=int, optional=True, default='NOT_DEFINED_INTEGER'),
-				addToken(name="Input.rte.mc.backward.jsupper", datatype=int, optional=True, default='NOT_DEFINED_INTEGER') ] ,
-			parents=['uvspec'],
-			non_parents= ['mc_forward_output' ],
-			speaker='rte_solver',
-			enable_values=("mystic","montecarlo"),
-			mystic =True,
-			childs=['mc_backward_output', 'mc_backward_writeallpixels',
-				'mc_backward_writeback','mc_panorama_view', 'mc_sensordirection',
-				'mc_sensorposition', 'mc_reference_to_nn','mc_bw_umu_file',
-				]
-		)
+        mc_escape = not_yet_lex2py_option(  # TODO: bad implementation in lex_starter.l
+                                            name='mc_escape',
+                                            group='mc',
+                                            helpstr='Calculate MYSTIC radiances via escape probabilities.',
+                                            documentation=documentation['mc_escape'],
+                                            gui_inputs=(ListInput(name='on/off', valid_range=['on', 'off']),),
+                                            tokens=addToken(name="", datatype=str),
+                                            parents=['uvspec'],
+                                            speaker='rte_solver',
+                                            enable_values=("mystic", "montecarlo"),
+                                            mystic=True
+                                            )
 
-		mc_sample_cldprp = option(
-			name='mc_sample_cldprp', 
-			group='mc',  
-			helpstr='Turns on sampling of cloud properties by photons.',
-			documentation=documentation['mc_sample_cldprp'],
-			tokens=[ addSetting(name='Input.rte.mc.backward.yes', setting=1, default=0),
-				   addSetting(name='Input.rte.mc.sample_cldprp', setting=1) ], 
-			parents=['mc_backward'],  
-			speaker='rte_solver',
-			enable_values=("mystic","montecarlo"),
-			threedmystic =True,
-			showInGui = False
-		)
+        mc_vroom = option(
+            name='mc_vroom',
+            group='mc',
+            helpstr='Use Variance Reduction Methods in MYSTIC.',
+            documentation=documentation['mc_vroom'],
+            gui_inputs=(ListInput(name='on/off', valid_range=['on', 'off'], optional=True),),
+            tokens=[addSetting(name="Input.rte.mc.vroom", setting=1),
+                    addLogical(name='Input.rte.mc.vroom', logicals=['on', 'off'], setting='SWITCH_', optional=True)],
+            parents=['uvspec'],
+            speaker='rte_solver',
+            enable_values=("mystic", "montecarlo"),
+            mystic=True
+        )
 
-		mc_surface_reflectalways = option(
-			name='mc_surface_reflectalways',
-			group='mc',  
-			helpstr='The photon is reflected and the albedo is considered by reducing the photon weight.',
-			documentation=documentation['mc_surface_reflectalways'],
-			tokens=[ addSetting(name='Input.rte.mc.reflectalways', setting=1, default=0)], 
-			parents=['uvspec'],  
-			speaker='rte_solver',
-			enable_values=("mystic","montecarlo"),
-			mystic =True,
-			showInGui=False,
-		)
-		
-		mc_DoLE = option(
-			name='mc_DoLE',
-			group='mc',  
-			helpstr='Double local estimate of specular ocean reflection to speed up convergence.',
-			documentation=documentation['mc_DoLE'],
-			tokens=[ addSetting(name='Input.rte.mc.DoLE', setting=1, default=0)], 
-			parents=['uvspec'],  
-			speaker='rte_solver',
-			enable_values=("mystic","montecarlo"),
-			mystic =True,
-			showInGui=False,
-                        islidar=True
-		)
-		
-		mc_spectral_is = option(  
-			name='mc_spectral_is', 
-			group='mc', 
-			helpstr='Turns on spectral importance sampling.', 
-			documentation=documentation['mc_spectral_is'],     
-			gui_inputs = (FloatInput(name='wavelength',optional=True,  valid_range=[0, 1000000.0]),),  
-			tokens=[addSetting(name='Input.rte.mc.spectral_is', setting=True, default=False),
-				addToken(name='Input.rte.mc.spectral_is_wvl[0]', datatype=float, valid_range=[0, 1e6],optional=True) ], 
-			parents=['uvspec'], 
-			speaker='rte_solver',
-			enable_values=("mystic","montecarlo"),
-			threedmystic =True,
-			islidar=True
-		)
+        mc_visualize = option(
+            name='mc_visualize',
+            group='mc',
+            helpstr='Switch on OpenGL visualization for MYSTIC.',
+            documentation=documentation['mc_visualize'],
+            gui_inputs=(ListInput(name='hiddenline', valid_range=['hiddenline'], optional=True),),
+            tokens=[addSetting(name="Input.rte.mc.visualize", setting=1),
+                    addLogical(name="GLmystic_hiddenline", logicals=['hiddenline'], optional=True)],
+            parents=['uvspec'],
+            speaker='rte_solver',
+            enable_values=("mystic", "montecarlo"),
+            threedmystic=True
+        )
 
-		mc_aerosol_is = option(  
-			name='mc_aerosol_is',
-			group='mc',
-			helpstr='Enable aerosol concentration importance sampling.', 
-			documentation=documentation['mc_aerosol_is'], 
-			tokens=[ addToken(name='Input.rte.mc.filename[FN_MC_AERIS]', datatype=file),
-				 addSetting(name='Input.rte.mc.concentration_is', setting=True, default=False) ],
-			parents=['uvspec'], 
-			speaker='rte_solver',
-			enable_values=("mystic","montecarlo"),
-			mystic =True,
-			showInGui = False,
-                        islidar=True
-		)
+        mc_truncate = option(
+            name='mc_truncate',
+            group='mc',
+            helpstr='Truncate phase function at the specified polar angle mu.',
+            documentation=documentation['mc_truncate'],
+            tokens=[addSetting(name="Input.rte.mc.truncate", setting=0.99),
+                    addToken(name="Input.rte.mc.truncate", datatype=float, optional=True)],
+            gui_inputs=(FloatInput(name='Polar angle mu', optional=True, default=0.99),),
+            parents=['uvspec'],
+            speaker='rte_solver',
+            enable_values=("mystic", "montecarlo"),
+            threedmystic=True,
+            showInGui=False,
+            islidar=True
+        )
 
-		mc_boxairmass = option(  
-			name='mc_boxairmass',
-			group='mc',
-			helpstr='Calculate box-air-mass factors', 
-			documentation=documentation['mc_boxairmass'], 
-			tokens=[ addSetting(name='Input.rte.mc.boxairmass', setting=True, default=False) ],
-			parents=['uvspec'], 
-			speaker='rte_solver',
-			enable_values=("mystic","montecarlo"),
-			mystic =True,
-			showInGui = False,
-                        islidar = True
-			)
-		
-		mc_albedo_spectral = option( # TODO: Documentation missing!
-			name='mc_albedo_spectral', 
-			group='mc', 
-			helpstr='',
-			documentation=documentation['mc_albedo_spectral'], 
-			tokens=addSetting(name='Input.rte.mc.spectral', setting=1, default=0), 
-			parents=['uvspec'], 
-			speaker='rte_solver',
-			enable_values=("mystic","montecarlo"),
-			mystic =True,
-			showInGui = False,
-                        islidar = True
+        mc_backward = option(
+            name='mc_backward',
+            group='mc',
+            helpstr='Backward tracing of photons.',
+            documentation=documentation['mc_backward'],
+            gui_inputs=(IntegerInput(name='mc_backward_islower', optional=True),
+                        IntegerInput(name='mc_backward_jslower', optional=True),
+                        IntegerInput(name='mc_backward_isupper', optional=True),
+                        IntegerInput(name='mc_backward_jsupper', optional=True),),
+            tokens=[addSetting(name="Input.rte.mc.backward.yes", setting=1),
+                    addToken(name="Input.rte.mc.backward.islower", datatype=int, optional=True,
+                             default='NOT_DEFINED_INTEGER'),
+                    addToken(name="Input.rte.mc.backward.jslower", datatype=int, optional=True,
+                             default='NOT_DEFINED_INTEGER'),
+                    addToken(name="Input.rte.mc.backward.isupper", datatype=int, optional=True,
+                             default='NOT_DEFINED_INTEGER'),
+                    addToken(name="Input.rte.mc.backward.jsupper", datatype=int, optional=True,
+                             default='NOT_DEFINED_INTEGER')],
+            parents=['uvspec'],
+            non_parents=['mc_forward_output'],
+            speaker='rte_solver',
+            enable_values=("mystic", "montecarlo"),
+            mystic=True,
+            childs=['mc_backward_output', 'mc_backward_writeallpixels',
+                    'mc_backward_writeback', 'mc_panorama_view', 'mc_sensordirection',
+                    'mc_sensorposition', 'mc_reference_to_nn', 'mc_bw_umu_file',
+                    ]
+        )
 
-		)
+        mc_sample_cldprp = option(
+            name='mc_sample_cldprp',
+            group='mc',
+            helpstr='Turns on sampling of cloud properties by photons.',
+            documentation=documentation['mc_sample_cldprp'],
+            tokens=[addSetting(name='Input.rte.mc.backward.yes', setting=1, default=0),
+                    addSetting(name='Input.rte.mc.sample_cldprp', setting=1)],
+            parents=['mc_backward'],
+            speaker='rte_solver',
+            enable_values=("mystic", "montecarlo"),
+            threedmystic=True,
+            showInGui=False
+        )
 
-		mc_azimuth_old = option(
-			name='mc_azimuth_old',
-			group='mc',
-			helpstr='Use old MYSTIC azimuth convention.',
-			documentation=documentation['mc_azimuth_old'], 
-			tokens=addSetting(name='Input.rte.mc.azimuth', setting='MCAZIMUTH_OLD', default ='MCAZIMUTH_NEW'),	
-			parents=['uvspec'], 
-			speaker='rte_solver',
-			enable_values=("mystic","montecarlo"),
-			mystic =True,
-			showInGui = False
+        mc_surface_reflectalways = option(
+            name='mc_surface_reflectalways',
+            group='mc',
+            helpstr='The photon is reflected and the albedo is considered by reducing the photon weight.',
+            documentation=documentation['mc_surface_reflectalways'],
+            tokens=[addSetting(name='Input.rte.mc.reflectalways', setting=1, default=0)],
+            parents=['uvspec'],
+            speaker='rte_solver',
+            enable_values=("mystic", "montecarlo"),
+            mystic=True,
+            showInGui=False,
+        )
 
-		)
+        mc_DoLE = option(
+            name='mc_DoLE',
+            group='mc',
+            helpstr='Double local estimate of specular ocean reflection to speed up convergence.',
+            documentation=documentation['mc_DoLE'],
+            tokens=[addSetting(name='Input.rte.mc.DoLE', setting=1, default=0)],
+            parents=['uvspec'],
+            speaker='rte_solver',
+            enable_values=("mystic", "montecarlo"),
+            mystic=True,
+            showInGui=False,
+            islidar=True
+        )
 
-		mc_backward_heat = option(
-			name='mc_backward_heat',
-			group='mc',
-			helpstr='Define method for thermal backward heating rate calculation.',
-			documentation=documentation['mc_backward_heat'],
-			tokens=addLogical(name='Input.rte.mc.backward.thermal_heating_method', logicals=['HYBRID','EMABS','EMABSOPT','DENET'], setting='MCBACKWARD_HEAT_',default = 'MCBACKWARD_HEAT_HYBRID'),
-			parents=['uvspec'],
-			enable_values=("mystic","montecarlo"),
-			threedmystic =True,
-			showInGui = False
-		)
+        mc_spectral_is = option(
+            name='mc_spectral_is',
+            group='mc',
+            helpstr='Turns on spectral importance sampling.',
+            documentation=documentation['mc_spectral_is'],
+            gui_inputs=(FloatInput(name='wavelength', optional=True, valid_range=[0, 1000000.0]),),
+            tokens=[addSetting(name='Input.rte.mc.spectral_is', setting=True, default=False),
+                    addToken(name='Input.rte.mc.spectral_is_wvl[0]', datatype=float, valid_range=[0, 1e6],
+                             optional=True)],
+            parents=['uvspec'],
+            speaker='rte_solver',
+            enable_values=("mystic", "montecarlo"),
+            threedmystic=True,
+            islidar=True
+        )
 
-		mc_backward_sunshape_file = option(
-			name='mc_backward_sunshape_file', 
-			group='mc', 
-			helpstr='Path to a 2-coloumned text file containing the extraterrestrial sun shape.', 
-			documentation=documentation['mc_backward_sunshape_file'],
-			tokens=addToken(name='Input.rte.mc.filename[FN_MC_SUNSHAPE_FILE]', datatype=file),
-			parents=['mc_backward'], 
-			speaker='rte_solver',
-			enable_values=("mystic","montecarlo"),
-			mystic =True,
-			showInGui = False,
-                        islidar = True
+        mc_aerosol_is = option(
+            name='mc_aerosol_is',
+            group='mc',
+            helpstr='Enable aerosol concentration importance sampling.',
+            documentation=documentation['mc_aerosol_is'],
+            tokens=[addToken(name='Input.rte.mc.filename[FN_MC_AERIS]', datatype=file),
+                    addSetting(name='Input.rte.mc.concentration_is', setting=True, default=False)],
+            parents=['uvspec'],
+            speaker='rte_solver',
+            enable_values=("mystic", "montecarlo"),
+            mystic=True,
+            showInGui=False,
+            islidar=True
+        )
 
-		)
+        mc_boxairmass = option(
+            name='mc_boxairmass',
+            group='mc',
+            helpstr='Calculate box-air-mass factors',
+            documentation=documentation['mc_boxairmass'],
+            tokens=[addSetting(name='Input.rte.mc.boxairmass', setting=True, default=False)],
+            parents=['uvspec'],
+            speaker='rte_solver',
+            enable_values=("mystic", "montecarlo"),
+            mystic=True,
+            showInGui=False,
+            islidar=True
+        )
 
-		mc_backward_writeback = option(
-			name='mc_backward_writeback',
-			group='mc',
-			helpstr='Write extra photon information',
-			documentation=documentation['mc_backward_writeback'],
-			tokens=addSetting(name='Input.rte.mc.backward.writeback', setting=1),
-			parents=['mc_backward'], 
-			speaker='rte_solver',
-			enable_values=("mystic","montecarlo"),
-			mystic =True,
-			showInGui = False
+        mc_albedo_spectral = option(  # TODO: Documentation missing!
+                                      name='mc_albedo_spectral',
+                                      group='mc',
+                                      helpstr='',
+                                      documentation=documentation['mc_albedo_spectral'],
+                                      tokens=addSetting(name='Input.rte.mc.spectral', setting=1, default=0),
+                                      parents=['uvspec'],
+                                      speaker='rte_solver',
+                                      enable_values=("mystic", "montecarlo"),
+                                      mystic=True,
+                                      showInGui=False,
+                                      islidar=True
 
-		)
+                                      )
 
-		mc_coherent_backscatter = option(
-			name='mc_coherent_backscatter',
-			group='mc', 
-			helpstr='Switches on coherent backscattering for lidar and radar.',
-			documentation=documentation['mc_coherent_backscatter'], 
-			tokens=addSetting(name='Input.rte.mc.coherent_backscatter',setting=1,default=0), 
-			parents=[], 
-			speaker='rte_solver',
-			enable_values=("mystic","montecarlo"),
-			mystic =True,
-			islidar = False,
-			showInGui=False
-		)
+        mc_azimuth_old = option(
+            name='mc_azimuth_old',
+            group='mc',
+            helpstr='Use old MYSTIC azimuth convention.',
+            documentation=documentation['mc_azimuth_old'],
+            tokens=addSetting(name='Input.rte.mc.azimuth', setting='MCAZIMUTH_OLD', default='MCAZIMUTH_NEW'),
+            parents=['uvspec'],
+            speaker='rte_solver',
+            enable_values=("mystic", "montecarlo"),
+            mystic=True,
+            showInGui=False
 
-		mc_delta_scaling = option(
-			name='mc_delta_scaling',
-			group='mc', 
-			helpstr='Truncate phase function in MYSTIC.',
-			documentation=documentation['mc_delta_scaling'],
-			tokens=[ addSetting(name='Input.rte.mc.delta_scaling_mucut', setting=0.99),	
-				addSetting(name='Input.rte.mc.delta_scaling_start', setting=0),
-				addToken(name='Input.rte.mc.delta_scaling_mucut', datatype=float, optional=True),	
-				addToken(name='Input.rte.mc.delta_scaling_start', datatype=int, optional =True) ], 
-			parents=['uvspec'], 
-			speaker='rte_solver',
-			enable_values=("mystic","montecarlo"),
-			threedmystic =True,
-			showInGui =False
-		)
+        )
 
-		mc_maxscatters = option( 
-			name='mc_maxscatters',
-			group='mc',
-			helpstr='Photons are destroyed after n scatters. For testing only.',
-			documentation=documentation['mc_maxscatters'], 
-			tokens=addToken(name='Input.rte.mc.maxscatters', datatype=int, default = 'NOT_DEFINED_INTEGER', valid_range=[0,1e6]), # 1e6 is float, not integer!??  
-			parents=['uvspec'],
-			speaker='rte_solver',
-			enable_values=("mystic","montecarlo"),
-			threedmystic =True,
-			showInGui =False
+        mc_backward_heat = option(
+            name='mc_backward_heat',
+            group='mc',
+            helpstr='Define method for thermal backward heating rate calculation.',
+            documentation=documentation['mc_backward_heat'],
+            tokens=addLogical(name='Input.rte.mc.backward.thermal_heating_method',
+                              logicals=['HYBRID', 'EMABS', 'EMABSOPT', 'DENET'], setting='MCBACKWARD_HEAT_',
+                              default='MCBACKWARD_HEAT_HYBRID'),
+            parents=['uvspec'],
+            enable_values=("mystic", "montecarlo"),
+            threedmystic=True,
+            showInGui=False
+        )
 
-		)
+        mc_backward_sunshape_file = option(
+            name='mc_backward_sunshape_file',
+            group='mc',
+            helpstr='Path to a 2-coloumned text file containing the extraterrestrial sun shape.',
+            documentation=documentation['mc_backward_sunshape_file'],
+            tokens=addToken(name='Input.rte.mc.filename[FN_MC_SUNSHAPE_FILE]', datatype=file),
+            parents=['mc_backward'],
+            speaker='rte_solver',
+            enable_values=("mystic", "montecarlo"),
+            mystic=True,
+            showInGui=False,
+            islidar=True
 
-		mc_minscatters = option( 
-			name='mc_minscatters',
-			group='mc',
-			helpstr='Local estimates are not performed before n scatters. For testing only',
-			documentation=documentation['mc_minscatters'],
-			tokens=addToken(name='Input.rte.mc.minscatters', datatype=int, default=0, valid_range=[0,1e6]),
-			parents=['uvspec'],
-			speaker='rte_solver',
-			enable_values=("mystic","montecarlo"),
-			threedmystic =True,
-			showInGui =False
+        )
 
-		)
+        mc_backward_writeback = option(
+            name='mc_backward_writeback',
+            group='mc',
+            helpstr='Write extra photon information',
+            documentation=documentation['mc_backward_writeback'],
+            tokens=addSetting(name='Input.rte.mc.backward.writeback', setting=1),
+            parents=['mc_backward'],
+            speaker='rte_solver',
+            enable_values=("mystic", "montecarlo"),
+            mystic=True,
+            showInGui=False
 
-		mc_minphotons = option(
-			name='mc_minphotons',
-			group='mc',
-			helpstr='Minimum value of photons to be used per simulation.',	
-			documentation=documentation['mc_minphotons'],
-			gui_inputs=(IntegerInput(name='Input.rte.mc.minphotons', default=0, valid_range=[0, 1000000]),),
-			tokens=addToken(name='Input.rte.mc.minphotons', datatype=int, default=0, valid_range=[0,1e6]),
-			parents=['uvspec'],
-			speaker='rte_solver',
-			enable_values=("mystic","montecarlo"),
-			threedmystic =True
-		)
+        )
 
-		mc_photons = option(
-			name='mc_photons', 
-			group='mc', 
-			helpstr='Total number of photons to be traced by the Monte Carlo solver.', 
-			documentation=documentation['mc_photons'], 
-			gui_inputs=(IntegerInput(name='Input.rte.mc.photons', default=10000, valid_range=[0, 10000000000]),),
-			tokens=addToken(name='Input.rte.mc.photons', datatype=long, valid_range=[0,1e10]),
-			parents=['uvspec'],
-			speaker='rte_solver',
-			enable_values=("mystic","montecarlo"),
-			mystic =True
-		)
+        mc_coherent_backscatter = option(
+            name='mc_coherent_backscatter',
+            group='mc',
+            helpstr='Switches on coherent backscattering for lidar and radar.',
+            documentation=documentation['mc_coherent_backscatter'],
+            tokens=addSetting(name='Input.rte.mc.coherent_backscatter', setting=1, default=0),
+            parents=[],
+            speaker='rte_solver',
+            enable_values=("mystic", "montecarlo"),
+            mystic=True,
+            islidar=False,
+            showInGui=False
+        )
 
-		mc_photons_file = option(  
-			name='mc_photons_file',
-			group='mc', 
-			helpstr='Define a MYSTIC spectral photon file.',
-			documentation=documentation['mc_photons_file'],
-			gui_inputs=(FileInput(name='filename'),),
-			tokens=addToken( name='Input.rte.mc.filename[FN_MC_PHOTONS]', datatype=file ),	
-			parents=['uvspec'], 
-			speaker='rte_solver',
-			enable_values=("mystic","montecarlo"),
-			mystic =True
-		)
+        mc_delta_scaling = option(
+            name='mc_delta_scaling',
+            group='mc',
+            helpstr='Truncate phase function in MYSTIC.',
+            documentation=documentation['mc_delta_scaling'],
+            tokens=[addSetting(name='Input.rte.mc.delta_scaling_mucut', setting=0.99),
+                    addSetting(name='Input.rte.mc.delta_scaling_start', setting=0),
+                    addToken(name='Input.rte.mc.delta_scaling_mucut', datatype=float, optional=True),
+                    addToken(name='Input.rte.mc.delta_scaling_start', datatype=int, optional=True)],
+            parents=['uvspec'],
+            speaker='rte_solver',
+            enable_values=("mystic", "montecarlo"),
+            threedmystic=True,
+            showInGui=False
+        )
 
-		mc_polarisation = option(
-			name='mc_polarisation', 
-			group='mc', 
-			helpstr='Turn on polarisation for Monte Carlo solver.', 
-			documentation=documentation['mc_polarisation'], 
-			tokens = [ addSetting(name='Input.rte.mc.polarisation', setting=1, default=0),
-				 addSetting(name='Input.rte.mc.reflectalways', setting=1,default=0),
-                                 addToken(name='Input.rte.mc.polarisation_state', datatype=int,valid_range=[-9,9],default=0,optional=True)],
-			parents=['uvspec'],
-			speaker='rte_solver',
-			enable_values=("mystic","montecarlo"),
-			mystic =True
-		)
-		
-		mc_rad_alpha =  option(
-			name='mc_rad_alpha', 
-			group='mc', 
-			helpstr='Define opening angle for radiance simulations.', 
-			documentation=documentation['mc_rad_alpha'], 
-			gui_inputs=(IntegerInput(name='Input.rte.mc.alpha',
-						 default=5, valid_range=[0, 90]),),
-			tokens=addToken(name='Input.rte.mc.alpha', datatype=float, default=5,
-					valid_range=[0,90]),
-			parents=['uvspec'],
-			speaker='rte_solver',
-			enable_values=("mystic","montecarlo"),
-			mystic =True
-		)
-		
-		mc_radial_pathlength = option(
-			name='mc_radial_pathlength', 
-			group='mc', 
-			helpstr='I3RC case 7',
-			documentation=documentation['mc_radial_pathlength'],
-			tokens=[ addToken(name='Input.rte.mc.Nr', datatype=int, default=0,valid_range=[0,1e6]),
-				 addToken(name='Input.rte.mc.Nt', datatype=int, default=0,valid_range=[0,1e6]) ],
-			parents=['uvspec'],
-			speaker='rte_solver',
-			enable_values=("mystic","montecarlo"),
-			threedmystic =True,
-			showInGui = False
-		)
+        mc_maxscatters = option(
+            name='mc_maxscatters',
+            group='mc',
+            helpstr='Photons are destroyed after n scatters. For testing only.',
+            documentation=documentation['mc_maxscatters'],
+            tokens=addToken(name='Input.rte.mc.maxscatters', datatype=int, default='NOT_DEFINED_INTEGER',
+                            valid_range=[0, 1e6]),  # 1e6 is float, not integer!??
+            parents=['uvspec'],
+            speaker='rte_solver',
+            enable_values=("mystic", "montecarlo"),
+            threedmystic=True,
+            showInGui=False
 
-		mc_radial_pathlength_dt = option(
-			name='mc_radial_pathlength_dt',
-			group='mc', 
-			helpstr='Time increment for mc_radial_pathlength',
-			documentation=documentation['mc_radial_pathlength_dt'],
-			tokens=addToken(name='Input.rte.mc.dt', datatype=float, default=1e-7, valid_range=[0,1e6]),
-			parents=['mc_radial_pathlength'],
-			speaker='rte_solver',
-			enable_values=("mystic",),
-			threedmystic =True,
-			showInGui = False
-		)
+        )
 
-		mc_readrandomstatus = option(  # TODO: Documentation wrong! filename is not implemented!
-			name='mc_readrandomstatus', 
-			group='mc', 
-			helpstr='Read from file the random status for the random number generator.',  #Documentation wrong!
-			documentation=documentation['mc_readrandomstatus'], 
-			tokens=[addSetting(name='Input.rte.mc.readrandomstatus',setting=1),
-				addSetting(name='Input.rte.mc.readrandomseed',setting=1) ],
-			parents=['uvspec'],
-			speaker='rte_solver',
-			enable_values=("mystic",),
-			threedmystic =True,
-			showInGui=False,
-		)
+        mc_minscatters = option(
+            name='mc_minscatters',
+            group='mc',
+            helpstr='Local estimates are not performed before n scatters. For testing only',
+            documentation=documentation['mc_minscatters'],
+            tokens=addToken(name='Input.rte.mc.minscatters', datatype=int, default=0, valid_range=[0, 1e6]),
+            parents=['uvspec'],
+            speaker='rte_solver',
+            enable_values=("mystic", "montecarlo"),
+            threedmystic=True,
+            showInGui=False
 
-		mc_randomseed = option(
-			name='mc_randomseed', 
-			group='mc', 
-			helpstr='Set random seed for MYSTIC.',
-			documentation=documentation['mc_randomseed'], 
-			gui_inputs=(IntegerInput(name='Input.rte.mc.randomseed', default=0, valid_range=[0, 1000000000000000]),),
-			tokens=addToken(name='Input.rte.mc.randomseed', datatype=int, valid_range=[0,1e15]),
-			parents=['uvspec'],
-			speaker='rte_solver',
-			enable_values=("mystic",),
-		)
+        )
 
-		mc_refraction = option(
-			name='mc_refraction',
-			group='mc',
-			helpstr='Enable refraction.', 
-			documentation=documentation['mc_refraction'],
-			tokens=addSetting(name='Input.rte.mc.refraction', setting=1, default=0), 
-			parents=['mc_spherical'], 
-			speaker='rte_solver',
-			enable_values=("mystic",),
-			mystic =True,
-			showInGui=False,
-			developer=True,
-		)
-	
-		mc_ris = option(
-			name='mc_ris',
-			group='mc',
-			helpstr='Use with mc_radar to get good statistics, artificially enhances the optical depth of the clouds for microwave wavelengths.',
-			documentation=documentation['mc_ris'],
-			tokens= [addLogical(name='id', logicals=['factor','optical_depth'], setting='MC_RIS_'),
-				addToken(name='Input.rte.mc.ris[id]', datatype=Double ) ], 
-			parents=[],
-			speaker='rte_solver',
-			enable_values=("mystic",),
-			threedmystic =True, 
-			islidar = True,
-			showInGui = False
-		)
+        mc_minphotons = option(
+            name='mc_minphotons',
+            group='mc',
+            helpstr='Minimum value of photons to be used per simulation.',
+            documentation=documentation['mc_minphotons'],
+            gui_inputs=(IntegerInput(name='Input.rte.mc.minphotons', default=0, valid_range=[0, 1000000]),),
+            tokens=addToken(name='Input.rte.mc.minphotons', datatype=int, default=0, valid_range=[0, 1e6]),
+            parents=['uvspec'],
+            speaker='rte_solver',
+            enable_values=("mystic", "montecarlo"),
+            threedmystic=True
+        )
 
-		self.options = [mc_polarisation, mc_refraction, mc_coherent_backscatter,
-				mc_backward, 
-				mc_escape, mc_vroom,
-				mc_surface_reflectalways,
-				mc_delta_scaling, mc_truncate,
-				mc_spectral_is, 
-				mc_aerosol_is,
-				mc_boxairmass,
-				mc_ris,
-			        mc_photons, mc_minphotons, mc_photons_file, 
-				mc_visualize, 
-				mc_maxscatters, mc_minscatters,
-				mc_randomseed, 
-				mc_readrandomstatus,
-                         	mc_backward_sunshape_file, 
-				mc_sample_cldprp, 
-				mc_albedo_spectral, 
-				mc_azimuth_old, 
-				mc_backward_heat,
-				mc_backward_writeback, 
-				mc_rad_alpha,
-				mc_radial_pathlength, 
-				mc_radial_pathlength_dt,
-				mc_DoLE
-				]
+        mc_photons = option(
+            name='mc_photons',
+            group='mc',
+            helpstr='Total number of photons to be traced by the Monte Carlo solver.',
+            documentation=documentation['mc_photons'],
+            gui_inputs=(IntegerInput(name='Input.rte.mc.photons', default=10000, valid_range=[0, 10000000000]),),
+            tokens=addToken(name='Input.rte.mc.photons', datatype=long, valid_range=[0, 1e10]),
+            parents=['uvspec'],
+            speaker='rte_solver',
+            enable_values=("mystic", "montecarlo"),
+            mystic=True
+        )
 
-	def __iter__(self):
-		return iter(self.options)
+        mc_photons_file = option(
+            name='mc_photons_file',
+            group='mc',
+            helpstr='Define a MYSTIC spectral photon file.',
+            documentation=documentation['mc_photons_file'],
+            gui_inputs=(FileInput(name='filename'),),
+            tokens=addToken(name='Input.rte.mc.filename[FN_MC_PHOTONS]', datatype=file),
+            parents=['uvspec'],
+            speaker='rte_solver',
+            enable_values=("mystic", "montecarlo"),
+            mystic=True
+        )
+
+        mc_polarisation = option(
+            name='mc_polarisation',
+            group='mc',
+            helpstr='Turn on polarisation for Monte Carlo solver.',
+            documentation=documentation['mc_polarisation'],
+            tokens=[addSetting(name='Input.rte.mc.polarisation', setting=1, default=0),
+                    addSetting(name='Input.rte.mc.reflectalways', setting=1, default=0),
+                    addToken(name='Input.rte.mc.polarisation_state', datatype=int, valid_range=[-9, 9], default=0,
+                             optional=True)],
+            parents=['uvspec'],
+            speaker='rte_solver',
+            enable_values=("mystic", "montecarlo"),
+            mystic=True
+        )
+
+        mc_rad_alpha = option(
+            name='mc_rad_alpha',
+            group='mc',
+            helpstr='Define opening angle for radiance simulations.',
+            documentation=documentation['mc_rad_alpha'],
+            gui_inputs=(IntegerInput(name='Input.rte.mc.alpha',
+                                     default=5, valid_range=[0, 90]),),
+            tokens=addToken(name='Input.rte.mc.alpha', datatype=float, default=5,
+                            valid_range=[0, 90]),
+            parents=['uvspec'],
+            speaker='rte_solver',
+            enable_values=("mystic", "montecarlo"),
+            mystic=True
+        )
+
+        mc_radial_pathlength = option(
+            name='mc_radial_pathlength',
+            group='mc',
+            helpstr='I3RC case 7',
+            documentation=documentation['mc_radial_pathlength'],
+            tokens=[addToken(name='Input.rte.mc.Nr', datatype=int, default=0, valid_range=[0, 1e6]),
+                    addToken(name='Input.rte.mc.Nt', datatype=int, default=0, valid_range=[0, 1e6])],
+            parents=['uvspec'],
+            speaker='rte_solver',
+            enable_values=("mystic", "montecarlo"),
+            threedmystic=True,
+            showInGui=False
+        )
+
+        mc_radial_pathlength_dt = option(
+            name='mc_radial_pathlength_dt',
+            group='mc',
+            helpstr='Time increment for mc_radial_pathlength',
+            documentation=documentation['mc_radial_pathlength_dt'],
+            tokens=addToken(name='Input.rte.mc.dt', datatype=float, default=1e-7, valid_range=[0, 1e6]),
+            parents=['mc_radial_pathlength'],
+            speaker='rte_solver',
+            enable_values=("mystic",),
+            threedmystic=True,
+            showInGui=False
+        )
+
+        mc_readrandomstatus = option(  # TODO: Documentation wrong! filename is not implemented!
+                                       name='mc_readrandomstatus',
+                                       group='mc',
+                                       helpstr='Read from file the random status for the random number generator.',
+                                       # Documentation wrong!
+                                       documentation=documentation['mc_readrandomstatus'],
+                                       tokens=[addSetting(name='Input.rte.mc.readrandomstatus', setting=1),
+                                               addSetting(name='Input.rte.mc.readrandomseed', setting=1)],
+                                       parents=['uvspec'],
+                                       speaker='rte_solver',
+                                       enable_values=("mystic",),
+                                       threedmystic=True,
+                                       showInGui=False,
+                                       )
+
+        mc_randomseed = option(
+            name='mc_randomseed',
+            group='mc',
+            helpstr='Set random seed for MYSTIC.',
+            documentation=documentation['mc_randomseed'],
+            gui_inputs=(IntegerInput(name='Input.rte.mc.randomseed', default=0, valid_range=[0, 1000000000000000]),),
+            tokens=addToken(name='Input.rte.mc.randomseed', datatype=int, valid_range=[0, 1e15]),
+            parents=['uvspec'],
+            speaker='rte_solver',
+            enable_values=("mystic",),
+        )
+
+        mc_refraction = option(
+            name='mc_refraction',
+            group='mc',
+            helpstr='Enable refraction.',
+            documentation=documentation['mc_refraction'],
+            tokens=addSetting(name='Input.rte.mc.refraction', setting=1, default=0),
+            parents=['mc_spherical'],
+            speaker='rte_solver',
+            enable_values=("mystic",),
+            mystic=True,
+            showInGui=False,
+            developer=True,
+        )
+
+        mc_ris = option(
+            name='mc_ris',
+            group='mc',
+            helpstr='Use with mc_radar to get good statistics, artificially enhances the optical depth of the clouds for microwave wavelengths.',
+            documentation=documentation['mc_ris'],
+            tokens=[addLogical(name='id', logicals=['factor', 'optical_depth'], setting='MC_RIS_'),
+                    addToken(name='Input.rte.mc.ris[id]', datatype=Double)],
+            parents=[],
+            speaker='rte_solver',
+            enable_values=("mystic",),
+            threedmystic=True,
+            islidar=True,
+            showInGui=False
+        )
+
+        self.options = [mc_polarisation, mc_refraction, mc_coherent_backscatter,
+                        mc_backward,
+                        mc_escape, mc_vroom,
+                        mc_surface_reflectalways,
+                        mc_delta_scaling, mc_truncate,
+                        mc_spectral_is,
+                        mc_aerosol_is,
+                        mc_boxairmass,
+                        mc_ris,
+                        mc_photons, mc_minphotons, mc_photons_file,
+                        mc_visualize,
+                        mc_maxscatters, mc_minscatters,
+                        mc_randomseed,
+                        mc_readrandomstatus,
+                        mc_backward_sunshape_file,
+                        mc_sample_cldprp,
+                        mc_albedo_spectral,
+                        mc_azimuth_old,
+                        mc_backward_heat,
+                        mc_backward_writeback,
+                        mc_rad_alpha,
+                        mc_radial_pathlength,
+                        mc_radial_pathlength_dt,
+                        mc_DoLE
+                        ]
+
+    def __iter__(self):
+        return iter(self.options)
 
 
 def get_mc_documentation():
-	return {
-		'mc_escape'  : r'''
+    return {
+        'mc_escape': r'''
 	Calculate MYSTIC radiances via escape probabilities; slows down the tracing 
 	but usually speeds up the computation considerably since it reduces
 	noise. Switched on per default since it should basically be used always 
@@ -515,17 +528,17 @@ def get_mc_documentation():
 	  mc_escape on/off
 	} 
   		''',
-		'mc_rad_alpha'  : r'''
+        'mc_rad_alpha': r'''
 	Define opening angle for radiance calculations without local
 	estimate. Ths oprion is useful for all-sky simulations.	
-                ''', 
-		'mc_vroom' : r'''
+                ''',
+        'mc_vroom': r'''
 	Variance Reduction Optimal Options Method (VROOM). Options are "on"
 	and "off". Needs to be specified if you are calculating radiances and
 	spiky phase functions are present in your atmosphere. If you are using
 	VROOM, please cite: \cite{buras2011a}.
        		''',
-		'mc_backward'  : r'''
+        'mc_backward': r'''
 	Backward tracing of photons. \code{mc_backward} takes either zero, two or four coordinates:
 	\fcode{
 	  mc_backward [ix_start iy_start] [ix_end iy_end]
@@ -537,7 +550,7 @@ def get_mc_documentation():
 	\code{mc_backward} computes radiances and downward diffuse irradiances. If 
 	a different quantity is required, please use \code{mc_backward_output}.
        		''',
-		'mc_sample_cldprp'  : r'''
+        'mc_sample_cldprp': r'''
 	Switch on sampling of cloud properties (reff/tau/dlwc) by photons. 
 	This option needs \code{mc_backward}. The optical properties contributing to 
 	the result for each pixel are integrated using the photon weight 
@@ -568,7 +581,7 @@ def get_mc_documentation():
 	taken at the last cloud scattering before hitting the sensor (information
 	about cloud surface orientation).
 		''',
-		'mc_spectral_is': r'''
+        'mc_spectral_is': r'''
 	{\sl Experimental option!!!!}\\
 	Calculate a spectrum with high spectral
 	resolution using an importance sampling
@@ -595,7 +608,7 @@ def get_mc_documentation():
         For more details refer to
 	\citet{emde2011}.
 	        ''',
-		'mc_boxairmass': r'''
+        'mc_boxairmass': r'''
 	{\sl Experimental option!!!!}\\
 	Calculate box-airmass-factors based on the pathlength
 	distribution as described by \citet{deutschmann2011}.
@@ -607,7 +620,7 @@ def get_mc_documentation():
 	significant amount of radiation, i.e. which do not influence
 	the pathlength distribution significantly.
 	        ''',
-		'mc_surface_reflectalways': r'''
+        'mc_surface_reflectalways': r'''
 	Usually, a photon is either absorbed or reflected at the surface, 
 	with a probability defined by the surface albedo. If 
 	\code{mc_surface_reflectalways} is specified, each photon is reflected and 
@@ -620,16 +633,16 @@ def get_mc_documentation():
 	considerably. In case of clouds, however, computational time might be 
 	increased considerably without gaining accuracy. 
        		''',
-		'mc_DoLE': r'''
+        'mc_DoLE': r'''
         Variance reduction method, use double local estimate and specular
         reflection instead of Cox and Munk ocean BRDF. Status is very
         experimental. USE ONLY IF YOU REALLY KNOW WHAT YOU ARE DOING!
        		''',
-		'mc_truncate': r'''
+        'mc_truncate': r'''
 	Truncate phase function at the specified polar angle mu. 
 	USE ONLY IF YOU REALLY KNOW WHAT YOU ARE DOING!
        	 	''',
-		'mc_aerosol_is' : r'''
+        'mc_aerosol_is': r'''
 	Enable aerosol concentration importance sampling. The input file
 	includes one column containing the desired scaling factors: 
 	\fcode{
@@ -637,17 +650,17 @@ def get_mc_documentation():
 	}
 	USE ONLY IF YOU REALLY KNOW WHAT YOU ARE DOING!
   		''',
-		'mc_albedo_spectral' : r'''
+        'mc_albedo_spectral': r'''
 	To be done!
 		''',
-		'mc_azimuth_old' : r'''
+        'mc_azimuth_old': r'''
 	Use old MYSTIC azimuth convention (0 degree = looking from the
 	direction of the sun; 180 degree = looking into the direction of the
 	sun; that is, exactly opposite to the disort convention). The MYSTIC
 	azimuth was changed March 1, 2004 - hence this option was introduced
 	for compatibility reasons.
 		''',
-		'mc_backward_heat' : r'''
+        'mc_backward_heat': r'''
         Customize calculation of thermal heating rates with backward
 	tracing (selected with \code{mc_backward} and \code{mc_backward_output}).
 	\fcode{
@@ -678,7 +691,7 @@ def get_mc_documentation():
         are identical. If not, \code{emabs} will be used for the
 	calculation. For details see \citet{klinger2013}.
 		''',
-		'mc_backward_sunshape_file' : r'''
+        'mc_backward_sunshape_file': r'''
 	Path to a 2-coloumned text file containing the extraterrestrial sun shape. 1. column:
 	A probability density or if you want to a radiance distribution. Does not need
 	to be normalized 2. column: Relative angular distance to center from sun inside sun disc,
@@ -686,12 +699,12 @@ def get_mc_documentation():
 	set the extent of the sun. If filename is set to "default", or if only sun radius is given
 	 a spectrally resolved sun shape as in \citet{koepke2001} is used.
 		''',
-		'mc_backward_writeback' : r'''
+        'mc_backward_writeback': r'''
 	If set, the distribution of photons contributing to the result is written 
 	to a file with extension .bac which may be useful for some interpretations
 	(it basically tells you where the photons come from whichn contribute to the result). 
 		''',
-		'mc_delta_scaling' : r'''
+        'mc_delta_scaling': r'''
 	Truncate phase function in MYSTIC: The phasefunctions are set to zero
 	for mu>mucut. The extinction coefficient etc. are scaled
 	accordingly. Optional settings are \code{mc_delta_scaling mucut} and
@@ -701,18 +714,18 @@ def get_mc_documentation():
 	function is applied. Default is 0, i.e. the delta-scaled phase
 	function is applied from the beginning.
 		''',
-		'mc_maxscatters' : r'''
+        'mc_maxscatters': r'''
 	If set, photons are destroyed after n scatters. Please note that this
 	is only for testing, debugging and process understanding! The result
 	will certainly be wrong because photons are lost.
 		''',
-		'mc_minscatters' :  r'''
+        'mc_minscatters': r'''
 	If set, local estimates are not performed before n scatters ( e.g. if
 	set to 1, single scattering is not taken into account). Please note
 	that this is only for testing, debugging and process understanding!
 	The result will certainly be wrong.
 		''',
-		'mc_coherent_backscatter' : r'''
+        'mc_coherent_backscatter': r'''
 	Switches on coherent backscattering, use only with \code{mc_polarisation}.
         \begin{itemize}
         \item If used without \code{mc_lidar} or \code{mc_radar} it will calculate enhancement values directly 
@@ -730,7 +743,7 @@ def get_mc_documentation():
         halfwidth in radian (\citet{fiebig2010_phd}) is written into a .lid.cb file.
         \end{itemize}
 		''',
-		'mc_minphotons' : r'''
+        'mc_minphotons': r'''
 	If set, this is the minimum value of photons to be used per
 	simulation. The default value is \code{MIN_MCPHOTONS}, set in
 	uvspec.h.
@@ -739,14 +752,14 @@ def get_mc_documentation():
 	mc_maxscatters value
 	}
 		''',
-		'mc_photons' : r'''
+        'mc_photons': r'''
 	Total number of photons to be traced by the Monte Carlo solver, MYSTIC.
 	\fcode{
 	mc_photons value
 	}
 	Only meaningful with \code{rte_solver montecarlo}.
 		''',
-		'mc_photons_file' : r'''
+        'mc_photons_file': r'''
 	Distribution of photons over wavelength bands; to be used with \code{mol_abs_param}.
 	\fcode{
 	mc_photons_file file
@@ -755,7 +768,7 @@ def get_mc_documentation():
 	Do only use if you are absolutely sure what you are doing.
 	Only meaningful with \code{rte_solver montecarlo}.
 		''',
-		'mc_polarisation' : r'''
+        'mc_polarisation': r'''
 	Switch on polarisation for \code{rte_solver montecarlo}. You can provide one of the 
         following optional numbers to specify the initial Stokes Vector:
         \begin{itemize}
@@ -772,17 +785,17 @@ def get_mc_documentation():
         \end{itemize}
 	Details about the implementation of polarisation are described in \citet{emde2010}.
 		''',
-		'mc_radial_pathlength' : r'''
+        'mc_radial_pathlength': r'''
 	I3RC case 7, laser beam experiment. Radiances are sampled in radial 
 	and pathlength elements. Specify the number of radial (Nr) and time (Nt) intervals. 
 	The radius increment is calculated from Nr and the domain size. The time interval 
 	may  be specified with \code{mc_radial_pathlength_dt}. 
 		''',
-		'mc_radial_pathlength_dt' : r'''
+        'mc_radial_pathlength_dt': r'''
 	Specify time increment for \code{mc_radial_pathlength}. Time is converted to pathlength 
 	assuming a speed of light of 3$\cdot$10$^8$~m/s
 		''',
-                'mc_randomseed' : r'''
+        'mc_randomseed': r'''
        	Provide your own random seed (positive integer) for the random number generator. 
        	\fcode{
        	mc_randomseed value
@@ -790,11 +803,11 @@ def get_mc_documentation():
        	Usually a random seed is determined from current time plus process id. 
        	This option is useful to re-run a simulation for debugging.
        		''',
-		'mc_refraction' : '''
+        'mc_refraction': '''
 	Enable refraction for \code{rte_solver montecarlo}. Works only 
 	in 1D spherical geometry (with option \code{mc_spherical}).
 		''',
-		'mc_visualize' : r'''
+        'mc_visualize': r'''
 	Switch on OpenGL visualization for MYSTIC. 
 	\fcode{
 	mc_visualize [hiddenline]
@@ -823,7 +836,7 @@ def get_mc_documentation():
 	  \item[b]  step through photon path; store a photon with 's'; press 'b'; use '+' and '-' to step through the photon path forward and backward
 	\end{description}
 		''',
-		'mc_ris' : r'''
+        'mc_ris': r'''
         Use with \code{mc_radar} or \code{mc_lidar} to get good statistics. Artificially enhances
         the scattering optical depth by a constant factor.
         \fcode{
@@ -837,7 +850,7 @@ def get_mc_documentation():
         In case of Lidar/Radar four additional paths at the rim of the transmitter cone are
         simulated and if needed an average over all paths is calculated.
 		''',
-		'mc_readrandomstatus' : r'''
+        'mc_readrandomstatus': r'''
 	Read from file the random status for the random number generator. 
 	\fcode{
 	mc_readrandomstatus file
@@ -845,5 +858,5 @@ def get_mc_documentation():
 	This option is useful to re-run a simulation for debugging, especially if
 	the buggy photon appears only late in a long simulation. This option automatically
 	toggles on \code{mc_readrandomseed}.
-		''',	
-	}
+		''',
+    }
