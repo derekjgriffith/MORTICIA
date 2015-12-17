@@ -33,9 +33,34 @@ There is no Windows-native version of libRadtran, so that generally implies that
 however, reading and writing of uvspec input files, as well as reading of uvspec output files is possible on any
 platform.
 
+Important note concerning the uu output:
+The uu field in the libRadtran/uvspec Case object contains the output radiances. In the most general case, this is a
+5-dimensional numpy array, with axes in the following order:
+1) umu - the cosine of the propagation zenith angles, where umu=1 is looking downward
+2) phi - the propagation azimuth angle, where 180 deg is viewing northwards
+3) spectral variable ('wavelength'/'wvl', 'wavenumber'/'wvn' and 'lambda' are alternative names)
+4) altitudes of viewing point ('zout', 'zout_sea', 'pressure'/'p' and 'cth' are alternative level variables
+5) stokes polarisation component (up to 4 stokes components, called I, Q, U and V)
+
+By 'propagation' is meant the direction in which light is travelling, which is 180 degrees different from the
+'viewing' direction.
+
+Trailing singleton dimensions are dropped. That is, if there is only one stokes component, then uu has only 4
+dimensions. If there is also only one level output (zout etc.), then uu has only 3 dimensions and so forth.
+
+Leading and sandwiched singleton dimensions are not dropped in the current implementation. Dropping of singleton
+dimensions can break existing code.
+
 The relevant code here is taken from libRadtran version 2.0
 
 """
+
+# TODO Reading of montecarlo (mystic/mc) output files, particularly:
+# mc.flx.spc - spectral irradiance, actinic flux at levels
+# mc.rad.spc - spectral radiance at levels
+# TODO Dealing with exceptions, warnings. Keywords missing from the options library etc.
+# TODO dealing with setting of units based on whatever is known about inputs/outputs, thermal is W/m^2/cm^-1
+
 
 _isfloatnum = '^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$'  # regular expression for matching tokens to floating point
 
@@ -208,7 +233,10 @@ class Case():
                 self.options.append(option[0])  # the option keyword (string)
                 self.tokens.append(option[1:])  # The tokens following the keyword (list of strings)
                 self.filorigin.append(line_nos[optnumber])  # The file origin of this keyword
-                self.optionobj.append(uvsOptions[self.options[optnumber]])  # The option object (dict lookup)
+                if self.options[optnumber] in uvsOptions:
+                    self.optionobj.append(uvsOptions[self.options[optnumber]])  # The option object (dict lookup)
+                else:
+                    print('Warning, keyword option ' +  option[0] + ' not found in options library.')
                 # Make any possible preparations for occurance of this keyword
                 self.prepare_for(option[0],option[1:])
         #TODO Build the case from the option list ?
@@ -239,6 +267,7 @@ class Case():
                     self.rad_units = sourceSolarUnits[self.source_file]
         elif tokens[0] == 'thermal':
             self.source = 'thermal'
+            self.rad_units = ['W', 'm^2', 'cm^-1']
 
     def prepare_for(self, keyword, tokens):
         """ Make any possible preparations for occurrences of particular keywords
@@ -294,6 +323,8 @@ class Case():
         if keyword == 'heating_rate':
             self.output_user = ['zout', 'heat']
             self.fluxline = []  #TODO note that heating rate outputs for multiple wavelengths have a header line
+        if keyword == 'print_disort_info':
+            self.fluxline = '?'  # this output format is unknown or too complex to handle
 
     def prepare_for_polradtran(self):
         """ Prepare for output from the polradtran solver
@@ -660,11 +691,17 @@ class Case():
         extension.
         :return:
         """
+        if self.fluxline == '?':
+            print('Unknown output format. Skipping file read.')
+            return
         if filename is None:
             filename = self.outfile
         elif filename == '':
             filename = easygui.fileopenbox(msg='Please select the uvspec output file.', filetypes=["*.OUT"])
         fluxdata = []
+        if not os.path.isfile(filename):
+            print('Output file does not exist. Run uvspec.')
+            return
         if self.output_user:
             fluxdata = np.loadtxt(filename)
             self.distribute_flux_data(fluxdata)
