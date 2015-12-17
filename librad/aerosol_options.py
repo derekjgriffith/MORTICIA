@@ -23,201 +23,243 @@
  * Boston, MA 02111-1307, USA.
  *--------------------------------------------------------------------"""
 
+# Modified by Derek Griffith to include aerosol_sizedist_file and aerosol_refrac_index
+
 
 from option_definition import *
 
+
 class aerosol_mixed_options(option):
-	"""
-	Logic for haze, season, vulcan and visibility
-	"""
-	def __init__(self, *args, **kwargs):
-		option.__init__(self, *args, **kwargs)
-		self.dependencies.extend(['aerosol_haze', 'aerosol_vulcan',
-				     'aerosol_season', 'aerosol_visibility'])
-	def isMandatory(self, is_set, get_value):
-		cond = [is_set(opt) for opt in 'aerosol_haze',
-			'aerosol_vulcan', 'aerosol_season',
-			'aerosol_visibility']
-		if all(cond):
-			return False
-		elif any(cond):
-			return True
-		else:
-			return False
-		
+    """
+    Logic for haze, season, vulcan and visibility
+    """
+
+    def __init__(self, *args, **kwargs):
+        option.__init__(self, *args, **kwargs)
+        self.dependencies.extend(['aerosol_haze', 'aerosol_vulcan',
+                                  'aerosol_season', 'aerosol_visibility'])
+
+    def isMandatory(self, is_set, get_value):
+        cond = [is_set(opt) for opt in 'aerosol_haze',
+                                       'aerosol_vulcan', 'aerosol_season',
+                                       'aerosol_visibility']
+        if all(cond):
+            return False
+        elif any(cond):
+            return True
+        else:
+            return False
+
 
 class setup_aerosol_group():
+    group_name = 'Aerosol'
 
-	group_name = 'Aerosol'
+    def __init__(self):
+        documentation = get_aerosol_documentation()
 
-	def __init__(self):
+        aerosol_default = option(
+            name='aerosol_default',
+            group='aerosol',
+            helpstr='Set up a default aerosol',
+            documentation=documentation['aerosol_default'],
+            tokens=[addSetting(name='Input.aer.standard', setting=1)],
+            childs=['aerosol_angstrom', 'aerosol_king_byrne'],
+            continious_update=True
+        )
 
-		documentation = get_aerosol_documentation()
+        aerosol_file = option(
+            name='aerosol_file',
+            group='aerosol',
+            helpstr='Location of aerosol file',
+            documentation=documentation['aerosol_file'],
+            tokens=[addLogical(name='id', logicals=['gg', 'ssa', 'tau', 'explicit', 'moments'], setting='FN_AER_'),
+                    addToken(name='Input.aer.filename[id]', datatype=file),
+                    addSetting(name='Input.aer.spec', setting=1)],
+            non_unique=True,
+        )
 
-		aerosol_default = option(
-			name = 'aerosol_default',
-			group='aerosol',
-			helpstr='Set up a default aerosol',
-			documentation=documentation['aerosol_default'],
-			tokens= [addSetting(name='Input.aer.standard', setting=1)],
-			childs=['aerosol_angstrom','aerosol_king_byrne'],
-			continious_update=True
-		)
-	
-		aerosol_file = option(
-			name='aerosol_file',
-		        group='aerosol',
-			helpstr='Location of aerosol file',
-			documentation=documentation['aerosol_file'],
-			tokens=[ addLogical( name='id', logicals=['gg', 'ssa', 'tau', 'explicit', 'moments' ], setting='FN_AER_' ), 
-				addToken(name='Input.aer.filename[id]', datatype=file),
-				addSetting(name='Input.aer.spec', setting=1) ], 
-			non_unique=True,
-		)
-	
-	#	aerosol_shettle = option(
-	#		'aerosol_file',	#name
-	#	        'aerosol',      #group
-	#		'Specify aerosol properties in atmosphere',	#helpstr
-	#		documentation['aerosol_shettle'],     #documentation
-	#		[ addLogical( 'id', ['vulcan', 'haze', 'season'], 'AER_SHETTLE_' ), 
-	#		addToken('Input.aer[id]', int) ], #token
-	#	        '',     #parents
-	#	        '',     #non_parents
-	#	        ''      #childs
-	#	)
-	#	
-	
-		aerosol_profile_modtran = option(
-			name='aerosol_profile_modtran',
-			group='aerosol',
-			helpstr='Squeeze aerosol profile',
-			documentation=documentation['aerosol_profile_modtran'],
-			tokens=[addSetting(name='Input.aer.profile_modtran', setting=True)],
-		)
-	
-		aerosol_angstrom = option(
-			name='aerosol_angstrom',
-		        group='aerosol',  
-			helpstr='Scale the aerosol optical depth using the {\AA}ngstr{\"o}m formula.', 
-			documentation= documentation['aerosol_angstrom'], 
-			tokens=[addToken(name='Input.aer.alpha', datatype=float ),
-				addToken(name='Input.aer.beta', datatype=float, default='NOT_DEFINED_FLOAT', valid_range=[0, 1e6]),
-				addSetting(name='Input.aer.spec', setting=1) ] ,
-			parents=['aerosol_default'], 
-		)
-	
-		aerosol_king_byrne = option(
-			name='aerosol_king_byrne',
-		        group='aerosol',  
-			helpstr='Scale the aerosol optical depth using the King Byrne formula.', 
-			documentation= documentation['aerosol_king_byrne'], 
-			tokens=[addToken(name='Input.aer.alpha_0', datatype=float, default='NOT_DEFINED_FLOAT', valid_range=[-1e6, 1e6]),#alph_0 is roughly equivalent with log(angstrom beta) and can thus will mostly be negative
-				addToken(name='Input.aer.alpha_1', datatype=float, default='NOT_DEFINED_FLOAT', valid_range=[-1e6, 1e6]),
-				addToken(name='Input.aer.alpha_2', datatype=float, default='NOT_DEFINED_FLOAT', valid_range=[-800, 800]),
-				addSetting(name='Input.aer.spec', setting=1) ] ,
-			parents=['aerosol_default'], 
-		)
-	
-		aerosol_modify = option(	#TODO: valid_ranges for GUI!!
-			name='aerosol_modify',
-			group='aerosol', 
-			helpstr='Modify aerosol optical properties.',
-			documentation=documentation['aerosol_modify'],
-			tokens=[addLogical( name='id1', logicals=['gg','ssa', 'tau', 'tau550'], setting='MODIFY_VAR_',gui_name='variable' ),
-				addLogical( name='id2', logicals=['set', 'scale' ], setting='MODIFY_TYPE_', gui_name='scale/set' ),
-				addToken( name='Input.aer.modify[id1][id2]', datatype=float, gui_name='value' ),
-				addSetting( name='Input.aer.spec', setting=1, default=0) ], 
-			non_unique=True,
-		)
-	
-	
-		aerosol_haze = option(
-			name='aerosol_haze',
-			group='aerosol', 
-			helpstr='Specify the aerosol type in the lower 2 km of the atmosphere',
-			documentation=documentation['aerosol_haze'],
-			#gui_inputs=(IntegerListInput(name='Input.aer.haze', default=None, valid_range=[1, 4, 5, 6]),),
-			tokens=[addToken( name='Input.aer.haze', datatype=int, valid_range=[1,6] )],
-			parents=[],#Please review! ['aerosol_vulcan', 'aerosol_season', 'aerosol_visibility'],
-			childs=['aerosol_option_specification'],
-			extra_dependencies=['aerosol_haze','aerosol_vulcan','aerosol_visibility','aerosol_season'],
-		)
-		
-		aerosol_set_tau_at_wvl = option(
-			name='aerosol_set_tau_at_wvl',
-			group='aerosol',
-			helpstr='Set the aerosol optical thickness at lambda (nm)',
-			documentation=documentation['aerosol_set_tau_at_wvl'],
-			tokens=[addToken(name='Input.aer.tau_wvl_lambda', datatype=float, default='NOT_DEFINED_FLOAT', valid_range=[0,1e6]),
-				addToken(name='Input.aer.tau_wvl_tau', datatype=float, default='NOT_DEFINED_FLOAT', valid_range=[0,1e6])],
-		)
-		
-		aerosol_season = option(
-			name='aerosol_season',
-			group='aerosol', 
-			helpstr='Specify season',
-			documentation=documentation['aerosol_season'],
-			tokens= [ addToken(name='Input.aer.seasn', datatype=int, valid_range=[1,2]),
-				addSetting(name='Input.aer.spec', setting=1) ],
-			childs=['aerosol_option_specification'], 
-			extra_dependencies=['aerosol_haze','aerosol_vulcan','aerosol_visibility','aerosol_season'],
-		)
-		
-		aerosol_species_file = option(	#TODO: undefined number of optional arguments are allowed
-			name='aerosol_species_file',
-			group='aerosol',
-			helpstr='Specify mass density profiles of a mixture of aerosol types',
-			documentation=documentation['aerosol_species_file'],
-			gui_inputs=(ListInput(name='Input.aer.mixture_name', valid_range=['continental_clean', 'continental_average', 'continental_polluted', 'urban', 'maritime_clean', 'maritime_polluted', 'maritime_tropical', 'desert', 'antarctic'], optional=False),),
-			tokens= [ addToken(name='Input.aer.mixture_name', datatype=str, valid_range = ['continental_clean', 'continental_average', 'continental_polluted', 
-						'urban', 'maritime_clean', 'maritime_polluted', 'maritime_tropical', 'desert', 'antarctic','desert_spheriods'] ), 
-				addSetting(name='Input.aer.n_species', setting=-1, default='NOT_DEFINED_INTEGER'),
-				addSetting(name='Input.aer.spec', setting=1) ],
-		)
-		
-		aerosol_species_library = option(
-			name='aerosol_species_library',
-			group='aerosol',
-			helpstr='Location of optical property files',
-			documentation=documentation['aerosol_species_library'],
-			tokens=[addToken(name='Input.aer.filename[FN_AER_SPECIES_LIB]', datatype=file, valid_range=['OPAC',file])],
-		)
-		
-		aerosol_visibility = option(
-			name='aerosol_visibility',
-			group='aerosol',
-			helpstr='Horizontal visibility in km',
-			documentation=documentation['aerosol_visibility'],
-			tokens=[addToken(name='Input.aer.visibility', datatype=float, default='NOT_DEFINED_FLOAT', valid_range=[0,1e6])],
-			childs=['aerosol_option_specification'], 
-			extra_dependencies=['aerosol_haze','aerosol_vulcan','aerosol_visibility','aerosol_season'],
-		)
-		
-		aerosol_vulcan = option(
-			name='aerosol_vulcan',
-			group='aerosol',
-			helpstr='Aerosol situation above 2 km',
-			documentation=documentation['aerosol_vulcan'],
-			#gui_inputs=(IntegerListInput(name='Input.aer.vulcan', default=None, valid_range=[1, 2, 3, 4], optional=False),),
-			tokens=addToken(name='Input.aer.vulcan', datatype=int, valid_range=[1,4]),
-			childs=['aerosol_option_specification'], 
-			extra_dependencies=['aerosol_haze','aerosol_vulcan','aerosol_visibility','aerosol_season'],
-		)
-	
-		self.options = [ aerosol_default,
-			aerosol_file, aerosol_species_library, aerosol_species_file, 
-			aerosol_haze, aerosol_season, aerosol_vulcan, aerosol_visibility,
-			aerosol_profile_modtran,
-			aerosol_angstrom,aerosol_king_byrne,
-			aerosol_modify, aerosol_set_tau_at_wvl ]
+        #	aerosol_shettle = option(
+        #		'aerosol_file',	#name
+        #	        'aerosol',      #group
+        #		'Specify aerosol properties in atmosphere',	#helpstr
+        #		documentation['aerosol_shettle'],     #documentation
+        #		[ addLogical( 'id', ['vulcan', 'haze', 'season'], 'AER_SHETTLE_' ),
+        #		addToken('Input.aer[id]', int) ], #token
+        #	        '',     #parents
+        #	        '',     #non_parents
+        #	        ''      #childs
+        #	)
+        #
 
-	def __iter__(self):
-		return iter(self.options)
-	
+        aerosol_profile_modtran = option(
+            name='aerosol_profile_modtran',
+            group='aerosol',
+            helpstr='Squeeze aerosol profile',
+            documentation=documentation['aerosol_profile_modtran'],
+            tokens=[addSetting(name='Input.aer.profile_modtran', setting=True)],
+        )
+
+        aerosol_angstrom = option(
+            name='aerosol_angstrom',
+            group='aerosol',
+            helpstr='Scale the aerosol optical depth using the {\AA}ngstr{\"o}m formula.',
+            documentation=documentation['aerosol_angstrom'],
+            tokens=[addToken(name='Input.aer.alpha', datatype=float),
+                    addToken(name='Input.aer.beta', datatype=float, default='NOT_DEFINED_FLOAT', valid_range=[0, 1e6]),
+                    addSetting(name='Input.aer.spec', setting=1)],
+            parents=['aerosol_default'],
+        )
+
+        aerosol_king_byrne = option(
+            name='aerosol_king_byrne',
+            group='aerosol',
+            helpstr='Scale the aerosol optical depth using the King Byrne formula.',
+            documentation=documentation['aerosol_king_byrne'],
+            tokens=[addToken(name='Input.aer.alpha_0', datatype=float, default='NOT_DEFINED_FLOAT',
+                             valid_range=[-1e6, 1e6]),
+                    # alph_0 is roughly equivalent with log(angstrom beta) and can thus will mostly be negative
+                    addToken(name='Input.aer.alpha_1', datatype=float, default='NOT_DEFINED_FLOAT',
+                             valid_range=[-1e6, 1e6]),
+                    addToken(name='Input.aer.alpha_2', datatype=float, default='NOT_DEFINED_FLOAT',
+                             valid_range=[-800, 800]),
+                    addSetting(name='Input.aer.spec', setting=1)],
+            parents=['aerosol_default'],
+        )
+
+        aerosol_modify = option(  # TODO: valid_ranges for GUI!!
+                                  name='aerosol_modify',
+                                  group='aerosol',
+                                  helpstr='Modify aerosol optical properties.',
+                                  documentation=documentation['aerosol_modify'],
+                                  tokens=[addLogical(name='id1', logicals=['gg', 'ssa', 'tau', 'tau550'],
+                                                     setting='MODIFY_VAR_', gui_name='variable'),
+                                          addLogical(name='id2', logicals=['set', 'scale'], setting='MODIFY_TYPE_',
+                                                     gui_name='scale/set'),
+                                          addToken(name='Input.aer.modify[id1][id2]', datatype=float, gui_name='value'),
+                                          addSetting(name='Input.aer.spec', setting=1, default=0)],
+                                  non_unique=True,
+                                  )
+
+        aerosol_haze = option(
+            name='aerosol_haze',
+            group='aerosol',
+            helpstr='Specify the aerosol type in the lower 2 km of the atmosphere',
+            documentation=documentation['aerosol_haze'],
+            # gui_inputs=(IntegerListInput(name='Input.aer.haze', default=None, valid_range=[1, 4, 5, 6]),),
+            tokens=[addToken(name='Input.aer.haze', datatype=int, valid_range=[1, 6])],
+            parents=[],  # Please review! ['aerosol_vulcan', 'aerosol_season', 'aerosol_visibility'],
+            childs=['aerosol_option_specification'],
+            extra_dependencies=['aerosol_haze', 'aerosol_vulcan', 'aerosol_visibility', 'aerosol_season'],
+        )
+
+        aerosol_set_tau_at_wvl = option(
+            name='aerosol_set_tau_at_wvl',
+            group='aerosol',
+            helpstr='Set the aerosol optical thickness at lambda (nm)',
+            documentation=documentation['aerosol_set_tau_at_wvl'],
+            tokens=[addToken(name='Input.aer.tau_wvl_lambda', datatype=float, default='NOT_DEFINED_FLOAT',
+                             valid_range=[0, 1e6]),
+                    addToken(name='Input.aer.tau_wvl_tau', datatype=float, default='NOT_DEFINED_FLOAT',
+                             valid_range=[0, 1e6])],
+        )
+
+        aerosol_season = option(
+            name='aerosol_season',
+            group='aerosol',
+            helpstr='Specify season',
+            documentation=documentation['aerosol_season'],
+            tokens=[addToken(name='Input.aer.seasn', datatype=int, valid_range=[1, 2]),
+                    addSetting(name='Input.aer.spec', setting=1)],
+            childs=['aerosol_option_specification'],
+            extra_dependencies=['aerosol_haze', 'aerosol_vulcan', 'aerosol_visibility', 'aerosol_season'],
+        )
+
+        aerosol_species_file = option(  # TODO: undefined number of optional arguments are allowed
+                                        name='aerosol_species_file',
+                                        group='aerosol',
+                                        helpstr='Specify mass density profiles of a mixture of aerosol types',
+                                        documentation=documentation['aerosol_species_file'],
+                                        gui_inputs=(ListInput(name='Input.aer.mixture_name',
+                                                              valid_range=['continental_clean', 'continental_average',
+                                                                           'continental_polluted', 'urban',
+                                                                           'maritime_clean', 'maritime_polluted',
+                                                                           'maritime_tropical', 'desert', 'antarctic'],
+                                                              optional=False),),
+                                        tokens=[addToken(name='Input.aer.mixture_name', datatype=str,
+                                                         valid_range=['continental_clean', 'continental_average',
+                                                                      'continental_polluted',
+                                                                      'urban', 'maritime_clean', 'maritime_polluted',
+                                                                      'maritime_tropical', 'desert', 'antarctic',
+                                                                      'desert_spheriods']),
+                                                addSetting(name='Input.aer.n_species', setting=-1,
+                                                           default='NOT_DEFINED_INTEGER'),
+                                                addSetting(name='Input.aer.spec', setting=1)],
+                                        )
+
+        aerosol_species_library = option(
+            name='aerosol_species_library',
+            group='aerosol',
+            helpstr='Location of optical property files',
+            documentation=documentation['aerosol_species_library'],
+            tokens=[addToken(name='Input.aer.filename[FN_AER_SPECIES_LIB]', datatype=file, valid_range=['OPAC', file])],
+        )
+
+        aerosol_visibility = option(
+            name='aerosol_visibility',
+            group='aerosol',
+            helpstr='Horizontal visibility in km',
+            documentation=documentation['aerosol_visibility'],
+            tokens=[addToken(name='Input.aer.visibility', datatype=float, default='NOT_DEFINED_FLOAT',
+                             valid_range=[0, 1e6])],
+            childs=['aerosol_option_specification'],
+            extra_dependencies=['aerosol_haze', 'aerosol_vulcan', 'aerosol_visibility', 'aerosol_season'],
+        )
+
+        aerosol_vulcan = option(
+            name='aerosol_vulcan',
+            group='aerosol',
+            helpstr='Aerosol situation above 2 km',
+            documentation=documentation['aerosol_vulcan'],
+            # gui_inputs=(IntegerListInput(name='Input.aer.vulcan', default=None, valid_range=[1, 2, 3, 4], optional=False),),
+            tokens=addToken(name='Input.aer.vulcan', datatype=int, valid_range=[1, 4]),
+            childs=['aerosol_option_specification'],
+            extra_dependencies=['aerosol_haze', 'aerosol_vulcan', 'aerosol_visibility', 'aerosol_season'],
+        )
+
+        aerosol_sizedist_file = option(
+            name='aerosol_sizedist_file',
+            group='aerosol',
+            helpstr='Aerosol size distribution file.',
+            documentation=documentation['aerosol_sizedist_file'],
+            tokens=addToken(name='Input.aer.filename[Id]', datatype=file),
+            childs=['aerosol_option_specification'],
+            extra_dependencies=[],
+        )
+        aerosol_refrac_index = option(
+            name='aerosol_refrac_index',
+            group='aerosol',
+            helpstr='Set the aerosol particle refractive index.',
+            documentation=documentation['aerosol_refrac_index'],
+            tokens=[addToken(name='Input.aer.nreal', datatype=float),
+                    addToken(name='Input.aer.nimag', datatype=float, default='NOT_DEFINED_FLOAT', valid_range=[0, 1e6]),
+                    addSetting(name='Input.aer.spec', setting=1)],
+            parents=['aerosol_default'],
+        )
+        self.options = [aerosol_default,
+                        aerosol_file, aerosol_species_library, aerosol_species_file,
+                        aerosol_haze, aerosol_season, aerosol_vulcan, aerosol_visibility,
+                        aerosol_profile_modtran,
+                        aerosol_angstrom, aerosol_king_byrne,
+                        aerosol_modify, aerosol_set_tau_at_wvl, aerosol_sizedist_file,
+                        aerosol_refrac_index]
+
+    def __iter__(self):
+        return iter(self.options)
+
+
 def get_aerosol_documentation():
-	return {
-		'aerosol_default'	: r'''
+    return {
+        'aerosol_default': r'''
 	Set up a default aerosol according to \citet{shettle89}. 
 	The default properties are 
 	a rural type aerosol in the boundary layer, background aerosol above 2km,
@@ -226,7 +268,7 @@ def get_aerosol_documentation():
 	and \code{aerosol\_visibility}.
 		''',
 
-		'aerosol_file'	: r'''
+        'aerosol_file': r'''
 	Location of file defining aerosol optical properties.
 	\fcode{
 	   aerosol\_file type file
@@ -307,10 +349,7 @@ def get_aerosol_documentation():
 	\end{description}
 		''',
 
-
-
-
-		'aerosol_species_file'	: r'''
+        'aerosol_species_file': r'''
 	Specify mass density profiles of a mixture of aerosol types. 
 	\fcode{
 	aerosol\_species\_file profile [aero\_1 aero\_2 ... aero\_n]
@@ -358,7 +397,7 @@ def get_aerosol_documentation():
 	desert\_spheroids
 	}
 		''',
-		'aerosol_species_library'	: r'''
+        'aerosol_species_library': r'''
 	With this option the \emph{directory} is specified where the optical property
 	files for all aerosols species used in the \code{aerosol\_species\_file} are
 	expected: For each species defined in \code{aerosol\_species\_file},
@@ -393,7 +432,7 @@ def get_aerosol_documentation():
 	The nonspherical mineral components are described by \citet{koepke2015}.
 		''',
 
-		'aerosol_season'	: r'''
+        'aerosol_season': r'''
 	Specify season to get appropriate aerosol profile.
 	\fcode{
 	   aerosol\_season season
@@ -405,7 +444,7 @@ def get_aerosol_documentation():
 	\end{description}
 		''',
 
-		'aerosol_visibility'	: r'''
+        'aerosol_visibility': r'''
 	Horizontal visibility in km. Affects the profile according to \citet{shettle89}
 	and the optical thickness. 
 	\fcode{
@@ -413,7 +452,7 @@ def get_aerosol_documentation():
 	}
 		''',
 
-		'aerosol_vulcan'	: r'''
+        'aerosol_vulcan': r'''
 	Aerosol situation above 2 km as defined in \citet{shettle89}.
 	\fcode{
 	   aerosol\_vulcan value
@@ -427,7 +466,7 @@ def get_aerosol_documentation():
 	\end{description}
 		''',
 
-		'aerosol_haze': r'''
+        'aerosol_haze': r'''
 	Specify the aerosol type in the lower 2 km of the atmosphere as
 	\fcode{
 	   aerosol\_haze type
@@ -442,13 +481,13 @@ def get_aerosol_documentation():
 	For a description of the different aerosol types see \citet{shettle89}.
 		''',
 
-		'aerosol_profile_modtran': r'''
+        'aerosol_profile_modtran': r'''
 	Squeeze aerosol profile up to 6 km when altitude is non-zero as in MODTRAN.
 	Per default the aerosol profile is shifted upwards
 	and remains unchanged. 
 		''',
 
-		'aerosol_angstrom'	: r'''
+        'aerosol_angstrom': r'''
 	Scale the aerosol optical depth using the {\AA}ngstr{\"o}m formula:
 	\begin{equation}
 	\tau = \beta \lambda^{-\alpha}
@@ -462,7 +501,7 @@ def get_aerosol_documentation():
 	\code{altitude} to TOA (top of atmosphere). 
 		''',
 
-		'aerosol_king_byrne'	: r'''
+        'aerosol_king_byrne': r'''
 	Scale the aerosol optical depth using the King Byrne formula \citep{king1976}:
 	\begin{equation}
 	\tau = e^{\alpha_0} \cdot \lambda^{\alpha_1} \lambda^{-\alpha}
@@ -476,7 +515,7 @@ def get_aerosol_documentation():
 	\code{altitude} to TOA (top of atmosphere). 
 		''',
 
-		'aerosol_modify' : r'''
+        'aerosol_modify': r'''
 	Modify aerosol optical properties.
 	\fcode{
 	aerosol\_modify variable scale/set value
@@ -484,7 +523,7 @@ def get_aerosol_documentation():
 	This option is identical to \code{wc\_modify}.
 	Please refer to \code{wc\_modify} for a detailed description of \code{variable}.
 		''',
-		'aerosol_set_tau_at_wvl'	: r'''
+        'aerosol_set_tau_at_wvl': r'''
 	Set the aerosol optical thickness at wavelength lambda (nm). Other wavelengths are scaled accordingly.
 	Note that this option requires for technical reasons that the
 	wavelength interval defined by \code{wavelength} does contain \code{lambda}.
@@ -494,4 +533,20 @@ def get_aerosol_documentation():
 	   aerosol\_set\_tau\_at\_wvl lambda tau
 	}
 		''',
-}
+
+        'aerosol_sizedist_file': r'''
+        Calculate optical properties from size distribution and index of refraction using Mie
+        theory. Here is an exception from the rule that ALL values defined above are overwritten
+        because the optical thickness profile is re-scaled so that the optical thickness
+        at the first internal wavelength is unchanged. It is done that way to give the user an
+        easy means of specifying the optical thickness at a given wavelength.
+        ''',
+
+        'aerosol_refrac_index': r'''
+        Calculate optical properties from size distribution and index of refraction using Mie
+        theory. Here is an exception from the rule that ALL values defined above are overwritten
+        because the optical thickness profile is re-scaled so that the optical thickness
+        at the first internal wavelength is unchanged. It is done that way to give the user an
+        easy means of specifying the optical thickness at a given wavelength.
+        ''',
+    }
