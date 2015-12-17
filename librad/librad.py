@@ -795,5 +795,34 @@ class Case():
             #         if self.uu.shape[1] / self.n_wvl > 1:  # if multiple output levels, reshape the radiance data appropriately
             #             self.uu = self.uu.reshape((self.n_umu, self.n_wvl, -1), order='F')
 
+class RadEnv():
+    """ RadEnv is a class to encapsulate a large number of uvspec runs to cover a large number of sightlines over the
+    whole sphere. A radiance map over the complete sphere is called a radiant environment map. The uvspec utility can
+    only handle a limited number of sighlines per run, determined by the maximum number of polar and azimuthal angles
+    specified in the file /libsrc_f/DISORT.MXD. If these values are changed, DISORT and uvspec must be recompiled. If
+    the values are set too large, the memory requirements could easily exceed your computer's limit (there is
+    currently no dynamic memory allocation in DISORT). The situation for the cdisort solver is less clear.
+    """
+
+    def __init__(self, base_case, n_pol, n_azi, mxumu=48, mxphi=19):
+        """
+        Where base_case is the uvspec case on which to base the environmental map, Name is the name to give the the
+        environmental map and n_pol and n_azi are the number of polar and azimuthal sightline angles to generate. The
+        mxumu and mxphi are the maximum number of polar and azimuth angles to calculate in a single run of uvspec.
+        The default values are mxumu = 48, and mxphi = 19. These values are taken from the standard libRadtran
+        distribution (/libsrc_f/DISORT.MXD) maximum parameter file. If using the polradtran solver, the corresponding
+        file is /libsrc_f/POLRADTRAN.MXD. Other solvers may have different restrictions. A warning will be issued if
+        the solver is not in the DISORT/POLRADTRAN family.
+
+        :param base_case: librad.Case object providing the case on which the environment map is to be based
+        :param n_pol: Number of polar angles (umu angles)
+        :param n_azi: Number of azimuthal angles
+        :param mxumu: Maximum number of polar angles per case
+        :param mxphi: Maximum number of azimuthal angles per case
+
+        The solver cdisort may have dynamic memory allocation, so the warning is still issued because the situation
+        is less clear.
+        """
+
 
 
