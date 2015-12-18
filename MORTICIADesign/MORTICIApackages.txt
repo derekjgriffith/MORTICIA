@@ -1,0 +1,9 @@
+
+Simple GUI file dialogs : easygui
+Relational database interaction : peewee ?
+Plotting : matplotlib
+HEALPix : healpy - for working with data defined on a sphere
+astropy : healpy dependency
+pyephem : astronomy-related calculation, sun, moon positions
+future : Python 2/3 compatibility
+six : Python 2/3 compatibility
