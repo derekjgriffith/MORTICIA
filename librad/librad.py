@@ -599,7 +599,7 @@ class Case():
         self.n_wvl = len(self.wvl)
 
     def readout(self, filename=None):
-        """ Read uvspec output. The result is placed into a dictionary called self.out
+        """ Read uvspec output and assign to variables as intelligently as possible.
 
          The general process of reading is:
           1) If the user has specified output_user, just assume a flat file and read using
@@ -609,16 +609,15 @@ class Case():
           3) Otherwise, if the output has radiance blocks, read those depending on the radiance block
              format for the specific solver. Keep reading flux and radiance blocks until the file is exhausted.
 
-         Once the data has all been read, the data is split up between the number of output levels and number
-         of wavelengths. For radiance data, the order of numpy dimensions is umu, phi, wavelength and zout. That is,
-         if a case has multiple zenith angles, multiple azimuth angles, multiple wavelengths and multiple output
-         levels, the radiance property uu will have 4 dimensions.
+         Once the data has all been read, the data is split up between the number of output levels and number of
+         wavelengths. For radiance data, the order of numpy dimensions is umu, phi, wavelength, zout and stokes. That
+         is, if a case has multiple zenith angles, multiple azimuth angles, multiple wavelengths and multiple output
+         levels, the radiance property uu will have 4 dimensions. In the case of polradtran, there will be 5
+         dimensions to include the stokes parameters.
 
-        Output from uvspec depends on the solver and a number of other
-        inputs, including the directive 'output_user'.
-        For the solvers disort, sdisort, spsdisort and presumably also
-        disort2, the irradiance (flux) outputs default to
-          lambda edir edn eup uavgdir uavgdn uavgup
+        Output from uvspec depends on the solver and a number of other inputs, including the directive 'output_user'.
+        For the solvers disort, sdisort, spsdisort and presumably also disort2, the irradiance (flux) outputs default
+        to lambda edir edn eup uavgdir uavgdn uavgup
 
         If radiances (intensities) have been requested with the umu
         (cosine zenith angles input), each line of flux data is followed
@@ -645,7 +644,6 @@ class Case():
 
         Radiance outputs are not affected by output_user options.
 
-
         For the polradtran solver, the flux block is as follows:
            lambda down_flux(1) up_flux(1) ... down_flux(iS) up_flux(iS)
 
@@ -669,28 +667,24 @@ class Case():
         For the two-stream solver (twostr), the flux block is
            lambda edir edn eup uavg
 
-        The directive keyword 'brightness' can also change output. The
-        documentation simply states that radiances and irradiances are
-        just converted to brightness temperatures.
+        The directive keyword 'brightness' can also change output. The documentation simply states that radiances and
+        irradiances are just converted to brightness temperatures.
 
-        The keyword directive 'zout' and it's parameters will influence
-        output format as well. In general the output is repeated for each
-        given value of zout or zout_sea.
+        The keyword directive 'zout' and it's parameters will influence output format as well. In general the output
+        is repeated for each given value of zout or zout_sea.
 
-        The keyword directive 'output' and its parameters will also have
-        a major effect.
+        The keyword directive 'output' and its parameters will also have a major effect.
 
         'output sum'
 
-        The keyword directive 'header' should not be used at all. This
-        produces some header information in the output that will cause
-        errors. An error is issued of the 'header' keyword is used in the
-        input.
+        The keyword directive 'header' should not be used at all. This produces some header information in the output
+        that will cause errors. An error is issued of the 'header' keyword is used in the input.
 
         :param filename: File from which to read the output. Defaults to name of input file, but with the .OUT
         extension.
         :return:
         """
+        #TODO check for use of header keyword
         if self.fluxline == '?':
             print('Unknown output format. Skipping file read.')
             return
@@ -805,8 +799,8 @@ class RadEnv():
     """
 
     def __init__(self, base_case, n_pol, n_azi, mxumu=48, mxphi=19):
-        """
-        Where base_case is the uvspec case on which to base the environmental map, Name is the name to give the the
+        """ Create a set of uvspec runs covering the whole sphere to calculate a full radiant environment map.
+        Where the base_case is the uvspec case on which to base the environmental map, Name is the name to give the
         environmental map and n_pol and n_azi are the number of polar and azimuthal sightline angles to generate. The
         mxumu and mxphi are the maximum number of polar and azimuth angles to calculate in a single run of uvspec.
         The default values are mxumu = 48, and mxphi = 19. These values are taken from the standard libRadtran

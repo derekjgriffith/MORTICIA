@@ -23,6 +23,11 @@ for a variety of satellite sensors.
 To execute full simulations using MORTICIA it is necessary to have a working installation of
 libRadtran.
 
+# Twilight
+libRadtran is able to calculate radiances and irradiances when the sun is below the horizon by up
+to 9 degrees or more. This is well into "nautical" twilight. The MYSTIC monte carlo solver is
+required to perform twilight computations.
+
 # libRadtran Downloads
 Further information and downloads are available at [libRadtran website](http://www.libradtran.org).
 

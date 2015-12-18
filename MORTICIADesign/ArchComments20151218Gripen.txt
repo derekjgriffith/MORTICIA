@@ -1,0 +1,529 @@
+# Need classes Lens/Sensor, Atm
+
+# Assume that Lens MTF, atmospheric MTF and other atmospheric stuff has been pre-computed
+
+""" Goals :
+1) Reassign functions to methods of new classes
+2) First pass on class definitions
+3) Seperate image simulation from TTP computation
+
+"""
+# If band model is specified up front, don't base MTF spectral sampling on that (e.g. defining Lens)
+# Lens class computes MTF on construction at "suitable" minimum spectral resolution defined by user
+# Spatial frequencies also chosen "judiciously". How to handle thru-focus and thru-field ?
+# MTFs up to 5d, but hanging singleton dimensions are removed
+# When creating sensor, compute sensor MTF or wait until image modelling is demanded ?
+# Do we want to be able to handle lens distortion ? Not priority - how would it be handled (15 min)
+
+# For FPA, have vector of spatial frequencies
+
+# System MTFs are up to 5 dimensional, thru-frequency, thu-wavelength, thru focus, thru-field, X and Y directions
+
+# Maximum spatial frequency for lens defined at time of lens instantiation
+# Same for wavelength scale,
+# Do we extrapolate and do we issue a warning when extrapolating.
+
+# Warnings and errors to be issued through the logging module.
+# Exception-handling strategy
+
+# Atmosphere (1D atmosphere)
+# 1) All RT calculations will be with 1D solvers
+# 2) Use IPA for "mixed" atmospheres - where atmospheric profile at target and sensor are
+#    very different.
+
+# Atmosphere defined by its vertical profiles
+# 1) Turbulence strength (C_n^2)
+# 2) Aerosol concentration and properties as a function of height
+# 3) gaseoous profile including water vapour
+# 4) Water cloud vertical distribution and properties
+# 5) Ice cloud vertical distribution and properties
+# 6) Temperature/pressure vertical profiles\
+# 7) Wind speed and direction
+# 8) Rain/precipitation
+
+# Class Snap is everything required to generate a picture from a camera
+# Includes
+# 1) Sensor (Lens + FPA)
+# 2) Target and sensor locations
+# 3) An atmosphere, an atmospheric MTF, path radiance and transmission
+# 4) Time of day and day of year
+
+# Classes : Lens, FPA, Sensor, Atm, Snap
+
+# sensor package, optics module, Lens class
+# sensor package, optics module, detector module, Detector class (abstract)
+
+
+
+# Consider using decorators as function "wrappers"
+
+
+# Compute spatial freqs at obj
+# Project spatial freq to image
+# Compute obj size projected to image
+# Center coordinates of object samples at image
+# Compute lesn MTF at object spatial frequencies all at image plane
+# Cutoff frequency of lens
+# Possible warning about insufficient object sampling
+# Extend to 2 dimensional sampling
+
+
+
+
+
+"""
+% ModelFPAImageTTP : Models image sampling in narrow field camera systems.
+%
+% The chief application of this function is to model sampling of images
+% produced by narrow field cameras, including atmospheric effects,
+% lens effects and the properties of the focal plane array (FPA),
+% Various noise mechanisms are modeled.
+%
+% Spatial filtering is performed using Fourier techniques.
+%
+% The signal transfer model is taken from Holst, G.C., "CCD Arrays,
+% Cameras and Displays", SPIE Press and JCD Publishing, Chap. 4,
+% 2nd Edition, pg 104, 1998. The noise model is taken from pg 123.
+%
+% A good overview of the intention of this model is provided in the
+% online report by Thomas Winzell, "Basic Optical Sensor Model",
+% Report number FOI--2135--SE, Swedish Defence Research Agency,
+% November 2006.
+%
+% One of the major limitations of the approach taken in this model is the
+% assumption of isoplanatism, i.e. that the optical transfer function is
+% invariant over the field of view. In general, both atmospheric turbulence
+% as well as lens optical transfer functions vary over the field.
+%
+% Further limitations and assumptions.
+% 1) The FPA response is assumed linear with input irradiance.
+% 2) The MTF due to the pixel aperture is assumed to be a sinc function.
+%    In fact, the MTF of an FPA can vary with wavelength due to photon
+%    penetration and charge diffusion. See "CCD Arrays, Cameras and
+%    Displays", Section 10.3.1 on pg. 276.
+% 3) Interlaced devices are not modeled in that the effect of
+%    "serration" is not included. This effect is very annoying in the
+%    presence of atmospheric turbulence or other small image motions.
+%    It is one of the many reasons that progressive-scan digital
+%    cameras are preferable for long range surveillance. In principle
+%    serration could be modeled by calling this routine twice with
+%    suitable inputs. An example of modeling serration will hopefully
+%    become available.
+% 4) MTF degradation due to charge transfer efficiency (CTE) effects
+%    in the FPA is not included.
+% 5) TDI (time delay and integration) devices are not dealt with.
+% 6) A practical atmospheric aerosol MTF has not yet been implemented.
+%    The work by Kopeika on this topic should serve as the basis for
+%    future implementation. See "A System Engineering Approach to
+%    Imaging", Chapter 17, SPIE Press, 1998.
+% 7) When the image is displayed it is displayed with one datel (digitised
+%    pixel) mapped to one disel (display element).
+% 8) Spurious out-of-band frequency response is neglected. In fact
+%    Vollmerhausen gives considerable detail on how to adjust the TTP to
+%    take spurious out-of-band response into account.
+%
+% Usage :
+%    Results = ModelFPAImageTTP(Wavelengths, Obj, Atm, Lens, FPA)
+%
+% Where input parameters are ...
+% Wavelengths is a vector of wavelengths at which the computation will
+%         be performed. Wavelengths must be given in microns.
+%
+%   Input Obj is a structure containing information about the object,
+%      having the following fields
+%         Samples - an array of samples of the object, the first two dimensions being spatial
+%                   and the third dimension being spectral. The third dimension must
+%                   have the same number of samples as the number of Wavelengths.
+%                   Samples can be any numeric class, but are converted to double
+%                   for processing. Samples can be spectral radiance or band radiance
+%                   if absolute FPA signal levels are required. Spectral radiance must
+%                   be given in units of W/m^2/sr/micron. Band radiance is in W/m^2/sr.
+%                   Object samples may also be called "scenels". The samples are typically
+%                   a synthetic scene or a close range calibrated digital photograph.
+%                   Tips for use of digital photography as input objects to this routine.
+%                   1) Bear in mind that the digital photograph will contain noise of very
+%                   much the same nature as that modeled by this routine. The pictures
+%                   should be taken with a high quality, preferably linear CCD camera.
+%                   2) Shoot using a tripod at the lowest gain or ISO setting available.
+%                   This will help to reduce noise. Shoot in the RAW mode if your camera
+%                   has one, and convert to a Matlab-readable image format using dcraw.
+%                   3) The camera should have the same or  better bit-depth as the one
+%                   you want to model. It is possible to compensate for noise and lower
+%                   bit depth by ensuring that many object pixels (scenels) map onto a
+%                   single image plane FPA pixel. For example ...
+%                   if you have 8-bit depth in the object samples and you want to model
+%                   a camera with 12 bit depth, then at least 16 object pixels (4 by 4)
+%                   must map to one FPA pixel. This oversampling also has the effect of
+%                   averaging out the noise in the object samples (scenels).
+%
+%    TargetMask -  A binary mask of the same dimensions as the scene
+%                  Samples input. Pixels that are part of the target are
+%                  logical 1 and pixels not part of the target are logical
+%                  0. This mask is used to determine the target size and
+%                  target contrast. The target pixels must form a single island in
+%                  the scene Samples data. If no TargetMask is supplied, it
+%                  is assumed that the entire scene is the target only.
+%
+%         Pitch  - Pitch (spacing) of the object samples in mm. The object must be
+%                  oversampled with reference to the projection onto the FPA pixels.
+%                  Compulsory scalar numeric. The function MeasureImageScale is
+%                  one possible method of determining the object sample pitch. If the
+%                  object samples are a high resolution digital image, then oversampling
+%                  of at least 4 times is advisable. A warning is issued if oversampling
+%                  is less than a factor of 4.
+%
+%         Range  - Distance of the object from the lens. Range must be given in metres.
+%                  Compulsory scalar numeric field.
+%
+%   Input Atm is a structure containing information about the atmosphere,
+%      having the following fields, none of which are compulsory. The default is
+%      a perfectly clear and still atmosphere.
+%         Extinct  - Extinction coefficient of the atmosphere for each of the
+%                    wavelengths or wavelength bands. The atmospheric transmission
+%                    is computed from the range (distance) of the object and
+%                    the extinction coefficient using the expression ...
+%                    Atm.Trans = exp(-Atm.Extinct * Obj.Range/1000)
+%                    Give either Extinct or Trans but not both. The extinction
+%                    coefficient must be given in units of km^-1.
+%            Trans - Atmospheric transmission for each of the wavelengths
+%                    or spectral bands. This must be the total transmission
+%                    between the object and the lens. Atmospheric path
+%                    transmittance can be computed using MODTRAN.
+%         Radiance - This is the band or spectral radiance of the atmospheric
+%                    path between the object and the lens. Must be a vector of
+%                    the same length as the Wavelengths input. Units must
+%                    be the same as for the Object.Samples input. Atmospheric
+%                    path radiance can be computed using MODTRAN.
+%              Cn2 - Path averaged atmospheric refractive index structure
+%                    function parameter. Scalar numeric. Constant Cn2 is
+%                    really only applicable to atmospheric paths that are
+%                    at a constant height above ground. Cn2 is used to compute
+%                    the turbulence MTF of the atmospheric path. Cn2 of
+%                    1e-12 is considered strong turbulence, 1e-13 is moderate
+%                    and smaller than 1e-14 is considered weak. The units are
+%                    metre to the -2/3 power.
+%               r0 - Atmospheric path Fried parameter. Give only one of Cn2,
+%                    or r0. The Fried parameter characterises the amount of
+%                    wavefront distortion introduced by a turbulent
+%                    atmospheric path, and can also be used to compute
+%                    atmospheric turbulence MTF. Units are metres. If r0
+%                    is given then Cn2, h0, h1 and h2 inputs will be ignored.
+%               h0 - Reference height for Cn2 above ground in units of metres.
+%                    This need only be given if the actual atmospheric path height
+%                    above ground (h1) is different from the height for which
+%                    the Atm.Cn2 parameter above has been defined. If h0
+%                    is given, then h1, the actual height must also be given.
+%                    Units are metres. The Tatarski approximation is used
+%                    to compute Cn2 at heights different from h0.
+%               h1 - The actual starting height (height of the object) above
+%                    ground in metres. If h2 is not given, then the path is
+%                    assumed to be at constant height of h1 above ground.
+%               h2 - The actual finishing height above ground (lens aperture
+%                    height) of the atmospheric path in metres. This need
+%                    only be given if different from h1 (i.e. a slanted
+%                    path is defined). If a slanted path is defined, the
+%                    turbulence MTF is computed using a path integral
+%                    with Cn2 varying with height according to the Tatarski
+%                    approximation. The absolute difference between h1 and
+%                    h2 must be less than or equal to the Obj.Range input.
+%      Since the Tatarski model goes to infinity at ground level, none of
+%      the height inputs h0, h1 or h2 may be zero (or negative).
+%      In all cases, for computation of turbulence MTF, the short exposure
+%      MTF is computed. Spherical wave approximations for all turbulence
+%      computations are assumed.
+%
+%   Input Lens is a structure containing information about the lens,
+%      having the following fields, of which EFL and one of F and D are
+%      compulsory.
+%         EFL - Effective focal length in mm. Compulsory scalar numeric.
+%         F   - Focal Ratio (dimensionless) OR
+%         D   - Aperture diameter in mm (give only one of F or D)
+%         Obs - Obscuration ratio (see PMTFobsWFE). Obscuration defaults to zero
+%               if not given. Scalar numeric.
+%         WFE - RMS wavefront error in fractions of waves at each of the wavelengths.
+%               This field is optional, but if present must have the same length as
+%               Wavelengths. The Shannon formula is used to model the effect of
+%               the wavefront error on the MTF. Only small amounts of WFE
+%               can be modeled using this method. A warning will be issued
+%               from the ATF function if WFE is too large.
+%     Defocus - The amount of defocus at the image plane in mm. Defocus
+%               contributes additional wavefront error that reduces the MTF.
+%               The Shannon formula is used to compute the defocus WFE. This
+%               method is valid only for small amounts of defocus. A warning
+%               will be issued from the ATF function if the defocus is too
+%               large.
+%       Trans - Lens transmission. If given, this must be a vector of the same
+%               length as the Wavelengths input parameter. If omitted, the lens
+%               transmission is assumed to be unity for all Wavelengths. The
+%               transmission loss due to the obscuration must not be included
+%               in this transmission factor. Any transmission loss due to filters
+%               must be included.
+%   SmearRate - The angular rate of smear due to relative motion of the object
+%               and the lens. The SmearRate must be given in radians per second.
+%               Defaults to zero smear. To compute smear, the exposure time of
+%               the FPA must be given as well (see below).
+% SmearOrient - Direction/orientation of the smear in the focal plane. Defaults to
+%               zero degrees which is smear in the x-direction. Give 90 degrees
+%               for smear in the y-direction.
+%   RMSJitter - The root-mean-square jitter displacement in radians. Jitter is high
+%               frequency random motion of the sightline. It is assumed that
+%               many jitter motions occur during the exposure time of the FPA. It
+%               is modeled with a simple gaussian-shaped filter.
+%
+%   Input FPA is a structure containing information about the focal plane array,
+%      having the following fields. If the FPA structure is completely empty, then
+%      only the Results.FPAIm field is returned.
+%         PitchX    - Pixel pitch of the FPA in the x direction in mm. Scalar numeric.
+%         PitchY    - Pixel pitch of the FPA in the y direction in mm. If not given,
+%                     it is assumed equal to PitchX. Scalar numeric. Compulsory if
+%                     the FPA structure is not completely empty.
+%         ApertureX - Pixel aperture in the x direction in mm. The pixel aperture may
+%                     not exceed the pixel pitch. Scalar numeric.
+%         ApertureY - Pixel aperture in the y direction in mm. Scalar numeric. Defaults
+%                     to ApertureX if not given. Compulsory input if the FPA structure
+%                     is not completely empty.
+%         ASR       - Absolute spectral responsivity of the FPA. If omitted, unity is
+%                     assumed for all wavelengths. Typical units are amperes per watt
+%                     of optical flux, and this unit is assumed here. ASR can be
+%                     computed from the spectral quantum efficiency using the
+%                     SQEtoASR function.
+%         OffsetX  - Sample origin/offset in the X direction. Must be from 0 to 1 pixels.
+%                    Scalar numeric. Allows investigation of pixel sample phase shift.
+%         OffsetY  - Sample origin/offset in the Y direction. Must be from 0 to 1 pixels.
+%                    Scalar numeric.
+%    WellCapacity  - Number of electrons that can be accumulated in the pixel
+%                    well before blooming occurs or the anti-blooming drain gate
+%                    opens. Compulsory if ExpTime is set to zero (auto-exposure).
+%         ExpTime  - Exposure time in seconds of the FPA. Compulsory scalar numeric.
+%                    If the exposure time is given as zero, then the exposure time
+%                    will be set automatically so that the mean signal over all
+%                    pixels is equal to 50% of the pixel well capacity. Note that
+%                    smear is ignored in this auto-exposure mode.
+%            PRNU  - RMS photo-response non-uniformity as a standard deviation
+%                    of the photo-response in percent. Scalar numeric.
+%                    White, gaussian statistics are used to model PRNU.
+%                    If this field is not given, photo-response uniformity is assumed.
+%         PRNUSeed - If given, this scalar numeric will be used to seed the random
+%                    number generator before computing PRNU. This facility is provided
+%                    in order to generate the same PRNU on every call to ModelFPAImageTTP
+%                    the reason being that PRNU is fixed at the time the FPA is
+%                    manufactured. Shot noise and other noise sources not associated
+%                    with FPA manufacture will still be random and different on every
+%                    call. This feature is potentially useful for visualising temporal
+%                    noise in a sequence of frames from the same FPA, but only if the
+%                    subsequent calls results in the same output array size for
+%                    the FPASignal output field.
+% ++++++++++++++++++++++++++++++ check units of dark signal - is it amperes
+% per pixel or electrons per pixel per second. What about temperature
+% dependence .............++++++++++++++++++++++++++
+%      DarkCurrent - The mean dark current density of the FPA in amperes per pixel. Dark
+%                    current generally has quite strong dependence on temperature.
+%                    Scalar numeric. Dark current is assumed zero if this field
+%                    is absent. The manufacturer of the FPA may give dark current
+%                    of the device in amperes per square centimetre. Multiply
+%                    by the pixel area in this case.
+%    StdevDarkCurr - The standard deviation of the FPA dark current expressed as
+%                    a percentage of the dark current.
+%                    Variance in dark current is a contributer to pattern noise,
+%                    called fixed pattern noise.
+%                    Scalar numeric. Dark current is assumed to have a
+%                    gaussian distribution and a white power spectrum.
+%  DarkCurrentSeed - if given, this field will seed the random number generator
+%                    for setting dark current uniformity (also called fixed
+%                    pattern noise - FPN). The same comments apply as for
+%                    the PRNUSeed field.
+%     ReadoutNoise - On-chip, white amplifier noise in RMS electrons. This noise
+%                    source may also be called mux (multiplexer) noise, noise-
+%                    equivalent electrons or the "noise floor" by the device
+%                    manufacturer.
+%    SpecIntegrate - This is a logical flag. If set true, the FPA signal is integrated
+%                    over all spectral bands. For spectral integration to be valid
+%                    the objects samples must be absolute spectral radiance.
+%    SpecSum       - Logical flag which sums all bands to a single result.
+%                    This is only valid if object samples are band
+%                    radiances in W/m^2/sr.
+%  DigitalResponse - This is the numer of signal electrons required to elevate
+%                    the digital number (DN) output of the camera by 1. If the
+%                    DigitalResponse field is given, another output field called
+%                    Datels will be given, being the digital number output.
+%                    Scalar numeric. Assumed the same for all bands.
+%     WellCapacity - This is the maximum number of electrons that can be
+%                    contained in a pixel well. If this number is exceeded,
+%                    the pixel saturates. If this scalar numeric field is
+%                    given, the Datels output field will be limited to a DN
+%                    equal to WellCapacity/DigitalResponse. The FPASignal
+%                    output will be limited to the value of WellCapacity.
+%                    The FPAPureSignal output will not be affected.
+%
+% Computation of the displayed image and the TTP metric require that
+% information about the display be given. An important assumption made here
+% is that one datel (digitised pixel) maps to one display element (disel).
+%
+% Display is an input structure that describes the properties of the
+% display system. It contains the following fields.
+%    RenderedDisel - This is an image of a greyscale pixel rendered on the display
+%                    system in question. This could be a simulated image of
+%                    a pixel displayed on the monitor, or it could be a
+%                    photograph of the pixel displayed on the monitor
+%                    captured using an imaging micro-photometer. There
+%                    should be at least 10 samples by 10 samples. Any dead,
+%                    black zones between pixels must be captured very
+%                    accurately. Currently this routine is only able to
+%                    deal with digital displays where datels map directly
+%                    to disels (display elements). If the system is a
+%                    colour display, then the RenderedDisel image must have
+%                    three channels in the order RGB. TTP computation
+%                    cannot proceed without this input.
+%      SamplePitch - This is the centre-to-centre spacing of the pixels in
+%                    RenderedDisel image. This is NOT the distance between
+%                    disels, but the distance between the samples of the
+%                    image of a single disel response function. This input
+%                    is compulsory and must be a scalar numeric in units of
+%                    mm.
+%       DiselPitch - Centre to centre spacing of disels on the display
+%                    system in mm. If this is not given, the DiselPitch is
+%                    assumed equal to the number of pixels across the
+%                    RenderedDisel image multiplied by the SamplePitch.
+% ViewingDistance - The distance at which the monitor is viewed. This input
+%                   is a compulsory scalar numeric input for successful
+%                   computation of the TTP.
+%          SiTF   - The signal transfer function of the display system.
+%                   This is the total visible emission from a disel when
+%                   the input to the display system is a specific grey
+%                   value. The SiTF is a lookup table in which the input
+%                   runs from 0 to unity and the output runs from 0 to the
+%                   bitdepth of the display. If the display has a bitdepth
+%                   of 8, then there are 256 entries in the SiTF table.
+%   MaxLuminance - The maximum luminance in cd/m^2 that the monitor on the
+%                  display system can deliver. This is the luminance
+%                  corresponding to the maximum datel input.
+%   MinLuminance - The minimum luminance the monitor can produce measured
+%                  in a completely dark environment. If this is not
+%                  measured, but the monitor has a specified contrast
+%                  ratio, then set MinLuminance to MaxLuminance multiplied
+%                  by the contrast ratio.
+% StrayLuminance - This is the luminance reflected from the display.
+%                  Stray luminance comes from the environment. If the monitor
+%                  is operated in a bright environment it will reflect some
+%                  of this environmental radiation making low contrast objects
+%                  more difficult to observe. This actually impacts the
+%                  resulting SiTF of the display system
+% DigitalZoom    - Digital zoom factor of displayed image - must be an
+%                  integer greater than or equal to 1.
+% ContrastEnhance - Contrast enhancement factor prior to display. This
+%                   input is optional and experimental.
+%
+% The input Task describes the task that is to be performed. Generally the
+% task difficulty depends on the target set that is under consideration and
+% the information required about the specific target presented that must be
+% derived from the image. The Task input must have the following fields :
+%
+% V_50  - The TTP metric value (at the target) which will give a 50%
+%        probability of successfuly executing the task. The task is
+%        typically a DRI (Detect, Recognize or Identify). This number of
+%        TTP cycles must be delivered over a specific critical dimension
+%        for the target set under consideration.
+% CriticalDimension - this is the distance at the target over which V_50 TTP
+%       cycles must be delivered. The code does not check to see if the
+%       critical dimension is smaller than the maximum chord length of the
+%       the target mask. Generally this should be so, but there could be
+%       uncommon instances in which the critical dimension is larger than
+%       any one dimension of a specific target in the set. The critical
+%       dimension must be a scalar in units of mm.
+%
+%
+%
+% Output Results is a structure with one or more of the following fields ...
+%   FPAIm is the spectral or band irradiance at the image plane. Units are consistent
+%         with the input scene spectral or band radiance i.e. if object radiance is in
+%         W/m^2/sr/nm, then this output will be in W/m^2/nm at the image.
+%         This image has the same sample density as the Object.Samples field,
+%         i.e. it consists of all object samples (scenels) projected to the image plane
+%         after spatial filtering by atmosphere and lens. The effects
+%         of smear and jitter are not included, but all transmission effects
+%         are. Atmospheric path radiance is also included.
+%   FPASignal are the pixel values sampled by the FPA. The samples are signal values per
+%         pixel in units of electrons (provided that the FPA.ASR input is in amperes/watt).
+%         FPASignal will have the same number of spectral channels as the object unless
+%         the spectral integration flag (FPA.SpecIntegrate) is set.
+%         The FPASignal field includes all noise mechanisms requested.
+%   FPAPureSignal is the FPA signal uncorrupted by any noise (also not shot noise). The
+%         noise per pixel can be computed by taking the difference
+%         FPASignal - FPAPureSignal. The FPAPureSignal is also in electrons if the
+%         appropriate input units have been used. The RMS noise for the entire image
+%         can be computed by taking the square root of the mean square of the
+%         difference i.e. RMSNoise = sqrt(mean(mean((FPASignal-FPAPureSignal).^2)))
+%         The mean signal to noise ratio for the entire image is then the mean
+%         signal divided by the RMS noise.
+%           i.e. SNR = mean(mean(FPAPureSignal))/RMSNoise
+%   Datels is the digital output of the camera if the digital responsivity has been
+%         given (FPA.DigitalResponse). These numbers are returned as class double,
+%         but are rounded to the nearest integer and therefore include the effect
+%         of "digitization noise". If the band model has been used to compute a
+%         colour image for a camera having a Bayer (or similar) filter, some of
+%         these pixels have to be discarded and/or replaced by interpolated values
+%         from adjacent pixels. This type of Bayer sampling is not performed by
+%         this function, and will be implemented in a separate function (Bayerize).
+% SimulatedDisels is a simulation of the display. The viewing distance must
+%         be increased by a correspondng factor to get an idea of what the display
+%         to be simulated would produce.
+% There may also be TTP-related outputs provided that the relevant inputs
+%  Display and Task have been provided.
+% The TTP-related outputs are as follows :
+% TTP     The TTP metric at the entrace pupil of the surveillance system in
+%         cycles per milliradian.
+% TTPtarg - This is the computed value of the TTP metric for the system in
+%           question, but projected back to the target. This is given in
+%           cycles per metre.
+%
+% ProbSuccess - this is the probability that the surveillance task will be achieved
+%       successfully for the given scenario. This is only computed if the
+%       task difficulty (V_50) is given in the Task input structure. Note
+%       that this excludes the probability of a correct random guess. The
+%       probability of a lucky task success depends on the number of
+%       possible answers to the question that is posed. If you wish to
+%       predict the outcome of an experiment, then the probability of a
+%       lucky guess must be included. The probability is computed using an
+%       empirically parametrized logistics equation.
+%
+%
+% A note about image reconstruction :
+% The image pixels (or Datels) returned by this function represent the image data obtained
+% by a camera. Reconstruction of the image is an important matter, determining how the image
+% is ultimately presented to the human observer. The reconstruction filter constitutes
+% the display hardware (perhaps amongst other components). If the datels are displayed at
+% a true scale of one datel to one display pixel on a computer, then the reconstruction
+% filter is the computer display card and monitor on which the image is displayed. The
+% bit-depth and MTF of the display must be taken into consideration. One display system
+% can be simulated on another display system by reconstructing one disel (display element)
+% on the display to be simulated by multiple disels on the simulation display system. The
+% viewing distance must then be increased in proportion. e.g. if 8 by 8 disels are used
+% on the simulation display to represent 1 by 1 disel on the display to be simulated, then
+% the viewing distance must be increased by a factor of 8. The effects of raster, phosphor
+% dots and other display artifacts can be simulated in this way. Also, a higher bit-depth
+% display can be simulated on a lower bit-depth display using this approach. A seperate
+% function will implement reconstruction.
+%
+% The image processing toolbox command truesize can be used to force Matlab to display
+% the datels in one to one correspondence with disels (one data pixel to one display pixel).
+%
+% For precise control over simulation of reconstruction, the reader is referred to the
+% PsychToolbox for Matlab (http://psychtoolbox.org).
+%
+% In order to simulate a display, the minimal information required is the pre-mask
+% line spread functions in the vertical and horizontal directions, the resolution-to-
+% addressability ratio (RAR) in the vertical and horizontal directions, and the shadow
+% mask aperture functions for red, green and blue (if simulating color imagery). Of
+% course, the simulation will not be good if the colors on the simulating display are
+% very different from those on the display to be simulated.
+%
+% Examples of the use of ModelFPAImageTTP are given in the scripts named
+%  ModelFPAImageTTPExample1.m etc.
+%
+% See also : PMTFobsWFE, truesize (image processing toolbox), MeasureImageScale, dcraw
+%
+% Bugs:
+%   Smear is ignored if the FPA.ExpTime is set to zero (auto-exposure mode). Jitter
+%   is always included.
+"""
+
