@@ -30,8 +30,12 @@ import numpy as np
 import pandas as pd
 import xray
 import logging
-# Import global units registry if it exists
-# from . import ureg, Q_
+# Import units registry
+from pint import UnitRegistry
+ureg = UnitRegistry()
+Q_ = ureg.Quantity
+def U_(units):
+    return Q_(1.0, units)
 
 # As a general rule, where relevant and present, optical parameters are passed in in the order
 #   spatial frequency (spf), wavelength (wvl), focal ratio (fno) followed by any other parameters.
@@ -53,7 +57,7 @@ import logging
 
 def mtf(spf, wvl, fno):
     """ Compute the simple (optimally focussed) diffraction Modulation Transfer Function (MTF) of a prefect lens with an
-    unobscured circular aperture
+    unobscured circular aperture.
 
     :param spf: Spatial frequencies in the image at which to compute the MTF
     :param wvl: Wavelength in units consistent with the spatial frequencies f
@@ -229,6 +233,13 @@ def atf(spf, wvl, fno, rms_wavefront_error):
     Specifications. "This is an approximation, however, and it becomes progressively less accurate as
     the amount of the rms wavefront error exceeds about 0.18 wavelength."
 
+    The formula used for computing the aberration MTF due to RMS wavefront error of :math:`W` at spatial frequency
+    :math:`f` is
+
+    .. math::
+        M\\!T\\!F_{W}(f)=1-\\left(\\frac{W}{0.18}\\right)^{2}\\left[1-4\\left(\\frac{f}{f_{c}}-\\frac{1}{2}\\right)^{2}\\right]
+
+    where the diffraction cutoff (or "critical") frequency is :math:`f_0`.
     .. seealso:: optics.pmtf_obs_wfe
     """
     rms_wavefront_error = np.abs(rms_wavefront_error)  # Force positive
@@ -251,7 +262,8 @@ def atf(spf, wvl, fno, rms_wavefront_error):
 
 
 def patf(spf, wvl, fno, rms_wavefront_error, wvl_weights):
-    """ Compute the polychromatic aberration transfer function
+    """ Compute the polychromatic aberration transfer function.
+
     :param spf: Spatial frequencies in the image plane at which to compute the ATF. Spatial frequencies must be in
         reciprocal units to wavelengths i.e. if wavelengths are in mm, spatial frequencies must be in cycles per mm.
     :param wvl: Wavelengths at which to compute the ATF
@@ -352,7 +364,7 @@ def n_air(wvl, temperature, pressure):
 # Functions related to the human eye, namely contrast transfer function (CTF) and modulation transfer function (MTF)
 def ctf_eye(spf, lum, w, num_eyes=2, formula=1):
     """ Compute the contrast transfer function of the human eye.
-    By default, uses the condensed version of the Barten CTF
+    By default, uses the condensed version of the Barten CTF.
 
     :param spf: spatial frequencies in eye-space in cycles per milliradian (scalar or vector numpy array input)
     :param lum: mean luminance of the viewing area in :math:`cd/m^2` (scalar or vector numpy array input)
@@ -363,7 +375,7 @@ def ctf_eye(spf, lum, w, num_eyes=2, formula=1):
     :param formula: The formula variant used for the computation. Defaults (formula=1) to the simple formula first
         published by Barten in SPIE 2003. Other options are formula=11 and formula=14, which are slight variations.
     :return: The CTF with respect to spf, lum and w (up to a 3D numpy array). Singular dimensions are squeezed out
-     using numpy.squeeze().
+        using numpy.squeeze().
     """
     spf = np.array(spf, dtype=np.float)
     spf, lum, w = np.meshgrid(spf, lum, w)
@@ -400,39 +412,82 @@ def ctf_eye(spf, lum, w, num_eyes=2, formula=1):
 
 class Lens:
     """ The Lens class encapsulates information and behaviour related to imaging lens systems.
-    The chief characteristics of a lens are its spectral through-field , through-focus and
+    The chief characteristics of a lens are its spectral through-field, through-focus and
     through-frequency MTF, as well as the spectral transmission.
     In order to transform spatial frequencies in the image plane to angular spatial frequencies
     in object space, the effective focal length of the lens (efl) must also be known.
     The basic lens model is a near diffraction-limited system with a centred circular aperture
     having a centred circular obscuration (which may be absent), where the MTF is constant over
-    the entire field of view (FOV).
-    The most basic lens model implemented here, from which more complicated lens models inherit
-    their properties have the following attributes
-    :param efl: The effective focal length of the
-    :param fno: The focal ratio
-    :param spec_trans: The spectral transmission of the lens
-    :param obs: The obscuration ratio, being the ratio of the circular obscuration diameter to the
-    full circular aperture aperture diameter
-    :param spectno: The spectral T-number, being the equivalent unobscured circular aperture
-    of unity (perfect) transmission
-    :param mtf: The MTF of the lens, if measurements are available
-    """
-    def __init__(self, efl, fno, spectrans, obs=None, wfe=None, mtf=None):
-        """ Lens constructor.
-        The
-        :param efl: The effective focal length in mm
-        :param fno: The focal ratio (or f-number) which is th ratio of focal length to aperture diameter
-        :param spectrans: The spectral transmission function, a function of wavelength in microns
-        :param obs: The obscuration ratio of the lens
-        :param wfe: The wavefront error must be expressed in waves (unitless). If the wfe is scalar,
-        it is assumed independent of wavelength. Alternatively, the wavefront error can be given as a function
-        of wavelength and/or field position.
+    the entire field of view (FOV). A lens with field-dependent MTF can be constructed by
+    providing wavefront error input that varies with field.
 
+    The most basic lens model implemented here, from which more complicated lens models could inherit
+    their properties have the following attributes
+
+    :param efl: The effective focal length of the lens in mm
+    :param fno: The focal ratio of the lens
+    :param trn: The spectral transmission of the lens (zero to unity).
+    :param wfe: The wavefront error measured in waves. This can be a scalar, assumed the same for
+        all wavelengths, or it can be provided as a function of wavelength and/or field position.
+    :param obs: The obscuration ratio, being the ratio of the circular obscuration diameter to the
+        full circular aperture aperture diameter
+    :param mtf: The MTF of the lens. Either the MTF can be provided as a set of measurements or it can be
+        computed from efl, fno, obs and wfe
+
+    The lens MTF is computed as a function of spatial frequency in the image, wavelength, defocus and field position.
+
+    The total RMS wavefront error is computed as
+
+    .. math::
+        W=\\sqrt{W_{\\Delta\\!z}^{2}+W_{a}^{2}}=\\sqrt{\\left(\\frac{\\Delta\\!z}{8\\lambda F^{2}}\\right)^{2}+W_{a}^{2}}
+
+    where :math:`\\Delta\\!z` is the defocus expressed in the same units as the wavelength :math:`\\lambda`, :math:`F` is
+    the focal ratio and :math:`W_a` is the RMS waverfront error due to aberrations at best focus.
+
+    """
+    def __init__(self, efl, fno, trn, obs=None, wfe=None, mtf=None):
+        """ Lens constructor.
+        The lens is constructed using the focal length, focal ratio and spectral transmittance, and
+        optionally also the obscuration ratio and wavefront error.
+
+        :param efl: The effective focal length of the lens. The effective focal length must be a scalar value
+            with units, e.g. [30, 'mm'].
+        :param fno: The focal ratio (or f-number) which is th ratio of focal length to aperture diameter. This input
+            must be a scalar value.
+        :param trn: The spectral transmission function, typically a function of wavelength. The spectral
+            transmittance function must be
+        :type trn: xray.DataArray
+        :param obs: The obscuration ratio of the lens.
+        :param wfe: The wavefront error must be expressed in waves (unitless). It can be a function of
+            wavelength and field position, but not focus.
         :param mtf:
         :return:
         """
-        pass
+
+        # Check some assertions
+        # assert spec_trans.dims == ('wvl',):
+        # Check units of efl and convert
+        self.efl = np.asarray(efl[0], dtype=np.float64)
+        self.units_efl = Q_(1.0, efl[1])
+        self.fno = np.asarray(fno)
+        self.trn = trn
+        self.obs = obs
+
+        # Need to choose the wavelength grid on which to compute the MTF
+        wvl_min = np.min(trn['wvl'])
+        wvl_max = np.max(trn['wvl'])
+
+        # Need to choose the spatial frequency grid on which to computer the MTF
+        # This depends on the cutoff (or "critical") frequency mainly.
+
+        # Need to compute the defocus grid on which to compute the MTF
+        # There is no real point in computing MTF using the Shannon formula
+        # if the total wavefront deformation is greater than 0.18 waves.
+        #
+
+
+        # Compute and save the lens MTF
+
 
 
 
