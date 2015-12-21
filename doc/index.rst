@@ -16,8 +16,8 @@ Contents:
 Indices and tables
 ==================
 
-Test Heading
-============
+Test Heading 1234
+==================
 
 * :ref:`genindex`
 * :ref:`modindex`
