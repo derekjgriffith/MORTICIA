@@ -45,7 +45,10 @@ background). A Snap comprises a single integration period of the camera (snapsho
 
 MORTICIA Conventions
 ====================
+
 There is a data dictionary for ``MORTICIA`` which defines commonly used variable and data names.
+
+xray.DataArray objects are created routinely, so the constructor is abbreviated to xD.
 
 Units of Measure
 ----------------
@@ -54,11 +57,21 @@ However, many functions and classes in ``MORTICIA`` expect xray.DataArray instan
 the metadata. When units are provided in this way, they should be provided in manner consistent with the Pyhon units
 package ``pint`` (see https://pint.readthedocs.org/ )
 
+Commonly, when a ``MORTICIA`` function or method requires a scalar numeric input, it must be provided as a list
+with magnitude and units e.g. [30, 'mm']. Unitless quantities are provided as a simple numeric magnitude.
+
+If a variable is named ``x``, then the units for the variable can be stored as ``units_x``. This convention is
+applied in the attributes of xray.DataArray objects, where, if a dimension or data is named ``var``, then attributes
+are provided in a dictionary with key values ``units_var`` which contains a ``pint Quantity`` object. The magnitude of
+``pint Quantity`` object must be set to 1.0. Convenience functions ``Q_`` for ``Quantity`` and ``U_`` for
+``Quantity(1.0, unit_str)`` are defined. Examples of usage are provided in the Jupyter notebooks/tutorials.
+
 MORTICIA Dependencies
 =====================
 MORTICIA makes use of a variety of other Python packages. The most important of these are:
 
 - ``numpy`` and ``scipy`` : The mainstay of technical computing in Python.
+- ``matplotlib`` : Plotting.
 - ``xray`` : A package for handling N-dimensional data arrays and datasets with named axes. Also for reading and writing
   data from netCDF format files.
 - ``pandas`` : For handling time-series and data in a tabular/relational view.
