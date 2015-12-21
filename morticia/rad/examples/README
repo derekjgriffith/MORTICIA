@@ -1,3 +1,5 @@
+This examples directory contains input and output for the libRadtran/uvspec utility.
+These files all come from the libRadtran distribution.
 Note: All *.OUT files where produced on a Pentium MMX running
       linux.
 
