@@ -328,6 +328,7 @@ class Case():
 
     def prepare_for_polradtran(self):
         """ Prepare for output from the polradtran solver
+
         :return:
         """
         self.fluxline = ['wvl']
@@ -335,12 +336,13 @@ class Case():
             self.fluxline.extend(['down_flux' + stokes, 'up_flux' + stokes])
 
     def append_option(self, option, origin=('user', None)):
-        ''' Append a libRadtran/uvspec options to this uvspec case. It will be appended at the end of the file
+        """ Append a libRadtran/uvspec options to this uvspec case. It will be appended at the end of the file
+
         :param option: A list containing the keyword and keyword parameters (tokens)
         :param origin: A 2-tuple giving the origin of the option and a "line number" reference. Default ('user', None)
         uvspec options.
         :return:
-        '''
+        """
         self.options.append(option[0])  # the option keyword (string)
         self.tokens.append(option[1:])  # The tokens following the keyword (list of strings)
         self.filorigin.append(origin)  # The origin of this keyword
@@ -351,6 +353,7 @@ class Case():
     def alter_option(self, option, origin=('user', None)):
         """ Alter the parameters of a uvspec input option. If the option is not found, the option is appended with
         append_option instead.
+
         :param option: List of keyword and tokens (parameters) to provide to the option keyword (list of strings).
         :param origin: A 2-tuple noting the "origin" of the change to this keyword. Default ('user', None)
         :return:
@@ -365,6 +368,7 @@ class Case():
 
     def del_option(self, option, all=True):
         """ Delete a uvspec input option matching the given option.
+
         :param option: Keyword of option to be deleted
         :param all: A flag indicating if all matching options must be deleted or only the first occurrence. The
         default is to delete all matching occurrences.
@@ -389,6 +393,7 @@ class Case():
     def read(path, includes_seen=[]):
         """ Reads a libRadtran input file. This will construct the libRadtran case from the contents of the .INP file
         Adapted from code by libRadtran developers.
+
         :param path: File path from which to read the uvspec input
         :param includes_seen: List of files already included (for recursion purposes to avoid infinite include loops)
         :return: data, line_nos, path
@@ -504,6 +509,7 @@ class Case():
     def write(self, filename=''):
         """ Write libRadtran/uvspec input to a file (.INP extension by default.
         If the filename input is given as '', a file save dialog will be presented
+
         :param filename: Filename to which to write the uvspec input
         :return:
         """
@@ -517,6 +523,7 @@ class Case():
 
     def distribute_flux_data(self, fluxdata):
         """ Distribute flux data read from uvspec output file to various fields
+
         :param fluxdata: Flux (irradiance) data read from uvspec output file
         :return:
         """
@@ -610,31 +617,33 @@ class Case():
              format for the specific solver. Keep reading flux and radiance blocks until the file is exhausted.
 
          Once the data has all been read, the data is split up between the number of output levels and number of
-         wavelengths. For radiance data, the order of numpy dimensions is umu, phi, wavelength, zout and stokes. That
+         wavelengths. For radiance data, the order of numpy dimensions is *umu*, *phi*, *wavelength*, *zout* and *stokes*. That
          is, if a case has multiple zenith angles, multiple azimuth angles, multiple wavelengths and multiple output
          levels, the radiance property uu will have 4 dimensions. In the case of polradtran, there will be 5
-         dimensions to include the stokes parameters.
+         dimensions to include the stokes parameters (if more than 1, which is the I = intensity parameter).
 
-        Output from uvspec depends on the solver and a number of other inputs, including the directive 'output_user'.
-        For the solvers disort, sdisort, spsdisort and presumably also disort2, the irradiance (flux) outputs default
-        to lambda edir edn eup uavgdir uavgdn uavgup
+        Output from uvspec depends on the solver and a number of other inputs, including the directive ``output_user`.
+        For the solvers ``disort``, ``sdisort``, ``spsdisort`` and presumably also ``disort2``, the irradiance (flux) outputs default
+        to
+        ::
+         lambda edir edn eup uavgdir uavgdn uavgup
 
         If radiances (intensities) have been requested with the umu
         (cosine zenith angles input), each line of flux data is followed
         by a block of radiance data as follows:
-
+        ::
          umu(0) u0u(umu(0))
          umu(1) u0u(umu(1))
          . . . .
          . . . .
          umu(n) u0u(umu(n))
 
-        u0u is the azimuthally averaged radiance for the requested zenith
+        where u0u is the azimuthally averaged radiance for the requested zenith
         angles.
 
         If azimuth angles (phi) have also been specified, then the
         radiance block is extended as follows:
-
+        ::
                                 phi(0)        ...     phi(m)
          umu(0) u0u(umu(0)) uu(umu(0),phi(0)) ... uu(umu(0),phi(m))
          umu(1) u0u(umu(1)) uu(umu(1),phi(0)) ... uu(umu(1),phi(m))
@@ -645,44 +654,50 @@ class Case():
         Radiance outputs are not affected by output_user options.
 
         For the polradtran solver, the flux block is as follows:
+        ::
            lambda down_flux(1) up_flux(1) ... down_flux(iS) up_flux(iS)
 
         where iS is the number of Stokes parameters specified using the
-        'polradtran_nstokes' directive.
+        'polradtran nstokes' directive.
         If umu and phi are also specified, the radiance block is as
         follows:
+        ::
                                  phi(0)      ...      phi(m)
-        Stokes vector I
-        umu(0) u0u(umu(0)) uu(umu(0),phi(0)) ... uu(umu(0),phi(m))
-        umu(1) u0u(umu(1)) uu(umu(1),phi(0)) ... uu(umu(1),phi(m))
-        . . . .
-        . . . .
-        umu(n) u0u(umu(n)) uu(umu(n),phi(0)) ... uu(umu(n),phi(m))
-        Stokes vector Q
-        . . .
-        . . .
-        u0u (azimuthally averaged radiance) is always zero for
+         Stokes vector I
+         umu(0) u0u(umu(0)) uu(umu(0),phi(0)) ... uu(umu(0),phi(m))
+         umu(1) u0u(umu(1)) uu(umu(1),phi(0)) ... uu(umu(1),phi(m))
+         . . . .
+         . . . .
+         umu(n) u0u(umu(n)) uu(umu(n),phi(0)) ... uu(umu(n),phi(m))
+         Stokes vector Q
+         . . .
+         . . .
+
+        The u0u (azimuthally averaged radiance) is always zero for
         polradtran.
 
         For the two-stream solver (twostr), the flux block is
+        ::
            lambda edir edn eup uavg
 
-        The directive keyword 'brightness' can also change output. The documentation simply states that radiances and
+        The directive keyword ``brightness`` can also change output. The documentation simply states that radiances and
         irradiances are just converted to brightness temperatures.
 
-        The keyword directive 'zout' and it's parameters will influence output format as well. In general the output
-        is repeated for each given value of zout or zout_sea.
+        The keyword directive ``zout`` and it's parameters will influence output format as well. In general the output
+        is repeated for each given value of ``zout`` or ``zout_sea``.
 
-        The keyword directive 'output' and its parameters will also have a major effect.
+        The keyword directive ``output`` and its parameters will also have a major effect.
 
-        'output sum'
+        The ``output sum`` keyword sums output data over the wavelength dimension. This in contrast to ``output integrate``,
+        which performs a spectral integral.
 
-        The keyword directive 'header' should not be used at all. This produces some header information in the output
-        that will cause errors. An error is issued of the 'header' keyword is used in the input.
+        The keyword directive ``header`` should not be used at all. This produces some header information in the output
+        that will cause errors. A warning is issued of the ``header`` keyword is used in the input.
 
         :param filename: File from which to read the output. Defaults to name of input file, but with the .OUT
         extension.
         :return:
+
         """
         #TODO check for use of header keyword
         if self.fluxline == '?':
