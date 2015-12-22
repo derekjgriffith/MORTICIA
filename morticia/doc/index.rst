@@ -50,6 +50,13 @@ There is a data dictionary for ``MORTICIA`` which defines commonly used variable
 
 xray.DataArray objects are created routinely, so the constructor is abbreviated to xD.
 
+``MORTICIA`` often deals with spectral variables, such as spectral transmission, spectral radiance etc.
+More often than not, these arrays are multidimensional. The `xray` package is used in `MORTICIA` for
+purposes of representing N-dimensional arrays (the `xray.DataArray` class).
+
+However, `xray` does not (yet) support interpolation when the coordinates of the data hypercube are
+not the same and two or more `xray.DataArray` objects must be added, divided or multiplied.
+
 Units of Measure
 ----------------
 Tracking of units of measure is not performed automatically in ``MORTICIA`` such as with the use of the pint package.
@@ -65,6 +72,14 @@ applied in the attributes of xray.DataArray objects, where, if a dimension or da
 are provided in a dictionary with key values ``units_var`` which contains a ``pint Quantity`` object. The magnitude of
 ``pint Quantity`` object must be set to 1.0. Convenience functions ``Q_`` for ``Quantity`` and ``U_`` for
 ``Quantity(1.0, unit_str)`` are defined. Examples of usage are provided in the Jupyter notebooks/tutorials.
+
+Logging Warnings and Exception Handling
+======================
+As a rule, `MORTICIA` does not use logging to files. Preferably, if any checking is performed, exceptions are thrown.
+Informational messages should printed to the terminal using the `logging.info()` or `logging.debug()` calls.
+Warnings that the user should take action on are provided through `warnings.warn()`. If the warning may relate to
+the fact that `MORTICIA` code should be improved or debugged, it should be issued through `logging.warning()`.
+`MORTICIA' internal modules do not define any logging handlers or filters. This is left to the user.
 
 MORTICIA Dependencies
 =====================
@@ -107,9 +122,6 @@ Atmospheric radiative transfer is performed by the libRadtran suite of tools
 
 .. automodule:: librad
    :members:
-
-
-
 
 
 
