@@ -29,7 +29,7 @@ __project__ = 'MORTICIA'
 import numpy as np
 import pandas as pd
 import xray
-import logging
+import warnings
 # Import units registry
 from pint import UnitRegistry
 ureg = UnitRegistry()
@@ -410,6 +410,36 @@ def ctf_eye(spf, lum, w, num_eyes=2, formula=1):
     return thresh
 
 
+def check_convert_units(value_with_units, preferred_units):
+    """ Check the units of a quantity and convert to preferred units using Python `pint`
+
+    :param value_with_units: A list with a numeric value or numpy array in the first position and a string
+        providing units in the second position. The unit string must be recognisable by the Python `pint` package.
+    :param preferred_units: A string expressing the units to which `pint` should convert the scalar
+    :return: Value expressed in the preferred units
+    """
+
+    # Use pint to convert
+    value = Q_(np.asarray(value_with_units[0], dtype=np.float64), value_with_units[1])  # Will blow up if units not recognised
+    value = value.to(preferred_units)
+    return value.magnitude
+
+def xD_check_convert_units(xD, axis_name, preferred_units):
+    """ Check and convert units for one or more axes of an `xray.DataArray`
+
+    :param xD: An xray.DataArray object having an axis called `axis_name` and a value in the `attrs` dictionary
+    :param preferred_units: A string providing the preferred units that can be passed to `pint`
+    :return: A xray.DataArray, inwhich the values in the named axis have been converted to the preferred units
+        The `axis_name_units` field is also updated.
+    """
+
+    # Create a pint.Quantity object using the data from the named array
+    Q_values = Q_(xD[axis_name].data, xD.attrs[axis_name + '_units'])
+    Q_values = Q_values.to(preferred_units)
+    xD[axis_name] = Q_values.magnitude
+    xD.attrs[axis_name + '_units'] = preferred_units
+
+
 class Lens:
     """ The Lens class encapsulates information and behaviour related to imaging lens systems.
     The chief characteristics of a lens are its spectral through-field, through-focus and
@@ -445,7 +475,9 @@ class Lens:
     the focal ratio and :math:`W_a` is the RMS waverfront error due to aberrations at best focus.
 
     """
-    def __init__(self, efl, fno, trn, obs=None, wfe=None, mtf=None):
+
+
+    def __init__(self, efl, fno, trn, obs=None, wfe=None, mtf=None, wvn_step=500.0):
         """ Lens constructor.
         The lens is constructed using the focal length, focal ratio and spectral transmittance, and
         optionally also the obscuration ratio and wavefront error.
@@ -464,26 +496,47 @@ class Lens:
         :return:
         """
 
-        # Check some assertions
-        # assert spec_trans.dims == ('wvl',):
-        # Check units of efl and convert
-        self.efl = np.asarray(efl[0], dtype=np.float64)
-        self.units_efl = Q_(1.0, efl[1])
-        self.fno = np.asarray(fno)
-        self.trn = trn
-        self.obs = obs
+        # Check some assertions : this is bad practice - assertions are used to trap situations
+        # the demonstrate that there is a bug in the code. Rather deal with input checking
+        # in other ways
+        if not trn.dims == ('wvl',): warnings.warn('No spectral dimension found for trn input to optics.Lens.')
 
+        # Check units of transmission wavelength scale and convert
+        xD_check_convert_units(trn, 'wvl', 'nm')  # Change units on wvl axis to nm in place
+        if any(trn['wvl'] < 150.0) or any(trn['wvl'] > 15000.0):
+            warnings.warn('Wavelength units for optics.Lens transmission probably not in nm.')
+        self.trn = trn
+        # Check units of efl and convert
+        self.efl = check_convert_units(efl, 'mm')  # convert efl units to mm
+        self.units_efl = 'mm'
+        self.fno = np.asarray(fno, dtype=np.float64)
+        self.trn = trn  # this should be an xray.DataArray
+        if obs:
+            if obs < 0.0 or obs > 1.0: warnings.warn('Obscuration ratio for optics.Lens must be from 0.0 to 1.0')
+            self.obs = np.asarray(obs, dtype=np.float64)
+        else:
+            self.obs = None  # no obscuration
         # Need to choose the wavelength grid on which to compute the MTF
+        # At this point is is assumed that EFL is in mm and wavelengths are in nm
         wvl_min = np.min(trn['wvl'])
         wvl_max = np.max(trn['wvl'])
-
+        # Spectral points will be evenly spaced in wavenumber
+        wvn_min = 1.0e7 / wvl_max
+        wvn_max = 1.0e7 / wvl_min
+        nsteps = np.ceil((wvn_max - wvn_min) / wvn_step)
+        wvn = np.linspace(wvn_min, wvn_max, nsteps+1)
+        wvl = 1.0e7 / wvn
         # Need to choose the spatial frequency grid on which to computer the MTF
         # This depends on the cutoff (or "critical") frequency mainly.
+        # Determine the minimum and maximum cutoff frequencies
+        max_cutoff = 1.0 / (min_wvl)
+        max_cutoff =
 
         # Need to compute the defocus grid on which to compute the MTF
         # There is no real point in computing MTF using the Shannon formula
         # if the total wavefront deformation is greater than 0.18 waves.
         #
+
 
 
         # Compute and save the lens MTF
