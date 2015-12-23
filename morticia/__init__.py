@@ -1,4 +1,6 @@
 # Create a global units registry
+# All morticia packages/modules that use the unit registry should import the global copy using
+# from .. import ureg, Q_, U_
 from pint import UnitRegistry
 ureg = UnitRegistry()
 Q_= ureg.Quantity
