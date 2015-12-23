@@ -30,10 +30,10 @@ import numpy as np
 import pandas as pd
 import xray
 import warnings
-# Import units registry
-from pint import UnitRegistry
-ureg = UnitRegistry()
-Q_ = ureg.Quantity
+from ..moglo import *  # Working reltive import of MORTICIA global objects
+
+# Import units registry from parent to avoid duplicates
+from .. import ureg, Q_
 def U_(units):
     return Q_(1.0, units)
 
@@ -411,6 +411,7 @@ def ctf_eye(spf, lum, w, num_eyes=2, formula=1):
 
 
 def check_convert_units(value_with_units, preferred_units):
+    # TODO Move this function to moglo.py ?
     """ Check the units of a quantity and convert to preferred units using Python `pint`
 
     :param value_with_units: A list with a numeric value or numpy array in the first position and a string
@@ -425,6 +426,7 @@ def check_convert_units(value_with_units, preferred_units):
     return value.magnitude
 
 def xD_check_convert_units(xD, axis_name, preferred_units):
+    # TODO Move this function to moglo.py
     """ Check and convert units for one or more axes of an `xray.DataArray`
 
     :param xD: An xray.DataArray object having an axis called `axis_name` and a value in the `attrs` dictionary
@@ -499,12 +501,12 @@ class Lens:
         # Check some assertions : this is bad practice - assertions are used to trap situations
         # the demonstrate that there is a bug in the code. Rather deal with input checking
         # in other ways
-        if not trn.dims == ('wvl',): warnings.warn('No spectral dimension found for trn input to optics.Lens.')
-
+        if not trn.dims == ('wvl',):
+            warnings.warn('Data axes for transmission of optics.Lens are likely incorrect.')
         # Check units of transmission wavelength scale and convert
         xD_check_convert_units(trn, 'wvl', 'nm')  # Change units on wvl axis to nm in place
         if any(trn['wvl'] < 150.0) or any(trn['wvl'] > 15000.0):
-            warnings.warn('Wavelength units for optics.Lens transmission probably not in nm.')
+            warnings.warn('Wavelength units for optics.Lens transmission probably not in units of '+ trn.attrs['wvl_units'])
         self.trn = trn
         # Check units of efl and convert
         self.efl = check_convert_units(efl, 'mm')  # convert efl units to mm
@@ -529,13 +531,24 @@ class Lens:
         # Need to choose the spatial frequency grid on which to computer the MTF
         # This depends on the cutoff (or "critical") frequency mainly.
         # Determine the minimum and maximum cutoff frequencies
-        max_cutoff = 1.0 / (min_wvl)
-        max_cutoff =
-
+        cutoff_max = 1.0 / (1.0e-6 * wvl_min * fno)  # wvl assumed now in nm, freq in cy/mm
+        cutoff_min = 1.0 / (1.0e-6 * wvl_max * fno)
+        spf_step = cutoff_min / 12.0  # Want at least 15 samples up to minimum cutoff
+        n_steps_spf = cutoff_max * 1.5 / spf_step  # Want sampling up to 1.5 times maximum spf
+        spf = np.linspace(0.0, cutoff_max * 1.5, n_steps_spf + 1)
         # Need to compute the defocus grid on which to compute the MTF
         # There is no real point in computing MTF using the Shannon formula
         # if the total wavefront deformation is greater than 0.18 waves.
         #
+
+
+        print len(spf)
+        print len(wvl)
+        print darray_harmonise_interp
+
+
+
+
 
 
 
