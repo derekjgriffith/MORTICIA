@@ -24,18 +24,20 @@ __project__ = 'MORTICIA'
                 > 15000.0 : Issue a warning
 
                 Dependencies : numpy (as np), pandas (as pd) and xray
+                               easygui, pint, warnings
 """
 
 import numpy as np
 import pandas as pd
 import xray
 import warnings
-from ..moglo import *  # Working reltive import of MORTICIA global objects
+
 
 # Import units registry from parent to avoid duplicates
-from .. import ureg, Q_
-def U_(units):
-    return Q_(1.0, units)
+from .. import ureg, Q_, U_
+
+# Import tools related to xray DataArray and related unit checking/conversion
+from ..tools.xd import *
 
 # As a general rule, where relevant and present, optical parameters are passed in in the order
 #   spatial frequency (spf), wavelength (wvl), focal ratio (fno) followed by any other parameters.
@@ -46,7 +48,7 @@ def U_(units):
 # vary along rows rather than in the third dimension.
 
 # TODO : Review the above statements. In general it may not be a good idea to remove singleton dimensions, other
-# TODO : than trailing singleton dimensions
+# TODO : than trailing singleton dimensions. The real fix is to use xray.DataArray
 
 
 # Possible strategy for dealing with units.
@@ -410,37 +412,6 @@ def ctf_eye(spf, lum, w, num_eyes=2, formula=1):
     return thresh
 
 
-def check_convert_units(value_with_units, preferred_units):
-    # TODO Move this function to moglo.py ?
-    """ Check the units of a quantity and convert to preferred units using Python `pint`
-
-    :param value_with_units: A list with a numeric value or numpy array in the first position and a string
-        providing units in the second position. The unit string must be recognisable by the Python `pint` package.
-    :param preferred_units: A string expressing the units to which `pint` should convert the scalar
-    :return: Value expressed in the preferred units
-    """
-
-    # Use pint to convert
-    value = Q_(np.asarray(value_with_units[0], dtype=np.float64), value_with_units[1])  # Will blow up if units not recognised
-    value = value.to(preferred_units)
-    return value.magnitude
-
-def xD_check_convert_units(xD, axis_name, preferred_units):
-    # TODO Move this function to moglo.py
-    """ Check and convert units for one or more axes of an `xray.DataArray`
-
-    :param xD: An xray.DataArray object having an axis called `axis_name` and a value in the `attrs` dictionary
-    :param preferred_units: A string providing the preferred units that can be passed to `pint`
-    :return: A xray.DataArray, inwhich the values in the named axis have been converted to the preferred units
-        The `axis_name_units` field is also updated.
-    """
-
-    # Create a pint.Quantity object using the data from the named array
-    Q_values = Q_(xD[axis_name].data, xD.attrs[axis_name + '_units'])
-    Q_values = Q_values.to(preferred_units)
-    xD[axis_name] = Q_values.magnitude
-    xD.attrs[axis_name + '_units'] = preferred_units
-
 
 class Lens:
     """ The Lens class encapsulates information and behaviour related to imaging lens systems.
@@ -523,23 +494,31 @@ class Lens:
         wvl_min = np.min(trn['wvl'])
         wvl_max = np.max(trn['wvl'])
         # Spectral points will be evenly spaced in wavenumber
-        wvn_min = 1.0e7 / wvl_max
-        wvn_max = 1.0e7 / wvl_min
+        wvn_min = 1.0e7 / wvl_max  # cm^-1
+        wvn_max = 1.0e7 / wvl_min  # cm^-1
         nsteps = np.ceil((wvn_max - wvn_min) / wvn_step)
-        wvn = np.linspace(wvn_min, wvn_max, nsteps+1)
-        wvl = 1.0e7 / wvn
+        wvn = np.linspace(wvn_min, wvn_max, nsteps+1)  # cm^-1
+        wvl = 1.0e7 / wvn  # nm
         # Need to choose the spatial frequency grid on which to computer the MTF
         # This depends on the cutoff (or "critical") frequency mainly.
         # Determine the minimum and maximum cutoff frequencies
         cutoff_max = 1.0 / (1.0e-6 * wvl_min * fno)  # wvl assumed now in nm, freq in cy/mm
-        cutoff_min = 1.0 / (1.0e-6 * wvl_max * fno)
+        cutoff_min = 1.0 / (1.0e-6 * wvl_max * fno)  # cy/mm
         spf_step = cutoff_min / 12.0  # Want at least 15 samples up to minimum cutoff
         n_steps_spf = cutoff_max * 1.5 / spf_step  # Want sampling up to 1.5 times maximum spf
-        spf = np.linspace(0.0, cutoff_max * 1.5, n_steps_spf + 1)
+        spf = np.linspace(0.0, cutoff_max * 1.5, n_steps_spf + 1)  # cy/mm
         # Need to compute the defocus grid on which to compute the MTF
         # There is no real point in computing MTF using the Shannon formula
         # if the total wavefront deformation is greater than 0.18 waves.
-        #
+        # Will allow up to 0.24 waves of defocus in steps of 0.02 waves
+        # Wavefront deformation can be a function of up to 3 variables:
+        # wvl, fld and image azimuth (sagittal/tangential)
+        # First find the maximum aberration wavefront deformation
+        if wfe:
+            wfe_max = np.max(wfe)  # waves, RMS
+        else:
+            wfe_max = 0.0
+
 
 
         print len(spf)
