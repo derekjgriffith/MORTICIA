@@ -320,7 +320,7 @@ def pmtf_obs_wfe(spf, wvl, fno, rms_wavefront_error, wvl_weights, obs=0.0):
     :param spf: Spatial frequencies in the image at which to compute the polychromatic MTF (numpy vector).
     :param wvl: Wavelength in units consistent with the spatial frequencies **spf** (numpy vector)
     :param fno: Focal ratio (working focal ratio) of the lens (numpy vector).
-    :param rms_wavefront_error:
+    :param rms_wavefront_error: Numpy vector of RMS wavefront error values
     :param wvl_weights: A numpy vector having the same length as the wvl vector, providing the relative weights of each
         of the wavelengths.
     :param obs: Obscuration ratio (centred circular obscuration in circular pupil), ratio of obscuration diameter to
@@ -475,13 +475,13 @@ class Lens:
         if not trn.dims == ('wvl',):
             warnings.warn('Data axes for transmission of optics.Lens are likely incorrect.')
         # Check units of transmission wavelength scale and convert
-        xD_check_convert_units(trn, 'wvl', 'nm')  # Change units on wvl axis to nm in place
+        xd_check_convert_units(trn, 'wvl', 'nm')  # Change units on wvl axis to nm in place
         if any(trn['wvl'] < 150.0) or any(trn['wvl'] > 15000.0):
             warnings.warn('Wavelength units for optics.Lens transmission probably not in units of '+ trn.attrs['wvl_units'])
         self.trn = trn
         # Check units of efl and convert
         self.efl = check_convert_units(efl, 'mm')  # convert efl units to mm
-        self.units_efl = 'mm'
+        self.efl_units = 'mm'
         self.fno = np.asarray(fno, dtype=np.float64)
         self.trn = trn  # this should be an xray.DataArray
         if obs:
@@ -491,8 +491,10 @@ class Lens:
             self.obs = None  # no obscuration
         # Need to choose the wavelength grid on which to compute the MTF
         # At this point is is assumed that EFL is in mm and wavelengths are in nm
-        wvl_min = np.min(trn['wvl'])
-        wvl_max = np.max(trn['wvl'])
+        wvl_min = np.min(trn['wvl']).values
+        wvl_max = np.max(trn['wvl']).values
+        if wvl_min == wvl_max:
+            warnings.warn('Spectral transmission function of optics.Lens should span a wavelength region.')
         # Spectral points will be evenly spaced in wavenumber
         wvn_min = 1.0e7 / wvl_max  # cm^-1
         wvn_max = 1.0e7 / wvl_min  # cm^-1
@@ -510,7 +512,7 @@ class Lens:
         # Need to compute the defocus grid on which to compute the MTF
         # There is no real point in computing MTF using the Shannon formula
         # if the total wavefront deformation is greater than 0.18 waves.
-        # Will allow up to 0.24 waves of defocus in steps of 0.02 waves
+        # Will allow up to 0.5 waves of defocus in steps of 0.02 waves
         # Wavefront deformation can be a function of up to 3 variables:
         # wvl, fld and image azimuth (sagittal/tangential)
         # First find the maximum aberration wavefront deformation
@@ -518,12 +520,21 @@ class Lens:
             wfe_max = np.max(wfe)  # waves, RMS
         else:
             wfe_max = 0.0
-
-
-
+            wfe = 0.0
+        if wfe_max >= 0.5:
+            warnings.warn('WFE for optics.Lens exceeds 0.5 waves. ATF generally invalid for large WFE.')
+        defocus_max = 8.0 * 1.0e-6 * wvl_max * fno**2.0 * np.sqrt(0.5**2.0 - wfe_max**2.0)
+        # Calculate defocus positions in mm
+        z_defocus = np.linspace(0.0, defocus_max, 10)  # 10 defocus positions in mm
+        # Now calculate the wfe values for the different defocus positions
+        # TODO From here optics MTF calculation
+        # wfe = np.sqrt(()**2.0 + )
+        # Axes of wfe should only include wavelength and field position
+        # Now compute the multidimensional MTF
         print len(spf)
         print len(wvl)
-        print darray_harmonise_interp
+        print defocus_max
+        print z_defocus
 
 
 
