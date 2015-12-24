@@ -1,13 +1,17 @@
 __author__ = 'DGriffith'
 
-# Functions related to interpolation of xray.DataArray
+# Functions related to interpolation of xray.DataArray and other utilities
 # The following function takes two DataArray objects and interpolates
 # both onto a merged set of coordinate points.
 
 # Some sort of global data dictionary (CF compliant ?), including short names and synonyms
 # Could import some or all CF definitions from XML file.
 
-def xD_harmonise_interp(dar_tup):
+import numpy as np
+import xray
+from .. import ureg, Q_, U_
+
+def xd_harmonise_interp(dar_tup):
     """ Perform linear interpolation on merged set of axis points for two or more xray DataArray objects.
     This function can be used to prepare (harmonise) multiple xray.DataArray objects for multiplication or addition
     on a common set of coordinate axis points by linearly interpolating all DataArray objects onto the same
@@ -52,20 +56,20 @@ def check_convert_units(value_with_units, preferred_units):
     return value.magnitude
 
 
-def xD_check_convert_units(xD, axis_name, preferred_units):
+def xd_check_convert_units(xd, axis_name, preferred_units):
     """ Check and convert units for one or more axes of an `xray.DataArray`
 
-    :param xD: An xray.DataArray object having an axis called `axis_name` and a value in the `attrs` dictionary
+    :param xd: An xray.DataArray object having an axis called `axis_name` and a value in the `attrs` dictionary
     :param preferred_units: A string providing the preferred units that can be passed to `pint`
     :return: A xray.DataArray, inwhich the values in the named axis have been converted to the preferred units
         The `axis_name_units` field is also updated.
     """
 
     # Create a pint.Quantity object using the data from the named array
-    Q_values = Q_(xD[axis_name].data, xD.attrs[axis_name + '_units'])
+    Q_values = Q_(xd[axis_name].data, xd.attrs[axis_name + '_units'])
     Q_values = Q_values.to(preferred_units)
-    xD[axis_name] = Q_values.magnitude
-    xD.attrs[axis_name + '_units'] = preferred_units
+    xd[axis_name] = Q_values.magnitude
+    xd.attrs[axis_name + '_units'] = preferred_units
 
 
 
