@@ -10,8 +10,21 @@ __author__ = 'DGriffith'
 import numpy as np
 import xray
 from .. import ureg, Q_, U_
+from scipy.interpolate import RegularGridInterpolator
+import warnings
 
-def xd_harmonise_interp(dar_tup):
+def xd_identity(np_vector, axis_name):
+    """ Create an identity xray.DataArray. That is, a DataArray vector in which both the values and axis
+        coordinates are identical.
+
+    :param np_vector:
+    :param axis_name:
+    :return:
+    """
+    return xray.DataArray(np_vector, [(axis_name, np_vector)], name=axis_name)
+
+
+def xd_harmonise_interp(xd_list):
     """ Perform linear interpolation on merged set of axis points for two or more xray DataArray objects.
     This function can be used to prepare (harmonise) multiple xray.DataArray objects for multiplication or addition
     on a common set of coordinate axis points by linearly interpolating all DataArray objects onto the same
@@ -19,7 +32,7 @@ def xd_harmonise_interp(dar_tup):
 
     The DataArry objects provided.    The scipy linear grid interpolator is used for this purpose. See:
     scipy.interpolate.RegularGridInterpolator
-    :param dar_tup:
+    :param xd_list:
     :return: Tuple of xray.DataArray objects with merged and linearly interpolated values in all axes.
     Only unique values in the interpolation axis are used.
 
@@ -28,17 +41,58 @@ def xd_harmonise_interp(dar_tup):
 
     # Accumulate the index values from each of the given arrays, for each of the axes in the first array
     index_vals = {}  # dictionary of index coordinates for each axis
+    #metadata = {}
 
-    for dar in dar_tup:
-        for axis in dar.dims:
-            pass  # accumulate dictionary for all dimensions in the entire collection of DataArrays
-
+    for xd_arr in xd_list:
+        for axis in xd_arr.dims:
+            # accumulate dictionary for all dimensions in the entire collection of DataArrays
+            if not axis in index_vals:
+                index_vals[axis] = xd_arr[axis]
+            else:
+                index_vals[axis] = np.hstack((index_vals[axis], xd_arr[axis]))
+            # also accumulate the attributes (metadata)
+            # metadata.update(xd_arr.attrs)
     # get the unique values in increasing numerical order using np.unique for each axis found in the whole set
+    for axis in index_vals:
+        index_vals[axis] = np.unique(index_vals[axis])
 
     # interpolate each of the DataArray objects onto the new grid (for whatever axes it does have)
+    xd_return_list = []
+    for xd_arr in xd_list:
+        # Create the linear interpolator
+        interpolator = RegularGridInterpolator([xd_arr[axis].values for axis in xd_arr.dims], xd_arr.values,
+                                               method='linear', bounds_error=False, fill_value=0.0)
+        interp_vals = interpolator(np.array([index_vals[axis] for axis in xd_arr.dims]).T)
+        # TODO : Reconstruct the metadata
+        # reconstruct the xray.DataArray with interpolated data
+        xd_arr = xray.DataArray(interp_vals, [(axis, index_vals[axis]) for axis in xd_arr.dims], name=xd_arr.name,
+                                attrs=xd_arr.attrs)
+        xd_return_list.append(xd_arr)
 
     # There may be axes not present in a specific DataArray. These are omitted for that DataArray and
-    # simply allowed to broadcast hen the
+    # simply allowed to broadcast when performing operations with other DataArrays
+    return xd_return_list
+
+def xd_harmonised_product(xd_list):
+    """ Compute the harmonised product of a number of N-dimensional data arrays.
+        The DataArrays are interpolated onto a common set of coordinates and then the product of the DataArrays
+        is computer, returning a single DataArray with merged attributes. Unit mismatches are
+    :param xd_list: List/tuple of xray.DataArray objects to be multiplied
+    :return: Product of xray.DataArray objects with merged attributes
+    """
+    metadata = {}  # Will accumulate all metadata here
+    unit_dict = {}
+    # Check units and merge metadata
+    for xd_arr in xd_list:
+        metadata.update(xd_arr.attrs)
+        for axis in xd_arr.dims:
+            if not axis in unit_dict:
+                unit_dict[axis] = axis.attrs[axis + '_units']
+            elif unit_dict[axis] != axis.attrs[axis + '_units']:
+                warnings.warn('Unit mismatch found when taking xray.DataArray harmonised product.')
+    xd_product = xd_harmonise_interp(xd_list)
+    return xd_product
+
 
 
 def check_convert_units(value_with_units, preferred_units):
