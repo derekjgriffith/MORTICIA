@@ -104,6 +104,14 @@ def ac_circle(e, w):
     auto = 2.0 * e**2.0 * np.log((surd + w)/(2.0*e)) - w*surd/2.0
     return np.abs(auto)
 
+def xd_ac_circle(e, w):
+    e.data = np.asarray(e.data, dtype=np.complex128)
+    w.data = np.minimum(np.asarray(w.data, dtype=np.complex128), 2*e.data)
+    surd = np.sqrt(w.data**2.0 - 4.0 * e.data**2.0)
+    auto = 2.0 * e.data**2.0 * np.log((surd + w.data)/(2.0*e.data)) - w.data*surd/2.0
+    return np.abs(auto)
+
+
 
 def cc_circle(e, w):
     """ Cross correlation of unit circle with circle of radius *e*.
@@ -573,12 +581,20 @@ class Lens:
 
 
     def mtf_obs_wfe(self):
-        """ Compute the multidimesional MTF of a Lens class object
+        """ Compute the multidimensional MTF of a Lens class object
 
         """
 
         if self.obs is not None:  # Compute the obscured MTF
-            pass
+            # Calculate w at each matrix site
+            w = 2.0 * self.fno * self.spf * 1.0e-6 * self.wvl
+            # print w
+            the_mtf = (ac_circle(1.0, w.data) - 2.0*cc_circle(self.obs, w.data) + ac_circle(self.obs, w.data)) / \
+                                 (np.pi*(1.0 - self.obs**2.0))
+            the_mtf = np.maximum(the_mtf, 0.0)
+            # print the_mtf
+            # Recreate a data array
+            the_mtf = xray.DataArray(the_mtf, [self.spf, self.wvl], name='mtf')
         else:  # Compute the unobscured MTF
             phi = np.arccos(self.fno * self.spf * 1.0e-6 * self.wvl)
             csphi = np.cos(phi) * np.sin(phi)
