@@ -4,27 +4,28 @@ __project__ = 'MORTICIA'
 """
 .. module:: optics
     :platform: Windows, Unix
-    :synopsis: The optics module includes all code related to imaging optics as spatial and spectral filters. It also
-               includes everything related to light propagation within such imaging optics. It does not include the
-               atmospheric radiative transfer code. Functions related to the optical characteristics of the human
-               eye are included in this module.
+    :synopsis:
+        The optics module includes all code related to imaging optics as spatial and spectral filters. It also
+        includes everything related to light propagation within such imaging optics. It does not include the
+        atmospheric radiative transfer code. Functions related to the optical characteristics of the human
+        eye are included in this module.
 
-               Some important conventions:
-               The most common variable names are:
-               wvl : wavelengths, conventionally in nm, but not always, so always make sure
-               spf : spatial frequencies, conventionally (for lenses) in cy/mm at the image plane
-               fno : focal ratios (ratio of effective focal length to aperture diameter
-               wvn : wavenumbers, conventionally in cm^-1
+        Some important conventions:
+        The most common variable names are:
+        wvl : wavelengths, conventionally in nm, but not always, so always make sure
+        spf : spatial frequencies, conventionally (for lenses) in cy/mm at the image plane
+        fno : focal ratios (ratio of effective focal length to aperture diameter
+        wvn : wavenumbers, conventionally in cm^-1
 
-               As a basic check when dealing with wavelengths, the following can be observed
-               If the wavelength is:
-                < 0.15 : Issue a warning
-                > 0.15 and < 150.0 : Assume the spectral variable is wavelength in microns
-                > 150.0 and < 15000.0 : Assume the spectral variable is wavelength in nm
-                > 15000.0 : Issue a warning
+        As a basic check when dealing with wavelengths, the following can be observed
+        If the wavelength is:
+        < 0.15 : Issue a warning
+        > 0.15 and < 150.0 : Assume the spectral variable is wavelength in microns
+        > 150.0 and < 15000.0 : Assume the spectral variable is wavelength in nm
+        > 15000.0 : Issue a warning
 
-                Dependencies : numpy (as np), pandas (as pd) and xray
-                               easygui, pint, warnings
+Dependencies : numpy (as np), pandas (as pd) and xray
+               easygui, pint, warnings
 """
 
 import numpy as np
@@ -450,7 +451,7 @@ class Lens:
     """
 
 
-    def __init__(self, efl, fno, trn, obs=None, wfe=None, mtf=None, wvn_step=500.0):
+    def __init__(self, efl, fno, trn, wfe=None, obs=None, mtf=None, wvn_step=500.0, wfe_allowed=0.5):
         """ Lens constructor.
         The lens is constructed using the focal length, focal ratio and spectral transmittance, and
         optionally also the obscuration ratio and wavefront error.
@@ -462,10 +463,14 @@ class Lens:
         :param trn: The spectral transmission function, typically a function of wavelength. The spectral
             transmittance function must be
         :type trn: xray.DataArray
-        :param obs: The obscuration ratio of the lens.
         :param wfe: The wavefront error must be expressed in waves (unitless). It can be a function of
-            wavelength and field position, but not focus.
-        :param mtf:
+            wavelength (wvl) and field position (flr) , but not focus (fldz). If no input is provided, the wfe
+            will default to zero over the same spectral region as the lens transmission function.
+        :param obs: The obscuration ratio of the lens (scalar numeric) range 0.0 - 1.0, Default None (0.0)
+        :param mtf: A complete pre-computed or measured MTF, with axes of spf, wvl, fldz, flr, flo
+        :param wvn_step: Minimum spectral increment in wavenumbers (cm^-1) for MTF calculation. Default 500 cm^-1
+        :param wfe_allowed: Maximum allowed wfe when computing lens defocus wfe, Default 0.5 waves at mean wavelength
+            of transmission function domain
         :return:
         """
 
@@ -493,14 +498,17 @@ class Lens:
         # At this point is is assumed that EFL is in mm and wavelengths are in nm
         wvl_min = np.min(trn['wvl']).values
         wvl_max = np.max(trn['wvl']).values
+        wvl_mean = np.mean([wvl_min, wvl_max])
         if wvl_min == wvl_max:
             warnings.warn('Spectral transmission function of optics.Lens should span a wavelength region.')
         # Spectral points will be evenly spaced in wavenumber
         wvn_min = 1.0e7 / wvl_max  # cm^-1
         wvn_max = 1.0e7 / wvl_min  # cm^-1
         nsteps = np.ceil((wvn_max - wvn_min) / wvn_step)
-        wvn = np.linspace(wvn_min, wvn_max, nsteps+1)  # cm^-1
+        wvn = np.linspace(wvn_max, wvn_min, nsteps+1)  # cm^-1
         wvl = 1.0e7 / wvn  # nm
+        # Convert wvl back to identity DataArray
+        wvl = xd_identity(wvl, 'wvl')
         # Need to choose the spatial frequency grid on which to computer the MTF
         # This depends on the cutoff (or "critical") frequency mainly.
         # Determine the minimum and maximum cutoff frequencies
@@ -509,6 +517,8 @@ class Lens:
         spf_step = cutoff_min / 12.0  # Want at least 15 samples up to minimum cutoff
         n_steps_spf = cutoff_max * 1.5 / spf_step  # Want sampling up to 1.5 times maximum spf
         spf = np.linspace(0.0, cutoff_max * 1.5, n_steps_spf + 1)  # cy/mm
+        # Create a DataArray of spatial frequencies
+        spf = xd_identity(spf, 'spf')
         # Need to compute the defocus grid on which to compute the MTF
         # There is no real point in computing MTF using the Shannon formula
         # if the total wavefront deformation is greater than 0.18 waves.
@@ -516,33 +526,62 @@ class Lens:
         # Wavefront deformation can be a function of up to 3 variables:
         # wvl, fld and image azimuth (sagittal/tangential)
         # First find the maximum aberration wavefront deformation
-        if wfe:
+        if wfe is not None:
             wfe_max = np.max(wfe)  # waves, RMS
+            wfe_wvl_min = np.min(wfe['wvl']).values
+            wfe_wvl_max = np.max(wfe['wvl']).values
+            if (wfe_wvl_min != wvl_min) or (wfe_wvl_max != wvl_max):
+                warnings.warn('Wavefront error input to optics.Lens does not have same wavelength limits as trn.')
         else:
             wfe_max = 0.0
-            wfe = 0.0
+            # Default to zero
+            wfe = xray.DataArray([0.0, 0.0], [('wvl', [wvl_min, wvl_max])], name='wfe',
+                                 attrs={'wfe_units': ''})
         if wfe_max >= 0.5:
             warnings.warn('WFE for optics.Lens exceeds 0.5 waves. ATF generally invalid for large WFE.')
-        defocus_max = 8.0 * 1.0e-6 * wvl_max * fno**2.0 * np.sqrt(0.5**2.0 - wfe_max**2.0)
+        defocus_max = 3.5 * 8.0 * 1.0e-6 * wvl_mean * fno**2.0 * np.sqrt(wfe_allowed**2.0 - wfe_max**2.0)
         # Calculate defocus positions in mm
         z_defocus = np.linspace(0.0, defocus_max, 10)  # 10 defocus positions in mm
-        # Now calculate the wfe values for the different defocus positions
-        # TODO From here optics MTF calculation
-        # wfe = np.sqrt(()**2.0 + )
-        # Axes of wfe should only include wavelength and field position
+        # Turn this into an identity DataArray
+        z_defocus = xd_identity(z_defocus, 'fldz')
+        # Now calculate the wfe values for the different defocus positions, bearing in mind that the wfe could
+        # have been given with up to 3 axes (wavelength, field position and field orientation)
+        # Axes of wfe should only include wavelength and field position. Those axes must now
+        # be complemented with a defocus axis.
+        # Calculate the RMS wavefront error due to defocus
+        rms_wfe_defocus  = z_defocus / (3.5 * 8.0 * 1e-6 * wvl * fno**2.0)  # Shannon formula, wvl and fldz axes
+        rms_wfe_defocus.name = 'wfe'
+        rms_wfe_defocus.attrs = {'wfe_units': '', 'wvl_units': 'nm', 'fldz_units': 'mm'}
+        # Combine this in quadrature w, but first need to harmonise rms_wfe_defocus with wfe
+        rms_wfe_aberr, rms_wfe_defocus = xd_harmonise_interp([wfe, rms_wfe_defocus])
+        self.rms_wfe_aberr = rms_wfe_aberr
+        self.rms_wfe_defocus = rms_wfe_defocus
+        # Calculate total wfe as quadrature sum of aberration and defocus wfe
+        self.rms_wfe_total = np.sqrt(self.rms_wfe_aberr**2.0 + self.rms_wfe_defocus**2.0)
+        # Set up attributes of the rms_wfe_total
+        self.rms_wfe_total.attrs = {}
+        self.rms_wfe_total.attrs.update(rms_wfe_aberr.attrs)
+        self.rms_wfe_total.attrs.update(rms_wfe_defocus.attrs)
         # Now compute the multidimensional MTF
-        print len(spf)
-        print len(wvl)
-        print defocus_max
-        print z_defocus
+        # The MTF is a function of spatial frequency, wavelength and defocus (always), with possible extra dimensions
+        # of field position (fldx, fldy) and field orientation (fldo).
 
 
+    def xd_mtf_obs_wfe(self, spf, fno, wvl, wfe, obs=None):
+        """ Compute the multidiemsional MTF of a Lens class object
+        :param spf: Spatial frequencies at which to compute the MTF in cycles/mm
+        :param fno: Focal ratio of the lens
+        :type fno: Scalar float
+        :param wvl: The wavelengths at which to compute the MTF in nm. Note that the MTF will be computed at these
+            wavelengths as a minimum. Other wavelengths could also arise
+        :type wvl: Vector np.float
+        :param wfe: The RMS wavefront error
+        :type wfe: xray.DataArray, with at least a wavelength axis covering the full transmission region
+            of the lens as well as a defocus axis, with defocus in mm.
+        :param obs: The obscuration ratio of the lens. Default os None
 
-
-
-
-
-        # Compute and save the lens MTF
+        :return: A
+        """
 
 
 
