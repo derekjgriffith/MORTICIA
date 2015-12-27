@@ -32,6 +32,7 @@ import numpy as np
 import pandas as pd
 import xray
 import warnings
+import logging  # TODO set up global logging if required.
 
 
 # Import units registry from parent to avoid duplicates
@@ -509,6 +510,8 @@ class Lens:
         wvl = 1.0e7 / wvn  # nm
         # Convert wvl back to identity DataArray
         wvl = xd_identity(wvl, 'wvl')
+        self.wvl = wvl
+
         # Need to choose the spatial frequency grid on which to computer the MTF
         # This depends on the cutoff (or "critical") frequency mainly.
         # Determine the minimum and maximum cutoff frequencies
@@ -519,6 +522,7 @@ class Lens:
         spf = np.linspace(0.0, cutoff_max * 1.5, n_steps_spf + 1)  # cy/mm
         # Create a DataArray of spatial frequencies
         spf = xd_identity(spf, 'spf')
+        self.spf = spf
         # Need to compute the defocus grid on which to compute the MTF
         # There is no real point in computing MTF using the Shannon formula
         # if the total wavefront deformation is greater than 0.18 waves.
@@ -563,25 +567,33 @@ class Lens:
         self.rms_wfe_total.attrs.update(rms_wfe_aberr.attrs)
         self.rms_wfe_total.attrs.update(rms_wfe_defocus.attrs)
         # Now compute the multidimensional MTF
+        self.mtf_obs_wfe()
         # The MTF is a function of spatial frequency, wavelength and defocus (always), with possible extra dimensions
         # of field position (fldx, fldy) and field orientation (fldo).
 
 
-    def xd_mtf_obs_wfe(self, spf, fno, wvl, wfe, obs=None):
-        """ Compute the multidiemsional MTF of a Lens class object
-        :param spf: Spatial frequencies at which to compute the MTF in cycles/mm
-        :param fno: Focal ratio of the lens
-        :type fno: Scalar float
-        :param wvl: The wavelengths at which to compute the MTF in nm. Note that the MTF will be computed at these
-            wavelengths as a minimum. Other wavelengths could also arise
-        :type wvl: Vector np.float
-        :param wfe: The RMS wavefront error
-        :type wfe: xray.DataArray, with at least a wavelength axis covering the full transmission region
-            of the lens as well as a defocus axis, with defocus in mm.
-        :param obs: The obscuration ratio of the lens. Default os None
+    def mtf_obs_wfe(self):
+        """ Compute the multidimesional MTF of a Lens class object
 
-        :return: A
         """
+
+        if self.obs is not None:  # Compute the obscured MTF
+            pass
+        else:  # Compute the unobscured MTF
+            phi = np.arccos(self.fno * self.spf * 1.0e-6 * self.wvl)
+            csphi = np.cos(phi) * np.sin(phi)
+            the_mtf = 2.0 * (phi - csphi) / np.pi
+            the_mtf.data[np.isnan(the_mtf.data)] = 0.0  # Set MTF to zero if nan
+
+
+
+        # Compute the aberration/defocus transfer function (ATF)
+
+        # Take the product of the MTF and the ATF
+
+        the_mtf.name = 'mtf'
+        self.mtf = the_mtf
+
 
 
 
