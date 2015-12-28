@@ -460,7 +460,7 @@ class Lens:
     """
 
 
-    def __init__(self, efl, fno, trn, wfe=None, obs=None, mtf=None, wvn_step=500.0, wfe_allowed=0.5):
+    def __init__(self, efl, fno, trn, wfe=None, obs=None, mtf=None, wvn_step=500.0, wfe_allowed=0.3):
         """ Lens constructor.
         The lens is constructed using the focal length, focal ratio and spectral transmittance, and
         optionally also the obscuration ratio and wavefront error.
@@ -519,15 +519,14 @@ class Lens:
         # Convert wvl back to identity DataArray
         wvl = xd_identity(wvl, 'wvl')
         self.wvl = wvl
-
-        # Need to choose the spatial frequency grid on which to computer the MTF
+       # Need to choose the spatial frequency grid on which to computer the MTF
         # This depends on the cutoff (or "critical") frequency mainly.
         # Determine the minimum and maximum cutoff frequencies
         cutoff_max = 1.0 / (1.0e-6 * wvl_min * fno)  # wvl assumed now in nm, freq in cy/mm
         cutoff_min = 1.0 / (1.0e-6 * wvl_max * fno)  # cy/mm
         spf_step = cutoff_min / 12.0  # Want at least 15 samples up to minimum cutoff
-        n_steps_spf = cutoff_max * 1.5 / spf_step  # Want sampling up to 1.5 times maximum spf
-        spf = np.linspace(0.0, cutoff_max * 1.5, n_steps_spf + 1)  # cy/mm
+        n_steps_spf = cutoff_max * 1.1 / spf_step  # Want sampling up to 1.1 times maximum spf
+        spf = np.linspace(0.0, cutoff_max * 1.1, n_steps_spf + 1)  # cy/mm
         # Create a DataArray of spatial frequencies
         spf = xd_identity(spf, 'spf')
         self.spf = spf
@@ -583,8 +582,11 @@ class Lens:
     def mtf_obs_wfe(self):
         """ Compute the multidimensional MTF of a Lens class object
 
+        .. seealso::
+            - optics.atf which shows the method and formula by which the aberration/defocus MTF degradation is
+                computed.
+            - optics.mtf_obs shows documents the typical calculation formulas for obscured MTF
         """
-
         if self.obs is not None:  # Compute the obscured MTF
             # Calculate w at each matrix site
             w = 2.0 * self.fno * self.spf * 1.0e-6 * self.wvl
@@ -600,13 +602,22 @@ class Lens:
             csphi = np.cos(phi) * np.sin(phi)
             the_mtf = 2.0 * (phi - csphi) / np.pi
             the_mtf.data[np.isnan(the_mtf.data)] = 0.0  # Set MTF to zero if nan
-
-
-
         # Compute the aberration/defocus transfer function (ATF)
-
+        # Find the cutoff frequencies
+        cutoff = 1.0 / (self.fno * 1.0e-6 * self.wvl)  # cy/mm
+        # Compute the spatial frequencies as a fraction of the cutoff (relative spf)
+        nu = self.spf / cutoff
+        # Compute the ATF according to Shannon
+        the_atf = 1.0 - (1.0 - 4.0 * (nu - 0.5)**2.0) * ((self.rms_wfe_total / 0.18)**2.0)
+        # Values above 1.0 are not possible, so set those to 1.0
+        the_atf.data[the_atf.data > 1.0] = 1.0
         # Take the product of the MTF and the ATF
-
+        the_mtf = the_mtf * the_atf
+        the_mtf.attrs['mtf_units'] = ''  # MTF is a unitless quantity
+        # Merge Attributes of contributing axes
+        the_mtf.attrs.update(self.spf.attrs)
+        the_mtf.attrs.update(self.wvl.attrs)
+        the_mtf.attrs.update(self.rms_wfe_total.attrs)
         the_mtf.name = 'mtf'
         self.mtf = the_mtf
 
