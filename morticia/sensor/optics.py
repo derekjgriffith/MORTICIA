@@ -28,6 +28,7 @@ Dependencies : numpy (as np), pandas (as pd) and xray
                easygui, pint, warnings
 """
 
+
 import numpy as np
 import pandas as pd
 import xray
@@ -103,14 +104,6 @@ def ac_circle(e, w):
     surd = np.sqrt(w**2.0 - 4.0 * e**2.0)
     auto = 2.0 * e**2.0 * np.log((surd + w)/(2.0*e)) - w*surd/2.0
     return np.abs(auto)
-
-def xd_ac_circle(e, w):
-    e.data = np.asarray(e.data, dtype=np.complex128)
-    w.data = np.minimum(np.asarray(w.data, dtype=np.complex128), 2*e.data)
-    surd = np.sqrt(w.data**2.0 - 4.0 * e.data**2.0)
-    auto = 2.0 * e.data**2.0 * np.log((surd + w.data)/(2.0*e.data)) - w.data*surd/2.0
-    return np.abs(auto)
-
 
 
 def cc_circle(e, w):
@@ -486,8 +479,9 @@ class Lens:
         # Check some assertions : this is bad practice - assertions are used to trap situations
         # the demonstrate that there is a bug in the code. Rather deal with input checking
         # in other ways
-        if not trn.dims == ('wvl',):
-            warnings.warn('Data axes for transmission of optics.Lens are likely incorrect.')
+        if not trn.dims == ('wvl',):  # TODO : Throw exception, issue warning, log warning
+            warnings.warn('Data axes for transmission of optics.Lens are likely missing/incorrect.')
+            raise MissingDataArrayAxis('Transmission data for optics.Lens to be function of wavelength only.')
         # Check units of transmission wavelength scale and convert
         xd_check_convert_units(trn, 'wvl', 'nm')  # Change units on wvl axis to nm in place
         if any(trn['wvl'] < 150.0) or any(trn['wvl'] > 15000.0):
@@ -546,8 +540,8 @@ class Lens:
         else:
             wfe_max = 0.0
             # Default to zero
-            wfe = xray.DataArray([0.0, 0.0], [('wvl', [wvl_min, wvl_max])], name='wfe',
-                                 attrs={'wfe_units': ''})
+            wfe = xray.DataArray([0.0, 0.0], [('wvl', [wvl_min, wvl_max], {'units': 'nm'})], name='wfe',
+                                 attrs={'units': ''})
         if wfe_max >= 0.5:
             warnings.warn('WFE for optics.Lens exceeds 0.5 waves. ATF generally invalid for large WFE.')
         defocus_max = 3.5 * 8.0 * 1.0e-6 * wvl_mean * fno**2.0 * np.sqrt(wfe_allowed**2.0 - wfe_max**2.0)
@@ -562,7 +556,7 @@ class Lens:
         # Calculate the RMS wavefront error due to defocus
         rms_wfe_defocus  = z_defocus / (3.5 * 8.0 * 1e-6 * wvl * fno**2.0)  # Shannon formula, wvl and fldz axes
         rms_wfe_defocus.name = 'wfe'
-        rms_wfe_defocus.attrs = {'wfe_units': '', 'wvl_units': 'nm', 'fldz_units': 'mm'}
+        rms_wfe_defocus.attrs = {'units': ''}
         # Combine this in quadrature w, but first need to harmonise rms_wfe_defocus with wfe
         rms_wfe_aberr, rms_wfe_defocus = xd_harmonise_interp([wfe, rms_wfe_defocus])
         self.rms_wfe_aberr = rms_wfe_aberr
@@ -613,11 +607,11 @@ class Lens:
         the_atf.data[the_atf.data > 1.0] = 1.0
         # Take the product of the MTF and the ATF
         the_mtf = the_mtf * the_atf
-        the_mtf.attrs['mtf_units'] = ''  # MTF is a unitless quantity
+        the_mtf.attrs['units'] = ''  # MTF is a unitless quantity
         # Merge Attributes of contributing axes
-        the_mtf.attrs.update(self.spf.attrs)
-        the_mtf.attrs.update(self.wvl.attrs)
-        the_mtf.attrs.update(self.rms_wfe_total.attrs)
+        the_mtf['spf'].attrs.update(self.spf.attrs)
+        the_mtf['wvl'].attrs.update(self.wvl.attrs)
+        the_mtf['fldz'].attrs.update(self.rms_wfe_total.attrs)
         the_mtf.name = 'mtf'
         self.mtf = the_mtf
 
