@@ -13,8 +13,8 @@ import numpy as np
 import pandas as pd
 import xray
 from .. import ureg, Q_, U_  # Import the pint units registry from parent
-from ..tools.xd import *  # import additional tools for working with xray.DataArray objects
-from ..moglo import *  # import global glossary/vocalbulary
+from ..tools.xd import *  # Import additional tools for working with xray.DataArray objects
+from ..moglo import *  # Import global glossary/vocalbulary
 
 def xd_asr2sqe(asr):
     """ Convert absolute spectral response (ASR) to spectral quantum efficiency (SQE).
