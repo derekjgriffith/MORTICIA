@@ -28,3 +28,5 @@ of any electronic component into a sensor results in an "electro-optical" sensor
 - Image processing components
 - Display systems
 
+.. automodule:: electro
+   :members:
