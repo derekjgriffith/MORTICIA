@@ -8,13 +8,15 @@ __author__ = 'DGriffith'
 # MORTICIA globals and utility functions
 
 
-# The following are the long names that will be provided
-long_names = {
+# The following are the long names that will be provided for plotting purposes and
+long_name = {
     'wvl': 'Wavelength',
     'wvn': 'Wavenumber',
     'trn': 'Transmission',
     'rad': 'Radiance',
     'irr': 'Irradiance',
+    'specrad': 'Spectral Radiance',
+    'specirr': 'Spectral Irradiance',
     'fldx': 'Field Position in x',
     'fldy': 'Field Position in y',
     'fldz': 'Defocus',
@@ -39,3 +41,33 @@ long_names = {
 standard_names = {
 
 }
+
+default_units = {
+    'wvl': 'nm',
+    'spf': '1/mm',
+    'efl': 'mm',
+    'rad': 'W/m^2/sr',
+    'irr': 'W/m^2',
+    'specrad': 'W/m^2/sr/nm',
+    'specirr': 'W/m^/nm',
+    'fldx': 'mm',
+    'fldy': 'mm',
+    'fldz': 'mm',
+    'flux': 'W',
+    'asr': 'A/W',
+    'sqe': '',
+    'lum': 'cd/m^2',
+    'ill': 'lux',
+    'flo': 'deg',
+}
+
+# Define a global exception for unit mismatch
+class UnitMismatch(Exception):
+    pass
+
+# Define a global exception for missing units
+class MissingUnits(Exception):
+    pass
+
+class MissingDataArrayAxis(Exception):
+    pass
