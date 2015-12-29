@@ -12,8 +12,9 @@ __author__ = 'DGriffith, ARamkolowan'
 import numpy as np
 import pandas as pd
 import xray
-from .. import ureg, Q_, U_
-from ..tools.xd import *
+from .. import ureg, Q_, U_  # Import the pint units registry from parent
+from ..tools.xd import *  # import additional tools for working with xray.DataArray objects
+from ..moglo import *  # import global glossary/vocalbulary
 
 def xd_asr2sqe(asr):
     """ Convert absolute spectral response (ASR) to spectral quantum efficiency (SQE).
@@ -32,7 +33,7 @@ def xd_asr2sqe(asr):
 
         where :math:`c` is the speed of light and :math:`\\lambda` is the wavelength.
 
-    :param asr: xray.DataArray object providing the absolute spectral response (ASR). The DataArray must have a single
+    :param asr: An xray.DataArray object providing the absolute spectral response (ASR). The DataArray must have a single
         axis providing the wavelength points, together with the standard attributes 'asr_units' and 'wvl_units'.
     :return: Spectral Quantum Efficiency as an xray.DataArray object. Returned wavelengths will be 'nm' in
         the wavelength ('wvl') axis.
@@ -47,8 +48,10 @@ def xd_asr2sqe(asr):
     E = h * c / asr['wvl'] / 1.0e-9  # Wavelength in nm, convert to metres
     photocurrent = asr / e
     sqe = photocurrent * E
-    sqe.attrs['sqe_units'] = ''
-    sqe.attrs['wvl_units'] = 'nm'
+    sqe.attrs['units'] = ''
+    sqe.attrs['long_name'] = long_name['sqe']
+    sqe['wvl'].attrs['units'] = 'nm'
+    sqe['wvl'].attrs['long_name'] = 'Wavelength'
     if any(sqe.values > 1.0):
         warnings.warn('electro.xd_asr2sqe computed unphysical quantum efficiencies exceeding 1.')
     return sqe
@@ -71,9 +74,12 @@ def xd_sqe2asr(sqe):
     E = h * c / sqe['wvl'] / 1.0e-9  # Wavelength in nm, convert to metres
     photocurrent = sqe / E
     asr = photocurrent * e
-    asr.attrs['asr_units'] = 'A/W'
-    asr.attrs['wvl_units'] = 'nm'
+    asr.attrs['units'] = 'A/W'
+    asr.attrs['long_name'] = long_name['asr']
+    asr['wvl'].attrs['units'] = 'nm'
+    asr['wvl'].attrs['long_name'] = 'Wavelength'
     return asr
+
 
 class FocalPlaneArray():
     """ Focal plane array detector. This implementation is typically at the chip level. That is, all or most of the
