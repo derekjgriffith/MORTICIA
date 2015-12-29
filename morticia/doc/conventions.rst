@@ -13,24 +13,36 @@ However, `xray` does not (yet) support interpolation when the coordinates of the
 not the same and two or more `xray.DataArray` objects must be added, divided or multiplied.
 
 Utility functions that operate on xray.DataArray objects are found in the `morticia.tools.xd` package.
-These functions perform axis harmonisation and unit checking and conversion.
+These functions perform axis harmonisation as well as unit checking and conversion.
 
 Units of Measure
 ----------------
 Tracking of units of measure is not performed automatically in ``MORTICIA`` such as with the use of the pint package.
 However, many functions and classes in ``MORTICIA`` expect xray.DataArray instances that provide units of measure in
-the metadata. When units are provided in this way, they should be provided in manner consistent with the Pyhon units
-package ``pint`` (see https://pint.readthedocs.org/ )
+the metadata. When units are provided in this way, they should be provided in manner consistent with the Python units
+package `pint` (see https://pint.readthedocs.org/ )
 
 Commonly, when a ``MORTICIA`` function or method requires a scalar numeric input, it must be provided as a list
 with magnitude and units e.g. [30, 'mm']. Unitless quantities are provided as a simple numeric magnitude.
 
-If a variable is named ``x``, then the units for the variable can be stored as ``x_units``. This convention is
-applied in the attributes of xray.DataArray objects, where, if a dimension or data is named ``var``, then attributes
-are provided in a dictionary with key values ``var_units`` which contains a units string that can be provided to a
-``pint Quantity`` object.
+If a variable is named ``x``, then the units for the variable can be stored as ``units`` in the xray.DataArray
+attributes dictionary (actually an OrderedDict). This units string should be recognizable to `pint` as a valid unit.
+When exporting xray.DataArray objects to NetCDF files in xray.Dataset objects, this convention of using the
+`units` attribute is recognised by NetCDF browsers and other NetCDF utilities. Further information on conventional
+NetCDF attributes can be found at
+`UCAR/Unidata <https://www.unidata.ucar.edu/software/thredds/current/netcdf-java/metadata/DataDiscoveryAttConvention.html>`_.
+See the ``MORTICIA`` notebooks for examples of creating `xray` objects with unit attributes.
 
-A pint global unit registry is created when `morticia` or any sub-package is imported. Any other `morticia' paackages
+The UCAR/Unidata attributes for NetCDF file elements considered as highly recommended are
+
+- `units`
+- `long_name`
+- `standard_name`
+
+The `standard_name` should come from the CF (Climate and Forecasting) name glossary, or the project should have
+its own vocabulary of short, standard and long names for all variables.
+
+A pint global unit registry is created when `morticia` or any sub-package is imported. Any other `morticia` paackages
 or modules share a single global unit registry called ureg. Convenience functions ``Q_`` for ``Quantity`` and ``U_`` for
 ``Quantity(1.0, unit_str)`` are also defined. Examples of usage are provided in the Jupyter notebooks/tutorials.
 
