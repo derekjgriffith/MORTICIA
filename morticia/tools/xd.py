@@ -13,16 +13,32 @@ from .. import ureg, Q_, U_
 from scipy.interpolate import RegularGridInterpolator, interpn
 import warnings
 from operator import mul, add
+from ..moglo import *  # Import morticia global vocab, exceptions etc.
 
-def xd_identity(np_vector, axis_name):
+def xd_identity(np_vector, axis_name, attrs=None):
     """ Create an identity xray.DataArray. That is, a DataArray vector in which both the values and axis
         coordinates are identical.
 
-    :param np_vector:
-    :param axis_name:
+    :param np_vector: Vector of numeric data
+    :param axis_name: Name for the axis - must be in vocabulary defined in moglo.py
+    :param attrs: Dictionay of additional attributes to attach to the DataArray
     :return:
     """
-    return xray.DataArray(np_vector, [(axis_name, np_vector)], name=axis_name)
+    if axis_name in long_name:
+        the_long_name = long_name[axis_name]
+    else:
+        warnings.warn('Unknown axis name ' + axis_name + ' encountered in xd_identity creation.')
+    if axis_name in default_units:
+        the_units = default_units[axis_name]
+    else:
+        the_units = ''
+    if attrs is not None:
+        the_attrs = attrs
+    else:
+        the_attrs = {}
+    the_attrs.update({'long_name': the_long_name})
+    the_attrs.update({'units': the_units})
+    return xray.DataArray(np_vector, [(axis_name, np_vector)], name=axis_name, attrs=the_attrs)
 
 
 def xd_harmonise_interp(xd_list):
@@ -38,8 +54,7 @@ def xd_harmonise_interp(xd_list):
     Only unique values in the interpolation axis are used.
 
     """
-    # TODO enforce compatible attributes or not ? What attributes in returned object
-
+    # TODO enforce compatible attributes or not ? What attributes in returned object ?
     # Accumulate the index values from each of the given arrays, for each of the axes in the first array
     index_vals = {}  # dictionary of index coordinates for each axis
     #metadata = {}
@@ -82,21 +97,35 @@ def xd_harmonised_product(xd_list):
 
     :param xd_list: List/tuple of xray.DataArray objects to be multiplied
     :return: Product of xray.DataArray objects with merged attributes
+    :except UnitMismatch, MissingUnits:
     """
-    metadata = {}  # Will accumulate all metadata here
-    unit_dict = {}
+    # TODO : This function to be checked to correct "var_units" mistake
+
+    #main_attrs = {}  # Will accumulate all main attributes here - not sure what to do with units ?
+    unit_dict = {}  #  Dictionary of units
+    axis_attrs = {}  # Dictionary of axis attribute dictionaries
     # Check units and merge metadata
+    # have to merge attributes for main data and all axes individually
     for xd_arr in xd_list:
-        metadata.update(xd_arr.attrs)
+        #main_attrs.update(xd_arr.attrs)
         for axis in xd_arr.dims:
+            axis_attrs[axis].update(xd_arr[axis].attrs)  # Accumulate the attributes for each axis
             if not axis in unit_dict:
-                unit_dict[axis] = xd_arr.attrs[axis + '_units']
-            elif unit_dict[axis] != xd_arr.attrs[axis + '_units']:
-                # TODO : COnsider throwing a unit mismatch error, or converting to desired units with pint
+                if 'units' in xd_arr[axis].attrs:
+                    unit_dict[axis] = xd_arr[axis].attrs['units']
+                else:
+                    raise MissingUnits('Units not found for ' + xd_arr.name + ' on axis ' + axis)
+            elif ('units' in xd_arr[axis].attrs['units']) and (unit_dict[axis] != xd_arr[axis].attrs['units']):
+                # TODO : Consider throwing a unit mismatch error, or converting to desired units with pint
                 warnings.warn('Unit mismatch found when taking xray.DataArray harmonised product.')
+                raise UnitMismatch('Unit mismatch encountered for ' + xd_arr.name + ' on axis ' + axis)
+            else:
+                raise MissingUnits('Units not found for ' + xd_arr.name + ' on axis ' + axis)
     xd_factors = xd_harmonise_interp(xd_list)
     xd_product = reduce(mul, xd_factors)  # take the product by reducing the list using the mul operator
-    xd_product.attrs = metadata
+    #xd_product.attrs = main_attrs
+    for axis in xd_product:  # Put the merged attributes into each of the axes
+        xd_product[axis].attrs = axis_attrs[axis]
     return xd_product
 
 
@@ -119,13 +148,22 @@ def xd_check_convert_units(xd, axis_name, preferred_units):
     """ Check and convert units for one or more axes of an `xray.DataArray`
 
     :param xd: An xray.DataArray object having an axis called `axis_name` and a value in the `attrs` dictionary
+    :param axis_name: Name of the axis or data to check/convert
     :param preferred_units: A string providing the preferred units that can be passed to `pint`
     :return: A xray.DataArray, in which the values in the named axis have been converted to the preferred units
         The `axis_name_units` field is also updated.
     """
 
-    # Create a pint.Quantity object using the data from the named array
-    Q_values = Q_(xd[axis_name].data, xd.attrs[axis_name + '_units'])
-    Q_values = Q_values.to(preferred_units)
-    xd[axis_name] = Q_values.magnitude
-    xd.attrs[axis_name + '_units'] = preferred_units
+    # Create a pint.Quantity object using the data from the named array and use that to convert to
+    # preferred units
+    if axis_name == xd.name:  # The primary data must be converted
+        Q_values = Q_(xd.data, xd.units)  # Can fetch units this way, but not set them
+        Q_values = Q_values.to(preferred_units)
+        xd.data = Q_values.magnitude
+        xd.attrs['units'] = preferred_units
+    else:  # Convert units of the named axis
+        Q_values = Q_(xd[axis_name].data, xd[axis_name].units)
+        Q_values = Q_values.to(preferred_units)
+        xd[axis_name].data = Q_values.magnitude
+        xd[axis_name].attrs['units'] = preferred_units
+
