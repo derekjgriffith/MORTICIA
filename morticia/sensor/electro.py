@@ -34,7 +34,7 @@ def xd_asr2sqe(asr):
         where :math:`c` is the speed of light and :math:`\\lambda` is the wavelength.
 
     :param asr: An xray.DataArray object providing the absolute spectral response (ASR). The DataArray must have a single
-        axis providing the wavelength points, together with the standard attributes 'asr_units' and 'wvl_units'.
+        axis providing the wavelength points, together with the standard attribute 'units' for the wavelength axis.
     :return: Spectral Quantum Efficiency as an xray.DataArray object. Returned wavelengths will be 'nm' in
         the wavelength ('wvl') axis.
 
@@ -61,7 +61,8 @@ def xd_sqe2asr(sqe):
     """ Convert spectral quantum efficiency (SQE) to absolute spectral response.
         This is the reverse conversion of that provided by electro.xd_asr2sqe.
 
-    :param sqe: The spectral quantum efficiency (SQE), provided as a xray.DataArray object.
+    :param sqe: The spectral quantum efficiency (SQE), provided as a xray.DataArray object in which SQE is
+        provided as a function of wavelength. The wavelength axis must provide the 'units' attribute.
     :return: Absolute spectral response (ASR) as an xray.DataArray object, havin a single axis of wavelength
         coordinates ('wvl'). Returned units for the wavelength axis will be 'nm'.
 
@@ -123,3 +124,44 @@ class FocalPlaneArray():
             to A/W (photoelectron current per unit optical flux).
         :return:
         """
+        # Deal with the pitch of the pixels (centre-to-center spacing)
+        if len(pitch) == 3:
+            self.pitchx = check_convert_units([pitch[0], pitch[2]], 'mm')
+            self.pitchy = check_convert_units([pitch[1], pitch[2]], 'mm')
+        elif len(pitch) == 2:
+            self.pitchx = self.pitchy = check_convert_units(pitch, 'mm')
+        else:
+            warnings.warn('The input "pitch" to FocalPlaneArray must be 2 or 3 element list with pitchx, '
+                          'pitchy (if different) and units.')
+        # Deal with pixel aperture
+        if len(aperture) == 3:
+            self.aperturex = check_convert_units([aperture[0], aperture[2]], 'mm')
+            self.aperturey = check_convert_units([aperture[1], aperture[2]], 'mm')
+        elif len(aperture) == 2:
+            self.aperturex = self.aperturey = check_convert_units(aperture, 'mm')
+        else:
+            warnings.warn('The input "aperture" to FocalPlaneArray must be 2 or 3 element list with aperturex, '
+                          'aperturey (if different) and units.')
+        self.wellcapacity = wellcapacity  # should be a scalar value in electrons
+        self.readnoise = readnoise  # scalar in electrons
+        self.darkcurrent = check_convert_units(darkcurrent, 'e/s')
+        self.dsnu = dsnu
+        self.prnu = prnu
+
+        # Deal with ASR or SQE
+        if (sqe is None) and (asr is None):
+            warnings.warn('Either SQE or ASR (but not both) must be provided for FocalPlaneArray objects.')
+        elif (sqe is not None) and (asr is not None):
+            warnings.warn('Either SQE or ASR (but not both) must be provided for FocalPlaneArray objects.')
+        elif asr is not None:  # Convert to SQE as primary required quantity
+            xd_check_convert_units(asr, 'wvl', 'nm')
+            xd_check_convert_units(asr, 'asr', 'A/W')
+            self.asr = asr
+            self.sqe = xd_asr2sqe(asr)
+        else:
+            xd_check_convert_units(sqe, 'wvl', 'nm')
+            self.sqe = sqe
+            self.asr = xd_sqe2asr(sqe)
+
+
+        # Calculate the horizontal and vertical MTF of the array
