@@ -95,7 +95,8 @@ class FocalPlaneArray():
     """
 
     def __init__(self, pitch, aperture, pixels, wellcapacity, readnoise, darkcurrent, dsnu, prnu, sqe=None, asr=None,
-                 t_ref=(25.0, 'degC'), darkcurrent_delta_t=(7.0, 'delta_degC'), temperature=(25.0, 'degC')):
+                 t_ref=(25.0, 'degC'), darkcurrent_delta_t=(7.0, 'delta_degC'), temperature=(25.0, 'degC'),
+                 attrs=None):
         """ Constructor for FocalPlaneAArray objects
 
         :param pitch: The centre-to-centre spacing of the FPA detector elements. This must be a list where the
@@ -129,12 +130,16 @@ class FocalPlaneArray():
         :param darkcurrent_delta_t: The increase in temperature that causes doubling of the dark current.
             Default is [7.0, 'delta_degC'].
         :param temperature: The operating temperature of the FocalPlaneArray. Default [25.0, 'degC']
+        :param attrs: Dictionary of attributes and metadata. Entries with 'name', 'long_name', 'title',
+            'summary' or others, especially as per netCDF attribute conventions.
+            The 'manufacturer' should possibly also be provided.
         :return:
         """
         # Deal with the pitch of the pixels (centre-to-center spacing)
         # TODO : Reconsider storage of scalar quantities with units and attributes
         # TODO : Multiple channels - implies multi-axis SQE/ASR
         # TODO : SQE channel axis ('R', 'G', 'B' ?)
+        # TODO : Add name field to FocalPlaneArray as well as long_name
         if len(pitch) == 3:
             self.pitchx = check_convert_units([pitch[0], pitch[2]], 'mm')
             self.pitchy = check_convert_units([pitch[1], pitch[2]], 'mm')
@@ -184,6 +189,7 @@ class FocalPlaneArray():
         self.temperature_units = 'degC'
         self.darkcurrent_delta_t = check_convert_units(darkcurrent_delta_t, 'delta_degC')
         self.temperature = check_convert_units(temperature, 'degC')
+        self.attrs = attrs  # Attach user-defined attributes
         # Calculate the dark current at the operating temperature
 
         # Calculate the horizontal and vertical MTF of the array

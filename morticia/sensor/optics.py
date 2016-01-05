@@ -456,7 +456,7 @@ class Lens:
     """
 
 
-    def __init__(self, efl, fno, trn, wfe=None, obs=None, mtf=None, wvn_step=500.0, wfe_allowed=0.3, attrs={}):
+    def __init__(self, efl, fno, trn, wfe=None, obs=None, mtf=None, wvn_step=500.0, wfe_allowed=0.3, attrs=None):
         """ Lens constructor.
         The lens is constructed using the focal length, focal ratio and spectral transmittance, and
         optionally also the obscuration ratio and wavefront error.
@@ -576,6 +576,7 @@ class Lens:
         self.mtf_obs_wfe()
         # The MTF is a function of spatial frequency, wavelength and defocus (always), with possible extra dimensions
         # of field position (fldx, fldy) and field orientation (fldo).
+        self.attrs = attrs  # attach user-defined attribute dictionary
 
 
     def mtf_obs_wfe(self):
