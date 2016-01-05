@@ -88,43 +88,44 @@ def mtf(spf, wvl, fno):
     return the_mtf.squeeze()
 
 
-def ac_circle(e, w):
-    """ Compute autocorrelation of a circular aperture of radius **e** with centre-to-centre sample
-    displacements of **w**.
+def autocorr_circle(circle_radius, shift):
+    """ Compute autocorrelation of a circular aperture of radius **circle_radius** with centre-to-centre sample
+    displacements of **shift**.
 
-    :param e: Radius of circle
-    :param w: Centre-to-centre displacements at which to compute the autocorrelation
+    :param circle_radius: Radius of circle
+    :param shift: Centre-to-centre displacements at which to compute the autocorrelation
     :return: Autocorrelation magnitude
 
-    .. seealso:: optics.cc_circle
+    .. seealso:: optics.crosscorr_circle
     """
-    e = np.asarray(e, dtype=np.complex128)
-    w = np.asarray(w, dtype=np.complex128)
-    w = np.minimum(w, 2.0*e)  # Calculation only valid up to w = 2 * e
-    surd = np.sqrt(w**2.0 - 4.0 * e**2.0)
-    auto = 2.0 * e**2.0 * np.log((surd + w)/(2.0*e)) - w*surd/2.0
+    circle_radius = np.asarray(circle_radius, dtype=np.complex128)
+    shift = np.asarray(shift, dtype=np.complex128)
+    shift = np.minimum(shift, 2.0*circle_radius)  # Calculation only valid up to shift = 2 * circle_radius
+    surd = np.sqrt(shift**2.0 - 4.0 * circle_radius**2.0)
+    auto = 2.0 * circle_radius**2.0 * np.log((surd + shift)/(2.0*circle_radius)) - shift*surd/2.0
     return np.abs(auto)
 
 
-def cc_circle(e, w):
-    """ Cross correlation of unit circle with circle of radius *e*.
+def crosscorr_circle(circle_radius, shift):
+    """ Cross correlation of unit circle with circle of radius **circle_radius**.
     Compute the cross-correlation of a circular aperture of unit radius at the origin,
-    with a circular aperture of radius e, with centre-to-centre displacements of w.
+    with a circular aperture of radius **circle_radius**, with centre-to-centre displacements of **shift**.
 
-    :param e: Radius of circle to cross-correlate with unit circle (scalar numeric)
-    :param w: Centre-to-centre displacements at which to compute the cross-correlation
+    :param circle_radius: Radius of circle to cross-correlate with unit circle (scalar numeric)
+    :param shift: Centre-to-centre displacements at which to compute the cross-correlation
     :return: Cross-correlation magnitude
 
-    .. seealso:: optics.ac_circle
+    .. seealso:: optics.autocorr_circle
     """
-    e = np.asarray(e, dtype=np.complex128)
-    w = np.asarray(w, dtype=np.complex128)
-    # Formula only valid for w between 1-e and 1+e
-    w = np.minimum(w, 1 + e)
-    w = np.maximum(w, 1 - e)
-    sigma = np.sqrt((e + w + 1.0)*(e - w + 1.0)*(e + w - 1.0)*(e - w - 1.0))
-    cross = e**2.0 * np.log(2.0*e*w / (w**2.0 + e**2.0 - sigma - 1)) + (
-                     np.log((w**2.0 - e**2.0 + sigma + 1.0)/(2.0*w)) - sigma/2.0)
+    circle_radius = np.asarray(circle_radius, dtype=np.complex128)
+    shift = np.asarray(shift, dtype=np.complex128)
+    # Formula only valid for shift between 1-circle_radius and 1+circle_radius
+    shift = np.minimum(shift, 1 + circle_radius)
+    shift = np.maximum(shift, 1 - circle_radius)
+    sigma = np.sqrt((circle_radius + shift + 1.0)*(circle_radius - shift + 1.0)*(circle_radius + shift - 1.0)*(
+                        circle_radius - shift - 1.0))
+    cross = circle_radius**2.0 * np.log(2.0*circle_radius*shift / (shift**2.0 + circle_radius**2.0 - sigma - 1)) + (
+                     np.log((shift**2.0 - circle_radius**2.0 + sigma + 1.0)/(2.0*shift)) - sigma/2.0)
     return np.abs(cross)
 
 
@@ -146,11 +147,13 @@ def mtf_obs(spf, wvl, fno, obs=0.0):
         return mtf(spf, wvl, fno)
 
     # Otherwise mesh things up and do it the hard way
-    wvl, spf, fno = np.meshgrid(np.asarray(wvl, dtype=np.float64).ravel(), np.asarray(spf, dtype=np.float64).ravel(),
+    wvl, spf, fno = np.meshgrid(np.asarray(wvl, dtype=np.float64).ravel(),
+                                np.asarray(spf, dtype=np.float64).ravel(),
                                 np.asarray(fno, dtype=np.float64).ravel())
     # Calculate w at each matrix site
     w = 2.0 * fno * spf * wvl
-    the_mtf = (ac_circle(1.0, w) - 2.0*cc_circle(obs, w) + ac_circle(obs, w)) / (np.pi*(1.0 - obs**2))
+    the_mtf = (autocorr_circle(1.0, w) - 2.0*crosscorr_circle(obs, w) + autocorr_circle(obs, w)) / (
+                        np.pi*(1.0 - obs**2))
     return np.maximum(the_mtf.squeeze(), 0.0)
 
 
@@ -217,7 +220,7 @@ def pmtf_obs(spf, wvl, fno, wvl_weights, obs=0.0):
     wvl, spf, fno = np.meshgrid(wvl, spf, fno)
     # Calculate w at each matrix site
     w = 2.0 * fno * spf * wvl
-    the_mono_mtf = (ac_circle(1.0, w) - 2.0*cc_circle(obs, w) + ac_circle(obs, w)) / (np.pi*(1.0 - obs**2))
+    the_mono_mtf = (autocorr_circle(1.0, w) - 2.0*crosscorr_circle(obs, w) + autocorr_circle(obs, w)) / (np.pi*(1.0 - obs**2))
     the_poly_mtf = np.sum(the_mono_mtf * wvl_weights_2, axis=1) / np.sum(wvl_weights_2, axis=1)
     return the_poly_mtf.squeeze()
 
@@ -453,7 +456,7 @@ class Lens:
     """
 
 
-    def __init__(self, efl, fno, trn, wfe=None, obs=None, mtf=None, wvn_step=500.0, wfe_allowed=0.3):
+    def __init__(self, efl, fno, trn, wfe=None, obs=None, mtf=None, wvn_step=500.0, wfe_allowed=0.3, attrs={}):
         """ Lens constructor.
         The lens is constructed using the focal length, focal ratio and spectral transmittance, and
         optionally also the obscuration ratio and wavefront error.
@@ -472,7 +475,9 @@ class Lens:
         :param mtf: A complete pre-computed or measured MTF, with axes of spf, wvl, fldz, flr, flo
         :param wvn_step: Minimum spectral increment in wavenumbers (cm^-1) for MTF calculation. Default 500 cm^-1
         :param wfe_allowed: Maximum allowed wfe when computing lens defocus wfe, Default 0.5 waves at mean wavelength
-            of transmission function domain
+            of transmission function domain.
+        :param attrs: A dictionary of user-defined attributes and metadata. Consider including 'name' and
+            'long_name', 'title', 'summary' or other netCDF convention attributes.
         :return:
         """
 
@@ -585,7 +590,7 @@ class Lens:
             # Calculate w at each matrix site
             w = 2.0 * self.fno * self.spf * 1.0e-6 * self.wvl
             # print w
-            the_mtf = (ac_circle(1.0, w.data) - 2.0*cc_circle(self.obs, w.data) + ac_circle(self.obs, w.data)) / \
+            the_mtf = (autocorr_circle(1.0, w.data) - 2.0*crosscorr_circle(self.obs, w.data) + autocorr_circle(self.obs, w.data)) / \
                                  (np.pi*(1.0 - self.obs**2.0))
             the_mtf = np.maximum(the_mtf, 0.0)
             # print the_mtf
