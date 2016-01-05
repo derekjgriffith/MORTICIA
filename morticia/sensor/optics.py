@@ -40,7 +40,7 @@ import logging  # TODO set up global logging if required.
 from .. import ureg, Q_, U_
 
 # Import tools related to xray DataArray and related unit checking/conversion
-from ..tools.xd import *
+from morticia.tools.xd import *
 
 # As a general rule, where relevant and present, optical parameters are passed in in the order
 #   spatial frequency (spf), wavelength (wvl), focal ratio (fno) followed by any other parameters.

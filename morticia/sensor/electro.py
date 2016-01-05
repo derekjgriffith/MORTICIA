@@ -12,9 +12,9 @@ __author__ = 'DGriffith, ARamkolowan'
 import numpy as np
 import pandas as pd
 import xray
-from .. import ureg, Q_, U_  # Import the pint units registry from parent
-from ..tools.xd import *  # Import additional tools for working with xray.DataArray objects
-from ..moglo import *  # Import global glossary/vocalbulary
+from morticia import ureg, Q_, U_  # Import the pint units registry from parent
+from morticia.tools.xd import *  # Import additional tools for working with xray.DataArray objects
+from morticia.moglo import *  # Import global glossary/vocalbulary
 
 def xd_asr2sqe(asr):
     """ Convert absolute spectral response (ASR) to spectral quantum efficiency (SQE).
@@ -94,7 +94,8 @@ class FocalPlaneArray():
 
     """
 
-    def __init__(self, pitch, aperture, wellcapacity, readnoise, darkcurrent, dsnu, prnu, sqe=None, asr=None):
+    def __init__(self, pitch, aperture, pixels, wellcapacity, readnoise, darkcurrent, dsnu, prnu, sqe=None, asr=None,
+                 t_ref=(25.0, 'degC'), darkcurrent_delta_t=(7.0, 'delta_degC'), temperature=(25.0, 'degC')):
         """ Constructor for FocalPlaneAArray objects
 
         :param pitch: The centre-to-centre spacing of the FPA detector elements. This must be a list where the
@@ -103,12 +104,13 @@ class FocalPlaneArray():
             in which the pitch is provided (string). The units must be pint-recognizable.
         :param aperture: The effective pixel aperture of the FPA detector elements. This must also be a list, providing
             the x-aperture of the pixel, y-aperture (if different from x) and the units (string).
+        :param pixels: A list of number of pixels in the x and y directions respectively
         :param wellcapacity: The well capacity of the pixel in number of electrons
         :param readnoise: The RMS read noise in electrons.
         :param darkcurrent: The dark current as a list, giving nagnitude and units. Units can be electrons per pixel
             per second (e/s), or in an amperage per pixel (A/s) or an amperage per unit area of the FPA (e.g. A/cm^2)
         :param dsnu: The dark signal non uniformity provided as a list giving the magnitude in the first element
-            and units in the second element. The units can also be e/s, A/s or A/area. This is the standard deviation.
+            and units in the second element. The units can also be e/s, A or A/area. This is the standard deviation.
             The DSNU can also be specified as 0.0 or None.
         :param prnu: The photo-response non-uniformity. This is also a standard deviation and must be provided in units
             of '%'. That is, the prnu input is a list with the magnitude in the first position and the obligatory
@@ -122,9 +124,17 @@ class FocalPlaneArray():
         :param asr: This is a xray.DataArray object providing the Absolute Spectral Response of the FPA. It can be
             provided as an alternative to the SQE. It must have the single axis of wavelength. Units are equivalent
             to A/W (photoelectron current per unit optical flux).
+        :param t_ref: The reference temperature at which the dark current and other parameters are specified.
+            To be provided as a [value, 'units'] list. Default is [25.0, 'degC'].
+        :param darkcurrent_delta_t: The increase in temperature that causes doubling of the dark current.
+            Default is [7.0, 'delta_degC'].
+        :param temperature: The operating temperature of the FocalPlaneArray. Default [25.0, 'degC']
         :return:
         """
         # Deal with the pitch of the pixels (centre-to-center spacing)
+        # TODO : Reconsider storage of scalar quantities with units and attributes
+        # TODO : Multiple channels - implies multi-axis SQE/ASR
+        # TODO : SQE channel axis ('R', 'G', 'B' ?)
         if len(pitch) == 3:
             self.pitchx = check_convert_units([pitch[0], pitch[2]], 'mm')
             self.pitchy = check_convert_units([pitch[1], pitch[2]], 'mm')
@@ -133,6 +143,7 @@ class FocalPlaneArray():
         else:
             warnings.warn('The input "pitch" to FocalPlaneArray must be 2 or 3 element list with pitchx, '
                           'pitchy (if different) and units.')
+        self.pitch_units = 'mm'
         # Deal with pixel aperture
         if len(aperture) == 3:
             self.aperturex = check_convert_units([aperture[0], aperture[2]], 'mm')
@@ -142,12 +153,19 @@ class FocalPlaneArray():
         else:
             warnings.warn('The input "aperture" to FocalPlaneArray must be 2 or 3 element list with aperturex, '
                           'aperturey (if different) and units.')
+        self.pixels = pixels  # number of pixels in x and y directions
         self.wellcapacity = wellcapacity  # should be a scalar value in electrons
         self.readnoise = readnoise  # scalar in electrons
-        self.darkcurrent = check_convert_units(darkcurrent, 'e/s')
+        # Darkcurrent a little more complicated to deal with - need to check if given per unit area or per pixel
+        q_darkcurrent = Q_(*darkcurrent)
+        if '[length]' in q_darkcurrent.dimensionality.keys():  # The dark current is presumably given per unit area
+            q_darkcurrent = q_darkcurrent.to('e/s/mm^2')
+            q_darkcurrent *= Q_(self.pitchx * self.pitchy, 'mm^2')
+            darkcurrent = [q_darkcurrent.magnitude, 'e/s']
+        self.darkcurrent = check_convert_units(darkcurrent, 'e/s')  # Actually e/s/pixel
+        self.darkcurrent_units = 'e/s'
         self.dsnu = dsnu
         self.prnu = prnu
-
         # Deal with ASR or SQE
         if (sqe is None) and (asr is None):
             warnings.warn('Either SQE or ASR (but not both) must be provided for FocalPlaneArray objects.')
@@ -162,6 +180,11 @@ class FocalPlaneArray():
             xd_check_convert_units(sqe, 'wvl', 'nm')
             self.sqe = sqe
             self.asr = xd_sqe2asr(sqe)
-
+        self.t_ref = check_convert_units(t_ref, 'degC')
+        self.temperature_units = 'degC'
+        self.darkcurrent_delta_t = check_convert_units(darkcurrent_delta_t, 'delta_degC')
+        self.temperature = check_convert_units(temperature, 'degC')
+        # Calculate the dark current at the operating temperature
 
         # Calculate the horizontal and vertical MTF of the array
+        #
