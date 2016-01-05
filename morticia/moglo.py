@@ -17,9 +17,6 @@ long_name = {
     'irr': 'Irradiance',
     'specrad': 'Spectral Radiance',
     'specirr': 'Spectral Irradiance',
-    'fldx': 'Field Position in x',
-    'fldy': 'Field Position in y',
-    'fldz': 'Defocus',
     'spf': 'Spatial Frequency',
     'mtf': 'Modulation Transfer Function',
     'otf': 'Optical Transfer Function',
@@ -29,12 +26,16 @@ long_name = {
     'lum': 'Luminance',
     'ill': 'Illuminance',
     'flux': 'Optical Flux',
-    'flo': 'Field Orientation',  # Typically horizontal/vertical, across/along track, sagittal/tangential
+    'fldy': 'Field Position in x',
+    'fldx': 'Field Position in y',
+    'fldz': 'Defocus',
+    'fldo': 'Field Orientation',  # Typically horizontal/vertical, across/along track, sagittal/tangential
     'obs': 'Obscuration Ratio',
     'pitchx': 'Pixel Pitch in x',
     'pitchy': 'Pixel Pitch in y',
     'asr': 'Absolute Spectral Response',
-    'sqe': 'Spectral Quantum Efficiency'
+    'sqe': 'Spectral Quantum Efficiency',
+    'chn': 'Spectral Channel'
 }
 
 # The following are intended to be the standard names as per the Climate and Forecast (CF) convention
