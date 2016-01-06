@@ -217,7 +217,24 @@ class FocalPlaneArray(object):
         self.temperature = temperature  # Will also set dark current
         self.attrs = attrs  # Attach user-defined attributes
         # Calculate the horizontal and vertical MTF of the array
-        # First set up a set of spatial frequencies up to a factor of the pixel nyquist
+        self.compute_mtf()
+
+
+    def set_dark_current(self):
+        """ Set the dark current of the FocalPlaneArray (FPA) according to the dark current reference temperature and
+            the current operating temperature of the FPA.
+        :return:
+        """
+        temp_difference = self.temperature - self.t_ref
+        factor = 2.0**(temp_difference / self.darkcurrent_delta_t)
+        self.darkcurrent = self.darkcurrent_ref * factor
+
+    def compute_mtf(self):
+        """ Compute the MTF of a FocalPlaneArray. In this model, the FPA is assumed to be a rectangular array
+            having pixels with rectangular aperture.
+        :return:
+        """
+        # First set up a set of spatial frequencies up to a factor of 20 times the pixel nyquist
         nyquist_x = 1.0/(2.0*self.pitchx)  # cy/mm
         self.nyquist_x = nyquist_x
         nyquist_y = 1.0/(2.0*self.pitchy)  # cy/mm
@@ -242,12 +259,3 @@ class FocalPlaneArray(object):
                                   [(spf), (fldo)],
                                   name='mtf', attrs={'units': ''})
 
-
-    def set_dark_current(self):
-        """ Set the dark current of the FocalPlaneArray (FPA) according to the dark current reference temperature and
-            the current operating temperature of the FPA.
-        :return:
-        """
-        temp_difference = self.temperature - self.t_ref
-        factor = 2.0**(temp_difference / self.darkcurrent_delta_t)
-        self.darkcurrent = self.darkcurrent_ref * factor
