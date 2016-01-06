@@ -35,7 +35,9 @@ long_name = {
     'pitchy': 'Pixel Pitch in y',
     'asr': 'Absolute Spectral Response',
     'sqe': 'Spectral Quantum Efficiency',
-    'chn': 'Spectral Channel'
+    'chn': 'Spectral Channel Number',
+    'rsr': 'Relative Spectral Response',
+    'srf': 'Spectral Response Function'
 }
 
 # The following are intended to be the standard names as per the Climate and Forecast (CF) convention
