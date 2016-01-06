@@ -617,7 +617,7 @@ class Lens:
         # Merge Attributes of contributing axes
         the_mtf['spf'].attrs.update(self.spf.attrs)
         the_mtf['wvl'].attrs.update(self.wvl.attrs)
-        the_mtf['fldz'].attrs.update(self.rms_wfe_total.attrs)
+        the_mtf['fldz'].attrs.update({'units': 'mm', 'long_name': long_name['fldz']})
         the_mtf.name = 'mtf'
         self.mtf = the_mtf
 
