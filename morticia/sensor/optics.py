@@ -419,7 +419,7 @@ def ctf_eye(spf, lum, w, num_eyes=2, formula=1):
 
 
 
-class Lens:
+class Lens(object):
     """ The Lens class encapsulates information and behaviour related to imaging lens systems.
         The chief characteristics of a lens are its spectral through-field, through-focus and
         through-frequency MTF, as well as the spectral transmission.
