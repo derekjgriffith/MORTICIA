@@ -1,4 +1,4 @@
-__author__ = 'DGriffith, ARamkolowan'
+__author__ = 'DGriffith, ARamkilowan'
 
 """
 .. module:: electro
@@ -82,7 +82,7 @@ def xd_sqe2asr(sqe):
     return asr
 
 
-class FocalPlaneArray():
+class FocalPlaneArray(object):
     """ Focal plane array detector. This implementation is typically at the chip level. That is, all or most of the
         information for building an FPA object can be found in the chip-level datasheet. The FPAs in question here
         are usually CCD, CMOS, scientific CMOS or electron-multiplying CCD (EMCCD).
@@ -91,8 +91,33 @@ class FocalPlaneArray():
 
         This class does not model Time-Delay and Integration (TDI), which is a dynamic imaging process.
 
+        The class does allow for setting of FPA operating temperature and recalculation of dark current
+        based on the dark current doubling delta temperature.
 
     """
+    # Define the temperature property and associated setter method
+    # This is required because the operating temperature affects the dark current
+    @property
+    def temperature(self):
+        return self.temperature
+
+    @temperature.setter
+    def temperature(self, operating_temperature):
+        """ Set the current operating temperature of the FocalPlaneArray. This influences the dark current
+            according to the dark current doubling temperature. Result will not be reliable if the dark
+            current doubling temperature attribute of the FPA is not set correctly.
+
+        :param operating_temperature:
+        :return:
+        """
+        check_convert_units(operating_temperature, 'degC')
+        # Set through self dictionary to avoid recursion
+        self.__temperature = operating_temperature[0]
+        self.set_dark_current()
+
+    @temperature.getter
+    def temperature(self):
+        return self.__temperature
 
     def __init__(self, pitch, aperture, pixels, wellcapacity, readnoise, darkcurrent, dsnu, prnu, sqe=None, asr=None,
                  t_ref=(25.0, 'degC'), darkcurrent_delta_t=(7.0, 'delta_degC'), temperature=(25.0, 'degC'),
@@ -168,6 +193,7 @@ class FocalPlaneArray():
             q_darkcurrent *= Q_(self.pitchx * self.pitchy, 'mm^2')
             darkcurrent = [q_darkcurrent.magnitude, 'e/s']
         self.darkcurrent = check_convert_units(darkcurrent, 'e/s')  # Actually e/s/pixel
+        self.darkcurrent_ref = self.darkcurrent
         self.darkcurrent_units = 'e/s'
         self.dsnu = dsnu
         self.prnu = prnu
@@ -188,9 +214,40 @@ class FocalPlaneArray():
         self.t_ref = check_convert_units(t_ref, 'degC')
         self.temperature_units = 'degC'
         self.darkcurrent_delta_t = check_convert_units(darkcurrent_delta_t, 'delta_degC')
-        self.temperature = check_convert_units(temperature, 'degC')
+        self.temperature = temperature  # Will also set dark current
         self.attrs = attrs  # Attach user-defined attributes
-        # Calculate the dark current at the operating temperature
-
         # Calculate the horizontal and vertical MTF of the array
-        #
+        # First set up a set of spatial frequencies up to a factor of the pixel nyquist
+        nyquist_x = 1.0/(2.0*self.pitchx)  # cy/mm
+        self.nyquist_x = nyquist_x
+        nyquist_y = 1.0/(2.0*self.pitchy)  # cy/mm
+        self.nyquist_y = nyquist_y
+        nyquist_max = np.maximum(nyquist_x, nyquist_y)
+        nyquist_min = np.minimum(nyquist_x, nyquist_y)
+        # Generate a relative set of spatial frequencies, with variable spacing up to 20 times relative nyquist
+        spf_rel = np.hstack((np.linspace(0., 1, 10), np.linspace(1., 2, 9), np.linspace(2. ,3, 7),
+                             np.linspace(3., 4, 7),  np.linspace(4., 5, 7), np.linspace(5. ,6, 5),
+                             np.linspace(6., 7, 5),  np.linspace(7., 8, 5), np.linspace(8. ,9 ,3),
+                             np.linspace(9., 10, 3)))  # Will use sinc function up to argument of 10
+        spf_rel = np.unique(spf_rel)   # Will be duplication at the zeroes
+        spf_x = spf_rel * nyquist_x * 2.0
+        spf_y = spf_rel * nyquist_y * 2.0
+        spf = xd_identity(np.unique(np.hstack((spf_x, spf_y))), 'spf', attrs={'units': '1/mm'})  # Create spat freq axis
+        self.spf = spf
+        # Get back spf_rel, which could be different in x and y directions
+        spf_rel_x = spf.data / (nyquist_x * 2.0)
+        spf_rel_y = spf.data / (nyquist_y * 2.0)
+        fldo = xd_identity([0.0, 90.0], 'fldo')
+        self.mtf = xray.DataArray(np.sinc(np.vstack((spf_rel_x, spf_rel_y))).T,
+                                  [(spf), (fldo)],
+                                  name='mtf', attrs={'units': ''})
+
+
+    def set_dark_current(self):
+        """ Set the dark current of the FocalPlaneArray (FPA) according to the dark current reference temperature and
+            the current operating temperature of the FPA.
+        :return:
+        """
+        temp_difference = self.temperature - self.t_ref
+        factor = 2.0**(temp_difference / self.darkcurrent_delta_t)
+        self.darkcurrent = self.darkcurrent_ref * factor
