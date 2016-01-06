@@ -37,7 +37,7 @@ import logging  # TODO set up global logging if required.
 
 
 # Import units registry from parent to avoid duplicates
-from .. import ureg, Q_, U_
+from morticia import ureg, Q_, U_
 
 # Import tools related to xray DataArray and related unit checking/conversion
 from morticia.tools.xd import *
