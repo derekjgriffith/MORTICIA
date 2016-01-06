@@ -59,7 +59,7 @@ def xd_asr2sqe(asr):
 
 def xd_sqe2asr(sqe):
     """ Convert spectral quantum efficiency (SQE) to absolute spectral response.
-        This is the reverse conversion of that provided by electro.xd_asr2sqe.
+    This is the reverse conversion of that provided by electro.xd_asr2sqe.
 
     :param sqe: The spectral quantum efficiency (SQE), provided as a xray.DataArray object in which SQE is
         provided as a function of wavelength. The wavelength axis must provide the 'units' attribute.
@@ -84,15 +84,19 @@ def xd_sqe2asr(sqe):
 
 class FocalPlaneArray(object):
     """ Focal plane array detector. This implementation is typically at the chip level. That is, all or most of the
-        information for building an FPA object can be found in the chip-level datasheet. The FPAs in question here
-        are usually CCD, CMOS, scientific CMOS or electron-multiplying CCD (EMCCD).
+    information for building an FPA object can be found in the chip-level datasheet. The FPAs in question here
+    are usually CCD, CMOS, scientific CMOS or electron-multiplying CCD (EMCCD).
 
-        The FPA class can be combined with an image intensifier tube (IIT) to produce an ICCD device.
+    The FPA class can be combined with an image intensifier tube (IIT) to produce an ICCD device.
 
-        This class does not model Time-Delay and Integration (TDI), which is a dynamic imaging process.
+    This class does not model Time-Delay and Integration (TDI), which is a dynamic imaging process.
 
-        The class does allow for setting of FPA operating temperature and recalculation of dark current
-        based on the dark current doubling delta temperature.
+    The class does allow for setting of FPA operating temperature and recalculation of dark current
+    based on the dark current doubling delta temperature.
+
+    The FPA is a component of a Camera class object and has the basic function of converting photons to
+    photoelectrons. FPA object can have multiple spectral channels as with a colour camera. The colour sampling
+    spatial pattern can be as for a Bayer filter or a 3-CCD camera.
 
     """
     # Define the temperature property and associated setter method
@@ -104,8 +108,8 @@ class FocalPlaneArray(object):
     @temperature.setter
     def temperature(self, operating_temperature):
         """ Set the current operating temperature of the FocalPlaneArray. This influences the dark current
-            according to the dark current doubling temperature. Result will not be reliable if the dark
-            current doubling temperature attribute of the FPA is not set correctly.
+        according to the dark current doubling temperature. Result will not be reliable if the dark
+        current doubling temperature attribute of the FPA is not set correctly.
 
         :param operating_temperature:
         :return:
@@ -222,7 +226,7 @@ class FocalPlaneArray(object):
 
     def set_dark_current(self):
         """ Set the dark current of the FocalPlaneArray (FPA) according to the dark current reference temperature and
-            the current operating temperature of the FPA.
+        the current operating temperature of the FPA.
         :return:
         """
         temp_difference = self.temperature - self.t_ref
@@ -258,4 +262,48 @@ class FocalPlaneArray(object):
         self.mtf = xray.DataArray(np.sinc(np.vstack((spf_rel_x, spf_rel_y))).T,
                                   [(spf), (fldo)],
                                   name='mtf', attrs={'units': ''})
+
+class Camera(object):
+    """ The Camera class composes a FocalPlaneArray (FPA) together with a gain stage (signal transfer function),
+    an analogue-to-digital converter of specific bit depth and an additional amplifier noise. The Camera
+    converts photoelectrons to digital output data.
+
+    """
+
+    def __init__(self, fpa, ad_bit_depth, digital_gain=None, digital_offset=(0.0, 'count'), noise=(0.0, 'count'), sitf=None):
+        """ Camera constructor. This class if for representation of a Camera, which incorporates
+        a FocalPlaneArray and a converter stage which converts photoelectrons into digital levels (also called
+        digital numbers - DN and in MORTICIA, the pint unit 'count' is used).
+
+        :param fpa: The FocalPlaneArray incorporated into the Camera
+        :param ad_bit_depth: Number of bits in the Analogue-to-Digital A/D converter. Must be provided in MORTICIA
+            scalar format as e.g. [16, 'bit']
+        :param digital_gain: The number of photoelectrons required to raise the output by 1 digital level (DN)
+            Must be provided in MORTICIA scalar format as e.g. [2.2, 'e/count'].
+        :param digital_offset: The digital level (DN) output of the camera for zero photoelectrons. This is not
+            the "black level", which typically includes additional dark signal. Must be provided in MORTICIA
+            scalar format as e.g. [10.0, 'count'].
+        :param noise: An optional additional noise component to add to the signal. Must be provided as a
+            MORTICIA scalar in either electrons or counts e.g. [2, 'e']. This is an RMS noise component,
+            which is equivalent to a standard deviation.
+        :param sitf: Signal transfer function (SiTF). As an alternative to providing the digital_gain and
+            digital_offset, (particularly should the camera have essentially non-linear response) the SiTF
+            can be provided as an xray.DataArray, with the input axis in units of electrons ('e') and
+            the data in units of digital level ('count'). If digital_gain and digital_offset are provided,
+            the SiTF is calculated and stored internally as an xray.DataArray.
+        :return:
+        """
+        self.fpa = fpa
+        self.ad_bit_depth = check_convert_units(ad_bit_depth, 'bit')
+        if digital_gain is not None:
+            self.digital_gain = check_convert_units(digital_gain, 'e/count')
+            if sitf is not None:
+                warnings.warn('The digital_gain and the sitf of a Camera object should not both be provided.')
+        if sitf is not None:
+            pass
+        else:
+            pass
+
+
+
 
