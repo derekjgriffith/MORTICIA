@@ -21,7 +21,7 @@ def xd_identity(np_vector, axis_name, attrs=None):
 
     :param np_vector: Vector of numeric data
     :param axis_name: Name for the axis - must be in vocabulary defined in moglo.py
-    :param attrs: Dictionay of additional attributes to attach to the DataArray
+    :param attrs: Dictionary of additional attributes to attach to the DataArray
     :return:
     """
     if axis_name in long_name:
@@ -147,7 +147,10 @@ def check_convert_units(value_with_units, preferred_units):
     """
 
     # Use pint to convert
-    value = Q_(np.asarray(value_with_units[0], dtype=np.float64), value_with_units[1])  # Will blow up if units not recognised
+    try:
+        value = Q_(np.asarray(value_with_units[0], dtype=np.float64), value_with_units[1])  # Will blow up if units not recognised
+    except TypeError:
+        warnings.warn('A scalar value was supplied without units. Example of correct scalar input is [40.0, "degC"]')
     value = value.to(preferred_units)
     return value.magnitude
 
