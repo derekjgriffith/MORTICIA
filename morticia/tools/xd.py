@@ -43,9 +43,9 @@ def xd_identity(np_vector, axis_name, attrs=None):
 
 def xd_harmonise_interp(xd_list):
     """ Perform linear interpolation on merged set of axis points for two or more xray DataArray objects.
-    This function can be used to prepare (harmonise) multiple xray.DataArray objects for multiplication or addition
-    on a common set of coordinate axis points by linearly interpolating all DataArray objects onto the same
-    set of points, obtained by merging and sorting the points from all input DataArray objects.
+        This function can be used to prepare (harmonise) multiple xray.DataArray objects for multiplication or addition
+        on a common set of coordinate axis points by linearly interpolating all DataArray objects onto the same
+        set of points, obtained by merging and sorting the points from all input DataArray objects.
 
     The DataArry objects provided.    The scipy linear grid interpolator is used for this purpose. See:
     scipy.interpolate.RegularGridInterpolator
@@ -54,9 +54,15 @@ def xd_harmonise_interp(xd_list):
     Only unique values in the interpolation axis are used.
 
     """
-    # TODO enforce compatible attributes or not ? What attributes in returned object ?
+    # TODO : enforce compatible attributes or not ? What attributes in returned object ?
+    # TODO : Ignore axes that have non-numeric coordinates e.g. xdarray['axisname'].dtype.char in 'SUa',
+    # TODO : which detects dtypes that are string, or xdarray['axisname'].dtype.kind in 'fc' (float or complex)
+    # TODO : alternatively require that axis coordinates are always numeric, say with a list of labels as attrs
+    # TODO : What about interpolation on times axes
+    # TODO : Need to expand on extrapolation (and possibly also single-axis interpolation) schemes
     # Accumulate the index values from each of the given arrays, for each of the axes in the first array
     index_vals = {}  # dictionary of index coordinates for each axis
+    index_float = {}  # determine if the index kind is a floating point type (complex included)
     #metadata = {}
 
     for xd_arr in xd_list:
@@ -71,14 +77,16 @@ def xd_harmonise_interp(xd_list):
     # get the unique values in increasing numerical order using np.unique for each axis found in the whole set
     for axis in index_vals:
         index_vals[axis] = np.unique(index_vals[axis])
-
+        index_float[axis] = index_vals[axis].dtype.kind in 'fc'
     # interpolate each of the DataArray objects onto the new grid (for whatever axes it does have)
     xd_return_list = []
     for xd_arr in xd_list:
         # Create the linear interpolator
-        interpolator = RegularGridInterpolator([xd_arr[axis].values for axis in xd_arr.dims], xd_arr.values,
+        interpolator = RegularGridInterpolator([xd_arr[axis].values for axis in xd_arr.dims],
+                                               xd_arr.values,
                                                method='linear', bounds_error=False, fill_value=0.0)
-        merged_coordinates = np.meshgrid(*[index_vals[axis] for axis in xd_arr.dims], indexing='ij')
+        merged_coordinates = np.meshgrid(*[index_vals[axis] for axis in xd_arr.dims],
+                                               indexing='ij')
         interp_vals = interpolator(tuple(merged_coordinates))
         # reconstruct the xray.DataArray with interpolated data
         xd_arr_interp = xray.DataArray(interp_vals, [(axis, index_vals[axis]) for axis in xd_arr.dims],
