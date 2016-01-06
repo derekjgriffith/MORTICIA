@@ -61,7 +61,7 @@ default_units = {
     'sqe': '',
     'lum': 'cd/m^2',
     'ill': 'lux',
-    'flo': 'deg',
+    'fldo': 'deg',
 }
 
 # Define a global exception for unit mismatch
