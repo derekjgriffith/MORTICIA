@@ -15,6 +15,15 @@ not the same and two or more `xray.DataArray` objects must be added, divided or 
 Utility functions that operate on xray.DataArray objects are found in the `morticia.tools.xd` package.
 These functions perform axis harmonisation as well as unit checking and conversion.
 
+The axis harmonisation functions for `xray.DataArray` objects requires that all axes have numeric coordinates.
+This applies also to axes that would benefit from having text labels. Text labels would be more appropriate for
+axes such as spectral channels and filed orientation for MTF data. In the case of spectral channels (with axis label
+`chn`) will be channel numbers (starting from 0).
+
+This curently applies equally well to timeseries. FOr incorporation in multi-axis `xray.DataArray` objects, timestamps
+must be converted to Julian date. A list of labels for such axes can and should be maintained in the `xray.DataArray`
+attributes (`attrs`).
+
 Units of Measure
 ----------------
 Tracking of units of measure is not performed automatically in ``MORTICIA`` such as with the use of the pint package.
@@ -46,8 +55,9 @@ A pint global unit registry is created when `morticia` or any sub-package is imp
 or modules share a single global unit registry called ureg. Convenience functions ``Q_`` for ``Quantity`` and ``U_`` for
 ``Quantity(1.0, unit_str)`` are also defined. Examples of usage are provided in the Jupyter notebooks/tutorials.
 
+
 Logging Warnings and Exception Handling
-======================
+=======================================
 As a rule, `MORTICIA` does not use logging to files. Preferably, if any checking is performed, exceptions are thrown.
 Informational messages should printed to the terminal using the `logging.info()` or `logging.debug()` calls.
 Warnings that the user should take action on are provided through `warnings.warn()`. If the warning may relate to
