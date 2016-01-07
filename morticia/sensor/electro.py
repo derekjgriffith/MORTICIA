@@ -14,7 +14,7 @@ import pandas as pd
 import xray
 from morticia import ureg, Q_, U_  # Import the pint units registry from parent
 from morticia.tools.xd import *  # Import additional tools for working with xray.DataArray objects
-from morticia.moglo import *  # Import global glossary/vocalbulary
+from morticia.moglo import *  # Import global glossary/vocabulary
 
 def xd_asr2sqe(asr):
     """ Convert absolute spectral response (ASR) to spectral quantum efficiency (SQE).
@@ -103,7 +103,7 @@ class FocalPlaneArray(object):
     # This is required because the operating temperature affects the dark current
     @property
     def temperature(self):
-        return self.temperature
+        return self.__temperature
 
     @temperature.setter
     def temperature(self, operating_temperature):
@@ -118,10 +118,6 @@ class FocalPlaneArray(object):
         # Set through self dictionary to avoid recursion
         self.__temperature = operating_temperature[0]
         self.set_dark_current()
-
-    @temperature.getter
-    def temperature(self):
-        return self.__temperature
 
     def __init__(self, pitch, aperture, pixels, wellcapacity, readnoise, darkcurrent, dsnu, prnu, sqe=None, asr=None,
                  t_ref=(25.0, 'degC'), darkcurrent_delta_t=(7.0, 'delta_degC'), temperature=(25.0, 'degC'),
@@ -170,37 +166,38 @@ class FocalPlaneArray(object):
         # TODO : SQE channel axis ('R', 'G', 'B' ?)
         # TODO : Add name field to FocalPlaneArray as well as long_name
         if len(pitch) == 3:
-            self.pitchx = check_convert_units([pitch[0], pitch[2]], 'mm')
-            self.pitchy = check_convert_units([pitch[1], pitch[2]], 'mm')
+            self.pitchx = Scalar('pitchx', pitch[0], pitch[2])
+            self.pitchy = Scalar('pitchy', pitch[1], pitch[2])
         elif len(pitch) == 2:
-            self.pitchx = self.pitchy = check_convert_units(pitch, 'mm')
+            self.pitchx = Scalar('pitchx', pitch[0], pitch[1])
+            self.pitchy = Scalar('pitchy', pitch[0], pitch[1])
         else:
             warnings.warn('The input "pitch" to FocalPlaneArray must be 2 or 3 element list with pitchx, '
                           'pitchy (if different) and units.')
         self.pitch_units = 'mm'
         # Deal with pixel aperture
         if len(aperture) == 3:
-            self.aperturex = check_convert_units([aperture[0], aperture[2]], 'mm')
-            self.aperturey = check_convert_units([aperture[1], aperture[2]], 'mm')
+            self.aperturex = Scalar('pixapx', aperture[0], aperture[2])
+            self.aperturey = Scalar('pixapy', aperture[1], aperture[2])
         elif len(aperture) == 2:
-            self.aperturex = self.aperturey = check_convert_units(aperture, 'mm')
+            self.aperturex = Scalar('pixapx', aperture[0], aperture[1])
+            self.aperturey = Scalar('pixapy', aperture[0], aperture[1])
         else:
             warnings.warn('The input "aperture" to FocalPlaneArray must be 2 or 3 element list with aperturex, '
                           'aperturey (if different) and units.')
         self.pixels = pixels  # number of pixels in x and y directions
-        self.wellcapacity = wellcapacity  # should be a scalar value in electrons
-        self.readnoise = readnoise  # scalar in electrons
+        self.wellcapacity = Scalar('wellcap', *wellcapacity) # should be a scalar value in electrons
+        self.readnoise = Scalar('readnoise', *readnoise)
         # Darkcurrent a little more complicated to deal with - need to check if given per unit area or per pixel
         q_darkcurrent = Q_(*darkcurrent)
         if '[length]' in q_darkcurrent.dimensionality.keys():  # The dark current is presumably given per unit area
             q_darkcurrent = q_darkcurrent.to('e/s/mm^2')
             q_darkcurrent *= Q_(self.pitchx * self.pitchy, 'mm^2')
             darkcurrent = [q_darkcurrent.magnitude, 'e/s']
-        self.darkcurrent = check_convert_units(darkcurrent, 'e/s')  # Actually e/s/pixel
-        self.darkcurrent_ref = self.darkcurrent
-        self.darkcurrent_units = 'e/s'
-        self.dsnu = dsnu
-        self.prnu = prnu
+        self.darkcurrent = Scalar('darkcurr', *darkcurrent)  # Actually e/s/pixel
+        self.darkcurrent_ref = self.darkcurrent[0]
+        self.dsnu = Scalar('dsnu', *dsnu)
+        self.prnu = Scalar('prnu', *prnu)
         # Deal with ASR or SQE
         if (sqe is None) and (asr is None):
             warnings.warn('Either SQE or ASR (but not both) must be provided for FocalPlaneArray objects.')
@@ -215,10 +212,10 @@ class FocalPlaneArray(object):
             xd_check_convert_units(sqe, 'wvl', 'nm')
             self.sqe = sqe
             self.asr = xd_sqe2asr(sqe)
-        self.t_ref = check_convert_units(t_ref, 'degC')
-        self.temperature_units = 'degC'
-        self.darkcurrent_delta_t = check_convert_units(darkcurrent_delta_t, 'delta_degC')
-        self.temperature = temperature  # Will also set dark current
+        self.t_ref = Scalar('tref', *t_ref)
+
+        self.darkcurrent_delta_t = Scalar('deltat', *darkcurrent_delta_t)
+        self.temperature = Scalar('temp', *temperature)  # Will also set dark current
         self.attrs = attrs  # Attach user-defined attributes
         # Calculate the horizontal and vertical MTF of the array
         self.compute_mtf()
@@ -229,9 +226,9 @@ class FocalPlaneArray(object):
         the current operating temperature of the FPA.
         :return:
         """
-        temp_difference = self.temperature - self.t_ref
-        factor = 2.0**(temp_difference / self.darkcurrent_delta_t)
-        self.darkcurrent = self.darkcurrent_ref * factor
+        temp_difference = self.temperature.data - self.t_ref.data
+        factor = 2.0**(temp_difference / self.darkcurrent_delta_t.data)
+        self.darkcurrent.data = [self.darkcurrent_ref * factor, 'delta_degC']
 
     def compute_mtf(self):
         """ Compute the MTF of a FocalPlaneArray. In this model, the FPA is assumed to be a rectangular array
@@ -267,10 +264,13 @@ class Camera(object):
     """ The Camera class composes a FocalPlaneArray (FPA) together with a gain stage (signal transfer function),
     an analogue-to-digital converter of specific bit depth and an additional amplifier noise. The Camera
     converts photoelectrons to digital output data.
+    NB : A Camera object in MORTICIA does *not* include the Lens. The most basic sensor object that includes a lens
+    is an Imager object which includes a lens and a camera.
 
     """
 
-    def __init__(self, fpa, ad_bit_depth, digital_gain=None, digital_offset=(0.0, 'count'), noise=(0.0, 'count'), sitf=None):
+    def __init__(self, fpa, ad_bit_depth, digital_gain=None, digital_offset=(0.0, 'count'), noise=(0.0, 'count'),
+                 sitf=None, exp_time_min=(10.0e-6, 's'), exp_time_max=(np.inf, 's'), attrs=None):
         """ Camera constructor. This class if for representation of a Camera, which incorporates
         a FocalPlaneArray and a converter stage which converts photoelectrons into digital levels (also called
         digital numbers - DN and in MORTICIA, the pint unit 'count' is used).
@@ -291,18 +291,43 @@ class Camera(object):
             can be provided as an xray.DataArray, with the input axis in units of electrons ('e') and
             the data in units of digital level ('count'). If digital_gain and digital_offset are provided,
             the SiTF is calculated and stored internally as an xray.DataArray.
+        :param
+        :param attrs: A user-defined dictionary of other information about this Camera object. Could include
+            items such as 'model', 'manufacturer' etc. A 'title' and 'long_name' are recommended attributes.
         :return:
         """
         self.fpa = fpa
-        self.ad_bit_depth = check_convert_units(ad_bit_depth, 'bit')
+        self.ad_bit_depth = [check_convert_units(ad_bit_depth, 'bit'), 'bit']
         if digital_gain is not None:
-            self.digital_gain = check_convert_units(digital_gain, 'e/count')
+            self.digital_gain = [check_convert_units(digital_gain, 'e/count'), 'e/count']
             if sitf is not None:
                 warnings.warn('The digital_gain and the sitf of a Camera object should not both be provided.')
-        if sitf is not None:
-            pass
+        self.digital_offset = [check_convert_units(digital_offset, 'count'), 'count']  # Initialise
+        if sitf is not None:  # Check and save the sitf
+            xd_check_convert_units(sitf, 'phe', default_units('phe'))
+            xd_check_convert_units(sitf, 'dn', default_units('dn'))
+            self.sitf = sitf
+        else:  # Create an sitf from the digital gain and offet inputs
+            if digital_gain is None:
+                warnings.warn('Estimating Camera digital gain from bit depth and FPA well capacity')
+                self.digital_gain = [self.fpa.wellcapacity[0] / 2.0**ad_bit_depth[0]]
+            slope = 1.0 / self.digital_gain[0]
+            # Compute the upper point of the sitf, taking A/D limit and well saturation into account
+            # Calculate digital numbers at the well capacity
+            dn_at_well_capacity = self.fpa.wellcapacity[0] * slope + self.digital_offset[0]
+            # Calculate the number of photelectrons at maximum DN
+            phe_at_max_dn = (2.0**self.ad_bit_depth[0] - self.digital_offset[0]) / slope
+            phe_max = np.minimum(phe_at_max_dn, self.fpa.wellcapacity[0]) # Can't have more photoelectrons than well cap.
+            dn_max = np.minimum(dn_at_well_capacity, 2.0**self.ad_bit_depth[0])  # Can't have more DN than 2^bits
+            self.sitf = xray.DataArray([self.digital_offset[0], dn_max],
+                                       [('phe', [0.0, phe_max], {'units': 'e', 'extrap_hi': 'sustain',
+                                                                 'extrap_lo': np.nan})],
+                                       name='dn', attrs={'units': 'count'})
+        if noise[1] == 'e':  # Convert to dn count using the sitf
+            self.noise = [noise[0] * slope, 'count']
         else:
-            pass
+            self.noise = check_convert_units(noise, 'count')
+        self.attrs = attrs  # user-defined info about this camera
 
 
 
