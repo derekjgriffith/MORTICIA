@@ -15,6 +15,7 @@ import xray
 from morticia import ureg, Q_, U_  # Import the pint units registry from parent
 from morticia.tools.xd import *  # Import additional tools for working with xray.DataArray objects
 from morticia.moglo import *  # Import global glossary/vocabulary
+import copy
 
 def xd_asr2sqe(asr):
     """ Convert absolute spectral response (ASR) to spectral quantum efficiency (SQE).
@@ -114,9 +115,7 @@ class FocalPlaneArray(object):
         :param operating_temperature:
         :return:
         """
-        check_convert_units(operating_temperature, 'degC')
-        # Set through self dictionary to avoid recursion
-        self.__temperature = operating_temperature[0]
+        self.__temperature = Scalar('temp', *operating_temperature)
         self.set_dark_current()
 
     def __init__(self, pitch, aperture, pixels, wellcapacity, readnoise, darkcurrent, dsnu, prnu, sqe=None, asr=None,
@@ -195,9 +194,9 @@ class FocalPlaneArray(object):
             q_darkcurrent *= Q_(self.pitchx * self.pitchy, 'mm^2')
             darkcurrent = [q_darkcurrent.magnitude, 'e/s']
         self.darkcurrent = Scalar('darkcurr', *darkcurrent)  # Actually e/s/pixel
-        self.darkcurrent_ref = self.darkcurrent[0]
-        self.dsnu = Scalar('dsnu', *dsnu)
-        self.prnu = Scalar('prnu', *prnu)
+        self.darkcurrent_ref = copy.deepcopy(self.darkcurrent)  # Keep an original copy of the dark current at t_ref
+        #self.dsnu = Scalar('dsnu', *dsnu)
+        #self.prnu = Scalar('prnu', *prnu)
         # Deal with ASR or SQE
         if (sqe is None) and (asr is None):
             warnings.warn('Either SQE or ASR (but not both) must be provided for FocalPlaneArray objects.')
@@ -213,9 +212,9 @@ class FocalPlaneArray(object):
             self.sqe = sqe
             self.asr = xd_sqe2asr(sqe)
         self.t_ref = Scalar('tref', *t_ref)
-
         self.darkcurrent_delta_t = Scalar('deltat', *darkcurrent_delta_t)
-        self.temperature = Scalar('temp', *temperature)  # Will also set dark current
+        self.__temperature = Scalar('temp', *temperature)
+        self.set_dark_current()  # Set the dark current according to the current operating temperature
         self.attrs = attrs  # Attach user-defined attributes
         # Calculate the horizontal and vertical MTF of the array
         self.compute_mtf()
@@ -228,7 +227,7 @@ class FocalPlaneArray(object):
         """
         temp_difference = self.temperature.data - self.t_ref.data
         factor = 2.0**(temp_difference / self.darkcurrent_delta_t.data)
-        self.darkcurrent.data = [self.darkcurrent_ref * factor, 'delta_degC']
+        self.darkcurrent.data = [self.darkcurrent_ref.data * factor, self.darkcurrent.units]
 
     def compute_mtf(self):
         """ Compute the MTF of a FocalPlaneArray. In this model, the FPA is assumed to be a rectangular array
@@ -236,12 +235,10 @@ class FocalPlaneArray(object):
         :return:
         """
         # First set up a set of spatial frequencies up to a factor of 20 times the pixel nyquist
-        nyquist_x = 1.0/(2.0*self.pitchx)  # cy/mm
-        self.nyquist_x = nyquist_x
-        nyquist_y = 1.0/(2.0*self.pitchy)  # cy/mm
-        self.nyquist_y = nyquist_y
-        nyquist_max = np.maximum(nyquist_x, nyquist_y)
-        nyquist_min = np.minimum(nyquist_x, nyquist_y)
+        nyquist_x = 1.0/(2.0*self.pitchx.data)  # cy/mm
+        self.nyquist_x = Scalar('nyqx', nyquist_x, '1/' + self.pitchx.units)
+        nyquist_y = 1.0/(2.0*self.pitchy.data)  # cy/mm
+        self.nyquist_y = Scalar('nyqy', nyquist_y, '1/' + self.pitchy.units)
         # Generate a relative set of spatial frequencies, with variable spacing up to 20 times relative nyquist
         spf_rel = np.hstack((np.linspace(0., 1, 10), np.linspace(1., 2, 9), np.linspace(2. ,3, 7),
                              np.linspace(3., 4, 7),  np.linspace(4., 5, 7), np.linspace(5. ,6, 5),
@@ -297,12 +294,12 @@ class Camera(object):
         :return:
         """
         self.fpa = fpa
-        self.ad_bit_depth = [check_convert_units(ad_bit_depth, 'bit'), 'bit']
+        self.ad_bit_depth = Scalar('bitdepth', *ad_bit_depth)
         if digital_gain is not None:
-            self.digital_gain = [check_convert_units(digital_gain, 'e/count'), 'e/count']
+            self.digital_gain = Scalar('dgain', *digital_gain)
             if sitf is not None:
                 warnings.warn('The digital_gain and the sitf of a Camera object should not both be provided.')
-        self.digital_offset = [check_convert_units(digital_offset, 'count'), 'count']  # Initialise
+        self.digital_offset = Scalar('doffset', *digital_offset)  # Initialise
         if sitf is not None:  # Check and save the sitf
             xd_check_convert_units(sitf, 'phe', default_units('phe'))
             xd_check_convert_units(sitf, 'dn', default_units('dn'))
@@ -310,23 +307,23 @@ class Camera(object):
         else:  # Create an sitf from the digital gain and offet inputs
             if digital_gain is None:
                 warnings.warn('Estimating Camera digital gain from bit depth and FPA well capacity')
-                self.digital_gain = [self.fpa.wellcapacity[0] / 2.0**ad_bit_depth[0]]
-            slope = 1.0 / self.digital_gain[0]
+                self.digital_gain = Scalar('dgain', self.fpa.wellcapacity.data / 2.0**self.ad_bit_depth.data, 'e/count')
+            slope = 1.0 / self.digital_gain.data
             # Compute the upper point of the sitf, taking A/D limit and well saturation into account
             # Calculate digital numbers at the well capacity
-            dn_at_well_capacity = self.fpa.wellcapacity[0] * slope + self.digital_offset[0]
+            dn_at_well_capacity = self.fpa.wellcapacity.data * slope + self.digital_offset.data
             # Calculate the number of photelectrons at maximum DN
-            phe_at_max_dn = (2.0**self.ad_bit_depth[0] - self.digital_offset[0]) / slope
-            phe_max = np.minimum(phe_at_max_dn, self.fpa.wellcapacity[0]) # Can't have more photoelectrons than well cap.
-            dn_max = np.minimum(dn_at_well_capacity, 2.0**self.ad_bit_depth[0])  # Can't have more DN than 2^bits
-            self.sitf = xray.DataArray([self.digital_offset[0], dn_max],
+            phe_at_max_dn = (2.0**self.ad_bit_depth.data - self.digital_offset.data) / slope
+            phe_max = np.minimum(phe_at_max_dn, self.fpa.wellcapacity.data) # Can't have more photoelectrons than well cap.
+            dn_max = np.minimum(dn_at_well_capacity, 2.0**self.ad_bit_depth.data)  # Can't have more DN than 2^bits
+            self.sitf = xray.DataArray([self.digital_offset.data, dn_max],
                                        [('phe', [0.0, phe_max], {'units': 'e', 'extrap_hi': 'sustain',
                                                                  'extrap_lo': np.nan})],
                                        name='dn', attrs={'units': 'count'})
         if noise[1] == 'e':  # Convert to dn count using the sitf
-            self.noise = [noise[0] * slope, 'count']
+            self.noise = Scalar('dnoise', noise[0] * slope, 'count')
         else:
-            self.noise = check_convert_units(noise, 'count')
+            self.noise = Scalar('dnoise', *noise)
         self.attrs = attrs  # user-defined info about this camera
 
 
