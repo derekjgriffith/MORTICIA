@@ -172,8 +172,57 @@ class Scalar(object):
             self.__units = default_units[mnemonic]
         self.__data = value.magnitude
 
-    def __repr__(self):
+    def __repr__(self):  #  TODO : Should we be using __repr__ or __str__
         return self.attrs['long_name'] + ' : ' + str(self.__data) + ' ' + self.__units
+
+    # TODO : Consider doing all arithmetical magic methods for Scalar class.
+    # TODO : Problem is that of catering for multiplcation of 2 scalar values, using isinstance considered unpythonic
+
+    def __pos__(self):
+        return +self.__data
+
+    def __neg__(self):
+        return -self.__data
+
+    def __abs__(self):
+        return abs(self.__data)
+
+    def __mul__(self, other):
+        if isinstance(other, Scalar):
+            return self.__data * other.__data
+        else:
+            return self.__data * other  # Hope that other defines multiplication with a simple scalar numeric
+
+    def __add__(self, other):
+        if isinstance(other, Scalar):
+            return self.__data + other.__data
+        else:
+            return self.__data + other
+
+    def __radd__(self, other):
+        if isinstance(other, Scalar):
+            return other.__data + self.__data
+        else:
+            return other + self.__data
+
+    def __sub__(self, other):
+        if isinstance(other, Scalar):
+            return self.__data * other.__data
+        else:
+            return self.__data * other
+
+    def __div__(self, other):
+        if isinstance(other. Scalar):
+            return self.__data / other.__data
+        else:
+            return self.__data / other
+
+    def __rdiv__(self, other):
+        if isinstance(other, Scalar):
+            return other.__data / self.__data
+        else:
+            return other / self.__data
+
 
 
 # Define a global exception for unit mismatch
