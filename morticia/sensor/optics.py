@@ -493,13 +493,12 @@ class Lens(object):
             warnings.warn('Wavelength units for optics.Lens transmission probably not in units of '+ trn.attrs['wvl_units'])
         self.trn = trn
         # Check units of efl and convert
-        self.efl = check_convert_units(efl, 'mm')  # convert efl units to mm
-        self.efl_units = 'mm'
-        self.fno = np.asarray(fno, dtype=np.float64)
+        self.efl = Scalar('efl', *efl)  # convert efl units to default units
+        self.fno = Scalar('fno', fno, '')  # fno is unitless
         self.trn = trn  # this should be an xray.DataArray
         if obs:
             if obs < 0.0 or obs > 1.0: warnings.warn('Obscuration ratio for optics.Lens must be from 0.0 to 1.0')
-            self.obs = np.asarray(obs, dtype=np.float64)
+            self.obs = Scalar('obs', obs, '')  # Obscuration is unitless
         else:
             self.obs = None  # no obscuration
         # Need to choose the wavelength grid on which to compute the MTF
@@ -589,22 +588,22 @@ class Lens(object):
         """
         if self.obs is not None:  # Compute the obscured MTF
             # Calculate w at each matrix site
-            w = 2.0 * self.fno * self.spf * 1.0e-6 * self.wvl
+            w = 2.0 * self.fno.data * self.spf * 1.0e-6 * self.wvl
             # print w
-            the_mtf = (autocorr_circle(1.0, w.data) - 2.0*crosscorr_circle(self.obs, w.data) + autocorr_circle(self.obs, w.data)) / \
-                                 (np.pi*(1.0 - self.obs**2.0))
+            the_mtf = (autocorr_circle(1.0, w.data) - 2.0*crosscorr_circle(self.obs.data, w.data) +
+                       autocorr_circle(self.obs.data, w.data)) / (np.pi*(1.0 - self.obs.data**2.0))
             the_mtf = np.maximum(the_mtf, 0.0)
             # print the_mtf
             # Recreate a data array
             the_mtf = xray.DataArray(the_mtf, [self.spf, self.wvl], name='mtf')
         else:  # Compute the unobscured MTF
-            phi = np.arccos(self.fno * self.spf * 1.0e-6 * self.wvl)
+            phi = np.arccos(self.fno.data * self.spf * 1.0e-6 * self.wvl)
             csphi = np.cos(phi) * np.sin(phi)
             the_mtf = 2.0 * (phi - csphi) / np.pi
             the_mtf.data[np.isnan(the_mtf.data)] = 0.0  # Set MTF to zero if nan
         # Compute the aberration/defocus transfer function (ATF)
         # Find the cutoff frequencies
-        cutoff = 1.0 / (self.fno * 1.0e-6 * self.wvl)  # cy/mm
+        cutoff = 1.0 / (self.fno.data * 1.0e-6 * self.wvl)  # cy/mm
         # Compute the spatial frequencies as a fraction of the cutoff (relative spf)
         nu = self.spf / cutoff
         # Compute the ATF according to Shannon
@@ -620,6 +619,10 @@ class Lens(object):
         the_mtf['fldz'].attrs.update({'units': 'mm', 'long_name': long_name['fldz']})
         the_mtf.name = 'mtf'
         self.mtf = the_mtf
+
+    def __repr__(self):
+        return (repr(self.efl) + '\n' + repr(self.fno) + '\n' + 'Attributes :' + '\n' +
+                repr([name for name in self.__dict__.keys() if not name.startswith('_')]))
 
 
 
