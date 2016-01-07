@@ -51,7 +51,13 @@ long_name = {
     'dsnu': 'Dark Signal Non-Uniformity',
     'tref': 'Reference Temperature',
     'temp': 'Temperature',
-    'deltat': 'Temperature Delta'
+    'deltat': 'Temperature Delta',
+    'nyqx': 'Nyquist Frequenct in x',
+    'nyqy': 'Nyquist Frequency in y',
+    'bitdepth': 'Bit Depth',
+    'dgain': 'Digital Gain',
+    'doffset': 'Digital Offset',
+    'dnoise': 'RMS Digital-Equivalent Noise'
 }
 
 # The following are intended to be the standard names as per the Climate and Forecast (CF) convention
@@ -90,7 +96,13 @@ default_units = {
     'dsnu': '%',  # Must actually be in percentage  This is a special case and needs special handling
     'tref': 'degC',
     'temp': 'degC',
-    'deltat': 'delta_degC'
+    'deltat': 'delta_degC',
+    'nyqx': '1/mm',
+    'nyqy': '1/mm',
+    'bitdepth': 'bit',
+    'dgain': 'e/count',
+    'doffset': 'count',
+    'dnoise': 'count'
 }
 
 class Scalar(object):
@@ -162,8 +174,6 @@ class Scalar(object):
 
     def __repr__(self):
         return self.attrs['long_name'] + ' : ' + str(self.__data) + ' ' + self.__units
-
-
 
 
 # Define a global exception for unit mismatch
