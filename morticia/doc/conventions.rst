@@ -63,3 +63,25 @@ Informational messages should printed to the terminal using the `logging.info()`
 Warnings that the user should take action on are provided through `warnings.warn()`. If the warning may relate to
 the fact that `MORTICIA` code should be improved or debugged, it should be issued through `logging.warning()`.
 `MORTICIA' internal modules do not define any logging handlers or filters. This is left to the user.
+
+General Terminology and Conventions
+===================================
+
+Camera and Imager
+-----------------
+A `Camera` object in MORTICIA does *not* include a Lens - it is a camera body, including an FPA and a
+digitisation stage (which may be fully integrated into the FPA chip - a so-called "camera on a chip").
+The `Imager` class incorporates a Camera and a Lens and is capable of producing actual imagery.
+
+Modulation Transfer Function Calculation
+----------------------------------------
+FOr image modelling purposes, it is necessary to know the full 2D MTF, whereas the normla situation is that the
+MTF is described using horizontal and vertical MTF profile functions. Suppose that :math:`\\eta` and :math:`\\xi` are
+ the spatial frequencies in the horizontal and vertical directions respectively and the :math:`M\\!T\\!F_\\eta(\\eta)` and
+:math:`M\\!T\\!F_\\xi(\\xi)` are the 1D MTFs in the horizontal and vertical directions. The 2D MTF is then computed as
+a rotationally weighted mean of the 1D MTFs as
+
+..math::
+    M\\!T\\!F(\\eta,\\xi)=\\frac{\\eta^{2}M\\!T\\!F_{\\eta}\\left(\\sqrt{\\eta^{2}+\\xi^{2}}\\right)+\\xi^{2}M\\!T\\!F_{\\xi}
+    \\left(\\sqrt{\\eta^{2}+\\xi^{2}}\\right)}{\\eta^{2}+\\xi^{2}}
+
