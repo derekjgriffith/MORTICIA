@@ -326,6 +326,43 @@ class Camera(object):
             self.noise = Scalar('dnoise', *noise)
         self.attrs = attrs  # user-defined info about this camera
 
+class Imager(object):
+    """ The Imager class encapsulates a complete imaging system with an optics.Lens and an electro.Camera.
+    The Imager class can provide the digital outputs of the Lens+Camera when looking into a scene that provides the
+    at-aperture (or at-sensor) radiance (the radiance apparent at the aperture of the Lens).
+
+    """
+
+    def __init__(self, lens, camera, attrs=None):
+        """ Constructor for Imager class.
+
+        :param lens: The optics.Lens for the Imager.
+        :param camera: The electro.Camera for the Imager.
+        :param attrs: User-defined dictionary of additional attributes, such as 'title', 'summary', 'long_name',
+            'manufacturer', especially those recommended for the netCDF conventions.
+        :return: an Imager object
+
+        """
+        # Mainly just save the input goodies and compute an Imager MTF
+        self.lens = lens
+        self.camera = camera
+        if attrs is None:
+            self.attrs = {}
+        else:
+            self.attrs = attrs
+        # Compute the multi-dimensional MTF for the camera
+        # The MTFs must be harmonised before taking the product
+        mtf_a, mtf_b = xd_harmonise_interp((self.lens.mtf, self.camera.fpa.mtf))
+        self.mtf = mtf_a * mtf_b
+        # self.mtf['spf'].attrs = {'units': '1/mm'}
+        # Will trim off spatial frequencies above the maximum spatial frequency of the Lens MTF
+        self.mtf = self.mtf.loc[dict(spf=slice(0.0, self.lens.spf_max.data))]
+        # Nest convert spatial frequencies to cycles/mrad
+
+    def __repr__(self):
+        return 'An Imager Class Object'  # TODO
 
 
+# When computing the 2D MTF from MTFs in x and y, say f(x) and g(y), then weight
+# w(x,y) = x^2 f(r)/r^2 + y^2 g(r)/r^2
 
