@@ -117,7 +117,10 @@ def xd_harmonised_product(xd_list):
     for xd_arr in xd_list:
         #main_attrs.update(xd_arr.attrs)
         for axis in xd_arr.dims:
-            axis_attrs[axis].update(xd_arr[axis].attrs)  # Accumulate the attributes for each axis
+            if axis in axis_attrs:
+                axis_attrs[axis].update(xd_arr[axis].attrs)  # Accumulate the attributes for each axis
+            else:
+                axis_attrs[axis] = xd_arr[axis].attrs
             if not axis in unit_dict:
                 if 'units' in xd_arr[axis].attrs:
                     unit_dict[axis] = xd_arr[axis].attrs['units']
@@ -177,4 +180,18 @@ def xd_check_convert_units(xd, axis_name, preferred_units):
         Q_values = Q_values.to(preferred_units)
         xd[axis_name].data = Q_values.magnitude
         xd[axis_name].attrs['units'] = preferred_units
+
+
+def xd_attrs_update(xd_list):
+    """ Update long_name and units attributes of all axes in an xray.DataArray
+    :param xd: Input xray.DataArray
+    :return:
+    """
+
+    for xd_arr in xd_list:
+        xd_arr.attrs['long_name'] = long_name[xd_arr.attrs['name']]
+        for axis in xd_arr.dims:
+            xd_arr[axis].attrs['long_name'] = long_name[axis]  # Will blow up if axis mnemonic name not found
+            xd_arr[axis].attrs['units'] = default_units[axis]  # Likewaise if units not found for this axis name
+
 
