@@ -357,7 +357,11 @@ class Imager(object):
         # self.mtf['spf'].attrs = {'units': '1/mm'}
         # Will trim off spatial frequencies above the maximum spatial frequency of the Lens MTF
         self.mtf = self.mtf.loc[dict(spf=slice(0.0, self.lens.spf_max.data))]
-        # Nest convert spatial frequencies to cycles/mrad
+        self.mtf.attrs['name'] = 'mtf'
+        # Next convert spatial frequencies to cycles/mrad
+        self.mtf['spf'].data = self.mtf['spf'].data * self.lens.efl.data / 1000.0
+        self.mtf = self.mtf.rename({'spf': 'spfa'})  # Now dealing with angular spatial frequencies
+        xd_attrs_update([self.mtf])  # Update long_names and units
 
     def __repr__(self):
         return 'An Imager Class Object'  # TODO
