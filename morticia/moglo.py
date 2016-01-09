@@ -59,7 +59,13 @@ long_name = {
     'dgain': 'Digital Gain',
     'doffset': 'Digital Offset',
     'dnoise': 'RMS Digital-Equivalent Noise',
-    'spfcut': 'Diffraction Cutoff Spatial Frequency'
+    'spfcut': 'Diffraction Cutoff Spatial Frequency',
+    'vza': 'View Zenith Angle',
+    'vaz': 'View Azimuth Angle',
+    'pza': 'Propagation Zenith Angle',
+    'umu': 'Cosine of the Propagation Zenith Angle',
+    'phi': 'Propagation Azimuth Angle',
+    'phi0': 'Solar Propagation Azimuth Angle'
 }
 
 # The following are intended to be the standard names as per the Climate and Forecast (CF) convention
@@ -96,18 +102,24 @@ default_units = {
     'darkcurr': 'e/s',  # per pixel
     'prnu': '%',  # Must actually be in percentage  This is a special case and needs special handling
     'dsnu': '%',  # Must actually be in percentage  This is a special case and needs special handling
-    'tref': 'degC',
-    'temp': 'degC',
-    'deltat': 'delta_degC',
-    'nyqx': '1/mm',
-    'nyqy': '1/mm',
+    'tref': 'degC',  # Reference temperature
+    'temp': 'degC',  # Operating temperautre
+    'deltat': 'delta_degC',  # Change in temperature
+    'nyqx': '1/mm',  # Nyquist x
+    'nyqy': '1/mm',  # Nyquist y
     'bitdepth': 'bit',
     'dgain': 'e/count',
     'doffset': 'count',
     'dnoise': 'count',
     'mtf': '',
     'spfcut': '1/mm',
-    'spfa': '1/mrad'
+    'spfa': '1/mrad',
+    'vza': 'deg', ## View zenith angle
+    'vaz': 'deg',  # View azimuth angle
+    'pza': 'deg',  # Propagation zenith angle
+    'umu': '',  # Cosine of the propagation zenith
+    'phi': 'deg',  # Propagation azimuth angle
+    'phi0': 'deg'  # Solar propagation azimuth angle
 }
 
 class Scalar(object):
