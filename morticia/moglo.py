@@ -19,7 +19,8 @@ long_name = {
     'irr': 'Irradiance',
     'specrad': 'Spectral Radiance',
     'specirr': 'Spectral Irradiance',
-    'spf': 'Spatial Frequency',
+    'spf': 'Linear Spatial Frequency',
+    'spfa': 'Angular spatial Frequency',
     'mtf': 'Modulation Transfer Function',
     'otf': 'Optical Transfer Function',
     'ptf': 'Phase Transfer Function',
@@ -52,12 +53,13 @@ long_name = {
     'tref': 'Reference Temperature',
     'temp': 'Temperature',
     'deltat': 'Temperature Delta',
-    'nyqx': 'Nyquist Frequenct in x',
+    'nyqx': 'Nyquist Frequency in x',
     'nyqy': 'Nyquist Frequency in y',
     'bitdepth': 'Bit Depth',
     'dgain': 'Digital Gain',
     'doffset': 'Digital Offset',
-    'dnoise': 'RMS Digital-Equivalent Noise'
+    'dnoise': 'RMS Digital-Equivalent Noise',
+    'spfcut': 'Diffraction Cutoff Spatial Frequency'
 }
 
 # The following are intended to be the standard names as per the Climate and Forecast (CF) convention
@@ -102,7 +104,10 @@ default_units = {
     'bitdepth': 'bit',
     'dgain': 'e/count',
     'doffset': 'count',
-    'dnoise': 'count'
+    'dnoise': 'count',
+    'mtf': '',
+    'spfcut': '1/mm',
+    'spfa': '1/mrad'
 }
 
 class Scalar(object):
