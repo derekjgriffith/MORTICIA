@@ -69,6 +69,9 @@ import os
 import easygui  # For file open dialogs
 import numpy as np
 import re
+import warnings
+from morticia.moglo import *
+from morticia.tools.xd import *
 
 uvsOptions = writeLex.loadOptions()  # Load all options into a global dictionary of uvspec option specifications.
 
@@ -811,9 +814,10 @@ class RadEnv():
     specified in the file /libsrc_f/DISORT.MXD. If these values are changed, DISORT and uvspec must be recompiled. If
     the values are set too large, the memory requirements could easily exceed your computer's limit (there is
     currently no dynamic memory allocation in DISORT). The situation for the cdisort solver is less clear.
+
     """
 
-    def __init__(self, base_case, n_pol, n_azi, mxumu=48, mxphi=19):
+    def __init__(self, base_case, n_pol, n_azi, mxumu=48, mxphi=19, hemi=False):
         """ Create a set of uvspec runs covering the whole sphere to calculate a full radiant environment map.
         Where the base_case is the uvspec case on which to base the environmental map, Name is the name to give the
         environmental map and n_pol and n_azi are the number of polar and azimuthal sightline angles to generate. The
@@ -824,14 +828,55 @@ class RadEnv():
         the solver is not in the DISORT/POLRADTRAN family.
 
         :param base_case: librad.Case object providing the case on which the environment map is to be based
-        :param n_pol: Number of polar angles (umu angles)
+        :param n_pol: Number of polar angles (view/propagation zenith angles)
         :param n_azi: Number of azimuthal angles
         :param mxumu: Maximum number of polar angles per case
         :param mxphi: Maximum number of azimuthal angles per case
+        :param hemi: If set True, will generate only a single hemisphere being on one side of
+            the solar principle plane. Default is False i.e. the environment map covers the full sphere
 
         The solver cdisort may have dynamic memory allocation, so the warning is still issued because the situation
         is less clear.
+
+        A note about radiative propagation angles and viewing angles, which are 180 deg opposite to each other.
+        For radiance calculations define the cosine of the viewing zenith angle
+        `umu` and the sensor azimuth `phi` and don't forget to also specify the solar azimuth
+        `phi0`. `umu` > 0 means sensor looking downward (e.g. a satellite), `umu` < 0 means looking
+        upward. `phi` = `phi0` indicates that the sensor looks into the direction of the sun,
+        `phi` - `phi0` = 180 means that the sun is in the back of the sensor.
+
+        The value of `umu` is the cosine of the propagation zenith angle. The value of `phi` is the true azimuth of
+        the propagation direction.
+
+        For all one-dimensional solvers the absolute azimuth does not matter, but only the relative azimuth
+        `phi` - `phi0`.
         """
+        # Require that n_pol be even
+        # This is to ensure that there is no umu = 0 (horizontal direction, illegal in libRAdtran)
+        if n_pol % 2:  # check comment below about Matlab polar angles
+            warnings.warn('Input n_pol to librad.RadEnv must be even. Increased by 1.')
+            n_pol += 1
+        view_zen_angles = np.linspace(0.0, 180.0, n_pol)  # Viewing straight down is view zenith angle of 180 deg
+        # The following line comes from Matlab - why only one half ?
+        # TODO : Resolve question as to why only one half of angles in polar-angles
+        # TODO : Also look at linspace for azimuth angles - want to avoid duplication (wrap)
+        # One option is to add one point at 360 and then delete it.
+        # another option is to avoid wrap by
+        prop_zen_angles = np.linspace(-np.pi, 0.0, n_pol)  # Radiation travelling straight up is propagation zenith angle of 0
+        umu = np.cos(prop_zen_angles)  # Negative umu is upward-looking, downwards propagating
+        # TODO : Is it necessary to have the complete sphere
+        # TODO : is it not sufficient to have a solar prinicple plane hemisphere ?
+        if hemi:
+            prop_azi_angles = np.linspace(0.0, 180.0, n_azi + 1)[0:-1]  # TODO : This has a wrap problem ?
+            view_azi_angles = np.linspace(-180.0, 0.0, n_azi + 1)[0:-1]
+        else:
+            prop_azi_angles = np.linspace(0.0, 360.0, n_azi + 1)[0:-1]
+            view_azi_angles = np.linspace(-180.0, 180.0,  n_azi + 1)[0:-1]
+
+        phi = xd_identity(prop_azi_angles, 'phi')
+        # Calculate number of batches in azimuthal and polar anlges
+        n_azi_batch = np.ceil(np.float(len(prop_azi_angles))/mxphi)
+        n_pol_batch = np.ceil(np.float(len(prop_zen_angles))/mxumu)
 
 
 
