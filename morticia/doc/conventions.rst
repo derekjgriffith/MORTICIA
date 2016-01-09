@@ -17,10 +17,12 @@ These functions perform axis harmonisation as well as unit checking and conversi
 
 The axis harmonisation functions for `xray.DataArray` objects requires that all axes have numeric coordinates.
 This applies also to axes that would benefit from having text labels. Text labels would be more appropriate for
-axes such as spectral channels and filed orientation for MTF data. In the case of spectral channels (with axis label
-`chn`) will be channel numbers (starting from 0).
+axes such as spectral channels and field orientation for MTF data. In the case of spectral channels (with axis label
+`chn`) will be channel numbers. These channel numbers would normally start from 0, but in some cases, such as when
+using a sub-range of correlated-k band models (e.g. `kato` or `fu` in libRadtran) the channel numbers would be a
+range of integers.
 
-This curently applies equally well to timeseries. FOr incorporation in multi-axis `xray.DataArray` objects, timestamps
+This curently applies equally well to timeseries. For incorporation in multi-axis `xray.DataArray` objects, timestamps
 must be converted to Julian date. A list of labels for such axes can and should be maintained in the `xray.DataArray`
 attributes (`attrs`).
 
@@ -88,6 +90,9 @@ and if the sagittal spatial frequency is defined as :math:`\rho=\sqrt{\eta^{2}+\
 
 .. math::
     M\!T\!F(\eta,\xi)=\frac{\eta^{2}M\!T\!F_{\eta}\left(\rho\right)+\xi^{2}M\!T\!F_{\xi}\left(\rho\right)}{\rho^{2}}.
+
+It is assumed here that the horizontal and vertical MTFs are symmetrical about the origin.
+
 
 
 
