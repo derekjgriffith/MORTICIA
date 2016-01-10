@@ -72,6 +72,7 @@ import re
 import warnings
 from morticia.moglo import *
 from morticia.tools.xd import *
+import copy
 
 uvsOptions = writeLex.loadOptions()  # Load all options into a global dictionary of uvspec option specifications.
 
@@ -863,6 +864,7 @@ class RadEnv():
         # One option is to add one point at 360 and then delete it.
         # another option is to avoid wrap by
         prop_zen_angles = np.linspace(-np.pi, 0.0, n_pol)  # Radiation travelling straight up is propagation zenith angle of 0
+        view_zen_angles = np.linspace(0.0, 180.0, n_pol)
         umu = np.cos(prop_zen_angles)  # Negative umu is upward-looking, downwards propagating
         # TODO : Is it necessary to have the complete sphere
         # TODO : is it not sufficient to have a solar prinicple plane hemisphere ?
@@ -873,10 +875,45 @@ class RadEnv():
             prop_azi_angles = np.linspace(0.0, 360.0, n_azi + 1)[0:-1]
             view_azi_angles = np.linspace(-180.0, 180.0,  n_azi + 1)[0:-1]
 
-        phi = xd_identity(prop_azi_angles, 'phi')
+        #
+        phi = prop_azi_angles
+        # umu = xd_identity(umu, 'umu')
         # Calculate number of batches in azimuthal and polar anlges
-        n_azi_batch = np.ceil(np.float(len(prop_azi_angles))/mxphi)
-        n_pol_batch = np.ceil(np.float(len(prop_zen_angles))/mxumu)
+        n_azi_batch = np.int(np.ceil(np.float(len(prop_azi_angles))/mxphi))
+        n_pol_batch = np.int(np.ceil(np.float(len(prop_zen_angles))/mxumu))
+        # Create an list of lists with all these batches of librad.Case
+        self.cases = [[copy.deepcopy(base_case) for i_azi in range(n_azi_batch)] for j_pol in range(n_pol_batch)]
+        # TODO : Take care of phi0 input in the case of hemi=True
+        for iazi, iazi_start in enumerate(range(0, len(phi), mxphi)):
+            batch_azi = phi[iazi_start:np.minimum(iazi_start+mxphi, len(phi))]
+            for ipol, ipol_start in enumerate(range(0, len(umu), mxumu)):
+                batch_pol = umu[ipol_start:np.minimum(ipol_start+mxumu, len(umu))]
+                # Set the umu and phi keyword parameters
+                self.cases[ipol][iazi].alter_option(['phi'] + [str(x) for x in batch_azi])
+                #print iazi, ipol,
+                #print len([str(x) for x in batch_azi]),
+                #print len([str(x) for x in batch_pol])
+                #print ['azi'] + [str(x) for x in batch_pol]
+                self.cases[ipol][iazi].alter_option(['umu'] + [str(x) for x in batch_pol])
+                self.cases[ipol][iazi].infile = (self.cases[ipol][iazi].infile[:-4] +
+                                                 '_{:04d}_{:04d}.INP'.format(ipol, iazi))
+                self.cases[ipol][iazi].outfile = (self.cases[ipol][iazi].outfile[:-4] +
+                                                 '_{:04d}_{:04d}.OUT'.format(ipol, iazi))
+                if hemi:  # Doing only one hemisphere along solar principal plane
+                    self.cases[ipol][iazi].alter_option(['phi0', '0.0'])  # Sun shining towards North
+        self.hemi = hemi
+        self.n_azi = n_azi
+        self.n_pol = n_pol
+        self.n_azi_batch = n_azi_batch
+        self.n_pol_batch = n_pol_batch
+        self.phi = xd_identity(prop_azi_angles, 'phi')
+        self.umu = xd_identity(umu, 'umu')
+        self.pza = xd_identity(np.linspace(-180.0, 0.0, n_pol), 'pza')
+        self.vza = xd_identity(view_zen_angles, 'vza')
+        self.vaz = xd_identity(view_azi_angles, 'vaz')
+
+
+
 
 
 
