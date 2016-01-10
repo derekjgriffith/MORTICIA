@@ -359,12 +359,16 @@ class Imager(object):
         self.mtf = self.mtf.loc[dict(spf=slice(0.0, self.lens.spf_max.data))]
         self.mtf.attrs['name'] = 'mtf'
         # Next convert spatial frequencies to cycles/mrad
+        # TODO : Reconsider if this is the best idea
         self.mtf['spf'].data = self.mtf['spf'].data * self.lens.efl.data / 1000.0
         self.mtf = self.mtf.rename({'spf': 'spfa'})  # Now dealing with angular spatial frequencies
         xd_attrs_update([self.mtf])  # Update long_names and units
+        # TODO : Consider also changing defocus to dioptres
+        # TODO : This is simply dividing the fldz value by efl^2/1000
+
 
     def __repr__(self):
-        return 'An Imager Class Object'  # TODO
+        return 'An Imager Class Object'  # TODO : Something more informative here
 
 
 # When computing the 2D MTF from MTFs in x and y, say f(x) and g(y), then weight
