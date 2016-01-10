@@ -247,7 +247,8 @@ def atf(spf, wvl, fno, rms_wavefront_error):
     .. math::
         M\\!T\\!F_{W}(f)=1-\\left(\\frac{W}{0.18}\\right)^{2}\\left[1-4\\left(\\frac{f}{f_{c}}-\\frac{1}{2}\\right)^{2}\\right]
 
-    where the diffraction cutoff (or "critical") frequency is :math:`f_0`.
+    where the diffraction cutoff (or "critical") frequency is :math:`f_c`.
+
     .. seealso:: optics.pmtf_obs_wfe
     """
     rms_wavefront_error = np.abs(rms_wavefront_error)  # Force positive
@@ -521,6 +522,7 @@ class Lens(object):
         # This depends on the cutoff (or "critical") frequency mainly.
         # Determine the minimum and maximum cutoff frequencies
         cutoff_max = 1.0 / (1.0e-6 * wvl_min * fno)  # wvl assumed now in nm, freq in cy/mm
+        self.cutoff_max = Scalar('spfcut', cutoff_max, '1/mm')
         cutoff_min = 1.0 / (1.0e-6 * wvl_max * fno)  # cy/mm
         spf_step = cutoff_min / 12.0  # Want at least 15 samples up to minimum cutoff
         n_steps_spf = cutoff_max * 1.1 / spf_step  # Want sampling up to 1.1 times maximum spf
@@ -528,6 +530,7 @@ class Lens(object):
         # Create a DataArray of spatial frequencies
         spf = xd_identity(spf, 'spf')
         self.spf = spf
+        self.spf_max = Scalar('spf', np.max(spf.data), '1/mm')
         # Need to compute the defocus grid on which to compute the MTF
         # There is no real point in computing MTF using the Shannon formula
         # if the total wavefront deformation is greater than 0.18 waves.
