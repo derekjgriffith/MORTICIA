@@ -9,18 +9,22 @@ __author__ = 'DGriffith'
 
 import numpy as np
 import xray
-from .. import ureg, Q_, U_
+from morticia import ureg, Q_, U_
 from scipy.interpolate import RegularGridInterpolator, interpn
 import warnings
 from operator import mul, add
-from ..moglo import *  # Import morticia global vocab, exceptions etc.
+from morticia.moglo import *  # Import morticia global vocab, exceptions etc.
 
-def xd_identity(np_vector, axis_name, attrs=None):
+def xd_identity(np_vector, axis_name, units=None, attrs=None):
     """ Create an identity xray.DataArray. That is, a DataArray vector in which both the values and axis
         coordinates are identical.
 
     :param np_vector: Vector of numeric data
     :param axis_name: Name for the axis - must be in vocabulary defined in moglo.py
+    :param units: The units of the np_vector data. If the units are not in the default units, the Python pint package
+        is used to make a conversion. If units are not given, it is assumed that the data is already in the
+        default units for the quantity named in axis_name. It is better to provide the units if in any way
+        unsure.
     :param attrs: Dictionary of additional attributes to attach to the DataArray
     :return:
     """
@@ -31,7 +35,12 @@ def xd_identity(np_vector, axis_name, attrs=None):
     if axis_name in default_units:
         the_units = default_units[axis_name]
     else:
-        the_units = ''
+        the_units = ''  # Assumed to be unitless quantity
+    if units is None:
+        units = the_units
+    values = Q_(np_vector, units)  # Create a pint quantity with the given units
+    values.to(the_units)  # actually the default units
+    np_vector = values.magnitude
     if attrs is not None:
         the_attrs = attrs
     else:
@@ -189,7 +198,7 @@ def xd_attrs_update(xd_list):
     """
 
     for xd_arr in xd_list:
-        xd_arr.attrs['long_name'] = long_name[xd_arr.attrs['name']]
+        xd_arr.attrs['long_name'] = long_name[xd_arr.name]
         for axis in xd_arr.dims:
             xd_arr[axis].attrs['long_name'] = long_name[axis]  # Will blow up if axis mnemonic name not found
             xd_arr[axis].attrs['units'] = default_units[axis]  # Likewaise if units not found for this axis name
