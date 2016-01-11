@@ -1,4 +1,12 @@
 __author__ = 'DGriffith, ARamkilowan'
+
+""" This module provides a variety of utilities related to radiometry, including, but not limited to
+- Creating, writing and reading of MODTRAN-format .flt (filter) files commonly used to to represent
+    spectral power/density functions such as transmittances, reflectance or spectral responsivity functions (SRF).
+    The original purpose was to specify sensor spectral response functions (i.e. more than just a "filter").
+-
+"""
+
 import numpy as np
 import pandas as pd
 import xray
@@ -6,6 +14,7 @@ import StringIO
 import matplotlib.pyplot as plt
 import easygui  # for simple file/open dialogs and such
 import re
+from morticia.tools.xd import *
 
 """ This module provides much of functionality related radiometry required by MORTICIA.
 Included here is functionality for :
@@ -371,6 +380,7 @@ class Flt:
 
     def plot(self):
         """ Plot a MODTRAN-style set of filter/SRF curves
+
         :return: None
         """
         plt.hold(True)
@@ -388,14 +398,49 @@ class Flt:
         else:
             plt.xlabel('Wavelength [' + self.units + ']')
         if len(self.filterheaders) <= 12:
-            plt.legend(self.filterheaders, loc=2)
+            plt.legend(self.filterheaders, loc='best')
         plt.grid()
         plt.hold(False)
 
-    def flt_as_datarrays(self):
+    def flt_as_xd(self):
         """ Convert an Flt class object to a list of xray DataArray objects
-        :return: The set of Flt filters as an xray DataArray
+
+        :return: The set of Flt filters as a list of xray DataArray objects, with a wavelength coordinate
+            axis ('wvl', long_name = 'Wavelength'
         """
+        xd_flt_list = []
+        for ifilt in range(self.nfilters):
+            wvl = xd_identity(self.filters[ifilt][:,0], 'wvl', self.units)
+            #print wvl
+            xd_flt_list.append(xray.DataArray(self.filters[ifilt][:,1], [wvl], name='srf',
+                                                attrs={'long_name': long_name['srf'],
+                                                       'labels': self.filterheaders[ifilt],
+                                                       'units': default_units['srf'],
+                                                       'title': self.name},
+                                                ))
+        return xd_flt_list
+
+    def flt_as_xd_harmonised(self):
+        """ Convert the Flt class object into a single, wavelength-harmonised xray.DataArray.
+
+        :return: The set of Flt filters as a single, wavelength-harmonised xray.DataArray object. The filter
+            headers are returned in an attribute called 'labels'. The fileheader of the Flt object is
+            returned in an attribute called 'title' (netCDF recommendation)
+        """
+        xd_flt_list = self.flt_as_xd()  # Create a list of xray.DataArray objects
+        # Harmonise the wavelength axes
+        xd_flt_list_harmonised = xd_harmonise_interp(xd_flt_list)
+        xd_attrs_update(xd_flt_list_harmonised)  # Update the attributes
+        # Compile the list into a single object
+        flt_data = np.vstack([xd_flt_list_harmonised[ifilt].data for ifilt in range(len(xd_flt_list))])
+        xd_flt_harmonised = xray.DataArray(flt_data.T, [(xd_flt_list_harmonised[0]['wvl']),
+                                                      ('chn', range(len(xd_flt_list)),
+                                                         {'labels': self.filterheaders})],
+                                           name='srf',
+                                           attrs={'long_name': long_name['srf'],
+                                                  'units': default_units['srf'],
+                                                  'title': self.name})
+        return xd_flt_harmonised
 
 
 
