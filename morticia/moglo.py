@@ -119,7 +119,8 @@ default_units = {
     'pza': 'deg',  # Propagation zenith angle
     'umu': '',  # Cosine of the propagation zenith
     'phi': 'deg',  # Propagation azimuth angle
-    'phi0': 'deg'  # Solar propagation azimuth angle
+    'phi0': 'deg',  # Solar propagation azimuth angle
+    'srf': ''
 }
 
 class Scalar(object):
