@@ -1,2 +1,0 @@
-Title: Terrestrial spectrum (REPTRAN)
-The downward terrestrial irradiance at the Earth's surface for a cloudless sky. The representative wavelengths parameterization is utilized. The parameterization data need to be installed.
