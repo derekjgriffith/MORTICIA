@@ -31,6 +31,17 @@ required to perform twilight computations.
 # libRadtran Downloads
 Further information and downloads are available at [libRadtran website](http://www.libradtran.org).
 
+# radute - Radiometry Utilities
+The moritica.rad package also inlcudes a number of utilities related to radiometry. This includes
+
+- Creating, reading and writing of MODTRAN-style .flt files for specification of sensor Spectral Response
+    functions (SRFs)
+- Conversion of .flt class objects to lists of xray.DataArray objects for use in the Spectra class.
+- The RadEnv class for computation and handling of Radiant Environment Maps (REMs).
+
+
+
+
 
  
 
