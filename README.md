@@ -14,7 +14,7 @@ Detected, Recognised or Identified (DRI)
   
 
  + Physically accurate rendering of targets of interest in atmospheric conditions that are statistically representative 
- of the theatre of operations.
+  of the theatre of operations.
  + Statistically valid Monte-carlo simulations of the Detect, Recognition and Identification (DRI) ranges of such targets
  in the theatre of operations.
  
@@ -35,15 +35,28 @@ Detected, Recognised or Identified (DRI)
  conditions can be chosen explicitly or generated randomly on the basis of the theatre climatology.
  
 ## Tools
- MORTICIA tools include utilities for building 
+ ``MORTICIA`` tools include utilities for building 
  + theatre boundaries and climatologies,
  + theatre topography
  + target geometry and optical characteristics
  + sensor characteristics
+ + radiant environment maps (using the libRadtran radiative transfer code)
  
  
 ## Documentation
- Code documentation for MORTICIA is generated using [Sphinx](http://sphinx-doc.org).
+ Code documentation for ``MORTICIA`` is generated using [Sphinx](http://sphinx-doc.org).
+ 
+## Installation and Requirements
+ ``MORTICIA`` has been developed largely in Python 2.7 and has not yet been testing in Python 3.X.
+ A working installation of [libRadtran](http://www.libradtran.org) is required to compute radiant environment
+ maps and atmospheric transmittance. In the Monte carlo/statistical mode of operation, a compute cluster
+ is generally required to achieve adequate sampling in a reasonable time. Parallel computation is performed
+ using the [`ipyparallel`](https://ipyparallel.readthedocs.org/en/latest/) package, which works in 
+ IPython/Jupyter notebooks as well as other Python launch modes.
+ 
+``MORTICIA`` has been developed using the [Anaconda](https://www.continuum.io/downloads) distribution from
+[Continuum Analytics](https://www.continuum.io/) and this is the recommended distribution for ``MORTICIA`` users.
+In principle, any Python 2.7 installation that can meet the dependencies should also work. 
  
  
 ## Repository
