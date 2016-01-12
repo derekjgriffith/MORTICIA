@@ -2,11 +2,13 @@
 Note : MORTICIA is in the very early stages of development. The following description is based on the desired result.
 ## Introduction
 MORTICIA is Monte-carlo Optical Rendering for Theatre Investigations of Capability under the Influence of the Atmosphere, 
-an open-source optical surveillance modelling framework written mainly in Python.
+an open-source optical remote sensing and surveillance modelling framework written mainly in Python.
 
   The theatre of operations is a geographical region defined by a polygon in which an optical surveillance system or 
-systems are deployed or to be deployed. Besides the engineering characteristics of the optical surveillance system, 
-the atmosphere plays a key role in determining the range at which targets can be Detected, Recognised or Identified (DRI).
+systems are deployed or to be deployed. Besides the engineering characteristics of the optical remote sensing or 
+surveillance system, the atmosphere plays a key role in determining system effectiveness. In the case of a 
+surveillance system, effectiveness may be quantified in terms of the range at which targets can be 
+Detected, Recognised or Identified (DRI) 
   
   Some of the key capabilities of MORTICIA are:
   
