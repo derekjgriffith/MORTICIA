@@ -20,7 +20,8 @@ This applies also to axes that would benefit from having text labels. Text label
 axes such as spectral channels and field orientation for MTF data. In the case of spectral channels (with axis label
 `chn`) will be channel numbers. These channel numbers would normally start from 0, but in some cases, such as when
 using a sub-range of correlated-k band models (e.g. `kato` or `fu` in libRadtran) the channel numbers would be a
-range of integers.
+range of integers. The convention in ``MORTICIA`` is that the text labels then be placed in an axis attribute called
+`labels`.
 
 This curently applies equally well to timeseries. For incorporation in multi-axis `xray.DataArray` objects, timestamps
 must be converted to Julian date. A list of labels for such axes can and should be maintained in the `xray.DataArray`
@@ -46,12 +47,18 @@ See the ``MORTICIA`` notebooks for examples of creating `xray` objects with unit
 
 The UCAR/Unidata attributes for NetCDF file elements considered as highly recommended are
 
-- `units`
-- `long_name`
-- `standard_name`
+- `units`, units expressed as a string - SI units preferred
+- `long_name`, such as may commonly be used to label graph axes
+- `standard_name`, the standard name that may be used in a specific scientific community
+
+and for ``MORTICIA``, also
+
+- `title`, such as may be used on the title of a plot of the data
+- `labels`, such as may be used in the legends of a plot
 
 The `standard_name` should come from the CF (Climate and Forecasting) name glossary, or the project should have
-its own vocabulary of short, standard and long names for all variables.
+its own vocabulary of short, standard and long names for all variables. These are to be found in the
+`morticia.moglo.py` module and may be expanded or updated from time to time.
 
 A pint global unit registry is created when `morticia` or any sub-package is imported. Any other `morticia` paackages
 or modules share a single global unit registry called ureg. Convenience functions ``Q_`` for ``Quantity`` and ``U_`` for
@@ -92,6 +99,8 @@ and if the sagittal spatial frequency is defined as :math:`\rho=\sqrt{\eta^{2}+\
     M\!T\!F(\eta,\xi)=\frac{\eta^{2}M\!T\!F_{\eta}\left(\rho\right)+\xi^{2}M\!T\!F_{\xi}\left(\rho\right)}{\rho^{2}}.
 
 It is assumed here that the horizontal and vertical MTFs are symmetrical about the origin.
+
+
 
 
 
