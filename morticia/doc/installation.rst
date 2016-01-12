@@ -1,6 +1,24 @@
+Installation and Requirements
+=============================
+ ``MORTICIA has`` been developed largely in Python 2.7 and has not yet been tested in Python 3.X.
+ A working installation of [libRadtran](http://www.libradtran.org) is required to compute radiant environment
+ maps and atmospheric transmittance. In the Monte carlo/statistical mode of operation, a compute cluster
+ is generally required to achieve adequate sampling in a reasonable time. Parallel computation is performed
+ using the [`ipyparallel`](https://ipyparallel.readthedocs.org/en/latest/) package, which works in
+ IPython/Jupyter notebooks as well as other Python launch modes. In principle, with ``ipyparallel`` it is possible
+ to run the Python worker engines on any network-accessible compute resource. This means that it is possible to
+ utilise a Linux-based compute cluster with a libRadtran installation in the background, while all foreground
+ work is performed on a Windows machine, for example. However, this setup has not yet been tested and may require
+ significant setup to implement. All the required information to do this is provided in the ``ipyparallel``
+ documentation.
+
 MORTICIA Dependencies
 =====================
-MORTICIA makes use of a variety of other Python packages. The most important of these are:
+``MORTICIA`` has been developed using the [Anaconda](https://www.continuum.io/downloads) distribution from
+[Continuum Analytics](https://www.continuum.io/) and this is the recommended distribution for ``MORTICIA`` users.
+In principle, any Python 2.7 installation that can meet the dependencies should also work.
+
+``MORTICIA`` makes use of a variety of other Python packages. The most important of these are:
 
 - ``numpy`` and ``scipy`` : The mainstay of technical computing in Python.
 - ``matplotlib`` : Plotting.
@@ -13,4 +31,5 @@ MORTICIA makes use of a variety of other Python packages. The most important of 
   so that there is no significant performance impact of any unit checking.
 - ``astropy`` and ``pyephem`` : for various astronomy-related calculations (sun, moon position).
 - ``easygui`` is used for simple file/open and save dialogs.
-- ``xray`` is used for multi-dimensional data hypercubes with named axes.
+- ``ipyparallel`` is used for parallel computation in IPython/Jupyter notebooks as well as other Python launch modes.
+
