@@ -808,6 +808,43 @@ class Case():
             #         if self.uu.shape[1] / self.n_wvl > 1:  # if multiple output levels, reshape the radiance data appropriately
             #             self.uu = self.uu.reshape((self.n_umu, self.n_wvl, -1), order='F')
 
+    def run(self, stderr_to_file=False, write_input=True, read_output=True, block=True):
+        """ Run the libRadtran/uvspec case.
+
+        This will run the libRadtran/uvspec Case instance provided. Some control is provided regarding the handling of
+        the standard error output from uvspec. This function only returns when uvspec terminates.
+
+        :param stderr_to_file: Controls whether standard error output goes to the screen or is written to a file
+            having the same name as the input/output files, except with the extension .ERR.
+        :param write_input: Controls whether the input file is writte out before execution. Default is True.
+        :param read_output: Controls whether the output file is read after execution. Default is True.
+        :param block: By default, this method waits until uvspec terminates. If set False, the uvspec process
+            is released to background and read_output is set to False (regardless of user input).
+        :return: The shell command string executed in order to run the case and the return status of the command.
+        """
+        # Write input file by default
+        import subprocess
+        if write_input:
+            self.write(filename=self.infile)
+        if stderr_to_file:
+            command = ['uvspec', '<' + self.infile, '>' + self.outfile]
+        else:
+            err_file = self.infile[:-4] + '.ERR'
+            command = ['uvspec', '<' + self.infile, '>' + self.outfile, '&>' + err_file]
+        if not block:
+            command.append('&')  # release to background
+            read_output = False
+        # Spawn a sub-process using the subprocess module
+        try:
+            return_code = subprocess.call(command)
+        except OSError:  # the uvspec command likely does not exist
+            warnings.warn('Unable to spawn uvspec process. Probably not installed system-wide on platform.')
+            return_code = 1
+        if not return_code and read_output:
+            self.readout()  # Read the output into the instance if the
+        return command, return_code
+
+
 class RadEnv():
     """ RadEnv is a class to encapsulate a large number of uvspec runs to cover a large number of sightlines over the
     whole sphere. A radiance map over the complete sphere is called a radiant environment map. The uvspec utility can
@@ -911,6 +948,19 @@ class RadEnv():
         self.pza = xd_identity(np.linspace(-180.0, 0.0, n_pol), 'pza')
         self.vza = xd_identity(view_zen_angles, 'vza')
         self.vaz = xd_identity(view_azi_angles, 'vaz')
+
+    def run(self, ipyparallel_view, stderr_to_file=False):
+        """ Run a complete set of radiant environment map cases of libRadtran/uvspec.
+
+        :param ipyparallel_view: an ipyparallel view of a Python engine cluster (see ipyparallel documentation.)
+        :param stderr_to_file: If set to True, standard error output will be sent to a file. use only for debugging
+            purposes.
+        :return:
+        """
+
+        # Two modes of operation
+        # 1) Using multiprocessing module
+        # 2) Using ipyparallel
 
 
 
