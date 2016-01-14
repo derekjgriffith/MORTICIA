@@ -848,7 +848,7 @@ class Case():
                 return_code = 1
         if not return_code and read_output:
             self.readout(filename=self.name+'.OUT')  # Read the output into the instance if the return code OK
-        return return_code
+        return self
 
 
 class RadEnv():
