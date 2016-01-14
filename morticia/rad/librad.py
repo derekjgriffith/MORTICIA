@@ -243,6 +243,8 @@ class Case():
                     print('Warning, keyword option ' +  option[0] + ' not found in options library.')
                 # Make any possible preparations for occurance of this keyword
                 self.prepare_for(option[0],option[1:])
+        if not self.name:  # set the name as the basname of the filename, excluding the extension
+            self.name = os.path.basename(self.infile)[:-4]
         #TODO Build the case from the option list ?
 
     def prepare_for_solver(self, tokens):
@@ -824,24 +826,26 @@ class Case():
         """
         # Write input file by default
         import subprocess
+        return_code = 0
         if write_input:
             self.write(filename=self.infile)
         if stderr_to_file:
-            command = ['uvspec', '<' + self.infile, '>' + self.outfile]
+            command = ['uvspec', '<' + self.name + '.INP', '>' + self.outfile + '.OUT']
         else:
-            err_file = self.infile[:-4] + '.ERR'
-            command = ['uvspec', '<' + self.infile, '>' + self.outfile, '&>' + err_file]
+            err_file = self.name + '.ERR'
+            command = ['uvspec', '<' + self.name + '.INP', '>' + self.name + '.OUT', '&>' + err_file]
         if not block:
             command.append('&')  # release to background
             read_output = False
         # Spawn a sub-process using the subprocess module
-        try:
-            return_code = subprocess.call(command)
-        except OSError:  # the uvspec command likely does not exist
-            warnings.warn('Unable to spawn uvspec process. Probably not installed system-wide on platform.')
-            return_code = 1
-        if not return_code and read_output:
-            self.readout()  # Read the output into the instance if the
+        # try:
+        #     return_code = subprocess.call(command)
+        # except OSError:  # the uvspec command likely does not exist
+        #     warnings.warn('Unable to spawn uvspec process. Probably not installed system-wide on platform.')
+        #     return_code = 1
+        # if not return_code and read_output:
+        #     self.readout()  # Read the output into the instance if the
+        print ' '.join(command)
         return command, return_code
 
 
