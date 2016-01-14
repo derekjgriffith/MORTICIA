@@ -826,27 +826,29 @@ class Case():
         """
         # Write input file by default
         import subprocess
-        return_code = 0
         if write_input:
             self.write(filename=self.name+'.INP')
-        if stderr_to_file:
-            command = ['uvspec', '<' + self.name + '.INP', '>' + self.outfile + '.OUT']
-        else:
-            err_file = self.name + '.ERR'
-            command = ['uvspec', '<' + self.name + '.INP', '>' + self.name + '.OUT', '&>' + err_file]
-        if not block:
-            command.append('&')  # release to background
-            read_output = False
         # Spawn a sub-process using the subprocess module
-        try:
-            return_code = subprocess.call(command)
-        except OSError:  # the uvspec command likely does not exist
-            warnings.warn('Unable to spawn uvspec process. Probably not installed system-wide on platform.')
-            return_code = 1
+        if not stderr_to_file:
+            try:
+                with open(self.name+'.INP', 'rt') as stin, \
+                     open(self.name+'.OUT', 'wt') as stout:
+                    return_code = subprocess.call(['uvspec'], stdin=stin, stdout=stout)
+            except OSError:  # the uvspec command likely does not exist
+                warnings.warn('Unable to spawn uvspec process. Probably not installed system-wide on platform.')
+                return_code = 1
+        else:  # redirect the standard error output to a file as well
+            try:
+                with open(self.name+'.INP', 'rt') as stin, \
+                     open(self.name+'.OUT', 'wt') as stout, \
+                     open(self.name+'.ERR', 'wt') as sterr:
+                    return_code = subprocess.call(['uvspec'], stdin=stin, stdout=stout, sterr=sterr)
+            except OSError:  # the uvspec command likely does not exist
+                warnings.warn('Unable to spawn uvspec process. Probably not installed system-wide on platform.')
+                return_code = 1
         if not return_code and read_output:
             self.readout(filename=self.name+'.OUT')  # Read the output into the instance if the return code OK
-        print ' '.join(command)
-        return command, return_code
+        return return_code
 
 
 class RadEnv():
