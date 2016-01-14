@@ -828,7 +828,7 @@ class Case():
         import subprocess
         return_code = 0
         if write_input:
-            self.write(filename=self.infile)
+            self.write(filename=self.name+'.INP')
         if stderr_to_file:
             command = ['uvspec', '<' + self.name + '.INP', '>' + self.outfile + '.OUT']
         else:
@@ -838,13 +838,13 @@ class Case():
             command.append('&')  # release to background
             read_output = False
         # Spawn a sub-process using the subprocess module
-        # try:
-        #     return_code = subprocess.call(command)
-        # except OSError:  # the uvspec command likely does not exist
-        #     warnings.warn('Unable to spawn uvspec process. Probably not installed system-wide on platform.')
-        #     return_code = 1
-        # if not return_code and read_output:
-        #     self.readout()  # Read the output into the instance if the
+        try:
+            return_code = subprocess.call(command)
+        except OSError:  # the uvspec command likely does not exist
+            warnings.warn('Unable to spawn uvspec process. Probably not installed system-wide on platform.')
+            return_code = 1
+        if not return_code and read_output:
+            self.readout(filename=self.name+'.OUT')  # Read the output into the instance if the return code OK
         print ' '.join(command)
         return command, return_code
 
