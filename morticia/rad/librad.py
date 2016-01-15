@@ -956,9 +956,18 @@ class RadEnv():
         self.vaz = xd_identity(view_azi_angles, 'vaz')
 
     def run(self, ipyparallel_view, stderr_to_file=False):
-        """ Run a complete set of radiant environment map cases of libRadtran/uvspec.
+        """ Run a complete set of radiant environment map cases of libRadtran/uvspec using the `ipyparallel`
+        Python package, which provides parallel computation from Jupyter notebooks and other Python launch
+        modes.
 
         :param ipyparallel_view: an ipyparallel view of a Python engine cluster (see ipyparallel documentation.)
+            Typical code for setting up the view:
+            >>> from ipyparallel import Client
+            >>> paraclient = Client(profile='mycluster', sshserver='me@mycluster.info', password='mypassword')
+             >>> paraclient[:].use_dill()  # Need dill as a pickle replacement for our purposes here
+            >>> ipyparallel_view = paraclient.load_balanced_view()
+            >>> ipyparallel_view.block = True
+            >>> ipyparallel_view.track = True
         :param stderr_to_file: If set to True, standard error output will be sent to a file. use only for debugging
             purposes.
         :return:
