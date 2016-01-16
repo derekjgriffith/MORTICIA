@@ -70,8 +70,9 @@ The general observer/target topocentric, cartesian coordinate system used in `MO
 the East and +z towards the zenith. Zenith angles are polar angles measured from the +z axis. This is a left-handed
 system and the alternative right-handed sytem is the same, except with +z towards nadir.
 
-The global Earth Centered Earth Fixed (ECEF) coordinate system has the
-
+The global Earth Centered Earth Fixed (ECEF) coordinate system has the north pole in the +Z direction, the prime
+meridian (0 deg longitude) in the +X direction and the +Y direction at 90 deg east longitude. This is a right-handed
+coordinate system.
 
 Logging Warnings and Exception Handling
 =======================================
