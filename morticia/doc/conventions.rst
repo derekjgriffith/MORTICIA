@@ -74,6 +74,11 @@ The global Earth Centered Earth Fixed (ECEF) coordinate system has the north pol
 meridian (0 deg longitude) in the +X direction and the +Y direction at 90 deg east longitude. This is a right-handed
 coordinate system.
 
+When dealing with sightlines and camera orientations, several conventions can be used. The
+`Euler angles <https://en.wikipedia.org/wiki/Euler_angles>`_ provide (relative to a given coordinate system,
+typically topocentric/geodetic) the view azimuth angle (VAZ = :math:`\alpha`) and view zenith angle (VZA =
+:math:`\beta`). The camera roll is then the third Euler angle :math:`\gamma`.
+
 Logging Warnings and Exception Handling
 =======================================
 As a rule, `MORTICIA` does not use logging to files. Preferably, if any checking is performed, exceptions are thrown.
