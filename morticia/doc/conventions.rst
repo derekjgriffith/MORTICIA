@@ -64,6 +64,14 @@ A pint global unit registry is created when `morticia` or any sub-package is imp
 or modules share a single global unit registry called ureg. Convenience functions ``Q_`` for ``Quantity`` and ``U_`` for
 ``Quantity(1.0, unit_str)`` are also defined. Examples of usage are provided in the Jupyter notebooks/tutorials.
 
+Coordinate Systems
+==================
+The general observer/target topocentric, cartesian coordinate system used in `MORTICIA` is +x towards North, +y towards
+the East and +z towards the zenith. Zenith angles are polar angles measured from the +z axis. This is a left-handed
+system and the alternative right-handed sytem is the same, except with +z towards nadir.
+
+The global Earth Centered Earth Fixed (ECEF) coordinate system has the
+
 
 Logging Warnings and Exception Handling
 =======================================
