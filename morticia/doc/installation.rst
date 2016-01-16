@@ -8,9 +8,10 @@ Installation and Requirements
  IPython/Jupyter notebooks as well as other Python launch modes. In principle, with ``ipyparallel`` it is possible
  to run the Python worker engines on any network-accessible compute resource. This means that it is possible to
  utilise a Linux-based compute cluster with a libRadtran installation in the background, while all foreground
- work is performed on a Windows machine, for example. However, this setup has not yet been tested and may require
+ work is performed on a Windows machine, for example. However, this setup may require
  significant setup to implement. All the required information to do this is provided in the ``ipyparallel``
- documentation.
+ documentation. Examples are provided in the `MORTICIA` notebooks in the
+[`nbMORITICIA` repository on GitHub](https://github.com/derekjgriffith/nbMORTICIA).
 
 MORTICIA Dependencies
 =====================
@@ -32,4 +33,6 @@ In principle, any Python 2.7 installation that can meet the dependencies should 
 - ``astropy`` and ``pyephem`` : for various astronomy-related calculations (sun, moon position).
 - ``easygui`` is used for simple file/open and save dialogs.
 - ``ipyparallel`` is used for parallel computation in IPython/Jupyter notebooks as well as other Python launch modes.
+- ``dill`` will be required if running libRadtran on remote machines using ``ipyparallel``
+- ``paramiko`` will be required for authentication when using ``ipyparallel`` across machine boundaries
 
