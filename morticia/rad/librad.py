@@ -959,6 +959,7 @@ class RadEnv():
         self.pza = xd_identity(np.linspace(-180.0, 0.0, n_pol), 'pza')
         self.vza = xd_identity(view_zen_angles, 'vza')
         self.vaz = xd_identity(view_azi_angles, 'vaz')
+        self.uu = np.array([])
 
     def run_ipyparallel(self, ipyparallel_view, stderr_to_file=False):
         """ Run a complete set of radiant environment map cases of libRadtran/uvspec using the `ipyparallel`
@@ -988,19 +989,34 @@ class RadEnv():
         self.uu = np.hstack([np.vstack([self.cases[i_pol][i_azi].uu for i_pol in range(self.n_pol_batch)])
                                                                     for i_azi in range(self.n_azi_batch)])
         # Delete the individual results in an attempt to save memory
-        for i_case in len(self.casechain):
-            del self.casechain[i_case].uu
+        for case in self.casechain:
+            del case.uu
 
-    def run_(self):
+    def run_parallel(self, n_nodes=4):
         """ Run the RadEnv in multiprocessing mode on the local host.
 
-        This is not yet implemented, but should use the multiprocessing package on the local host to use all
+        This is not yet tested, but should work with the multiprocessing package on the local host to use all
         the available cores. Will only work if libRadtran is installed on the local host.
 
+        In order to use dill instead of pickle, it is necessary to use the pathos multiprocessing module
+        instead of the standard multiprocessing module
+
+        :param n_nodes: Number of compute nodes to use. Default is 4. Preferably set to number of cores you have
+            available on the local host.
         :return:
         """
-        import multiprocessing
-        pass
+        from pathos.multiprocessing import ProcessingPool
+        worker_pool = ProcessingPool(nodes=n_nodes)
+        self.casechain = worker_pool.map(Case.run, self.casechain)
+        # Now recreate the list of lists view
+        self.cases = [[self.casechain[i_pol * self.n_azi_batch + i_azi] for i_azi in range(self.n_azi_batch)]
+                                                                        for i_pol in range(self.n_pol_batch)]
+        # Compile the radiance results into one large array
+        self.uu = np.hstack([np.vstack([self.cases[i_pol][i_azi].uu for i_pol in range(self.n_pol_batch)])
+                                                                    for i_azi in range(self.n_azi_batch)])
+        # Delete the individual results in an attempt to save memory
+        for case in self.casechain:
+            del case.uu
 
 
 
