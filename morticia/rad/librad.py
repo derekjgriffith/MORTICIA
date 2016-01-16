@@ -73,6 +73,7 @@ import warnings
 from morticia.moglo import *
 from morticia.tools.xd import *
 import copy
+from itertools import chain  #Used in RadEnv constructor
 
 uvsOptions = writeLex.loadOptions()  # Load all options into a global dictionary of uvspec option specifications.
 
@@ -364,13 +365,14 @@ class Case():
         :param origin: A 2-tuple noting the "origin" of the change to this keyword. Default ('user', None)
         :return:
         """
-        ioption = self.options.index(option[0])
-        if ioption:
+        try:
+            ioption = self.options.index(option[0])
+        except ValueError:
+            self.append_option(option, origin)  # just append the option if not found
+        else:
             self.tokens[ioption] = option[1:]  # The tokens following the keyword (list of strings)
             self.filorigin[ioption] = origin  # The origin of this keyword
             self.prepare_for(option[0], option[1:])
-        else:
-            self.append_option(option, origin)  # just append the option if not found
 
     def del_option(self, option, all=True):
         """ Delete a uvspec input option matching the given option.
@@ -782,7 +784,6 @@ class Case():
             self.uu = self.uu.transpose([0, 2, 3, 4, 1])  # transpose so that the nstokes axis is last
             while self.uu.shape[-1] == 1:  # Remove any hanging singleton dimensions at the end
                 self.uu = self.uu.squeeze(axis=self.uu.ndim-1)
-            # Put stokes last ?
 
             # if self.solver == 'polradtran':
             #     self.u0u = radND[:,1].reshape(self.n_umu, self.nstokes, self.n_wvl, -1, order='F').squeeze()  # should actually all be zero
@@ -926,6 +927,7 @@ class RadEnv():
         n_pol_batch = np.int(np.ceil(np.float(len(prop_zen_angles))/mxumu))
         # Create an list of lists with all these batches of librad.Case
         self.cases = [[copy.deepcopy(base_case) for i_azi in range(n_azi_batch)] for j_pol in range(n_pol_batch)]
+
         # TODO : Take care of phi0 input in the case of hemi=True
         for iazi, iazi_start in enumerate(range(0, len(phi), mxphi)):
             batch_azi = phi[iazi_start:np.minimum(iazi_start+mxphi, len(phi))]
@@ -944,6 +946,9 @@ class RadEnv():
                                                  '_{:04d}_{:04d}.OUT'.format(ipol, iazi))
                 if hemi:  # Doing only one hemisphere along solar principal plane
                     self.cases[ipol][iazi].alter_option(['phi0', '0.0'])  # Sun shining towards North
+        # Create a flattened list view of the cases
+        # Put all the cases into a single list
+        self.casechain = list(chain(*self.cases))  # This creates a linear view of the cases
         self.hemi = hemi
         self.n_azi = n_azi
         self.n_pol = n_pol
@@ -955,27 +960,48 @@ class RadEnv():
         self.vza = xd_identity(view_zen_angles, 'vza')
         self.vaz = xd_identity(view_azi_angles, 'vaz')
 
-    def run(self, ipyparallel_view, stderr_to_file=False):
+    def run_ipyparallel(self, ipyparallel_view, stderr_to_file=False):
         """ Run a complete set of radiant environment map cases of libRadtran/uvspec using the `ipyparallel`
         Python package, which provides parallel computation from Jupyter notebooks and other Python launch
         modes.
 
         :param ipyparallel_view: an ipyparallel view of a Python engine cluster (see ipyparallel documentation.)
             Typical code for setting up the view:
+
             >>> from ipyparallel import Client
             >>> paraclient = Client(profile='mycluster', sshserver='me@mycluster.info', password='mypassword')
-             >>> paraclient[:].use_dill()  # Need dill as a pickle replacement for our purposes here
+            >>> paraclient[:].use_dill()  # Need dill as a pickle replacement for our purposes here
             >>> ipyparallel_view = paraclient.load_balanced_view()
-            >>> ipyparallel_view.block = True
-            >>> ipyparallel_view.track = True
+            >>> ipyparallel_view.block = True  # Must wait for completion of all tasks on the cluster
+
         :param stderr_to_file: If set to True, standard error output will be sent to a file. use only for debugging
             purposes.
         :return:
         """
+        # The following should work, but the list casechain is completely reassigned
+        # instead of being assigned element for element
+        self.casechain = ipyparallel_view.map(Case.run, self.casechain)
+        # Now recreate the list of lists view
+        self.cases = [[self.casechain[i_pol * self.n_azi_batch + i_azi] for i_azi in range(self.n_azi_batch)]
+                                                                        for i_pol in range(self.n_pol_batch)]
+        # Compile the radiance results into one large array
+        self.uu = np.hstack([np.vstack([self.cases[i_pol][i_azi].uu for i_pol in range(self.n_pol_batch)])
+                                                                    for i_azi in range(self.n_azi_batch)])
+        # Delete the individual results in an attempt to save memory
+        for i_case in len(self.casechain):
+            del self.casechain[i_case].uu
 
-        # Two modes of operation
-        # 1) Using multiprocessing module
-        # 2) Using ipyparallel
+    def run_(self):
+        """ Run the RadEnv in multiprocessing mode on the local host.
+
+        This is not yet implemented, but should use the multiprocessing package on the local host to use all
+        the available cores. Will only work if libRadtran is installed on the local host.
+
+        :return:
+        """
+        import multiprocessing
+        pass
+
 
 
 
