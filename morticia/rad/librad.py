@@ -214,7 +214,7 @@ class Case():
         self.zout_sea = np.zeros(1)  # altitudes above seal level, same as zout unless ground 'altitude' provided
         self.pressure_out = []  # Only populated if pressure_out keyword is given
         self.output_user = ''  # set with the output_user keyword
-        self.output_quantity = '' # default is radiances and irradiances in units determined by input solar file
+        self.output_quantity = 'radiance' # default is radiances and irradiances in units determined by input solar file
         self.source = ''  # 'solar' or 'thermal'
         self.source_file = ''
         self.n_umu = 0  # number of zenith angles (actually cosine of zenith angle)
@@ -228,7 +228,7 @@ class Case():
         self.n_stokes = 1  # default number of stokes parameters for polradtran
         self.stokes = ['I']  # default is to compute intensity component only (all solvers, including polradtran)
         self.radND = []  # N-dimensional radiance data (umu, phi, wvn, zout, stokes)
-        self.rad_units = []  # radiance/irradiance units, could be K for brightness temperatures
+        self.rad_units = 'radiance'  # radiance/irradiance units, could be K for brightness temperatures
         self.altitude = np.zeros(1)  # Default surface (ground) height above sea level
         if filename is not None:
             if not filename:
@@ -266,6 +266,7 @@ class Case():
             self.prepare_for_polradtran()
         elif self.solver == 'sslidar':
             self.fluxline = ['center_of_range', 'number_of_photons', 'lidar_ratio']
+            self.irrad_units = ['count', '', '']
 
     def prepare_for_source(self, tokens):
         """ Prepare for source, particularly units of various kinds, depending on the source
@@ -334,14 +335,14 @@ class Case():
         if keyword == 'output_quantity':  # Try to set output units
             self.output_quantity = tokens[0]
             if self.output_quantity == 'brightness':
-                self.rad_units = 'K'
-                self.irrad_units = 'K'
+                self.rad_units = ['K', '', '']
+                self.irrad_units = ['K', '', '']
             elif self.output_quantity == 'reflectivity':
-                self.rad_units = ''
-                self.irrad_units = ''
+                self.rad_units = ['', '', '']
+                self.irrad_units = ['', '', '']
             elif self.output_quantity == 'transmittance':
-                self.rad_units = ''
-                self.irrad_units = ''
+                self.rad_units = ['', '', '']
+                self.irrad_units = ['', '', '']
         if keyword == 'heating_rate':
             self.output_user = ['zout', 'heat']
             self.fluxline = []  #TODO note that heating rate outputs for multiple wavelengths have a header line
@@ -927,10 +928,21 @@ class Case():
             levels = xd_identity(self.level_values, self.levels_out_type)  # Presume units correct
             stokes = xd_identity(range(self.n_stokes), 'stokes')
             # Determine the units of uu
-            uu_units = self.rad_units[0] + '/' + self.rad_units[1] + '/sr'
-            if self.rad_units[2]:
-                uu_units += '/' + self.rad_units[2]
-            print uu_units
+            if self.output_quantity == 'radiance':
+                uu_units = self.rad_units[0] + '/' + self.rad_units[1] + '/sr'
+                if self.rad_units[2]:
+                    uu_units += '/' + self.rad_units[2]
+            elif self.output_quantity == 'brightness':
+                uu_units = 'K'
+            elif self.output_quantity == 'transmittance' or self.levels_out == 'reflectivity':
+                uu_units = ''
+            # print 'units : ' + uu_units
+            # Build the xray.DataArray
+            qty_name = {'radiance': 'specrad', 'transmittance': 'trnx', 'reflectivity': 'reflx'}[self.output_quantity]
+            uu = xray.DataArray(self.uu, [umu, phi, wvl, levels, stokes],
+                                name=qty_name, attrs={'units': uu_units})
+            self.xd_uu = uu
+
 
 
 
