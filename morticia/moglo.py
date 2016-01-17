@@ -62,10 +62,17 @@ long_name = {
     'spfcut': 'Diffraction Cutoff Spatial Frequency',
     'vza': 'View Zenith Angle',
     'vaz': 'View Azimuth Angle',
+    'svaz': 'Solar-Relative View Azimuth Angle',
     'pza': 'Propagation Zenith Angle',
     'umu': 'Cosine of the Propagation Zenith Angle',
     'phi': 'Propagation Azimuth Angle',
-    'phi0': 'Solar Propagation Azimuth Angle'
+    'phi0': 'Solar Propagation Azimuth Angle',
+    'stokes': 'Stokes Parameter',  # I=0, Q=1, U=2, V=3
+    'zout': 'Height Above Ground',
+    'zout_sea': 'Height Above Sea Level',
+    'p': 'Pressure',
+    'sph_alb': 'Atmospheric Spherical Albedo'
+    # TODO : Include all libRadtran definitions as well from rad.librad.py
 }
 
 # The following are intended to be the standard names as per the Climate and Forecast (CF) convention
@@ -117,10 +124,15 @@ default_units = {
     'vza': 'deg', ## View zenith angle
     'vaz': 'deg',  # View azimuth angle
     'pza': 'deg',  # Propagation zenith angle
+    'svaz': 'deg',  # Solar-relative view azimuth angle
     'umu': '',  # Cosine of the propagation zenith
     'phi': 'deg',  # Propagation azimuth angle
     'phi0': 'deg',  # Solar propagation azimuth angle
-    'srf': ''
+    'srf': '',  # spectral response function
+    'stokes': '',  # Stokes parameter number (not the actual stokes parameter)
+    'zout': 'km',  # Altitude above ground level
+    'zout_sea': 'km',  # Altitude above sea level
+    'p': 'hPa'  # Atmospheric pressure preferred units : hectopascals
 }
 
 class Scalar(object):
