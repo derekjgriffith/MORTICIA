@@ -71,7 +71,10 @@ long_name = {
     'zout': 'Height Above Ground',
     'zout_sea': 'Height Above Sea Level',
     'p': 'Pressure',
-    'sph_alb': 'Atmospheric Spherical Albedo'
+    'sph_alb': 'Atmospheric Spherical Albedo',
+    'reflx': 'Reflectivity',
+    'trnx': 'Transmissivity',
+
     # TODO : Include all libRadtran definitions as well from rad.librad.py
 }
 
@@ -133,7 +136,9 @@ default_units = {
     'stokes': '',  # Stokes parameter number (not the actual stokes parameter)
     'zout': 'km',  # Altitude above ground level
     'zout_sea': 'km',  # Altitude above sea level
-    'p': 'hPa'  # Atmospheric pressure preferred units : hectopascals
+    'p': 'hPa',  # Atmospheric pressure preferred units : hectopascals
+    'reflx': '',  # reflectivity
+    'trnx': ''  # transmissivity
 }
 
 class Scalar(object):
