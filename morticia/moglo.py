@@ -83,6 +83,7 @@ standard_names = {
 # Default units are the units that are preferred and to which MORTICIA will convert if other units are given
 default_units = {
     'wvl': 'nm',
+    'wvn': 'cm^-1',
     'spf': '1/mm',
     'efl': 'mm',
     'rad': 'W/m^2/sr',
