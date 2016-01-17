@@ -68,6 +68,7 @@ import writeLex  # This imports all the libradtran option definitions
 import os
 import easygui  # For file open dialogs
 import numpy as np
+import xray
 import re
 import warnings
 from morticia.moglo import *
@@ -82,7 +83,7 @@ sourceSolarUnits = {
     'apm_0_5nm': ['mW', 'm^2', 'nm'],
     'apm_1nm': ['mW', 'm^2', 'nm'],
     'atlas_plus_modtran': ['mW', 'm^2', 'nm'],
-    'atlas_plus_modtran_ph': ['photons/s', 'cm^2', 'nm'],
+    'atlas_plus_modtran_ph': ['count/s', 'cm^2', 'nm'],  # count photons
     'atlas2': ['mW', 'm^2', 'nm'],
     'atlas3': ['mW', 'm^2', 'nm'],
     'fu': ['W', 'm^2', ''],  # in band
@@ -132,7 +133,8 @@ uvspecOutVars = {
     'f': 'Actinic flux (scalar irradiance)',
     'sza': 'Solar zenith angle [deg]',
     'n_air': 'Air refractive index',
-    'zout': 'Output altitude [km]',
+    'zout': 'Altitude above ground [km]',
+    'zout_sea': 'Altitude above sea level [km]',
     'sph_alb': 'Spherical albedo of the complete atmosphere',
     'albedo': 'Albedo',
     'heat': 'Heating rate in K/day',
@@ -176,9 +178,9 @@ uvspecOutVars = outVars  # copy the updated dict back to the original
 indexVars = ['lambda', 'wavelength', 'wvl', 'wvn', 'zout', 'zout_sea', 'p', 'cth']
 
 # Define a regexp for determining if a token of the zout keyword is a single level
-# It is a single level if it is either a floating point number or the words sur, cpt or toa (for surface,
+# It is a single level if it is either a floating point number or the words boa, sur, cpt or toa (for surface,
 # cold point tropopause and top of atmosphere)
-re_isSingleOutputLevel = '(^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$)|(^sur$)|(^surface$)|(^cpt$)|(^toa$)'
+re_isSingleOutputLevel = '(^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$)|(^boa$)|(^sur$)|(^surface$)|(^cpt$)|(^toa$)'
 
 class Case():
     """ Class which encapsulates a run case of libRadtran/uvspec.
@@ -208,7 +210,9 @@ class Case():
         self.fluxline = ['wvl', 'edir', 'edn', 'eup', 'uavgdir', 'uavgdn', 'uavgup']  # default output
         self.wvl = []  # wavelengths, wavenumbers and output levels difficult to ascertain to start with
         self.wvn = []
-        self.zout = []
+        self.zout = np.zeros(1)  # If no zout (or equivalent) is given, uvspec produces output at the surface
+        self.zout_sea = np.zeros(1)  # altitudes above seal level, same as zout unless ground 'altitude' provided
+        self.pressure_out = []  # Only populated if pressure_out keyword is given
         self.output_user = ''  # set with the output_user keyword
         self.output_quantity = '' # default is radiances and irradiances in units determined by input solar file
         self.source = ''  # 'solar' or 'thermal'
@@ -217,12 +221,15 @@ class Case():
         self.umu = []  # zenith angles for radiance calculations
         self.n_phi = 0  # number of azimuth radiance angles
         self.phi = []  # azimuth angles for radiance calculations
-        self.n_zout = 1  # Assume only one output level, unless zout keyword is used.
+        self.n_levels_out = 1  # Assume only one output level, unless zout/zout_sea/pressure_out keyword is used.
+        self.levels_out = []  # Tokens provided on an output level keyword (zout, zout_sea, pressure_out)
+        self.levels_out_type = 'zout'  # Assume that type of levels out data is altitude above surface
         self.n_wvl = '?'  # number of wavelengths is difficult to ascertain to start with
-        self.nstokes = 1  # default number of stokes parameters for polradtran
+        self.n_stokes = 1  # default number of stokes parameters for polradtran
         self.stokes = ['I']  # default is to compute intensity component only (all solvers, including polradtran)
         self.radND = []  # N-dimensional radiance data (umu, phi, wvn, zout, stokes)
         self.rad_units = []  # radiance/irradiance units, could be K for brightness temperatures
+        self.altitude = np.zeros(1)  # Default surface (ground) height above sea level
         if filename is not None:
             if not filename:
                 # Open a dialog to get the filename
@@ -243,7 +250,7 @@ class Case():
                 else:
                     print('Warning, keyword option ' +  option[0] + ' not found in options library.')
                 # Make any possible preparations for occurance of this keyword
-                self.prepare_for(option[0],option[1:])
+                self.prepare_for_keyword(option[0],option[1:])
         if not self.name:  # set the name as the basname of the filename, excluding the extension
             self.name = os.path.basename(self.infile)[:-4]
         #TODO Build the case from the option list ?
@@ -265,6 +272,9 @@ class Case():
         :param tokens: uvspec option parameters (tokens)
         :return:
         """
+
+        # TODO : More work required here - see libRadtran manual under source keyword
+        # TODO : Also need to verify default radiance output units (mW/m^2/sr/nm or W/m^2/sr/nm)
         if tokens[0] == 'solar':  # dealing with solar spectrum
             self.source = 'solar'
             if len(tokens) > 1:  # solar source file provided
@@ -272,11 +282,14 @@ class Case():
                 # try to establish the radiometric units based on the filename
                 if self.source_file in sourceSolarUnits:
                     self.rad_units = sourceSolarUnits[self.source_file]
+                elif len(tokens) == 3:
+                    self.rad_units = {'per_nm': ['W', 'm^2', 'nm'], 'per_cm-1': ['W', 'm^2', 'cm^-1'],
+                                      'per_band': ['W', 'm^2', '']}[tokens[2]]
         elif tokens[0] == 'thermal':
             self.source = 'thermal'
             self.rad_units = ['W', 'm^2', 'cm^-1']
 
-    def prepare_for(self, keyword, tokens):
+    def prepare_for_keyword(self, keyword, tokens):
         """ Make any possible preparations for occurrences of particular keywords
         :param keyword: The uvspec option keyword (string)
         :param tokens: The parameters (tokens) for the keyword as a list of strings
@@ -300,22 +313,24 @@ class Case():
             self.output_user = [token.replace('wavelength', 'wvl') for token in self.output_user]  # abbreviate wavelength
             self.fluxline = []
         if keyword == 'polradtran' and tokens[0] == 'nstokes':
-            self.nstokes = int(tokens[1])
-            if self.nstokes == 1:
+            self.n_stokes = int(tokens[1])
+            if self.n_stokes == 1:
                 self.stokes = ['I']
-            elif self.nstokes == 3:
+            elif self.n_stokes == 3:
                 self.stokes = ['I', 'Q', 'U']
-            elif self.nstokes == 4:
+            elif self.n_stokes == 4:
                 self.stokes = ['I', 'Q', 'U', 'V']
             else:
                 raise ValueError('uvspec input polradtran nstokes must be 1, 3 or 4.')
             self.prepare_for_polradtran()
         if (keyword == 'zout' or keyword == 'zout_sea' or keyword == 'pressure_out' or
             keyword == 'tzs_cloud_top_height'):  # Determine number of output levels
+            self.levels_out_type = keyword
             if all([re.match(re_isSingleOutputLevel, token.lower()) for token in tokens]):
-                self.n_zout = len(tokens)
+                self.n_levels_out = len(tokens)
+                self.levels_out = tokens
             else:  # Number of output levels is not known, will have to auto-detect
-                self.n_zout = '?'
+                self.n_levels_out = 0  # This indicates that the number of output levels is not known
         if keyword == 'output_quantity':  # Try to set output units
             self.output_quantity = tokens[0]
             if self.output_quantity == 'brightness':
@@ -332,6 +347,8 @@ class Case():
             self.fluxline = []  #TODO note that heating rate outputs for multiple wavelengths have a header line
         if keyword == 'print_disort_info':
             self.fluxline = '?'  # this output format is unknown or too complex to handle
+        if keyword == 'altitude':
+            self.altitude = np.float64(tokens[0])  # This is the ground altitude above sea level
 
     def prepare_for_polradtran(self):
         """ Prepare for output from the polradtran solver
@@ -355,7 +372,7 @@ class Case():
         self.filorigin.append(origin)  # The origin of this keyword
         self.optionobj.append(uvsOptions[option[0]])  # The option object
         # Make any possible preparations for occurance of this keyword
-        self.prepare_for(option[0],option[1:])
+        self.prepare_for_keyword(option[0],option[1:])
 
     def alter_option(self, option, origin=('user', None)):
         """ Alter the parameters of a uvspec input option. If the option is not found, the option is appended with
@@ -372,7 +389,7 @@ class Case():
         else:
             self.tokens[ioption] = option[1:]  # The tokens following the keyword (list of strings)
             self.filorigin[ioption] = origin  # The origin of this keyword
-            self.prepare_for(option[0], option[1:])
+            self.prepare_for_keyword(option[0], option[1:])
 
     def del_option(self, option, all=True):
         """ Delete a uvspec input option matching the given option.
@@ -394,7 +411,7 @@ class Case():
         if deletedsomething:
             # Run through all options and reconstruct preparations
             for (ioption, option) in enumerate(self.options):
-                self.prepare_for(self.options[ioption], self.tokens[ioption])
+                self.prepare_for_keyword(self.options[ioption], self.tokens[ioption])
         return deletedsomething
 
     @staticmethod
@@ -556,18 +573,18 @@ class Case():
                 # print datashape[1], ' not the same as ', len(fields) #TODO try to deal with this
         if (fields[0] == 'zout' or fields[0] == 'zout_sea' or fields[0] == 'p' or
             fields[0] == 'cth'):  # output level or pressure level is the primary variable
-            if self.n_zout == '?':  # Unknown number of output levels
+            if self.n_levels_out == 0:  # Unknown number of output levels
                 # Try just using the number of unique values in the first column
-                self.n_zout = len(np.unique(fluxdata[:,0]))
-            fluxdata = fluxdata.reshape((self.n_zout, -1, linecount), order='F')
+                self.n_levels_out = len(np.unique(fluxdata[:,0]))
+            fluxdata = fluxdata.reshape((self.n_levels_out, -1, linecount), order='F')
         elif fields[0] == 'wvl' or fields[0] == 'wvn':  # wavelength/wavenumber is the primary variable
-            if self.n_zout == '?':  # Don't know number of output levels
+            if self.n_levels_out == 0:  # Don't know number of output levels
                 self.n_wvl = len(np.unique(fluxdata[:,0]))  # Try to determine number of wavelengths/wavenumbers
                 fluxdata = fluxdata.reshape((self.n_wvl, -1, linecount), order='F')
             else:
-                fluxdata = fluxdata.reshape((-1, self.n_zout, linecount), order='F')
+                fluxdata = fluxdata.reshape((-1, self.n_levels_out, linecount), order='F')
         else:  # Assume secondary variable is zout
-            fluxdata = fluxdata.reshape((-1, self.n_zout, linecount), order='F')  #TODO provide warning or something
+            fluxdata = fluxdata.reshape((-1, self.n_levels_out, linecount), order='F')  #TODO provide warning or something
         self.fluxdata = fluxdata  # retain the flux data in the instance, reshaped as well as possible
         if linecount == 1:  # here the data is actually distributed, single line a special case
             # Some output fields, such as umu, uu, u0u, uu_down, uu_up, cmu(?) are vectors and therefore occupy
@@ -602,9 +619,37 @@ class Case():
                 setattr(self, field, np.squeeze(fluxdata[:, :, colstart:(colstart + ncols)]))
                 colstart = colstart + ncols
         # Clean up zout and wavelength/wavenumber data
-        self.zout = np.unique(self.zout)  #TODO check that this does not reorder the zout values (especially pressure)
-        if len(self.zout) > 0:
-            self.n_zout = len(self.zout)
+        # Convert levels to real numbers
+        level_dict = {'boa': self.altitude, 'BOA': self.altitude, 'sur': self.altitude,
+                      'SUR': self.altitude, 'surface': self.altitude, 'SURFACE': self.altitude,
+                      'toa': np.inf, 'TOA': np.inf, 'cpt': np.nan, 'CPT': np.nan}
+        level_values = []
+        for level in self.levels_out:
+            try:
+                level_values.append(np.float64(level))
+            except ValueError:
+                if level in level_dict:
+                    level_values.append(level_dict[level])  # Try translating
+                else:
+                    warnings.warn('Invalid level token found in ' + self.levels_out_type + ' keyword.')
+        self.level_values = np.float64(level_values)
+        #self.zout = np.unique(self.zout)  #TODO check that this does not reorder the zout values (especially pressure)
+        #if len(self.zout) > 0:  #  TODO : Problems here with pressure_out, zout_sea etc.
+        if self.levels_out_type == 'zout':
+            self.zout = np.unique(self.level_values)
+            self.n_levels_out = len(self.zout)
+            self.zout_sea = self.zout + self.altitude
+        elif self.levels_out_type == 'zout_sea':
+            self.zout_sea = np.unique(self.level_values)
+            self.n_levels_out = len(self.zout_sea)
+            self.zout = self.zout_sea - self.altitude
+        elif self.levels_out_type == 'pressure_out':
+            self.pressure_out = np.unique(self.level_values)[::-1]  # Reverse order
+            self.n_levels_out = len(self.pressure_out)
+            self.zout = np.nan
+            self.zout_sea = np.nan
+
+        #    self.n_levels_out = len(self.zout)
         self.wvn = np.unique(self.wvn)
         self.wvl = np.unique(self.wvl)
         if len(self.wvl) > 0 and len(self.wvn) == 0:  # Calculate wavenumbers if wavelengths available
@@ -778,12 +823,15 @@ class Case():
             self.phi_check = phicheck
 
             # See if one size fits all
-            self.u0u = radND[:,1].reshape(self.n_umu, self.nstokes, self.n_wvl, -1, order='F').squeeze()  # should actually all be zero
+            self.u0u = radND[:,1].reshape(self.n_umu, self.n_stokes, self.n_wvl, -1, order='F').squeeze()  # should actually all be zero
             self.uu = radND[:,2:]
-            self.uu = self.uu.reshape((self.n_umu, self.nstokes, max(self.n_phi, 1), self.n_wvl, -1), order='F')
+            self.uu = self.uu.reshape((self.n_umu, self.n_stokes, max(self.n_phi, 1), self.n_wvl, -1), order='F')
             self.uu = self.uu.transpose([0, 2, 3, 4, 1])  # transpose so that the nstokes axis is last
-            while self.uu.shape[-1] == 1:  # Remove any hanging singleton dimensions at the end
-                self.uu = self.uu.squeeze(axis=self.uu.ndim-1)
+            # At this point, uu should be 5 dimensional (possibly with singleton dimensions) in order of
+            # 'umu', 'phi', 'wv', 'zout' (or equivalent)
+            self.process_outputs()
+            # while self.uu.shape[-1] == 1:  # Remove any hanging singleton dimensions at the end
+            #    self.uu = self.uu.squeeze(axis=self.uu.ndim-1)
 
             # if self.solver == 'polradtran':
             #     self.u0u = radND[:,1].reshape(self.n_umu, self.nstokes, self.n_wvl, -1, order='F').squeeze()  # should actually all be zero
@@ -850,6 +898,40 @@ class Case():
         if not return_code and read_output:
             self.readout(filename=self.name+'.OUT')  # Read the output into the instance if the return code OK
         return self
+
+    def process_outputs(self):
+        """ Process outputs from libRadtran into moglo.Scalar and xray.DataArray objects.
+
+        Note that this method probably does not cover all libRadtran/uvspec inputs and outputs and will most
+        likely continue to evolve, perhaps breaking existing code.
+        :return:
+        """
+        # Determine output levels if possible
+        # 'cpt', being cold-point tropopause is mapped to np.nan and toa maps to np.inf
+
+
+        # The most important output for MORTICIA is radiances (self.uu), so those get processed
+        # first. This is a 5 dimensional numpy array with axes 'umu'. 'phi', 'wvl', 'zout' (or equivalent)
+        # and 'stokes'.
+        # Create each of the axes individually using xd_identity
+        if len(self.uu):  # OK, there is some radiance data
+            uu_shape = self.uu.shape
+            umu = xd_identity(self.umu, 'umu', '')
+            if len(self.phi):
+                pass
+            else:
+                self.phi = np.zeros(1)
+            phi = xd_identity(self.phi, 'phi', 'deg')
+            wvl = xd_identity(self.wvl, 'wvl', 'nm')
+            wvn = xd_identity(self.wvn, 'wvn', 'cm^-1')
+            levels = xd_identity(self.level_values, self.levels_out_type)  # Presume units correct
+            stokes = xd_identity(range(self.n_stokes), 'stokes')
+            # Determine the units of uu
+            uu_units = self.rad_units[0] + '/' + self.rad_units[1] + '/sr'
+            if self.rad_units[2]:
+                uu_units += '/' + self.rad_units[2]
+            print uu_units
+
 
 
 class RadEnv():
@@ -1017,6 +1099,7 @@ class RadEnv():
         # Delete the individual results in an attempt to save memory
         for case in self.casechain:
             del case.uu
+
 
 
 
