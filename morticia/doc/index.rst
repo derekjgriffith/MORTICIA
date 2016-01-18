@@ -14,6 +14,7 @@ Contents:
    intro
    installation
    conventions
+   styleguide
    sensorpack
    radpack
 

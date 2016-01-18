@@ -1,6 +1,6 @@
 Installation and Requirements
 =============================
- ``MORTICIA has`` been developed largely in Python 2.7 and has not yet been tested in Python 3.X.
+ ``MORTICIA`` has been developed largely in Python 2.7 and has not yet been tested in Python 3.X.
  A working installation of [libRadtran](http://www.libradtran.org) is required to compute radiant environment
  maps and atmospheric transmittance. In the Monte carlo/statistical mode of operation, a compute cluster
  is generally required to achieve adequate sampling in a reasonable time. Parallel computation is performed
