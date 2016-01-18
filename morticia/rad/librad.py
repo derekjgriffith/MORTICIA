@@ -1039,7 +1039,7 @@ class RadEnv():
                                                  '_{:04d}_{:04d}.INP'.format(ipol, iazi))
                 self.cases[ipol][iazi].outfile = (self.cases[ipol][iazi].outfile[:-4] +
                                                  '_{:04d}_{:04d}.OUT'.format(ipol, iazi))
-                self.cases[ipol][iazi].name = (self.cases[ipol][iazi].name[:-4] +
+                self.cases[ipol][iazi].name = (self.cases[ipol][iazi].name +
                                                  '_{:04d}_{:04d}'.format(ipol, iazi))
                 if hemi:  # Doing only one hemisphere along solar principal plane
                     self.cases[ipol][iazi].alter_option(['phi0', '0.0'])  # Sun shining towards North
@@ -1076,7 +1076,7 @@ class RadEnv():
             purposes.
         :return:
         """
-        # The following should work, but the list casechain is completely reassigned
+        # The following does work, but the list casechain is completely reassigned
         # instead of being assigned element for element
         self.casechain = ipyparallel_view.map(Case.run, self.casechain)
         # Now recreate the list of lists view
@@ -1088,6 +1088,9 @@ class RadEnv():
         # Delete the individual results in an attempt to save memory
         for case in self.casechain:
             del case.uu
+        # Concatenate the cases in umu and phi
+        self.xd_uu = xray.concat([xray.concat([case_uu.xd_uu for case_uu in self.cases[jj]], dim='phi')
+                                                 for jj in range(len(self.cases))], dim='umu')
 
     def run_parallel(self, n_nodes=4):
         """ Run the RadEnv in multiprocessing mode on the local host.
