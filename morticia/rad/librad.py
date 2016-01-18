@@ -635,7 +635,7 @@ class Case():
                     warnings.warn('Invalid level token found in ' + self.levels_out_type + ' keyword.')
         #print 'level_values ++'
         #print level_values
-        self.level_values = np.float64(level_values)
+        self.level_values = level_values
         #self.zout = np.unique(self.zout)  #TODO check that this does not reorder the zout values (especially pressure)
         #if len(self.zout) > 0:  #  TODO : Problems here with pressure_out, zout_sea etc.
         if self.levels_out_type == 'zout':
