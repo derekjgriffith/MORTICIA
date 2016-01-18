@@ -222,7 +222,7 @@ class Case():
         self.n_phi = 0  # number of azimuth radiance angles
         self.phi = []  # azimuth angles for radiance calculations
         self.n_levels_out = 1  # Assume only one output level, unless zout/zout_sea/pressure_out keyword is used.
-        self.levels_out = []  # Tokens provided on an output level keyword (zout, zout_sea, pressure_out)
+        self.levels_out = ['boa']  # Tokens provided on an output level keyword (zout, zout_sea, pressure_out), default
         self.levels_out_type = 'zout'  # Assume that type of levels out data is altitude above surface
         self.n_wvl = '?'  # number of wavelengths is difficult to ascertain to start with
         self.n_stokes = 1  # default number of stokes parameters for polradtran
@@ -925,6 +925,7 @@ class Case():
             phi = xd_identity(self.phi, 'phi', 'deg')
             wvl = xd_identity(self.wvl, 'wvl', 'nm')
             wvn = xd_identity(self.wvn, 'wvn', 'cm^-1')
+            print self.levels_out
             levels = xd_identity(self.level_values, self.levels_out_type)  # Presume units correct
             stokes = xd_identity(range(self.n_stokes), 'stokes')
             # Determine the units of uu
@@ -942,8 +943,6 @@ class Case():
             uu = xray.DataArray(self.uu, [umu, phi, wvl, levels, stokes],
                                 name=qty_name, attrs={'units': uu_units})
             self.xd_uu = uu
-
-
 
 
 class RadEnv():
@@ -1038,6 +1037,8 @@ class RadEnv():
                                                  '_{:04d}_{:04d}.INP'.format(ipol, iazi))
                 self.cases[ipol][iazi].outfile = (self.cases[ipol][iazi].outfile[:-4] +
                                                  '_{:04d}_{:04d}.OUT'.format(ipol, iazi))
+                self.cases[ipol][iazi].name = (self.cases[ipol][iazi].name[:-4] +
+                                                 '_{:04d}_{:04d}'.format(ipol, iazi))
                 if hemi:  # Doing only one hemisphere along solar principal plane
                     self.cases[ipol][iazi].alter_option(['phi0', '0.0'])  # Sun shining towards North
         # Create a flattened list view of the cases
