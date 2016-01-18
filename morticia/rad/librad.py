@@ -624,15 +624,17 @@ class Case():
         level_dict = {'boa': self.altitude, 'BOA': self.altitude, 'sur': self.altitude,
                       'SUR': self.altitude, 'surface': self.altitude, 'SURFACE': self.altitude,
                       'toa': np.inf, 'TOA': np.inf, 'cpt': np.nan, 'CPT': np.nan}
-        level_values = []
+        level_values = np.array([])
         for level in self.levels_out:
             try:
-                level_values.append(np.float64(level))
+                level_values = np.append(level_values, np.float64(level))
             except ValueError:
                 if level in level_dict:
-                    level_values.append(level_dict[level])  # Try translating
+                    level_values = np.append(level_values, level_dict[level])  # Try translating
                 else:
                     warnings.warn('Invalid level token found in ' + self.levels_out_type + ' keyword.')
+        #print 'level_values ++'
+        #print level_values
         self.level_values = np.float64(level_values)
         #self.zout = np.unique(self.zout)  #TODO check that this does not reorder the zout values (especially pressure)
         #if len(self.zout) > 0:  #  TODO : Problems here with pressure_out, zout_sea etc.
@@ -658,6 +660,7 @@ class Case():
         if len(self.wvn) > 0 and len(self.wvl) == 0:  # Calculate wavelengths if wavenumbers available
             self.wvl = 1e7 / self.wvn
         self.n_wvl = len(self.wvl)
+
 
     def readout(self, filename=None):
         """ Read uvspec output and assign to variables as intelligently as possible.
@@ -925,7 +928,6 @@ class Case():
             phi = xd_identity(self.phi, 'phi', 'deg')
             wvl = xd_identity(self.wvl, 'wvl', 'nm')
             wvn = xd_identity(self.wvn, 'wvn', 'cm^-1')
-            print self.levels_out
             levels = xd_identity(self.level_values, self.levels_out_type)  # Presume units correct
             stokes = xd_identity(range(self.n_stokes), 'stokes')
             # Determine the units of uu
