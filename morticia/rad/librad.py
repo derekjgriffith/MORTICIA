@@ -62,7 +62,7 @@ The relevant code here is taken from libRadtran version 2.0
 # TODO dealing with setting of units based on whatever is known about inputs/outputs, thermal is W/m^2/cm^-1
 
 
-_isfloatnum = '^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$'  # regular expression for matching tokens to floating point
+_isfloatnum = '^[-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?$'  # regular expression for matching tokens to floating point
 
 import writeLex  # This imports all the libradtran option definitions
 import os
@@ -661,7 +661,6 @@ class Case():
             self.wvl = 1e7 / self.wvn
         self.n_wvl = len(self.wvl)
 
-
     def readout(self, filename=None):
         """ Read uvspec output and assign to variables as intelligently as possible.
 
@@ -920,7 +919,7 @@ class Case():
         # Create each of the axes individually using xd_identity
         if len(self.uu):  # OK, there is some radiance data
             uu_shape = self.uu.shape
-            umu = xd_identity(self.umu, 'umu', '')
+            umu = xd_identity(self.umu, 'umu', '')  # TODO : This must change to the propagation zenith (polar) angle
             if len(self.phi):
                 pass
             else:
@@ -942,9 +941,9 @@ class Case():
             # print 'units : ' + uu_units
             # Build the xray.DataArray
             qty_name = {'radiance': 'specrad', 'transmittance': 'trnx', 'reflectivity': 'reflx'}[self.output_quantity]
-            uu = xray.DataArray(self.uu, [umu, phi, wvl, levels, stokes],
+            xd_uu = xray.DataArray(self.uu, [umu, phi, wvl, levels, stokes],
                                 name=qty_name, attrs={'units': uu_units})
-            self.xd_uu = uu
+            self.xd_uu = xd_uu
 
 
 class RadEnv():
@@ -1008,8 +1007,8 @@ class RadEnv():
         # TODO : Is it necessary to have the complete sphere
         # TODO : is it not sufficient to have a solar prinicple plane hemisphere ?
         if hemi:
-            prop_azi_angles = np.linspace(0.0, 180.0, n_azi + 1)[0:-1]  # TODO : This has a wrap problem ?
-            view_azi_angles = np.linspace(-180.0, 0.0, n_azi + 1)[0:-1]
+            prop_azi_angles = np.linspace(0.0, 180.0, n_azi + 1)[0:-1]  # Remove point at end to avoid wrap
+            view_azi_angles = np.linspace(-180.0, 0.0, n_azi + 1)[0:-1]  # Same here
         else:
             prop_azi_angles = np.linspace(0.0, 360.0, n_azi + 1)[0:-1]
             view_azi_angles = np.linspace(-180.0, 180.0,  n_azi + 1)[0:-1]
@@ -1117,6 +1116,83 @@ class RadEnv():
         # Delete the individual results in an attempt to save memory
         for case in self.casechain:
             del case.uu
+
+    def sph_harm_fit(self, degree):
+        """ Fit spherical harmonics to the radiant environment map (REM).
+        One set of coefficients per wavelength or spectral channel will be fitted. The coefficients for each spectral
+        bin/channel comprise one coefficient for order :math:`-m` to :math:`+m` for :math:`m = 0, 1, 2, ..., n`.
+        The total number of coefficients is :math:`(n+1)^2`.
+
+        The convention used for the spherical harmonics is that of Sloan with the Ramamoorthi and Hanrahan
+        normalization. This is a real-valued basis defined as follows:
+
+        .. math::
+            y_{n}^{m}=\\begin{cases}
+            (-1)^{m}\\sqrt{2}\\Re(Y_{n}^{m}) & m>0\\\\
+            (-1)^{m}\\sqrt{2}\\Im(Y_{n}^{m}) & m<0\\\\
+            Y_{n}^{0} & m=0
+            \\end{cases}=\\begin{cases}
+            (-1)^{m}\\sqrt{2}\\cos m\\phi\\,P_{n}^{m}(\\cos\\theta) & m>0\\\\
+            (-1)^{m}\\sqrt{2}\\sin|m|\\phi\\,P_{n}^{|m|}(\\cos\\theta) & m<0\\\\
+            K_{n}^{0}P_{n}^{0}(\\cos\\theta) & m=0
+            \\end{cases},
+
+        where the complex basis functions :math:`Y^{m}_{n}` are defined as:
+
+        .. math::
+            Y_{n}^{m}(\\theta,\\phi)=K_{n}^{m}e^{im\\phi}P_{n}^{|m|}(\\cos\\theta),\\,n\\in\\mathbf{N},\\,-n\\leq m\\leq n,
+
+        having the normalisation factor of:
+
+        .. math::
+            K_{n}^{m}=\\sqrt{\\frac{(2n+1)(n-|m|)!}{4\\pi(n+|m|)!}}.
+
+        The definition of the complex basis functions is consistent with the
+        `scipy.special <http://docs.scipy.org/doc/scipy-0.16.0/reference/generated/scipy.special.sph_harm.html>`_
+        definition of the spherical harmonics. Therefore, for fitting of the Sloan/Ramamoorthi/Hanrahan basis, the
+        first definitions is used above, that is :math:`y_{n}^{m}` calculated from the `scipy.special` function
+        :math:`Y_{n}^{m}` as:
+
+        .. math::
+            y_{n}^{m}=\\begin{cases}
+            (-1)^{m}\\sqrt{2}\\Re(Y_{n}^{m}) & m>0\\\\
+            (-1)^{m}\\sqrt{2}\\Im(Y_{n}^{m}) & m<0\\\\
+            Y_{n}^{0} & m=0
+            \\end{cases}.
+
+        :param degree: Spherical harmonics up to this degree :math:`n`, for all orders :math:`m` will be fitted,
+        :return:
+        """
+        from scipy.special import sph_harm
+        azi_angles = np.linspace(0.0, 2*np.pi, self.n_azi+1)[:-1]  # TODO : Review please
+        pol_angles = np.linspace(0.0, np.pi, self.n_pol)
+        cos_pol_angles = np.cos(pol_angles)
+        # Angles to be meshgridded - is this really necessary
+        # TODO : Check if meshgridding is really nec
+        azi_angles, pol_angles = np.meshgrid((azi_angles, pol_angles))
+        sin_pol_angles = np.sin(pol_angles)
+        # TODO : Symmetry checking still required
+        # if self.hemi:  # Sun-symmetric REM
+        for n in range(degree + 1):
+            for m in range(n + 1):
+                # Compute the Sloan/Ramamoorthi/Hanrahan spherical harmonic basis
+                if m == 0:
+                    y_mn = sph_harm(0, n, azi_angles, pol_angles)
+                else:
+                    y_mn = (-1.0)**m * np.sqrt(2.0) * sph_harm(m, n, azi_angles, pol_angles)
+                # Take the real part
+                y_mn = y_mn.real
+                # Create xray.DataArray
+
+                # Compute the integrand
+                inner_integrand = self.xd_uu * y_mn * sin_pol_angles
+                # Compute the coefficients
+                # First integrate over the propagation zenigh angle
+                outer_integrand = np.trapz(inner_integrand, inner_integrand['pza'],
+                                           axis=inner_integrand.get_axis_num('pza'))
+                # Then integrate over the propagation azimuth angle
+                sph_harm_coeff =  np.trapz(outer_integrand, outer_integrand['paz'],
+                                           axis=outer_integrand.get_axis_num('paz'))
 
 
 
