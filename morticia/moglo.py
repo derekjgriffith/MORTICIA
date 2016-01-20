@@ -63,12 +63,13 @@ long_name = {
     'vza': 'View Zenith Angle',
     'vaz': 'View Azimuth Angle',
     'svaz': 'Solar-Relative View Azimuth Angle',
-    'pza': 'Propagation Zenith Angle',
+    'pza': 'Propagation Zenith Angle',  # in radians
     'umu': 'Cosine of the Propagation Zenith Angle',
-    'phi': 'Propagation Azimuth Angle',
+    'phi': 'Propagation Azimuth Angle',  # in unit of degrees
+    'paz': 'Propagation Azimuth Angle',  # but in units of radians
     'phi0': 'Solar Propagation Azimuth Angle',
     'stokes': 'Stokes Parameter',  # I=0, Q=1, U=2, V=3
-    'zout': 'Height Above Ground',
+    'zout': 'Height Above Surface',
     'zout_sea': 'Height Above Sea Level',
     'p': 'Pressure',
     'sph_alb': 'Atmospheric Spherical Albedo',
@@ -127,10 +128,11 @@ default_units = {
     'spfa': '1/mrad',
     'vza': 'deg', ## View zenith angle
     'vaz': 'deg',  # View azimuth angle
-    'pza': 'deg',  # Propagation zenith angle
+    'pza': 'rad',  # Propagation zenith angle
     'svaz': 'deg',  # Solar-relative view azimuth angle
     'umu': '',  # Cosine of the propagation zenith
-    'phi': 'deg',  # Propagation azimuth angle
+    'phi': 'deg',  # Propagation azimuth angle, same as paz, except for units
+    'paz' : 'rad',  # same as phi except for units
     'phi0': 'deg',  # Solar propagation azimuth angle
     'srf': '',  # spectral response function
     'stokes': '',  # Stokes parameter number (not the actual stokes parameter)
