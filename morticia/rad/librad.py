@@ -62,7 +62,7 @@ The relevant code here is taken from libRadtran version 2.0
 # TODO dealing with setting of units based on whatever is known about inputs/outputs, thermal is W/m^2/cm^-1
 
 
-_isfloatnum = '^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$'  # regular expression for matching tokens to floating point
+_isfloatnum = '^[-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?$'  # regular expression for matching tokens to floating point
 
 import writeLex  # This imports all the libradtran option definitions
 import os
@@ -216,20 +216,27 @@ class Case():
         self.output_user = ''  # set with the output_user keyword
         self.output_quantity = 'radiance' # default is radiances and irradiances in units determined by input solar file
         self.source = ''  # 'solar' or 'thermal'
-        self.source_file = ''
+        self.source_file = ''  # TOA irradiance source file
         self.n_umu = 0  # number of zenith angles (actually cosine of zenith angle)
         self.umu = []  # zenith angles for radiance calculations
         self.n_phi = 0  # number of azimuth radiance angles
         self.phi = []  # azimuth angles for radiance calculations
         self.n_levels_out = 1  # Assume only one output level, unless zout/zout_sea/pressure_out keyword is used.
-        self.levels_out = []  # Tokens provided on an output level keyword (zout, zout_sea, pressure_out)
+        self.levels_out = ['boa']  # Tokens provided on an output level keyword (zout, zout_sea, pressure_out), default
         self.levels_out_type = 'zout'  # Assume that type of levels out data is altitude above surface
         self.n_wvl = '?'  # number of wavelengths is difficult to ascertain to start with
         self.n_stokes = 1  # default number of stokes parameters for polradtran
         self.stokes = ['I']  # default is to compute intensity component only (all solvers, including polradtran)
         self.radND = []  # N-dimensional radiance data (umu, phi, wvn, zout, stokes)
-        self.rad_units = 'radiance'  # radiance/irradiance units, could be K for brightness temperatures
+        self.rad_units = ['mW', 'm^2', 'nm']  # radiance/irradiance units, could be K for brightness temperatures
         self.altitude = np.zeros(1)  # Default surface (ground) height above sea level
+        self.mol_abs_param = 'reptran'  # REPTRAN is the default molecular absorption parametrization
+        self.spectral_res = 'coarse'  # The coarse 15 cm^-1 spectral resolution is the default
+        self.reptran_channel = ''  # Used with mol_abs_param keyword
+        self.spectral_channels = []  #  These are the spectral channels, such as for 'kato', 'fu' band models.
+        self.spectral_axis = 'wvl'  # By default RT calculations are spectral, with wavelength as the variable
+        self.wavelength_index = []  # set by 'wavelength_index' keyword
+        self.output_process = 'none'  # Default is to output spectral data. See output_process in uvspec manual
         if filename is not None:
             if not filename:
                 # Open a dialog to get the filename
@@ -266,7 +273,7 @@ class Case():
             self.prepare_for_polradtran()
         elif self.solver == 'sslidar':
             self.fluxline = ['center_of_range', 'number_of_photons', 'lidar_ratio']
-            self.irrad_units = ['count', '', '']
+            self.rad_units = ['count', '', '']
 
     def prepare_for_source(self, tokens):
         """ Prepare for source, particularly units of various kinds, depending on the source
@@ -284,11 +291,106 @@ class Case():
                 if self.source_file in sourceSolarUnits:
                     self.rad_units = sourceSolarUnits[self.source_file]
                 elif len(tokens) == 3:
-                    self.rad_units = {'per_nm': ['W', 'm^2', 'nm'], 'per_cm-1': ['W', 'm^2', 'cm^-1'],
-                                      'per_band': ['W', 'm^2', '']}[tokens[2]]
+                    self.rad_units[2] = {'per_nm': 'nm', 'per_cm-1':'cm^-1',
+                                      'per_band': ''}[tokens[2]]
         elif tokens[0] == 'thermal':
             self.source = 'thermal'
             self.rad_units = ['W', 'm^2', 'cm^-1']
+
+    def prepare_for_mol_abs_param(self, tokens):
+        """ Make preparations for the desired molecular absorption parametrization. There are various
+        molecular absorption options in libRadtran/uvspec and the options will certainly evolve.
+        The default mode is to perform a spectral calculation (fine wavelength grid) with output
+        of spectral radiances and irradiances. Some of the other modes, such as `crs` also output
+        spectral data. The `crs` mode actually switches off molecular line absorption and considers
+        only spectrally continuous scattering and absorption. This is really only good for the UV/blue
+        spectrum. The `reptran_channel` mode and the correlated-k modes (`kato` variants, `fu`, `avhrr_kratz`
+        and `lowtran`/`sbdart`) do not produce spectral radiances and irradiances. They produce band quantities
+        which may even be summed using the `output_process sum` directive. A sub-range of correlated-k
+        bins/channels can be selected using the `wavelength_index` directive.
+
+        See the libRadtran manual for further information on the relevant options.
+        :return:
+        """
+        tokens = [token.lower() for token in tokens]
+        if tokens[0] == 'reptran':
+            self.mol_abs_param = 'reptran'
+            self.spectral_axis = 'wvl'  # RT calculations are spectral as opposed to band
+            if len(tokens) > 1:
+                if tokens[1] == 'coarse':
+                    self.spectral_res = 'coarse'
+                elif tokens[1] == 'medium':
+                    self.spectral_res = 'medium'
+                elif tokens[1] == 'fine':
+                    self.spectral_res = 'fine'
+                else:
+                    warnings.warn('Invalid REPTRAN spectral resolution qualifier found in mol_abs_param directive.')
+        elif tokens[0] == 'crs':  # This option actually switches off line-absorption and only considers continua
+            self.mol_abs_param = 'crs'  # Only good for UV really, but will output in any spectral region
+            self.spectral_res = ''
+            self.spectral_axis = 'wvn'
+        elif tokens[0] == 'reptran_channel':
+            self.mol_abs_param = 'reptran_channel'
+            self.reptran_channel = tokens[1]
+            self.spectral_res = ''
+            self.spectral_axis = 'chn'
+        elif tokens[0] == 'kato':
+            self.mol_abs_param = 'kato'
+            self.spectral_res = ''
+            self.spectral_axis = 'chn'
+        elif tokens[0] == 'kato2':
+            self.mol_abs_param = 'kato2'
+            self.spectral_res = ''
+            self.spectral_axis = 'chn'
+        elif tokens[0] == 'kato2.96':
+            self.mol_abs_param = 'kato2.96'
+            self.spectral_res = ''
+            self.spectral_axis = 'chn'
+        elif tokens[0] == 'fu':
+            self.mol_abs_param = 'fu'
+            self.spectral_res = ''
+            self.spectral_axis = 'chn'
+        elif tokens[0] == 'avhrr_kratz':
+            self.mol_abs_param = 'avhrr_kratz'
+            self.spectral_res = ''
+            self.spectral_axis = 'chn'
+        elif tokens[0] == 'lowtran' or tokens[0] == 'sbdart':
+            self.mol_abs_param = 'lowtran'
+            self.spectral_res = ''
+            self.spectral_axis = 'chn'  # These are pseudo-spectral with 20 cm^-1 resolution
+        else:
+            warnings.warn('Unknown mol_abs_param type encountered.')
+
+    def prepare_for_output_process(self, tokens):
+        """ Prepare for effects of the `output_process` keyword in the libRadtran/uvspec input file.
+
+        :param tokens: Keyword tokens of the uvspec `output_process` keyword.
+        :return:
+        """
+        self.output_process = tokens[0]
+        process = tokens[0].lower()
+        if process == 'sum':  # the units become per band
+            self.mol_abs_para
+            self.process = 'sum'
+        elif process == 'integrate':
+            if not self.spectral_axis == 'wvl':
+                warnings.warn('Option output_process integrate probably not valid with band quantities')
+            self.output_process = 'integrate'
+            self.rad_units[2] = ''  # The third element in the rad_units list gives the spectral variable
+        elif process == 'per_nm':
+            self.output_process = 'per_nm'
+            self.rad_units[2] = 'nm'
+        elif process == 'per_cm-1':
+            self.output_process = 'per_cm-1'
+            self.rad_units[2] = 'cm^-1'
+        elif process == 'per_band':
+            self.output_process = 'per_band'
+            self.rad_units[2] = ''
+        elif process == 'none':
+            self.output_process = 'none'
+            # TODO : Probably need to revert to other defaults here
+        else:
+            warnings.warn('Invalid output_process option encountered in uvspec input file.')
 
     def prepare_for_keyword(self, keyword, tokens):
         """ Make any possible preparations for occurrences of particular keywords
@@ -336,13 +438,10 @@ class Case():
             self.output_quantity = tokens[0]
             if self.output_quantity == 'brightness':
                 self.rad_units = ['K', '', '']
-                self.irrad_units = ['K', '', '']
             elif self.output_quantity == 'reflectivity':
                 self.rad_units = ['', '', '']
-                self.irrad_units = ['', '', '']
             elif self.output_quantity == 'transmittance':
                 self.rad_units = ['', '', '']
-                self.irrad_units = ['', '', '']
         if keyword == 'heating_rate':
             self.output_user = ['zout', 'heat']
             self.fluxline = []  #TODO note that heating rate outputs for multiple wavelengths have a header line
@@ -350,6 +449,12 @@ class Case():
             self.fluxline = '?'  # this output format is unknown or too complex to handle
         if keyword == 'altitude':
             self.altitude = np.float64(tokens[0])  # This is the ground altitude above sea level
+        if keyword == 'mol_abs_param':
+            self.prepare_for_mol_abs_param(tokens)
+        if keyword == 'wavlength_index':
+            self.wavelength_index = [int(tokens[0]), int(tokens[1])]
+        if keyword == 'output_process':
+            self.prepare_for_output_process(tokens)
 
     def prepare_for_polradtran(self):
         """ Prepare for output from the polradtran solver
@@ -624,16 +729,18 @@ class Case():
         level_dict = {'boa': self.altitude, 'BOA': self.altitude, 'sur': self.altitude,
                       'SUR': self.altitude, 'surface': self.altitude, 'SURFACE': self.altitude,
                       'toa': np.inf, 'TOA': np.inf, 'cpt': np.nan, 'CPT': np.nan}
-        level_values = []
+        level_values = np.array([])
         for level in self.levels_out:
             try:
-                level_values.append(np.float64(level))
+                level_values = np.append(level_values, np.float64(level))
             except ValueError:
                 if level in level_dict:
-                    level_values.append(level_dict[level])  # Try translating
+                    level_values = np.append(level_values, level_dict[level])  # Try translating
                 else:
                     warnings.warn('Invalid level token found in ' + self.levels_out_type + ' keyword.')
-        self.level_values = np.float64(level_values)
+        #print 'level_values ++'
+        #print level_values
+        self.level_values = level_values
         #self.zout = np.unique(self.zout)  #TODO check that this does not reorder the zout values (especially pressure)
         #if len(self.zout) > 0:  #  TODO : Problems here with pressure_out, zout_sea etc.
         if self.levels_out_type == 'zout':
@@ -913,25 +1020,34 @@ class Case():
 
         # The most important output for MORTICIA is radiances (self.uu), so those get processed
         # first. This is a 5 dimensional numpy array with axes 'umu'. 'phi', 'wvl', 'zout' (or equivalent)
-        # and 'stokes'.
+        # and 'stokes'. The 'wvl' axis could also be 'chn' (spectral channel) or 'wvn' (spectral wavenumber)
         # Create each of the axes individually using xd_identity
         if len(self.uu):  # OK, there is some radiance data
-            uu_shape = self.uu.shape
-            umu = xd_identity(self.umu, 'umu', '')
-            if len(self.phi):
-                pass
-            else:
-                self.phi = np.zeros(1)
-            phi = xd_identity(self.phi, 'phi', 'deg')
-            wvl = xd_identity(self.wvl, 'wvl', 'nm')
-            wvn = xd_identity(self.wvn, 'wvn', 'cm^-1')
+            umu = xd_identity(self.umu, 'umu', '')  # TODO : This must change to the propagation zenith (polar) angle
+            paz = self.paz
+            pza = self.pza
+            phi = self.phi
+            if self.spectral_axis == 'wvl':
+                spectral_axis = self.wvl  # The spectral axis is wavelength
+            elif self.spectral_axis == 'wvn':
+                spectral_axis = self.wvn  # The spectral axis is wavenumber
+            elif self.spectral_axis == 'chn':  # The spectral axis is channel number
+                spectral_axis = self.chn
             levels = xd_identity(self.level_values, self.levels_out_type)  # Presume units correct
+            self.levels = levels
             stokes = xd_identity(range(self.n_stokes), 'stokes')
+            self.stokes = stokes
             # Determine the units of uu
             if self.output_quantity == 'radiance':
-                uu_units = self.rad_units[0] + '/' + self.rad_units[1] + '/sr'
-                if self.rad_units[2]:
-                    uu_units += '/' + self.rad_units[2]
+                if self.rad_units[0] and self.rad_units[0][-1] == 'W':  # have flux
+                    uu_units = self.rad_units[0] + '/sr'
+                    if self.rad_units[1]:
+                        uu_units += '/' + self.rad_units[1]
+                    if self.rad_units[2]:
+                        uu_units += '/' + self.rad_units[2]
+                else:
+                    warnings.warn('Unexpected/invalid radiant units encountered for output_quantity mode.')
+                    uu_units = self.rad_units[0]
             elif self.output_quantity == 'brightness':
                 uu_units = 'K'
             elif self.output_quantity == 'transmittance' or self.levels_out == 'reflectivity':
@@ -939,11 +1055,9 @@ class Case():
             # print 'units : ' + uu_units
             # Build the xray.DataArray
             qty_name = {'radiance': 'specrad', 'transmittance': 'trnx', 'reflectivity': 'reflx'}[self.output_quantity]
-            uu = xray.DataArray(self.uu, [umu, phi, wvl, levels, stokes],
+            xd_uu = xray.DataArray(self.uu, [pza, paz, wvl, levels, stokes],
                                 name=qty_name, attrs={'units': uu_units})
-            self.xd_uu = uu
-
-
+            self.xd_uu = xd_uu
 
 
 class RadEnv():
@@ -972,7 +1086,9 @@ class RadEnv():
         :param mxumu: Maximum number of polar angles per case
         :param mxphi: Maximum number of azimuthal angles per case
         :param hemi: If set True, will generate only a single hemisphere being on one side of
-            the solar principle plane. Default is False i.e. the environment map covers the full sphere
+            the solar principle plane. Default is False i.e. the environment map covers the full sphere.
+            Note that if hemi=True, the number of REM samples in azimuth becomes n_azi :math:`\\times` 2.
+            This is the recommended mode (hemi=True) for MORTICIA purposes.
 
         The solver cdisort may have dynamic memory allocation, so the warning is still issued because the situation
         is less clear.
@@ -984,11 +1100,24 @@ class RadEnv():
         upward. `phi` = `phi0` indicates that the sensor looks into the direction of the sun,
         `phi` - `phi0` = 180 means that the sun is in the back of the sensor.
 
+        `phi` is the propagation azimuth angle `paz`, except that `paz` is in radians and `phi` is in degrees.
+
+        `pza` is the propagation zenith angle in radians.
+
+        `vaz` is the view azimuth angle and is 180 :math:`^\\circ` different from `paz`. `vaz` is expressed
+        in degrees. `vza`, the view zenith angle is 180 :math:`^\\circ` different from `paz' and is expressed
+        in degrees. In order to keep all azimuth angles in increasing order, 'vaz' is in the range [-180, 180],
+        while `phi` is in the range [0, 360] and `vaz` = `phi` - 180.
+
         The value of `umu` is the cosine of the propagation zenith angle. The value of `phi` is the true azimuth of
         the propagation direction.
 
         For all one-dimensional solvers the absolute azimuth does not matter, but only the relative azimuth
         `phi` - `phi0`.
+
+        For `MORTICIA` work, it is strongly recommended that the `hemi` flag be set True. This will automatically
+        set the `phi0` keyword to zero in the RadEnv cases when running uvspec. This will essentially halve the
+        execution time for radiant environment maps of the same effective spatial resolution.
         """
         # Require that n_pol be even
         # This is to ensure that there is no umu = 0 (horizontal direction, illegal in libRAdtran)
@@ -996,27 +1125,15 @@ class RadEnv():
             warnings.warn('Input n_pol to librad.RadEnv must be even. Increased by 1.')
             n_pol += 1
         view_zen_angles = np.linspace(0.0, 180.0, n_pol)  # Viewing straight down is view zenith angle of 180 deg
-        # The following line comes from Matlab - why only one half ?
-        # TODO : Resolve question as to why only one half of angles in polar-angles
-        # TODO : Also look at linspace for azimuth angles - want to avoid duplication (wrap)
-        # One option is to add one point at 360 and then delete it.
-        # another option is to avoid wrap by
-        prop_zen_angles = np.linspace(-np.pi, 0.0, n_pol)  # Radiation travelling straight up is propagation zenith angle of 0
-        view_zen_angles = np.linspace(0.0, 180.0, n_pol)
+        prop_zen_angles = np.linspace(np.pi, 0.0, n_pol)  # Radiation travelling straight up is propagation zenith angle of 0
         umu = np.cos(prop_zen_angles)  # Negative umu is upward-looking, downwards propagating
-        # TODO : Is it necessary to have the complete sphere
-        # TODO : is it not sufficient to have a solar prinicple plane hemisphere ?
         if hemi:
-            prop_azi_angles = np.linspace(0.0, 180.0, n_azi + 1)[0:-1]  # TODO : This has a wrap problem ?
-            view_azi_angles = np.linspace(-180.0, 0.0, n_azi + 1)[0:-1]
+            prop_azi_angles = np.linspace(0.0, 180.0, n_azi + 1)[0:-1]  # Remove point at end to avoid wrap
+            view_azi_angles = np.linspace(-180.0, 0.0, n_azi + 1)[0:-1]  # Same here
         else:
             prop_azi_angles = np.linspace(0.0, 360.0, n_azi + 1)[0:-1]
             view_azi_angles = np.linspace(-180.0, 180.0,  n_azi + 1)[0:-1]
-
-        #
         phi = prop_azi_angles
-        # umu = xd_identity(umu, 'umu')
-        # Calculate number of batches in azimuthal and polar anlges
         n_azi_batch = np.int(np.ceil(np.float(len(prop_azi_angles))/mxphi))
         n_pol_batch = np.int(np.ceil(np.float(len(prop_zen_angles))/mxumu))
         # Create an list of lists with all these batches of librad.Case
@@ -1029,15 +1146,13 @@ class RadEnv():
                 batch_pol = umu[ipol_start:np.minimum(ipol_start+mxumu, len(umu))]
                 # Set the umu and phi keyword parameters
                 self.cases[ipol][iazi].alter_option(['phi'] + [str(x) for x in batch_azi])
-                #print iazi, ipol,
-                #print len([str(x) for x in batch_azi]),
-                #print len([str(x) for x in batch_pol])
-                #print ['azi'] + [str(x) for x in batch_pol]
                 self.cases[ipol][iazi].alter_option(['umu'] + [str(x) for x in batch_pol])
                 self.cases[ipol][iazi].infile = (self.cases[ipol][iazi].infile[:-4] +
                                                  '_{:04d}_{:04d}.INP'.format(ipol, iazi))
                 self.cases[ipol][iazi].outfile = (self.cases[ipol][iazi].outfile[:-4] +
                                                  '_{:04d}_{:04d}.OUT'.format(ipol, iazi))
+                self.cases[ipol][iazi].name = (self.cases[ipol][iazi].name +
+                                                 '_{:04d}_{:04d}'.format(ipol, iazi))
                 if hemi:  # Doing only one hemisphere along solar principal plane
                     self.cases[ipol][iazi].alter_option(['phi0', '0.0'])  # Sun shining towards North
         # Create a flattened list view of the cases
@@ -1048,11 +1163,12 @@ class RadEnv():
         self.n_pol = n_pol
         self.n_azi_batch = n_azi_batch
         self.n_pol_batch = n_pol_batch
-        self.phi = xd_identity(prop_azi_angles, 'phi')
-        self.umu = xd_identity(umu, 'umu')
-        self.pza = xd_identity(np.linspace(-180.0, 0.0, n_pol), 'pza')
-        self.vza = xd_identity(view_zen_angles, 'vza')
-        self.vaz = xd_identity(view_azi_angles, 'vaz')
+        self.phi = xd_identity(prop_azi_angles, 'phi', 'deg')
+        self.umu = xd_identity(umu, 'umu', '')
+        self.pza = xd_identity(prop_zen_angles, 'pza', 'rad')
+        self.paz = xd_identity(np.deg2rad(prop_azi_angles), 'paz', 'rad')
+        self.vza = xd_identity(view_zen_angles, 'vza', 'deg')
+        self.vaz = xd_identity(view_azi_angles, 'vaz', 'deg')
         self.uu = np.array([])
 
     def run_ipyparallel(self, ipyparallel_view, stderr_to_file=False):
@@ -1073,7 +1189,7 @@ class RadEnv():
             purposes.
         :return:
         """
-        # The following should work, but the list casechain is completely reassigned
+        # The following does work, but the list casechain is completely reassigned
         # instead of being assigned element for element
         self.casechain = ipyparallel_view.map(Case.run, self.casechain)
         # Now recreate the list of lists view
@@ -1082,9 +1198,19 @@ class RadEnv():
         # Compile the radiance results into one large array
         self.uu = np.hstack([np.vstack([self.cases[i_pol][i_azi].uu for i_pol in range(self.n_pol_batch)])
                                                                     for i_azi in range(self.n_azi_batch)])
+        if self.hemi:  # Double up in the azimuth direction, but flip as well
+            self.uu = np.hstack([self.uu, self.uu[:,::-1,...]])
+            # Perform doubling up in all azimuth variables
+            self.pza = xray.concat((self.pza, self.pza + np.pi), dim='pza')
+            self.phi = xray.concat((self.phi, self.phi + 180), dim='phi')
+            self.vaz = xray.concat((self.vaz, self.vaz + 180), dim='vaz')  # view azimuth angle
         # Delete the individual results in an attempt to save memory
         for case in self.casechain:
             del case.uu
+        # Concatenate the cases in umu and phi
+        self.xd_uu = xray.concat([xray.concat([case_uu.xd_uu for case_uu in self.cases[jj]], dim='phi')
+                                                 for jj in range(len(self.cases))], dim='umu')
+        self.xd_uu = xray.DataArray(self.uu, [self.pza, self.paz, self.wvl, self.])
 
     def run_parallel(self, n_nodes=4):
         """ Run the RadEnv in multiprocessing mode on the local host.
@@ -1111,6 +1237,85 @@ class RadEnv():
         # Delete the individual results in an attempt to save memory
         for case in self.casechain:
             del case.uu
+
+    def sph_harm_fit(self, degree):
+        """ Fit spherical harmonics to the radiant environment map (REM).
+        One set of coefficients per wavelength or spectral channel will be fitted. The coefficients for each spectral
+        bin/channel comprise one coefficient for order :math:`-m` to :math:`+m` for :math:`m = 0, 1, 2, ..., n`.
+        The total number of coefficients is :math:`(n+1)^2`.
+
+        The convention used for the spherical harmonics is that of Sloan with the Ramamoorthi and Hanrahan
+        normalization. This is a real-valued basis defined as follows:
+
+        .. math::
+            y_{n}^{m}=\\begin{cases}
+            (-1)^{m}\\sqrt{2}\\Re(Y_{n}^{m}) & m>0\\\\
+            (-1)^{m}\\sqrt{2}\\Im(Y_{n}^{m}) & m<0\\\\
+            Y_{n}^{0} & m=0
+            \\end{cases}=\\begin{cases}
+            (-1)^{m}\\sqrt{2}\\cos m\\phi\\,P_{n}^{m}(\\cos\\theta) & m>0\\\\
+            (-1)^{m}\\sqrt{2}\\sin|m|\\phi\\,P_{n}^{|m|}(\\cos\\theta) & m<0\\\\
+            K_{n}^{0}P_{n}^{0}(\\cos\\theta) & m=0
+            \\end{cases},
+
+        where the complex basis functions :math:`Y^{m}_{n}` are defined as:
+
+        .. math::
+            Y_{n}^{m}(\\theta,\\phi)=K_{n}^{m}e^{im\\phi}P_{n}^{|m|}(\\cos\\theta),\\,n\\in\\mathbf{N},\\,-n\\leq m\\leq n,
+
+        having the normalisation factor of:
+
+        .. math::
+            K_{n}^{m}=\\sqrt{\\frac{(2n+1)(n-|m|)!}{4\\pi(n+|m|)!}}.
+
+        The definition of the complex basis functions is consistent with the
+        `scipy.special <http://docs.scipy.org/doc/scipy-0.16.0/reference/generated/scipy.special.sph_harm.html>`_
+        definition of the spherical harmonics. Therefore, for fitting of the Sloan/Ramamoorthi/Hanrahan basis, the
+        first definitions is used above, that is :math:`y_{n}^{m}` calculated from the `scipy.special` function
+        :math:`Y_{n}^{m}` as:
+
+        .. math::
+            y_{n}^{m}=\\begin{cases}
+            (-1)^{m}\\sqrt{2}\\Re(Y_{n}^{m}) & m>0\\\\
+            (-1)^{m}\\sqrt{2}\\Im(Y_{n}^{m}) & m<0\\\\
+            Y_{n}^{0} & m=0
+            \\end{cases}.
+
+        :param degree: Spherical harmonics up to this degree :math:`n`, for all orders :math:`m` will be fitted,
+        :return:
+        """
+        from scipy.special import sph_harm
+        azi_angles = self.paz.data  # Propagation zenith angles in radians
+        pol_angles = self.pza.data   # Propagation polar (zenith) angles in radians
+        # Angles to be meshgridded - is this really necessary
+        # TODO : Check if meshgridding is really necessary
+        azi_angles, pol_angles = np.meshgrid((azi_angles, pol_angles))
+        sin_pol_angles = np.sin(pol_angles)
+        # TODO : Symmetry checking still required
+        # if self.hemi:  # Sun-symmetric REM
+        sph_harm_coeff = []
+        for n in range(degree + 1):
+            sph_harm_coeff.append([])  # Add another list of coefficients for order m = 0 to n
+            for m in range(n + 1):
+                sph_harm_coeff[n].append([])  # Add another coefficient for order m
+                # Compute the Sloan/Ramamoorthi/Hanrahan spherical harmonic basis
+                if m == 0:
+                    y_mn = sph_harm(0, n, azi_angles, pol_angles)
+                else:
+                    y_mn = (-1.0)**m * np.sqrt(2.0) * sph_harm(m, n, azi_angles, pol_angles)
+                # Take the real part
+                y_mn = y_mn.real
+                # Create xray.DataArray
+
+                # Compute the integrand
+                inner_integrand = self.xd_uu * y_mn * sin_pol_angles
+                # Compute the coefficients
+                # First integrate over the propagation zenith angle
+                outer_integrand = np.trapz(inner_integrand, inner_integrand['pza'],
+                                           axis=inner_integrand.get_axis_num('pza'))
+                # Then integrate over the propagation azimuth angle
+                sph_harm_coeff[n][m] =  np.trapz(outer_integrand, outer_integrand['paz'],
+                                           axis=outer_integrand.get_axis_num('paz'))
 
 
 
