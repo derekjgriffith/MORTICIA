@@ -1246,12 +1246,16 @@ class RadEnv():
             >>> ipyparallel_view = paraclient.load_balanced_view()
             >>> ipyparallel_view.block = True  # Must wait for completion of all tasks on the cluster
 
+            Note that if new ipengines are started, use_dill() must be executed again. The use_dill() call
+            should be a routine before every function map to the cluster.
+
         :param stderr_to_file: If set to True, standard error output will be sent to a file. use only for debugging
             purposes.
         :return:
         """
         # The following does work, but the list casechain is completely reassigned
         # instead of being assigned element for element
+        # TODO : Consider passing in the client instead, to set blocking and use_dill() EVERY time.
         self.casechain = ipyparallel_view.map(Case.run, self.casechain)
         # Now recreate the list of lists view
         self.cases = [[self.casechain[i_pol * self.n_azi_batch + i_azi] for i_azi in range(self.n_azi_batch)]
@@ -1348,36 +1352,44 @@ class RadEnv():
         from scipy.special import sph_harm
         azi_angles = self.paz.data  # Propagation zenith angles in radians
         pol_angles = self.pza.data   # Propagation polar (zenith) angles in radians
+        azi_ang_delta = azi_angles[1] - azi_angles[0]
+        pol_ang_delta = pol_angles[1] - pol_angles[0]
         # Angles to be meshgridded - is this really necessary
         # TODO : Check if meshgridding is really necessary
-        azi_angles, pol_angles = np.meshgrid((azi_angles, pol_angles))
-        sin_pol_angles = np.sin(pol_angles)
+        azi_angles, pol_angles = np.meshgrid(azi_angles, pol_angles)
+        sin_pol_angles = xray.DataArray(np.sin(pol_angles), [self.pza, self.paz])
         # TODO : Symmetry checking still required
         # if self.hemi:  # Sun-symmetric REM
         sph_harm_coeff = []
-        if self.hemi:  # Calculating over only one hemisphere
+        if self.hemi:  # Calculating over only one hemisphere (integration over a hemisphere)
             for n in range(degree + 1):
                 sph_harm_coeff.append([])  # Add another list of coefficients for order m = 0 to n
-                for m in range(n + 1):
-                    sph_harm_coeff[n].append([])  # Add another coefficient for order m
+                for m in range(-n, n + 1):
+                    sph_harm_coeff[n].append(0.0)  # Add another coefficient for order m
                     # Compute the Sloan/Ramamoorthi/Hanrahan spherical harmonic basis
                     if m == 0:
                         y_mn = sph_harm(0, n, azi_angles, pol_angles)
                     else:
                         y_mn = (-1.0)**m * np.sqrt(2.0) * sph_harm(m, n, azi_angles, pol_angles)
-                    # Take the real part
-                    y_mn = y_mn.real
+                    if m >= 0:
+                        # Take the real part, since we are using a real basis
+                        y_mn = y_mn.real
+                    elif m < 0:
+                        y_mn = y_mn.imag
                     # Create xray.DataArray
-
+                    y_mn = xray.DataArray(y_mn, [self.pza, self.paz])
                     # Compute the integrand
                     inner_integrand = self.xd_uu * y_mn * sin_pol_angles
                     # Compute the coefficients
                     # First integrate over the propagation zenith angle
-                    outer_integrand = np.trapz(inner_integrand, inner_integrand['pza'],
-                                               axis=inner_integrand.get_axis_num('pza'))
+                    outer_integrand = inner_integrand.sum(dim='pza') * pol_ang_delta
                     # Then integrate over the propagation azimuth angle
-                    sph_harm_coeff[n][m] =  np.trapz(outer_integrand, outer_integrand['paz'],
-                                               axis=outer_integrand.get_axis_num('paz'))
+                    # There is a factor of 2 here because it is only one hemisphere
+                    sph_harm_coeff[n][m + n] = 2.0 * outer_integrand.sum(dim='paz') * azi_ang_delta
+        else:  # Perform integration over the full sphere
+            pass
+        self.sph_harm_coeff = sph_harm_coeff
+        return sph_harm_coeff
 
 
 
