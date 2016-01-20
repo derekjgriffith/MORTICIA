@@ -420,9 +420,13 @@ class Flt:
                                                 ))
         return xd_flt_list
 
-    def flt_as_xd_harmonised(self):
+    def flt_as_xd_harmonised(self, quantity_name='srf', chn_start_index=0):
         """ Convert the Flt class object into a single, wavelength-harmonised xray.DataArray.
 
+        :param quantity_name: The name of the quantity as defined the long_names variable in moglo.py. Defaults to
+            'srf', a Spectral Response Function, but could also be a transmission functions 'trn' or other spectral
+            quantity known to moglo.py.
+        :param chn_start_index: Use this parameter to select the starting channel number. Defaults to zero.
         :return: The set of Flt filters as a single, wavelength-harmonised xray.DataArray object. The filter
             headers are returned in an attribute called 'labels'. The fileheader of the Flt object is
             returned in an attribute called 'title' (netCDF recommendation)
@@ -430,17 +434,41 @@ class Flt:
         xd_flt_list = self.flt_as_xd()  # Create a list of xray.DataArray objects
         # Harmonise the wavelength axes
         xd_flt_list_harmonised = xd_harmonise_interp(xd_flt_list)
-        xd_attrs_update(xd_flt_list_harmonised)  # Update the attributes
+        xd_attrs_update(xd_flt_list_harmonised)  # Update the attribute
+        chn_indices = range(chn_start_index, chn_start_index + len(xd_flt_list))
         # Compile the list into a single object
         flt_data = np.vstack([xd_flt_list_harmonised[ifilt].data for ifilt in range(len(xd_flt_list))])
         xd_flt_harmonised = xray.DataArray(flt_data.T, [(xd_flt_list_harmonised[0]['wvl']),
-                                                      ('chn', range(len(xd_flt_list)),
+                                                      ('chn', chn_indices,
                                                          {'labels': self.filterheaders})],
-                                           name='srf',
-                                           attrs={'long_name': long_name['srf'],
-                                                  'units': default_units['srf'],
+                                           name=quantity_name,
+                                           attrs={'long_name': long_name[quantity_name],
+                                                  'units': default_units[quantity_name],
                                                   'title': self.name})
         return xd_flt_harmonised
+
+class SpectralChannels(object):
+    """ The SpectralChannels class defines any band-limited spectral distribution function. This could be
+    the spectral response functions of a sensor, or the spectral transmittance of an optical filter, the spectral
+    spectral radiance, irradiance or any other band-limited spectral quantity. The actual spectral distribution
+    function is represented by an xray.DataArray object with a wavelength axis in preferred units of 'nm'.
+
+    SpectralChannels is a list of channels that can be indexed in the usual way, by the global channel index
+    """
+    _channel_counter = 0  # This is a class global counter, incremented for each channel, so that every
+                          # defined channel gets a unique number
+    _channel_list = []  # The global list of spectral channels indexed self.ichn
+    _channel_groups = []  # Global list of channel group names
+    _channel_group_dict = {}  # Dictionary of channels indexed by group name
+    def __init__(self, sdf=None, group='', channels='all'):
+        """ Create one or a group of spectral distribution functions
+        :param sdf: The spectral distribution function as an xray.DataArray
+        :param group:
+        :param channels:
+        :return:
+        """
+        pass
+
 
 
 
