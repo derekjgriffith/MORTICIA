@@ -228,13 +228,15 @@ class Case():
         self.n_stokes = 1  # default number of stokes parameters for polradtran
         self.stokes = ['I']  # default is to compute intensity component only (all solvers, including polradtran)
         self.radND = []  # N-dimensional radiance data (umu, phi, wvn, zout, stokes)
-        self.rad_units = 'radiance'  # radiance/irradiance units, could be K for brightness temperatures
+        self.rad_units = ['mW', 'm^2', 'nm']  # radiance/irradiance units, could be K for brightness temperatures
         self.altitude = np.zeros(1)  # Default surface (ground) height above sea level
         self.mol_abs_param = 'reptran'  # REPTRAN is the default molecular absorption parametrization
         self.spectral_res = 'coarse'  # The coarse 15 cm^-1 spectral resolution is the default
         self.reptran_channel = ''  # Used with mol_abs_param keyword
-        self.spectral_var = 'wvl'  # By default RT calculations are spectral, with wavelength as the variable
+        self.spectral_channels = []  #  These are the spectral channels, such as for 'kato', 'fu' band models.
+        self.spectral_axis = 'wvl'  # By default RT calculations are spectral, with wavelength as the variable
         self.wavelength_index = []  # set by 'wavelength_index' keyword
+        self.output_process = 'none'  # Default is to output spectral data. See output_process in uvspec manual
         if filename is not None:
             if not filename:
                 # Open a dialog to get the filename
@@ -271,7 +273,7 @@ class Case():
             self.prepare_for_polradtran()
         elif self.solver == 'sslidar':
             self.fluxline = ['center_of_range', 'number_of_photons', 'lidar_ratio']
-            self.irrad_units = ['count', '', '']
+            self.rad_units = ['count', '', '']
 
     def prepare_for_source(self, tokens):
         """ Prepare for source, particularly units of various kinds, depending on the source
@@ -289,20 +291,31 @@ class Case():
                 if self.source_file in sourceSolarUnits:
                     self.rad_units = sourceSolarUnits[self.source_file]
                 elif len(tokens) == 3:
-                    self.rad_units = {'per_nm': ['W', 'm^2', 'nm'], 'per_cm-1': ['W', 'm^2', 'cm^-1'],
-                                      'per_band': ['W', 'm^2', '']}[tokens[2]]
+                    self.rad_units[2] = {'per_nm': 'nm', 'per_cm-1':'cm^-1',
+                                      'per_band': ''}[tokens[2]]
         elif tokens[0] == 'thermal':
             self.source = 'thermal'
             self.rad_units = ['W', 'm^2', 'cm^-1']
 
     def prepare_for_mol_abs_param(self, tokens):
-        """ Make preparations for the desired molecular absorption parametrization.
+        """ Make preparations for the desired molecular absorption parametrization. There are various
+        molecular absorption options in libRadtran/uvspec and the options will certainly evolve.
+        The default mode is to perform a spectral calculation (fine wavelength grid) with output
+        of spectral radiances and irradiances. Some of the other modes, such as `crs` also output
+        spectral data. The `crs` mode actually switches off molecular line absorption and considers
+        only spectrally continuous scattering and absorption. This is really only good for the UV/blue
+        spectrum. The `reptran_channel` mode and the correlated-k modes (`kato` variants, `fu`, `avhrr_kratz`
+        and `lowtran`/`sbdart`) do not produce spectral radiances and irradiances. They produce band quantities
+        which may even be summed using the `output_process sum` directive. A sub-range of correlated-k
+        bins/channels can be selected using the `wavelength_index` directive.
+
+        See the libRadtran manual for further information on the relevant options.
         :return:
         """
         tokens = [token.lower() for token in tokens]
         if tokens[0] == 'reptran':
             self.mol_abs_param = 'reptran'
-            self.spectral_var = 'wvl'  # RT calculations are spectral as opposed to band
+            self.spectral_axis = 'wvl'  # RT calculations are spectral as opposed to band
             if len(tokens) > 1:
                 if tokens[1] == 'coarse':
                     self.spectral_res = 'coarse'
@@ -313,40 +326,71 @@ class Case():
                 else:
                     warnings.warn('Invalid REPTRAN spectral resolution qualifier found in mol_abs_param directive.')
         elif tokens[0] == 'crs':  # This option actually switches off line-absorption and only considers continua
-            self.mol_abs_param = 'crs'
+            self.mol_abs_param = 'crs'  # Only good for UV really, but will output in any spectral region
             self.spectral_res = ''
-            self.spectral_var = 'wvn'
+            self.spectral_axis = 'wvn'
         elif tokens[0] == 'reptran_channel':
             self.mol_abs_param = 'reptran_channel'
             self.reptran_channel = tokens[1]
             self.spectral_res = ''
-            self.spectral_var = False
+            self.spectral_axis = 'chn'
         elif tokens[0] == 'kato':
             self.mol_abs_param = 'kato'
             self.spectral_res = ''
-            self.spectral_var = 'chn'
+            self.spectral_axis = 'chn'
         elif tokens[0] == 'kato2':
             self.mol_abs_param = 'kato2'
             self.spectral_res = ''
-            self.spectral_var = 'chn'
+            self.spectral_axis = 'chn'
         elif tokens[0] == 'kato2.96':
             self.mol_abs_param = 'kato2.96'
             self.spectral_res = ''
-            self.spectral_var = 'chn'
+            self.spectral_axis = 'chn'
         elif tokens[0] == 'fu':
             self.mol_abs_param = 'fu'
             self.spectral_res = ''
-            self.spectral_var = 'chn'
+            self.spectral_axis = 'chn'
         elif tokens[0] == 'avhrr_kratz':
             self.mol_abs_param = 'avhrr_kratz'
             self.spectral_res = ''
-            self.spectral_var = 'chn'
+            self.spectral_axis = 'chn'
         elif tokens[0] == 'lowtran' or tokens[0] == 'sbdart':
             self.mol_abs_param = 'lowtran'
             self.spectral_res = ''
-            self.spectral_var = 'chn'  # These are pseudo-spectral with 20 cm^-1 resolution
+            self.spectral_axis = 'chn'  # These are pseudo-spectral with 20 cm^-1 resolution
         else:
             warnings.warn('Unknown mol_abs_param type encountered.')
+
+    def prepare_for_output_process(self, tokens):
+        """ Prepare for effects of the `output_process` keyword in the libRadtran/uvspec input file.
+
+        :param tokens: Keyword tokens of the uvspec `output_process` keyword.
+        :return:
+        """
+        self.output_process = tokens[0]
+        process = tokens[0].lower()
+        if process == 'sum':  # the units become per band
+            self.mol_abs_para
+            self.process = 'sum'
+        elif process == 'integrate':
+            if not self.spectral_axis == 'wvl':
+                warnings.warn('Option output_process integrate probably not valid with band quantities')
+            self.output_process = 'integrate'
+            self.rad_units[2] = ''  # The third element in the rad_units list gives the spectral variable
+        elif process == 'per_nm':
+            self.output_process = 'per_nm'
+            self.rad_units[2] = 'nm'
+        elif process == 'per_cm-1':
+            self.output_process = 'per_cm-1'
+            self.rad_units[2] = 'cm^-1'
+        elif process == 'per_band':
+            self.output_process = 'per_band'
+            self.rad_units[2] = ''
+        elif process == 'none':
+            self.output_process = 'none'
+            # TODO : Probably need to revert to other defaults here
+        else:
+            warnings.warn('Invalid output_process option encountered in uvspec input file.')
 
     def prepare_for_keyword(self, keyword, tokens):
         """ Make any possible preparations for occurrences of particular keywords
@@ -394,13 +438,10 @@ class Case():
             self.output_quantity = tokens[0]
             if self.output_quantity == 'brightness':
                 self.rad_units = ['K', '', '']
-                self.irrad_units = ['K', '', '']
             elif self.output_quantity == 'reflectivity':
                 self.rad_units = ['', '', '']
-                self.irrad_units = ['', '', '']
             elif self.output_quantity == 'transmittance':
                 self.rad_units = ['', '', '']
-                self.irrad_units = ['', '', '']
         if keyword == 'heating_rate':
             self.output_user = ['zout', 'heat']
             self.fluxline = []  #TODO note that heating rate outputs for multiple wavelengths have a header line
@@ -412,6 +453,8 @@ class Case():
             self.prepare_for_mol_abs_param(tokens)
         if keyword == 'wavlength_index':
             self.wavelength_index = [int(tokens[0]), int(tokens[1])]
+        if keyword == 'output_process':
+            self.prepare_for_output_process(tokens)
 
     def prepare_for_polradtran(self):
         """ Prepare for output from the polradtran solver
@@ -984,17 +1027,27 @@ class Case():
             paz = self.paz
             pza = self.pza
             phi = self.phi
-            wvl = self.wvl  # Problem here dealing with channels instead of wavelengths
-            wvn = self.wvn
+            if self.spectral_axis == 'wvl':
+                spectral_axis = self.wvl  # The spectral axis is wavelength
+            elif self.spectral_axis == 'wvn':
+                spectral_axis = self.wvn  # The spectral axis is wavenumber
+            elif self.spectral_axis == 'chn':  # The spectral axis is channel number
+                spectral_axis = self.chn
             levels = xd_identity(self.level_values, self.levels_out_type)  # Presume units correct
             self.levels = levels
             stokes = xd_identity(range(self.n_stokes), 'stokes')
             self.stokes = stokes
             # Determine the units of uu
             if self.output_quantity == 'radiance':
-                uu_units = self.rad_units[0] + '/' + self.rad_units[1] + '/sr'
-                if self.rad_units[2]:
-                    uu_units += '/' + self.rad_units[2]
+                if self.rad_units[0] and self.rad_units[0][-1] == 'W':  # have flux
+                    uu_units = self.rad_units[0] + '/sr'
+                    if self.rad_units[1]:
+                        uu_units += '/' + self.rad_units[1]
+                    if self.rad_units[2]:
+                        uu_units += '/' + self.rad_units[2]
+                else:
+                    warnings.warn('Unexpected/invalid radiant units encountered for output_quantity mode.')
+                    uu_units = self.rad_units[0]
             elif self.output_quantity == 'brightness':
                 uu_units = 'K'
             elif self.output_quantity == 'transmittance' or self.levels_out == 'reflectivity':
