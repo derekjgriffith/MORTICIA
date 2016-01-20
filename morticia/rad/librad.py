@@ -1189,11 +1189,11 @@ class RadEnv():
         prop_zen_angles = np.linspace(np.pi, 0.0, n_pol)  # Radiation travelling straight up is propagation zenith angle of 0
         umu = np.cos(prop_zen_angles)  # Negative umu is upward-looking, downwards propagating
         if hemi:
-            prop_azi_angles = np.linspace(0.0, 180.0, n_azi + 1)[0:-1]  # Remove point at end to avoid wrap
-            view_azi_angles = np.linspace(-180.0, 0.0, n_azi + 1)[0:-1]  # Same here
+            prop_azi_angles = np.linspace(0.0, 180.0, n_azi)
+            view_azi_angles = np.linspace(-180.0, 0.0, n_azi)
         else:
-            prop_azi_angles = np.linspace(0.0, 360.0, n_azi + 1)[0:-1]
-            view_azi_angles = np.linspace(-180.0, 180.0,  n_azi + 1)[0:-1]
+            prop_azi_angles = np.linspace(0.0, 360.0, n_azi)
+            view_azi_angles = np.linspace(-180.0, 180.0,  n_azi)
         phi = prop_azi_angles
         n_azi_batch = np.int(np.ceil(np.float(len(prop_azi_angles))/mxphi))
         n_pol_batch = np.int(np.ceil(np.float(len(prop_zen_angles))/mxumu))
@@ -1259,18 +1259,18 @@ class RadEnv():
         # Compile the radiance results into one large array
         self.uu = np.hstack([np.vstack([self.cases[i_pol][i_azi].uu for i_pol in range(self.n_pol_batch)])
                                                                     for i_azi in range(self.n_azi_batch)])
-        if self.hemi:  # Double up in the azimuth direction, but flip as well
-            self.uu = np.hstack([self.uu, self.uu[:,::-1,...]])
-            # Perform doubling up in all azimuth variables
-            self.pza = xray.concat((self.pza, self.pza + np.pi), dim='pza')
-            self.phi = xray.concat((self.phi, self.phi + 180), dim='phi')
-            self.vaz = xray.concat((self.vaz, self.vaz + 180), dim='vaz')  # view azimuth angle
+        # if self.hemi:  # Double up in the azimuth direction, but flip as well
+        #     self.uu = np.hstack([self.uu, self.uu[:,::-1,...]])
+        #     # Perform doubling up in all azimuth variables
+        #     self.pza = xray.concat((self.pza, self.pza + np.pi), dim='pza')
+        #     self.phi = xray.concat((self.phi, self.phi + 180), dim='phi')
+        #     self.vaz = xray.concat((self.vaz, self.vaz + 180), dim='vaz')  # view azimuth angle
         # Delete the individual results in an attempt to save memory
         for case in self.casechain:
             del case.uu
         # Concatenate the cases in umu and phi
-        self.xd_uu = xray.concat([xray.concat([case_uu.xd_uu for case_uu in self.cases[jj]], dim='phi')
-                                                 for jj in range(len(self.cases))], dim='umu')
+        self.xd_uu = xray.concat([xray.concat([case_uu.xd_uu for case_uu in self.cases[jj]], dim='paz')
+                                                 for jj in range(len(self.cases))], dim='pza')
         #self.xd_uu = xray.DataArray(self.uu, [self.pza, self.paz, self.wvl, self.])
 
     def run_parallel(self, n_nodes=4):
@@ -1355,28 +1355,29 @@ class RadEnv():
         # TODO : Symmetry checking still required
         # if self.hemi:  # Sun-symmetric REM
         sph_harm_coeff = []
-        for n in range(degree + 1):
-            sph_harm_coeff.append([])  # Add another list of coefficients for order m = 0 to n
-            for m in range(n + 1):
-                sph_harm_coeff[n].append([])  # Add another coefficient for order m
-                # Compute the Sloan/Ramamoorthi/Hanrahan spherical harmonic basis
-                if m == 0:
-                    y_mn = sph_harm(0, n, azi_angles, pol_angles)
-                else:
-                    y_mn = (-1.0)**m * np.sqrt(2.0) * sph_harm(m, n, azi_angles, pol_angles)
-                # Take the real part
-                y_mn = y_mn.real
-                # Create xray.DataArray
+        if self.hemi:  # Calculating over only one hemisphere
+            for n in range(degree + 1):
+                sph_harm_coeff.append([])  # Add another list of coefficients for order m = 0 to n
+                for m in range(n + 1):
+                    sph_harm_coeff[n].append([])  # Add another coefficient for order m
+                    # Compute the Sloan/Ramamoorthi/Hanrahan spherical harmonic basis
+                    if m == 0:
+                        y_mn = sph_harm(0, n, azi_angles, pol_angles)
+                    else:
+                        y_mn = (-1.0)**m * np.sqrt(2.0) * sph_harm(m, n, azi_angles, pol_angles)
+                    # Take the real part
+                    y_mn = y_mn.real
+                    # Create xray.DataArray
 
-                # Compute the integrand
-                inner_integrand = self.xd_uu * y_mn * sin_pol_angles
-                # Compute the coefficients
-                # First integrate over the propagation zenith angle
-                outer_integrand = np.trapz(inner_integrand, inner_integrand['pza'],
-                                           axis=inner_integrand.get_axis_num('pza'))
-                # Then integrate over the propagation azimuth angle
-                sph_harm_coeff[n][m] =  np.trapz(outer_integrand, outer_integrand['paz'],
-                                           axis=outer_integrand.get_axis_num('paz'))
+                    # Compute the integrand
+                    inner_integrand = self.xd_uu * y_mn * sin_pol_angles
+                    # Compute the coefficients
+                    # First integrate over the propagation zenith angle
+                    outer_integrand = np.trapz(inner_integrand, inner_integrand['pza'],
+                                               axis=inner_integrand.get_axis_num('pza'))
+                    # Then integrate over the propagation azimuth angle
+                    sph_harm_coeff[n][m] =  np.trapz(outer_integrand, outer_integrand['paz'],
+                                               axis=outer_integrand.get_axis_num('paz'))
 
 
 
