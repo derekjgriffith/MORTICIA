@@ -216,7 +216,7 @@ class Case():
         self.output_user = ''  # set with the output_user keyword
         self.output_quantity = 'radiance' # default is radiances and irradiances in units determined by input solar file
         self.source = ''  # 'solar' or 'thermal'
-        self.source_file = ''
+        self.source_file = ''  # TOA irradiance source file
         self.n_umu = 0  # number of zenith angles (actually cosine of zenith angle)
         self.umu = []  # zenith angles for radiance calculations
         self.n_phi = 0  # number of azimuth radiance angles
@@ -231,9 +231,10 @@ class Case():
         self.rad_units = 'radiance'  # radiance/irradiance units, could be K for brightness temperatures
         self.altitude = np.zeros(1)  # Default surface (ground) height above sea level
         self.mol_abs_param = 'reptran'  # REPTRAN is the default molecular absorption parametrization
-        self.reptran_res = 'coarse'  # The coarse 15 cm^-1 spectral resolution is the default
+        self.spectral_res = 'coarse'  # The coarse 15 cm^-1 spectral resolution is the default
         self.reptran_channel = ''  # Used with mol_abs_param keyword
-        self.spectral_rt = True  # By default RT calculations are spectral
+        self.spectral_var = 'wvl'  # By default RT calculations are spectral, with wavelength as the variable
+        self.wavelength_index = []  # set by 'wavelength_index' keyword
         if filename is not None:
             if not filename:
                 # Open a dialog to get the filename
@@ -294,7 +295,6 @@ class Case():
             self.source = 'thermal'
             self.rad_units = ['W', 'm^2', 'cm^-1']
 
-
     def prepare_for_mol_abs_param(self, tokens):
         """ Make preparations for the desired molecular absorption parametrization.
         :return:
@@ -302,52 +302,51 @@ class Case():
         tokens = [token.lower() for token in tokens]
         if tokens[0] == 'reptran':
             self.mol_abs_param = 'reptran'
-            self.spectral_rt = True  # RT calculations are spectral as opposed to band
+            self.spectral_var = 'wvl'  # RT calculations are spectral as opposed to band
             if len(tokens) > 1:
                 if tokens[1] == 'coarse':
-                    self.reptran_res = 'coarse'
+                    self.spectral_res = 'coarse'
                 elif tokens[1] == 'medium':
-                    self.reptran_res = 'medium'
+                    self.spectral_res = 'medium'
                 elif tokens[1] == 'fine':
-                    self.reptran_res = 'fine'
+                    self.spectral_res = 'fine'
                 else:
                     warnings.warn('Invalid REPTRAN spectral resolution qualifier found in mol_abs_param directive.')
         elif tokens[0] == 'crs':  # This option actually switches off line-absorption and only considers continua
             self.mol_abs_param = 'crs'
-            self.reptran_res = ''
-            self.spectral_rt = True
+            self.spectral_res = ''
+            self.spectral_var = 'wvn'
         elif tokens[0] == 'reptran_channel':
             self.mol_abs_param = 'reptran_channel'
             self.reptran_channel = tokens[1]
-            self.reptran_res = ''
-            self.spectral_rt = False
+            self.spectral_res = ''
+            self.spectral_var = False
         elif tokens[0] == 'kato':
             self.mol_abs_param = 'kato'
-            self.reptran_res = ''
-            self.spectral_rt = False
+            self.spectral_res = ''
+            self.spectral_var = 'chn'
         elif tokens[0] == 'kato2':
             self.mol_abs_param = 'kato2'
-            self.reptran_res = ''
-            self.spectral_rt = False
+            self.spectral_res = ''
+            self.spectral_var = 'chn'
         elif tokens[0] == 'kato2.96':
             self.mol_abs_param = 'kato2.96'
-            self.reptran_res = ''
-            self.spectral_rt = False
+            self.spectral_res = ''
+            self.spectral_var = 'chn'
         elif tokens[0] == 'fu':
             self.mol_abs_param = 'fu'
-            self.reptran_res = ''
-            self.spectral_rt = False
+            self.spectral_res = ''
+            self.spectral_var = 'chn'
         elif tokens[0] == 'avhrr_kratz':
             self.mol_abs_param = 'avhrr_kratz'
-            self.reptran_res = ''
-            self.spectral_rt = False
+            self.spectral_res = ''
+            self.spectral_var = 'chn'
         elif tokens[0] == 'lowtran' or tokens[0] == 'sbdart':
             self.mol_abs_param = 'lowtran'
-            self.reptran_res = ''
-            self.spectral_rt = True  # These are pseudo-spectral with 20 cm^-1 resolution
+            self.spectral_res = ''
+            self.spectral_var = 'chn'  # These are pseudo-spectral with 20 cm^-1 resolution
         else:
             warnings.warn('Unknown mol_abs_param type encountered.')
-            
 
     def prepare_for_keyword(self, keyword, tokens):
         """ Make any possible preparations for occurrences of particular keywords
@@ -411,6 +410,8 @@ class Case():
             self.altitude = np.float64(tokens[0])  # This is the ground altitude above sea level
         if keyword == 'mol_abs_param':
             self.prepare_for_mol_abs_param(tokens)
+        if keyword == 'wavlength_index':
+            self.wavelength_index = [int(tokens[0]), int(tokens[1])]
 
     def prepare_for_polradtran(self):
         """ Prepare for output from the polradtran solver
@@ -976,7 +977,7 @@ class Case():
 
         # The most important output for MORTICIA is radiances (self.uu), so those get processed
         # first. This is a 5 dimensional numpy array with axes 'umu'. 'phi', 'wvl', 'zout' (or equivalent)
-        # and 'stokes'.
+        # and 'stokes'. The 'wvl' axis could also be 'chn' (spectral channel) or 'wvn' (spectral wavenumber)
         # Create each of the axes individually using xd_identity
         if len(self.uu):  # OK, there is some radiance data
             umu = xd_identity(self.umu, 'umu', '')  # TODO : This must change to the propagation zenith (polar) angle
