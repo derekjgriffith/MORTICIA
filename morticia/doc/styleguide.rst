@@ -5,7 +5,7 @@ MORTICIA Style Guide
  to ``MORTICIA`` development.
 
 To PEP-8 or not to PEP-8
-========================
+=========================
 While PEP-8 has become the *de facto* standard for pythonic coding, it was deemed necessary by the ``MORTICIA`` developers
 to make certain exceptions. 
 
