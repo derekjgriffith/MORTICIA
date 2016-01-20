@@ -219,8 +219,9 @@ class Case():
         self.source_file = ''  # TOA irradiance source file
         self.n_umu = 0  # number of zenith angles (actually cosine of zenith angle)
         self.umu = []  # zenith angles for radiance calculations
+        self.uu = []  # This will be populated if there is radiance data output by the case
         self.n_phi = 0  # number of azimuth radiance angles
-        self.phi = []  # azimuth angles for radiance calculations
+        self.phi = [] # np.zeros(1)  # azimuth angles for radiance calculations
         self.n_levels_out = 1  # Assume only one output level, unless zout/zout_sea/pressure_out keyword is used.
         self.levels_out = ['boa']  # Tokens provided on an output level keyword (zout, zout_sea, pressure_out), default
         self.levels_out_type = 'zout'  # Assume that type of levels out data is altitude above surface
@@ -236,6 +237,7 @@ class Case():
         self.spectral_channels = []  #  These are the spectral channels, such as for 'kato', 'fu' band models.
         self.spectral_axis = 'wvl'  # By default RT calculations are spectral, with wavelength as the variable
         self.wavelength_index = []  # set by 'wavelength_index' keyword
+        self.wavelength_index_range = []  # for use where range() would be applicable
         self.output_process = 'none'  # Default is to output spectral data. See output_process in uvspec manual
         if filename is not None:
             if not filename:
@@ -295,7 +297,8 @@ class Case():
                                       'per_band': ''}[tokens[2]]
         elif tokens[0] == 'thermal':
             self.source = 'thermal'
-            self.rad_units = ['W', 'm^2', 'cm^-1']
+            if self.output_quantity == 'radiance':
+                self.rad_units = ['W', 'm^2', 'cm^-1']
 
     def prepare_for_mol_abs_param(self, tokens):
         """ Make preparations for the desired molecular absorption parametrization. There are various
@@ -334,30 +337,37 @@ class Case():
             self.reptran_channel = tokens[1]
             self.spectral_res = ''
             self.spectral_axis = 'chn'
+            # Not sure if spectral or band-integrated quantities are provided
         elif tokens[0] == 'kato':
             self.mol_abs_param = 'kato'
             self.spectral_res = ''
             self.spectral_axis = 'chn'
+            self.rad_units[2] = ''  # band integrated quantity out
         elif tokens[0] == 'kato2':
             self.mol_abs_param = 'kato2'
             self.spectral_res = ''
             self.spectral_axis = 'chn'
+            self.rad_units[2] = ''  # band integrated quantity
         elif tokens[0] == 'kato2.96':
             self.mol_abs_param = 'kato2.96'
             self.spectral_res = ''
             self.spectral_axis = 'chn'
+            self.rad_units[2] = ''  # band integrated quanitity
         elif tokens[0] == 'fu':
             self.mol_abs_param = 'fu'
             self.spectral_res = ''
             self.spectral_axis = 'chn'
+            self.rad_units[2] = ''  # band integrated quantity
         elif tokens[0] == 'avhrr_kratz':
             self.mol_abs_param = 'avhrr_kratz'
             self.spectral_res = ''
             self.spectral_axis = 'chn'
+            self.rad_units[2] = ''  # band integrated quantity
         elif tokens[0] == 'lowtran' or tokens[0] == 'sbdart':
             self.mol_abs_param = 'lowtran'
             self.spectral_res = ''
             self.spectral_axis = 'chn'  # These are pseudo-spectral with 20 cm^-1 resolution
+            # Spectral quantities are provided
         else:
             warnings.warn('Unknown mol_abs_param type encountered.')
 
@@ -407,9 +417,12 @@ class Case():
         if keyword == 'umu':
             self.n_umu = len(tokens)  # The number of umu values
             self.umu = np.array(tokens).astype(np.float)
+            self.pza = xd_identity(np.arccos(self.umu), 'pza', 'rad')
+            self.paz = xd_identity(np.deg2rad(self.phi), 'paz', 'rad')
         if keyword == 'phi':
             self.n_phi = len(tokens)
             self.phi = np.array(tokens).astype(np.float)
+            self.paz = xd_identity(np.deg2rad(self.phi), 'paz', 'rad')
         if keyword == 'output_user':
             self.output_user = [token.replace('lambda', 'wvl') for token in tokens]  # lambda is a keyword
             self.output_user = [token.replace('wavenumber', 'wvn') for token in self.output_user]  # abbreviate wavenumber
@@ -451,8 +464,9 @@ class Case():
             self.altitude = np.float64(tokens[0])  # This is the ground altitude above sea level
         if keyword == 'mol_abs_param':
             self.prepare_for_mol_abs_param(tokens)
-        if keyword == 'wavlength_index':
+        if keyword == 'wavelength_index':
             self.wavelength_index = [int(tokens[0]), int(tokens[1])]
+            self.wavelength_index_range = range(int(tokens[0]), int(tokens[1]) + 1)
         if keyword == 'output_process':
             self.prepare_for_output_process(tokens)
 
@@ -766,6 +780,39 @@ class Case():
             self.wvl = 1e7 / self.wvn
         self.n_wvl = len(self.wvl)
 
+    def rad_units_str(self, latex=False):
+        """ Provide a radiance units string e.g. W/sr/m^2/nm.
+        If output_quantity is set to 'brightness' or 'reflectivity', rad_units will be 'K' or '' respectively.
+        :return: Radiance units as a string
+        """
+
+        rad_units = self.rad_units[0]
+        if rad_units and rad_units[-1] == 'W':
+            rad_units += '/sr'
+            if self.rad_units[1]:
+                rad_units += '/' + self.rad_units[1]
+            if self.rad_units[2]:
+                rad_units += '/' + self.rad_units[2]
+        if latex:
+            rad_units = ' [$' + rad_units + '$]'
+        return rad_units
+
+    def irrad_units_str(self, latex=False):
+        """ Provide an irradiance units string e.g. W/m^2/nm.
+        If output_quantity is set to 'brightness' or 'reflectivity', irrad_units will be 'K' or '' respectively.
+        :return: Irradiance units as a string
+        """
+
+        irrad_units = self.rad_units[0]
+        if irrad_units and irrad_units[-1] == 'W':
+            if self.rad_units[1]:
+                irrad_units += '/' + self.rad_units[1]
+            if self.rad_units[2]:
+                irrad_units += '/' + self.rad_units[2]
+        if latex:
+            irrad_units = ' [$' + irrad_units + '$]'
+        return irrad_units
+
     def readout(self, filename=None):
         """ Read uvspec output and assign to variables as intelligently as possible.
 
@@ -932,11 +979,23 @@ class Case():
 
             # See if one size fits all
             self.u0u = radND[:,1].reshape(self.n_umu, self.n_stokes, self.n_wvl, -1, order='F').squeeze()  # should actually all be zero
+            # There is actually some radiance data
             self.uu = radND[:,2:]
-            self.uu = self.uu.reshape((self.n_umu, self.n_stokes, max(self.n_phi, 1), self.n_wvl, -1), order='F')
-            self.uu = self.uu.transpose([0, 2, 3, 4, 1])  # transpose so that the nstokes axis is last
+            if self.uu.size:  # checks how many elements actually
+                self.uu = self.uu.reshape((self.n_umu, self.n_stokes, max(self.n_phi, 1), self.n_wvl, -1), order='F')
+                self.uu = self.uu.transpose([0, 2, 3, 4, 1])  # transpose so that the nstokes axis is last
+            else:
+                self.uu = np.array([])
             # At this point, uu should be 5 dimensional (possibly with singleton dimensions) in order of
-            # 'umu', 'phi', 'wv', 'zout' (or equivalent)
+            # 'umu', 'phi', 'wv', 'zout' (or equivalent) and stokes
+            # if self.uu.shape[3] == 0:  # singleton dimension in zout
+            #     print 'Singleton in zout dimension, n_wvl = '
+            #     print self.n_wvl
+            #     print 'self.uu'
+            #     print self.uu
+            #     print 'self.u0u'
+            #     print self.u0u
+                # self.uu = self.uu
             self.process_outputs()
             # while self.uu.shape[-1] == 1:  # Remove any hanging singleton dimensions at the end
             #    self.uu = self.uu.squeeze(axis=self.uu.ndim-1)
@@ -1009,6 +1068,7 @@ class Case():
 
     def process_outputs(self):
         """ Process outputs from libRadtran into moglo.Scalar and xray.DataArray objects.
+        Currently only radiance outputs are processed.
 
         Note that this method probably does not cover all libRadtran/uvspec inputs and outputs and will most
         likely continue to evolve, perhaps breaking existing code.
@@ -1022,40 +1082,41 @@ class Case():
         # first. This is a 5 dimensional numpy array with axes 'umu'. 'phi', 'wvl', 'zout' (or equivalent)
         # and 'stokes'. The 'wvl' axis could also be 'chn' (spectral channel) or 'wvn' (spectral wavenumber)
         # Create each of the axes individually using xd_identity
-        if len(self.uu):  # OK, there is some radiance data
+        if self.uu.size:  # OK, there is some radiance data (not azimuthally averaged)
             umu = xd_identity(self.umu, 'umu', '')  # TODO : This must change to the propagation zenith (polar) angle
             paz = self.paz
             pza = self.pza
             phi = self.phi
             if self.spectral_axis == 'wvl':
-                spectral_axis = self.wvl  # The spectral axis is wavelength
+                spectral_axis = xd_identity(self.wvl, 'wvl','nm')  # The spectral axis is wavelength
             elif self.spectral_axis == 'wvn':
-                spectral_axis = self.wvn  # The spectral axis is wavenumber
+                spectral_axis = xd_identity(self.wvn, 'wvn', 'cm^-1')  # The spectral axis is wavenumber
             elif self.spectral_axis == 'chn':  # The spectral axis is channel number
-                spectral_axis = self.chn
+                spectral_axis = self.spectral_channels
             levels = xd_identity(self.level_values, self.levels_out_type)  # Presume units correct
             self.levels = levels
             stokes = xd_identity(range(self.n_stokes), 'stokes')
             self.stokes = stokes
             # Determine the units of uu
-            if self.output_quantity == 'radiance':
-                if self.rad_units[0] and self.rad_units[0][-1] == 'W':  # have flux
-                    uu_units = self.rad_units[0] + '/sr'
-                    if self.rad_units[1]:
-                        uu_units += '/' + self.rad_units[1]
-                    if self.rad_units[2]:
-                        uu_units += '/' + self.rad_units[2]
-                else:
-                    warnings.warn('Unexpected/invalid radiant units encountered for output_quantity mode.')
-                    uu_units = self.rad_units[0]
-            elif self.output_quantity == 'brightness':
-                uu_units = 'K'
-            elif self.output_quantity == 'transmittance' or self.levels_out == 'reflectivity':
-                uu_units = ''
+            uu_units = self.rad_units_str()
+            # if self.output_quantity == 'radiance':
+            #     if self.rad_units[0] and self.rad_units[0][-1] == 'W':  # have flux
+            #         uu_units = self.rad_units[0] + '/sr'
+            #         if self.rad_units[1]:
+            #             uu_units += '/' + self.rad_units[1]
+            #         if self.rad_units[2]:
+            #             uu_units += '/' + self.rad_units[2]
+            #     else:
+            #         warnings.warn('Unexpected/invalid radiant units encountered for output_quantity mode.')
+            #         uu_units = self.rad_units[0]
+            # elif self.output_quantity == 'brightness':
+            #     uu_units = 'K'
+            # elif self.output_quantity == 'transmittance' or self.levels_out == 'reflectivity':
+            #     uu_units = ''
             # print 'units : ' + uu_units
             # Build the xray.DataArray
             qty_name = {'radiance': 'specrad', 'transmittance': 'trnx', 'reflectivity': 'reflx'}[self.output_quantity]
-            xd_uu = xray.DataArray(self.uu, [pza, paz, wvl, levels, stokes],
+            xd_uu = xray.DataArray(self.uu, [pza, paz, spectral_axis, levels, stokes],
                                 name=qty_name, attrs={'units': uu_units})
             self.xd_uu = xd_uu
 
@@ -1210,7 +1271,7 @@ class RadEnv():
         # Concatenate the cases in umu and phi
         self.xd_uu = xray.concat([xray.concat([case_uu.xd_uu for case_uu in self.cases[jj]], dim='phi')
                                                  for jj in range(len(self.cases))], dim='umu')
-        self.xd_uu = xray.DataArray(self.uu, [self.pza, self.paz, self.wvl, self.])
+        #self.xd_uu = xray.DataArray(self.uu, [self.pza, self.paz, self.wvl, self.])
 
     def run_parallel(self, n_nodes=4):
         """ Run the RadEnv in multiprocessing mode on the local host.
