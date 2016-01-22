@@ -75,6 +75,7 @@ from morticia.moglo import *
 from morticia.tools.xd import *
 import copy
 from itertools import chain  #Used in RadEnv constructor
+import matplotlib.pyplot as plt
 
 uvsOptions = writeLex.loadOptions()  # Load all options into a global dictionary of uvspec option specifications.
 
@@ -1363,20 +1364,21 @@ class RadEnv():
         # if self.hemi:  # Sun-symmetric REM
         sph_harm_coeff = []
         # If calculating over one hemisphere of a symmetrical REM with sun in the north-south line,
-        # The sin (imaginary) coefficients are zero and the cos (real components) are doubled
+        # The sine (imaginary) coefficients are zero and the cos (real components) are doubled
         # SO should just run m = 0 to n, take twice the real part if hemi, otherwise full complex calc
         for n in range(degree + 1):
             sph_harm_coeff.append([])  # Add another list of coefficients for order m = 0 to n
             for m in range(0, n + 1):
                 sph_harm_coeff[n].append(None)  # Add another coefficient for order m
+                condon_short = (-1.0)**m * np.sqrt(2)
                 # Compute the complex spherical harmonic basis
                 if m == 0:
-                    y_mn = sph_harm(0, n, azi_angles, pol_angles)  # Small imaginary components may arise - drop
+                    y_mn = sph_harm(0, n, azi_angles, pol_angles)
+                    print self.hemi, y_mn.mean()
                 else:
-                    y_mn = (-1.0)**m * np.sqrt(2.0) * sph_harm(m, n, azi_angles, pol_angles)  # Ramamoorthi normalisation
-                    #y_mn = np.sqrt(2.0) * sph_harm(m, n, azi_angles, pol_angles)  # Ramamoorthi normalisation
-                if self.hemi:  # integrate over hemisphere, therefore need a factor of 2
-                    y_mn = y_mn.real * 2.0  # equivalent of taking only the cosine components times 2
+                    y_mn = condon_short * sph_harm(m, n, azi_angles, pol_angles)  # Ramamoorthi normalisation
+                if self.hemi:
+                    y_mn = y_mn.real * 2.0
                 # Create xray.DataArray
                 y_mn = xray.DataArray(y_mn, [self.pza, self.paz])
                 # Compute the integrand
@@ -1388,6 +1390,59 @@ class RadEnv():
                 sph_harm_coeff[n][m] = outer_integrand.sum(dim='paz') * azi_ang_delta
         self.sph_harm_coeff = sph_harm_coeff
         return sph_harm_coeff
+
+    def sph_harm_fat(self, degree):
+        from scipy.special import sph_harm
+        azi_angles = self.paz.data  # Propagation zenith angles in radians
+        pol_angles = self.pza.data   # Propagation polar (zenith) angles in radians
+        azi_ang_delta = azi_angles[1] - azi_angles[0]
+        pol_ang_delta = np.abs(pol_angles[1] - pol_angles[0])
+        # print azi_ang_delta, pol_ang_delta
+        # Angles to be meshgridded - is this really necessary
+        # TODO : Check if meshgridding is really necessary
+        azi_angles, pol_angles = np.meshgrid(azi_angles, pol_angles)
+        sin_pol_angles = xray.DataArray(np.sin(pol_angles), [self.pza, self.paz])
+        # TODO : Symmetry checking still required
+        # if self.hemi:  # Sun-symmetric REM
+        sph_harm_coeff_cos = []
+        sph_harm_coeff_sin = []
+        # If calculating over one hemisphere of a symmetrical REM with sun in the north-south line,
+        # The sine (imaginary) coefficients are zero and the cos (real components) are doubled
+        # SO should just run m = 0 to n, take twice the real part if hemi, otherwise full complex calc
+        for n in range(degree + 1):
+            sph_harm_coeff_cos.append([])
+            sph_harm_coeff_sin.append([])# Add another list of coefficients for order m = 0 to n
+            for m in range(0, n + 1):
+                sph_harm_coeff_cos[n].append(None)# Add another coefficient for order m
+                sph_harm_coeff_sin[n].append(None)
+                # Compute the complex spherical harmonic basis
+                if m == 0:
+                    y_mn = sph_harm(0, n, azi_angles, pol_angles)  # Small imaginary components may arise - drop
+                else:
+                    y_mn = (-1.0)**m * np.sqrt(2.0) * sph_harm(m, n, azi_angles, pol_angles)  # Ramamoorthi normalisation
+                if self.hemi:  # integrate over hemisphere, therefore need a factor of 2
+                    y_mn = y_mn * 2.0  # equivalent of taking only the cosine components times 2
+                # Create xray.DataArray
+                y_mn_cos = xray.DataArray(y_mn.real, [self.pza, self.paz])
+                y_mn_sin = xray.DataArray(y_mn.imag, [self.pza, self.paz])
+                # Compute the integrand
+                inner_integrand_cos = self.xd_uu * y_mn_cos * sin_pol_angles
+                # Compute the coefficients
+                # First integrate over the propagation zenith angle using summation (very slight overestimate)
+                outer_integrand_cos = inner_integrand_cos.sum(dim='pza') * pol_ang_delta
+                # Then integrate over the propagation azimuth angle
+                sph_harm_coeff_cos[n][m] = outer_integrand_cos.sum(dim='paz') * azi_ang_delta
+
+                # Compute the sin integrand
+                inner_integrand_sin = self.xd_uu * y_mn_sin * sin_pol_angles
+                # Compute the coefficients
+                # First integrate over the propagation zenith angle using summation (very slight overestimate)
+                outer_integrand_sin = inner_integrand_sin.sum(dim='pza') * pol_ang_delta
+                # Then integrate over the propagation azimuth angle
+                sph_harm_coeff_sin[n][m] = outer_integrand_sin.sum(dim='paz') * azi_ang_delta
+        self.sph_harm_coeff_cos = sph_harm_coeff_cos
+        self.sph_harm_coeff_cos = sph_harm_coeff_cos
+        return sph_harm_coeff_cos, sph_harm_coeff_sin
 
 
 
