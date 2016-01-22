@@ -183,7 +183,7 @@ indexVars = ['lambda', 'wavelength', 'wvl', 'wvn', 'zout', 'zout_sea', 'p', 'cth
 # cold point tropopause and top of atmosphere)
 re_isSingleOutputLevel = '(^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$)|(^boa$)|(^sur$)|(^surface$)|(^cpt$)|(^toa$)'
 
-class Case():
+class Case(object):
     """ Class which encapsulates a run case of libRadtran/uvspec.
     This class has methods to read libRadtran/uvspec input files, write uvspec input files, run uvspec in parallel on
     multiple compute nodes and read uvspec output files. An important use-case is that of reading a uvspec input
@@ -1122,7 +1122,7 @@ class Case():
             self.xd_uu = xd_uu
 
 
-class RadEnv():
+class RadEnv(object):
     """ RadEnv is a class to encapsulate a large number of uvspec runs to cover a large number of sightlines over the
     whole sphere. A radiance map over the complete sphere is called a radiant environment map. The uvspec utility can
     only handle a limited number of sighlines per run, determined by the maximum number of polar and azimuthal angles
@@ -1354,7 +1354,10 @@ class RadEnv():
             Y_{n}^{0} & m=0
             \\end{cases}.
 
-        :param degree: Spherical harmonics up to this degree :math:`n`, for all orders :math:`m` will be fitted,
+        :param degree: Spherical harmonics up to this degree :math:`n`, for all orders :math:`m` will be fitted.
+        :param method: Integration method by which the coefficients are computed. 'trapz' for trapezoidal integration,
+            'sum' for simple summation and 'simpson' for Simpson's Rule. The 'trapz' method seems to be
+            considerably more accurate than 'sum' or 'simpson'.
         :return:
         """
         from scipy.special import sph_harm
@@ -1389,12 +1392,13 @@ class RadEnv():
                 y_mn = xray.DataArray(y_mn, [self.pza, self.paz])
                 # Compute the integrand
                 inner_integrand = y_mn * self.xd_uu * sin_pol_angles
-                # Compute the coefficients
-                # First integrate over the propagation zenith angle using summation (very slight overestimate)
+                # Compute the coefficients by integration by various methods
                 if method == 'sum':  # Integrate by simple summation
+                    # First integrate over the propagation zenith angle using summation
                     outer_integrand = inner_integrand.sum(dim='pza') * pol_ang_delta
+                    # Then integrate over propagation azimuth
                     sph_harm_coeff[n][m] = outer_integrand.sum(dim='paz') * azi_ang_delta
-                elif method == 'trapz':  # Integrate using the trapezoidal rule
+                elif method == 'trapz':  # Integrate using the trapezoidal rule (seems best)
                     outer_integrand = (inner_integrand.isel(pza=0) +
                                             2.0 * inner_integrand.isel(pza=slice(1, -1)).sum(dim='pza') +
                                        inner_integrand.isel(pza=-1)) * pol_ang_delta / 2.0
@@ -1418,6 +1422,10 @@ class RadEnv():
         return sph_harm_coeff
 
     def sph_harm_fat(self, degree):
+        """ This code was used for debugging purposes - ignore
+        :param degree:
+        :return:
+        """
         from scipy.special import sph_harm
         azi_angles = self.paz.data  # Propagation zenith angles in radians
         pol_angles = self.pza.data   # Propagation polar (zenith) angles in radians
