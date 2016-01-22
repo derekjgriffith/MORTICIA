@@ -1186,6 +1186,9 @@ class RadEnv():
         if n_pol % 2:  # check comment below about Matlab polar angles
             warnings.warn('Input n_pol to librad.RadEnv must be even. Increased by 1.')
             n_pol += 1
+        if n_azi % 2:
+            warnings.warn('Input n_azi to librad.RadEnv must be even. Increased by 1.')
+            n_azi += 1
         view_zen_angles = np.linspace(0.0, 180.0, n_pol)  # Viewing straight down is view zenith angle of 180 deg
         prop_zen_angles = np.linspace(np.pi, 0.0, n_pol)  # Radiation travelling straight up is propagation zenith angle of 0
         umu = np.cos(prop_zen_angles)  # Negative umu is upward-looking, downwards propagating
@@ -1276,7 +1279,11 @@ class RadEnv():
         # Concatenate the cases in umu and phi
         self.xd_uu = xray.concat([xray.concat([case_uu.xd_uu for case_uu in self.cases[jj]], dim='paz')
                                                  for jj in range(len(self.cases))], dim='pza')
-        #self.xd_uu = xray.DataArray(self.uu, [self.pza, self.paz, self.wvl, self.])
+        #self.xd_uu = xray.DataArray(self.uu, [self.pza, self.paz, self.spectral, self.levels, self.stokes])
+        # Replace the values in the xray.DataArray with the exact original values in the zenith and azimuth
+        # directions. Not doing this gave rise to a very subtle bug in spherical harmonic fitting
+        self.xd_uu['pza'] = self.pza
+        self.xd_uu['paz'] = self.paz
 
     def run_parallel(self, n_nodes=4):
         """ Run the RadEnv in multiprocessing mode on the local host.
@@ -1304,7 +1311,7 @@ class RadEnv():
         for case in self.casechain:
             del case.uu
 
-    def sph_harm_fit(self, degree):
+    def sph_harm_fit(self, degree, method='trapz'):
         """ Fit spherical harmonics to the radiant environment map (REM).
         One set of coefficients per wavelength or spectral channel will be fitted. The coefficients for each spectral
         bin/channel comprise one coefficient for order :math:`-m` to :math:`+m` for :math:`m = 0, 1, 2, ..., n`.
@@ -1354,7 +1361,7 @@ class RadEnv():
         azi_angles = self.paz.data  # Propagation zenith angles in radians
         pol_angles = self.pza.data   # Propagation polar (zenith) angles in radians
         azi_ang_delta = azi_angles[1] - azi_angles[0]
-        pol_ang_delta = np.abs(pol_angles[1] - pol_angles[0])
+        pol_ang_delta = abs(pol_angles[1] - pol_angles[0])
         # print azi_ang_delta, pol_ang_delta
         # Angles to be meshgridded - is this really necessary
         # TODO : Check if meshgridding is really necessary
@@ -1374,7 +1381,6 @@ class RadEnv():
                 # Compute the complex spherical harmonic basis
                 if m == 0:
                     y_mn = sph_harm(0, n, azi_angles, pol_angles)
-                    print self.hemi, y_mn.mean()
                 else:
                     y_mn = condon_short * sph_harm(m, n, azi_angles, pol_angles)  # Ramamoorthi normalisation
                 if self.hemi:
@@ -1382,12 +1388,32 @@ class RadEnv():
                 # Create xray.DataArray
                 y_mn = xray.DataArray(y_mn, [self.pza, self.paz])
                 # Compute the integrand
-                inner_integrand = self.xd_uu * y_mn * sin_pol_angles
+                inner_integrand = y_mn * self.xd_uu * sin_pol_angles
                 # Compute the coefficients
                 # First integrate over the propagation zenith angle using summation (very slight overestimate)
-                outer_integrand = inner_integrand.sum(dim='pza') * pol_ang_delta
-                # Then integrate over the propagation azimuth angle
-                sph_harm_coeff[n][m] = outer_integrand.sum(dim='paz') * azi_ang_delta
+                if method == 'sum':  # Integrate by simple summation
+                    outer_integrand = inner_integrand.sum(dim='pza') * pol_ang_delta
+                    sph_harm_coeff[n][m] = outer_integrand.sum(dim='paz') * azi_ang_delta
+                elif method == 'trapz':  # Integrate using the trapezoidal rule
+                    outer_integrand = (inner_integrand.isel(pza=0) +
+                                            2.0 * inner_integrand.isel(pza=slice(1, -1)).sum(dim='pza') +
+                                       inner_integrand.isel(pza=-1)) * pol_ang_delta / 2.0
+                    # Then integrate over the propagation azimuth angle
+                    sph_harm_coeff[n][m] = (outer_integrand.isel(paz=0) +
+                                              2.0 * outer_integrand.isel(paz=slice(1, -1)).sum(dim='paz') +
+                                            outer_integrand.isel(paz=-1)) * azi_ang_delta / 2.0
+                elif method == 'simpson':  # The following is integration by Simpsons rule
+                    outer_integrand = (inner_integrand.isel(pza=0) +
+                                            4.0 * inner_integrand.isel(pza=slice(1, -1, 2)).sum(dim='pza') +
+                                            2.0 * inner_integrand.isel(pza=slice(2, -2, 2)).sum(dim='pza') +
+                                       inner_integrand.isel(pza=-1)) * pol_ang_delta / 3.0
+                    # Then integrate over the propagation azimuth angle
+                    sph_harm_coeff[n][m] = (outer_integrand.isel(paz=0) +
+                                              4.0 * outer_integrand.isel(paz=slice(1, -1, 2)).sum(dim='paz') +
+                                              2.0 * outer_integrand.isel(paz=slice(2, -2, 2)).sum(dim='paz') +
+                                            outer_integrand.isel(paz=-1)) * azi_ang_delta / 3.0
+                else:
+                    warnings.warn('Unknown integration method ' + method + ' encountered in sph_harm_fit.')
         self.sph_harm_coeff = sph_harm_coeff
         return sph_harm_coeff
 
