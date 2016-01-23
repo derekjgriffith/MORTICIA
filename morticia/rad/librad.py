@@ -1250,6 +1250,28 @@ class RadEnv(object):
         self.vaz = xd_identity(view_azi_angles, 'vaz', 'deg')
         self.uu = np.array([])
 
+    def setup_trans_cases(self, n_sza):
+        """ Setup a list of cases for computing the transmission matrices between every level defined in the
+        REM (and at every wavelength and stokes parameter combination). The computation of  transmittance between
+        levels is accomplished in `MORTICIA` using libRadtran/uvspec by computing the direct solar irradiance
+        transmittance for multiple zenith angles.
+
+        Note that if there is an optically thick cloud layer between two levels in the REM, the transmittance
+        will compute as zero or very small. This will also result in the incorrect/noisy computation of path
+        radiances between the two levels. This situation is unavoidable. The recommended approach is that
+        REMS be computed with altitude levels that all lie between cloud layers (i.e. no levels in the REM
+        span a cloud layer). The user, or the code which uses the REMs should see to this. Essentially it must
+        be recognised that optical surveillance is not possible through optically thick cloud layers.
+
+        This setup routine will compute transmittances after removing any cloud keywords in the uvspec input file.
+        That is, any keywords that begin with `wc_` (water clouds) or `ic_` (ice clouds) will be removed from
+        the uvspec input file/case. This is only done to allow valid computation of transmittances and path
+        radiances in clear air between cloud layers.
+
+        :param n_sza:
+        :return:
+        """
+
     def run_ipyparallel(self, ipyparallel_view, stderr_to_file=False):
         """ Run a complete set of radiant environment map cases of libRadtran/uvspec using the `ipyparallel`
         Python package, which provides parallel computation from Jupyter notebooks and other Python launch
