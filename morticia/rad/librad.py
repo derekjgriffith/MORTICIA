@@ -1027,7 +1027,7 @@ class Case(object):
             #         if self.uu.shape[1] / self.n_wvl > 1:  # if multiple output levels, reshape the radiance data appropriately
             #             self.uu = self.uu.reshape((self.n_umu, self.n_wvl, -1), order='F')
 
-    def run(self, stderr_to_file=False, write_input=True, read_output=True, block=True):
+    def run(self, stderr_to_file=False, write_input=True, read_output=True, block=True, purge=True):
         """ Run the libRadtran/uvspec case.
 
         This will run the libRadtran/uvspec Case instance provided. Some control is provided regarding the handling of
@@ -1039,10 +1039,13 @@ class Case(object):
         :param read_output: Controls whether the output file is read after execution. Default is True.
         :param block: By default, this method waits until uvspec terminates. If set False, the uvspec process
             is released to background and read_output is set to False (regardless of user input).
+        :param purge: If set True, the input and output files from this run will be deleted after the run is complete
+            and the outputs have been read. Will only be honoured if read_output is also True. Default is True.
         :return: The shell command string executed in order to run the case and the return status of the command.
         """
         # Write input file by default
         import subprocess
+        import os
         if write_input:
             self.write(filename=self.name+'.INP')
         # Spawn a sub-process using the subprocess module
@@ -1065,6 +1068,11 @@ class Case(object):
                 return_code = 1
         if not return_code and read_output:
             self.readout(filename=self.name+'.OUT')  # Read the output into the instance if the return code OK
+            if purge:  # Delete the input and output files
+                os.remove(self.name+'.INP')
+                os.remove(self.name+'.INP')
+                if stderr_to_file:
+                    os.remove(self.name+'.ERR')
         return self
 
     def process_outputs(self):
@@ -1146,7 +1154,9 @@ class RadEnv(object):
             that not any basecase can be used. As a general guideline, the basecase should have standard irradiance
             outputs (i.e. should not use the `output_user` keyword). It should also not the use `output_process` or
             `output_quantity` keywords, which change the units and/or format of the libRadtran/uvspec output.
-             Minimal validation of the basecase is performed.
+             Minimal validation of the basecase is performed. However, use with `mol_abs_param` such as `kato` and
+             `fu` is important for `MORTICIA` and these are supported (k-distribution or `correlated-k`
+             parametrizations).
         :param n_pol: Number of polar angles (view/propagation zenith angles)
         :param n_azi: Number of azimuthal angles.
         :param mxumu: Maximum number of polar angles per case.
@@ -1358,10 +1368,18 @@ class RadEnv(object):
             Y_{n}^{0} & m=0
             \\end{cases}.
 
+        The fitted coefficients of the spherical harmonics are computed by multiplying the REM by each of the
+        harmonics and performing double numerical integration over zenith and azimuth angle as:
+
+        .. math::
+            L_{n}^{m}=\\int_{\\theta=0}^{\\pi}\\int_{\\phi=0}^{2\\pi}L(\\theta,\\phi)y_{n}^{m}(\\theta,\\phi)\\sin\\theta d\\theta d\\phi,
+
+        where :math:`L_{n}^{m}` are the coefficients and :math:`L(\\theta,\\phi)` is the REM.
+
         :param degree: Spherical harmonics up to this degree :math:`n`, for all orders :math:`m` will be fitted.
         :param method: Integration method by which the coefficients are computed. 'trapz' for trapezoidal integration,
             'sum' for simple summation and 'simpson' for Simpson's Rule. The 'trapz' method seems to be
-            considerably more accurate than 'sum' or 'simpson'.
+            considerably more accurate than 'sum' or 'simpson'. Therefore 'trapz' is the default.
         :return:
         """
         from scipy.special import sph_harm
@@ -1481,6 +1499,7 @@ class RadEnv(object):
         self.sph_harm_coeff_cos = sph_harm_coeff_cos
         self.sph_harm_coeff_cos = sph_harm_coeff_cos
         return sph_harm_coeff_cos, sph_harm_coeff_sin
+
 
 
 
