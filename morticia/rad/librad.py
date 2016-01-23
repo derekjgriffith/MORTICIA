@@ -1325,6 +1325,13 @@ class RadEnv(object):
             self.trans_cases.append(copy.deepcopy(self.trans_base_case))
             # Set the solar zenith angle
             self.trans_cases[i_case].alter_option(['sza', str(self.trans_vza_up[i_case].data)])
+            # Change the name and input and output filenames
+            self.trans_cases[i_case].infile = (self.trans_cases[i_case].infile[:-4] +
+                                             '_x_{:04d}.INP'.format(i_case))
+            self.trans_cases[i_case].outfile = (self.trans_cases[i_case].outfile[:-4] +
+                                             '_x_{:04d}.OUT'.format(i_case))
+            self.trans_cases[i_case].name = (self.trans_cases[i_case].name +
+                                             '_x_{:04d}'.format(i_case))
 
 
     def run_ipyparallel(self, ipyparallel_view, stderr_to_file=False):
