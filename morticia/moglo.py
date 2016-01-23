@@ -60,7 +60,9 @@ long_name = {
     'doffset': 'Digital Offset',
     'dnoise': 'RMS Digital-Equivalent Noise',
     'spfcut': 'Diffraction Cutoff Spatial Frequency',
-    'vza': 'View Zenith Angle',
+    'vza': 'View Zenith Angle',  # degrees
+    'vpa': 'View Polar Angle',  # same as vza, but in radians
+    'vea': 'View Elevation Angle',  # complement of the VZA
     'vaz': 'View Azimuth Angle',
     'svaz': 'Solar-Relative View Azimuth Angle',
     'pza': 'Propagation Zenith Angle',  # in radians
@@ -126,8 +128,10 @@ default_units = {
     'mtf': '',
     'spfcut': '1/mm',
     'spfa': '1/mrad',
-    'vza': 'deg', ## View zenith angle
+    'vza': 'deg',  # View zenith angle
+    'vpa': 'rad',  # Same as vza, but in radians
     'vaz': 'deg',  # View azimuth angle
+    'vea' : 'deg',  # View elevation angle (complement of the view zenith angle)
     'pza': 'rad',  # Propagation zenith angle
     'svaz': 'deg',  # Solar-relative view azimuth angle
     'umu': '',  # Cosine of the propagation zenith
