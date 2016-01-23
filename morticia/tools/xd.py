@@ -39,7 +39,7 @@ def xd_identity(np_vector, axis_name, units=None, attrs=None):
     if units is None:
         units = the_units
     values = Q_(np_vector, units)  # Create a pint quantity with the given units
-    values.to(the_units)  # actually the default units
+    values = values.to(the_units)  # actually the default units
     np_vector = values.magnitude
     if attrs is not None:
         the_attrs = attrs
