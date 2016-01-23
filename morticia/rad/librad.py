@@ -1044,6 +1044,9 @@ class Case(object):
         :return: The shell command string executed in order to run the case and the return status of the command.
         """
         # Write input file by default
+        # Note that the location of the following imports is actually important, since this run code may be
+        # executed on a foreign host with a different operating system to the machine calling for the
+        # RT computations.
         import subprocess
         import os
         if write_input:
@@ -1140,7 +1143,7 @@ class RadEnv(object):
 
     """
 
-    def __init__(self, base_case, n_pol, n_azi, mxumu=48, mxphi=19, hemi=False):
+    def __init__(self, base_case, n_pol, n_azi, mxumu=48, mxphi=19, hemi=False, n_sza=0):
         """ Create a set of uvspec runs covering the whole sphere to calculate a full radiant environment map.
         Where the base_case is the uvspec case on which to base the environmental map, Name is the name to give the
         environmental map and n_pol and n_azi are the number of polar and azimuthal sightline angles to generate. The
@@ -1203,6 +1206,8 @@ class RadEnv(object):
         if n_azi % 2:
             warnings.warn('Input n_azi to librad.RadEnv must be even. Increased by 1.')
             n_azi += 1
+        self.base_case = copy.deepcopy(base_case)  # Keep a copy of the uvspec base_case
+        self.trans_base_case = copy.deepcopy(base_case)  # Keep a copy for transmittance computation purposes
         view_zen_angles = np.linspace(0.0, 180.0, n_pol)  # Viewing straight down is view zenith angle of 180 deg
         prop_zen_angles = np.linspace(np.pi, 0.0, n_pol)  # Radiation travelling straight up is propagation zenith angle of 0
         umu = np.cos(prop_zen_angles)  # Negative umu is upward-looking, downwards propagating
@@ -1248,9 +1253,11 @@ class RadEnv(object):
         self.paz = xd_identity(np.deg2rad(prop_azi_angles), 'paz', 'rad')
         self.vza = xd_identity(view_zen_angles, 'vza', 'deg')
         self.vaz = xd_identity(view_azi_angles, 'vaz', 'deg')
+        if n_sza:  # Setup the transmission run cases
+            self.setup_trans_cases(n_sza=n_sza)
         self.uu = np.array([])
 
-    def setup_trans_cases(self, n_sza):
+    def setup_trans_cases(self, n_sza=32):
         """ Setup a list of cases for computing the transmission matrices between every level defined in the
         REM (and at every wavelength and stokes parameter combination). The computation of  transmittance between
         levels is accomplished in `MORTICIA` using libRadtran/uvspec by computing the direct solar irradiance
@@ -1268,9 +1275,39 @@ class RadEnv(object):
         the uvspec input file/case. This is only done to allow valid computation of transmittances and path
         radiances in clear air between cloud layers.
 
-        :param n_sza:
+        Another inherent and unavoidable problem with computation of path transmittances and radiances using
+        libRadtran/uvspec is that precisely horizontal paths cannot be dealt with using one-dimensional RT
+        solvers. Therefore in this case, the maximum range that can be dealt with depends on the height difference
+        between the REM levels and the maximum solar zenith angle (SZA) using for computation of transmittances.
+
+        A further implication of the above point is that path transmittances and path radiances cannot be interpolated
+        between the SZA nearest the horizon and the horizon proper. Some form of logarithmic extrapolation could be
+        performed, but could result in large errors due to failure of Beer's Law and other problems.
+
+        Execution and attribution of transmittance cases will provide each level with transmittance to levels
+        below and above that altitude level. Therefore the top level will have transmittances to TOA and
+        the lowest level will have transmittances to BOA (this statement subject to review, could be that
+        the top level and bottom level will have no valid transmittances to TOA and BOA respectively).
+
+        :param n_sza: The number of solar zenith angles at which to compute path transmittances and radiances.
+             the SZA values are computed equi-spaced in the cosine of the solar zenith angle rather that the
+             SZA itself. This is to help with the problem that the effective range between levels increases
+             with
         :return:
         """
+
+        # Start by removing any cloud options in the transmission base_case
+        new_option_list = []
+        new_tokens_list = []
+        for (ioption, option) in enumerate(self.trans_base_case.options):
+            if option.startswith('wc_') or option.startswith('ic_') or option.startswith('cloudcover'):
+                pass  # TODO : Look for other cloud options that may be important
+            else:
+                new_option_list.append(option)
+                new_tokens_list.append(self.trans_base_case.tokens[ioption])
+        self.trans_base_case.options = new_option_list
+        self.trans_base_case.tokens = new_tokens_list
+
 
     def run_ipyparallel(self, ipyparallel_view, stderr_to_file=False):
         """ Run a complete set of radiant environment map cases of libRadtran/uvspec using the `ipyparallel`
