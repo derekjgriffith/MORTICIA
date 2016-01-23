@@ -1142,15 +1142,19 @@ class RadEnv(object):
         file is /libsrc_f/POLRADTRAN.MXD. Other solvers may have different restrictions. A warning will be issued if
         the solver is not in the DISORT/POLRADTRAN family.
 
-        :param base_case: librad.Case object providing the case on which the environment map is to be based
+        :param base_case: librad.Case object providing the case on which the environment map is to be based. Note
+            that not any basecase can be used. As a general guideline, the basecase should have standard irradiance
+            outputs (i.e. should not use the `output_user` keyword). It should also not the use `output_process` or
+            `output_quantity` keywords, which change the units and/or format of the libRadtran/uvspec output.
+             Minimal validation of the basecase is performed.
         :param n_pol: Number of polar angles (view/propagation zenith angles)
-        :param n_azi: Number of azimuthal angles
-        :param mxumu: Maximum number of polar angles per case
-        :param mxphi: Maximum number of azimuthal angles per case
+        :param n_azi: Number of azimuthal angles.
+        :param mxumu: Maximum number of polar angles per case.
+        :param mxphi: Maximum number of azimuthal angles per case.
         :param hemi: If set True, will generate only a single hemisphere being on one side of
             the solar principle plane. Default is False i.e. the environment map covers the full sphere.
             Note that if hemi=True, the number of REM samples in azimuth becomes n_azi :math:`\\times` 2.
-            This is the recommended mode (hemi=True) for MORTICIA purposes.
+            This is the recommended mode (hemi=True) for MORTICIA purposes, since it reduces execution time.
 
         The solver cdisort may have dynamic memory allocation, so the warning is still issued because the situation
         is less clear.
