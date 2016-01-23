@@ -668,7 +668,7 @@ class Case(object):
             uvINP.write(alldata)
 
     def distribute_flux_data(self, fluxdata):
-        """ Distribute flux data read from uvspec output file to various fields
+        """ Distribute flux data read from uvspec output file to various fields.
 
         :param fluxdata: Flux (irradiance) data read from uvspec output file
         :return:
@@ -1255,6 +1255,7 @@ class RadEnv(object):
         self.vaz = xd_identity(view_azi_angles, 'vaz', 'deg')
         if n_sza:  # Setup the transmission run cases
             self.setup_trans_cases(n_sza=n_sza)
+            # self.trans_vza_up = []
         self.uu = np.array([])
 
     def setup_trans_cases(self, n_sza=32):
@@ -1291,8 +1292,8 @@ class RadEnv(object):
 
         :param n_sza: The number of solar zenith angles at which to compute path transmittances and radiances.
              the SZA values are computed equi-spaced in the cosine of the solar zenith angle rather that the
-             SZA itself. This is to help with the problem that the effective range between levels increases
-             with
+             SZA itself. This is to help with the problem that the slant range between levels increases
+             in linear relation to the secant of the view zenith angle
         :return:
         """
 
@@ -1307,6 +1308,23 @@ class RadEnv(object):
                 new_tokens_list.append(self.trans_base_case.tokens[ioption])
         self.trans_base_case.options = new_option_list
         self.trans_base_case.tokens = new_tokens_list
+        # Change the transmission base case to output_quantity reflectivity. THis seems counter-intuitive,
+        # but take a look at the libRadtran/uvspec manual to see why. Essentially, the reflectivity
+        # option computes the ratio of the horizontal irradiance to the horizontal irradiance at TOA.
+        self.trans_base_case.alter_option(['output_quantity', 'reflectivity'])
+        # Calculate the view zenith angles equi-spaced in the secant of the VZA
+        # First upward looking
+        cosine_up = np.linspace(1.0, 0.0, n_sza + 1)[:-1]  # Drop the last element because it is horizontal (illegal)
+        # Calculate the view-zenith angles in radians
+        vpa_up = np.arccos(cosine_up)  # view polar angle looking upwards
+        self.trans_vza_up = xd_identity(vpa_up, 'vza', 'rad')
+        # Now build a list of uvspec runs, based on trans_base_case
+        # The list is called trans_cases
+        self.trans_cases = []
+        for i_case in range(len(cosine_up)):
+            self.trans_cases.append(copy.deepcopy(self.trans_base_case))
+            # Set the solar zenith angle
+            self.trans_cases[i_case].alter_option(['sza', str(self.trans_vza_up[i_case].data)])
 
 
     def run_ipyparallel(self, ipyparallel_view, stderr_to_file=False):
@@ -1357,6 +1375,11 @@ class RadEnv(object):
         # directions. Not doing this gave rise to a very subtle bug in spherical harmonic fitting
         self.xd_uu['pza'] = self.pza
         self.xd_uu['paz'] = self.paz
+        # Also need to obtain the irradiances from one of the cases - they should actually all be the same
+        # TODO : Obtain self.fluxdata from one of the self.cases
+        self.fluxdata = self.casechain[0].fluxdata  # Would really want this as a xray.DataArray
+        self.fluxline = self.casechain[0].fluxline
+
 
     def run_parallel(self, n_nodes=4):
         """ Run the RadEnv in multiprocessing mode on the local host.
