@@ -1325,13 +1325,16 @@ class RadEnv(object):
             self.trans_cases.append(copy.deepcopy(self.trans_base_case))
             # Set the solar zenith angle
             self.trans_cases[i_case].alter_option(['sza', str(self.trans_vza_up[i_case].data)])
-            # Change the name and input and output filenames
+            # Change the name and input and output filenames, the _x_ is for transmission runs
             self.trans_cases[i_case].infile = (self.trans_cases[i_case].infile[:-4] +
                                              '_x_{:04d}.INP'.format(i_case))
             self.trans_cases[i_case].outfile = (self.trans_cases[i_case].outfile[:-4] +
                                              '_x_{:04d}.OUT'.format(i_case))
             self.trans_cases[i_case].name = (self.trans_cases[i_case].name +
                                              '_x_{:04d}'.format(i_case))
+        # The transmission cases should be ready to run a this point.
+        # The run_ipyparallel method will run these cases, but not in parallel with
+        # the radiance cases.
 
 
     def run_ipyparallel(self, ipyparallel_view, stderr_to_file=False):
@@ -1588,6 +1591,14 @@ class RadEnv(object):
         self.sph_harm_coeff_cos = sph_harm_coeff_cos
         self.sph_harm_coeff_cos = sph_harm_coeff_cos
         return sph_harm_coeff_cos, sph_harm_coeff_sin
+
+    def compute_path_radiance(self):
+        """ Compute path radiances for path segments between all altitudes in the REM.
+        The path transmittances as well as the total radiances at each altitude are required to
+        calculate path radiances.
+
+        :return:
+        """
 
 
 
