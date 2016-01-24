@@ -1198,6 +1198,8 @@ class RadEnv(object):
             the solar principle plane. Default is False i.e. the environment map covers the full sphere.
             Note that if hemi=True, the number of REM samples in azimuth becomes n_azi :math:`\\times` 2.
             This is the recommended mode (hemi=True) for MORTICIA purposes, since it reduces execution time.
+        :param n_sza: The number of solar zenith angles (SZA) at which to perform transmittance and path radiance
+            computations. Each SZA will result in another run of the base case (no radiances)
 
         The solver cdisort may have dynamic memory allocation, so the warning is still issued because the situation
         is less clear.
@@ -1327,11 +1329,13 @@ class RadEnv(object):
         :return:
         """
 
-        # Start by removing any cloud options in the transmission base_case
+        # Start by removing any cloud options in the transmission base_case, as well as any radiance options
+        # to reduce runtime.
         new_option_list = []
         new_tokens_list = []
         for (ioption, option) in enumerate(self.trans_base_case.options):
-            if option.startswith('wc_') or option.startswith('ic_') or option.startswith('cloudcover'):
+            if (option.startswith('wc_') or option.startswith('ic_') or option.startswith('cloudcover') or
+                option == 'umu' or option == 'phi' or option == 'phi0'):
                 pass  # TODO : Look for other cloud options that may be important
             else:
                 new_option_list.append(option)
