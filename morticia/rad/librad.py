@@ -194,12 +194,42 @@ class Case(object):
     # Definitions of some of the possible uvspec output variables
 
     def __init__(self, casename='', filename=None, optionlist=None):
-        """ A libRadtran/uvspec case
+        """ Instantiate a libRadtran/uvspec case, typically by reading a uvspec .INP file.
+
         :param casename: A user-defined name for the libRadtran/uvspec case
         :param filename: An optional filename from which to read the libRadtran/uvspec input
         :param optionlist: A list of option keywords and parameteres (tokens). The keyword existence
-         is verified. Besides that, no error checking is performed automatically (yet).
-        :return:
+            is verified. Besides that, no error checking is performed automatically.
+        :return: None
+
+        .. todo::
+            Implement checking of uvspec input keyword tokens (parameters)
+
+        >>> # Read a libRadtran/uvspec case from a .INP file and display the expanded input
+        >>> import morticia.rad.librad as librad
+        >>> libRadCase = librad.Case(filename='./examples/UVSPEC_AEROSOL.INP')  # Read uvspec input and expand includes, if any
+        >>> print libRadCase   # This prints the uvspec input file, compare to contents of UVSPEC_AEROSOL.INP
+        atmosphere_file ../data/atmmod/afglus.dat
+        source solar ../data/solar_flux/atlas_plus_modtran
+        mol_modify O3 300. DU
+        day_of_year 170
+        albedo 0.2
+        sza 32.0
+        rte_solver disort
+        number_of_streams 6
+        wavelength 299.0 341.0
+        slit_function_file ../examples/TRI_SLIT.DAT
+        spline 300 340 1
+        quiet
+        aerosol_vulcan 1
+        aerosol_haze 6
+        aerosol_season 1
+        aerosol_visibility 20.0
+        aerosol_angstrom 1.1 0.2
+        aerosol_modify ssa scale 0.85
+        aerosol_modify gg set 0.70
+        aerosol_file tau ../examples/AERO_TAU.DAT
+
         """
         self.name = casename
         self.error_txt = []
@@ -1389,6 +1419,11 @@ class RadEnv(object):
         # TODO : Obtain self.fluxdata from one of the self.cases
         self.fluxdata = self.casechain[0].fluxdata  # Would really want this as a xray.DataArray
         self.fluxline = self.casechain[0].fluxline
+        # Run the transmittance sequence
+
+        # Compile the transmittance data
+
+        # Compile the path radiance data
 
 
     def run_parallel(self, n_nodes=4):
