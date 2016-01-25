@@ -1109,7 +1109,7 @@ class Case(object):
             if purge:  # Delete the input and output files
                 try:
                     os.remove(self.name+'.INP')
-                    os.remove(self.name+'.INP')
+                    os.remove(self.name+'.OUT')
                     if stderr_to_file:
                         os.remove(self.name+'.ERR')
                 except OSError:
@@ -1311,15 +1311,28 @@ class RadEnv(object):
         span a cloud layer). The user, or the code which uses the REMs should see to this. Essentially it must
         be recognised that optical surveillance is not possible through optically thick cloud layers.
 
-        This setup routine will compute transmittances after removing any cloud keywords in the uvspec input file.
-        That is, any keywords that begin with `wc_` (water clouds) or `ic_` (ice clouds) will be removed from
-        the uvspec input file/case. This is only done to allow valid computation of transmittances and path
-        radiances in clear air between cloud layers.
+        The REM is provided with a cloud flag that indicates if the base case incorporates clouds. The approach to
+        computing inter-level transmittance (optical depth is the stored parameter, since this scales more
+        closely in a linear fashion with distance) in the presence of cloud is to vary the 'cloudcover'
+        keyword parameter (water and ice clouds independently). This is done for solar zenith angle of zero.
+        The optical thickness from TOA to the level in question is then computed as a function of cloud cover
+        fraction (CCF). The optical depth between levels (i.e the optical depth of a layer between two levels)
+        is computed as the difference in optical depth to TOA of the lower level minus the optical depth to TOA
+        of the upper level. If there is no difference in the layer optical depth when the CCF is varied from
+        zero to some positive value (say 0.1, but not as high as 1), then the layer is free of cloud.
 
-        Another inherent and unavoidable problem with computation of path transmittances and radiances using
+        A flag per layer is thus obtained which indicates if the layer contains cloud. If it does, the transmittance
+        will compute as zero between the two levels in question. This means that the cloud base is not resolved
+        to better than the level resolution in the REM. It is probably then quite important to ensure that
+        cloud base altitude statistics are available in the theatre climatology.
+
+        An upgrade to cloud handling could be to read the cloud profile files in order to obtain the exact vertical
+        location of the cloud layers.
+
+        Another inherent and unavoidable problem with computation of path optical depths and radiances using
         libRadtran/uvspec is that precisely horizontal paths cannot be dealt with using one-dimensional RT
         solvers. Therefore in this case, the maximum range that can be dealt with depends on the height difference
-        between the REM levels and the maximum solar zenith angle (SZA) using for computation of transmittances.
+        between the REM levels and the maximum solar zenith angle (SZA) used for computation of optical depth.
 
         A further implication of the above point is that path transmittances and path radiances cannot be interpolated
         between the SZA nearest the horizon and the horizon proper. Some form of logarithmic extrapolation could be
