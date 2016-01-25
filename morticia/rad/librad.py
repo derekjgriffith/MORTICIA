@@ -1485,11 +1485,16 @@ class RadEnv(object):
         # TODO : Obtain self.fluxdata from one of the self.cases
         self.fluxdata = self.casechain[0].fluxdata  # Would really want this as a xray.DataArray
         self.fluxline = self.casechain[0].fluxline
-        # Run the transmittance sequence
-
+        # Run the transmittance sequences
+        self.trans_cases = ipyparallel_view.map(Case.run, self.trans_cases)
+        # If there are clouds in the radiant environment, run the could OD detection cases
+        # These cases reveal if there are layers in the REM that include clouds
+        if self.has_clouds:
+            self.cloud_detect_cases = ipyparallel_view.map(Case.run, self.cloud_detect_cases)
         # Compile the transmittance data
-
+        self.compute_path_transmittance()
         # Compile the path radiance data
+        self.compute_path_radiance()
 
     def run_parallel(self, n_nodes=4):
         """ Run the RadEnv in multiprocessing mode on the local host.
@@ -1691,6 +1696,17 @@ class RadEnv(object):
         self.sph_harm_coeff_cos = sph_harm_coeff_cos
         self.sph_harm_coeff_cos = sph_harm_coeff_cos
         return sph_harm_coeff_cos, sph_harm_coeff_sin
+
+    def compute_path_transmittance(self):
+        """ Compute path transmittances from the set of libRadtran/uvspec runs executed for solar zenith angles
+        of 0 to near 90 degrees.
+
+        .. seealso::
+            RadEnv.setup_trans_cases()
+        :return: None
+        """
+
+        
 
     def compute_path_radiance(self):
         """ Compute path radiances for path segments between all altitudes in the REM.
