@@ -270,6 +270,9 @@ class Case(object):
         self.wavelength_index = []  # set by 'wavelength_index' keyword
         self.wavelength_index_range = []  # for use where range() would be applicable
         self.output_process = 'none'  # Default is to output spectral data. See output_process in uvspec manual
+        self.has_ice_clouds = False  # Default, unless discovered otherwise
+        self.has_water_clouds = False  # ditto
+        self.has_clouds = False  # either water or ice clouds
         if filename is not None:
             if not filename:
                 # Open a dialog to get the filename
@@ -503,6 +506,19 @@ class Case(object):
             self.wavelength_index_range = range(int(tokens[0]), int(tokens[1]) + 1)
         if keyword == 'output_process':
             self.prepare_for_output_process(tokens)
+        if keyword == 'wc_file':
+            self.has_water_clouds = True
+            self.has_clouds = True
+        if keyword == 'ic_file':
+            self.has_ice_clouds = True
+            self.has_clouds = True
+        if keyword == 'profile_file':
+            if tokens[0] == 'wc':
+                self.has_water_clouds = True
+                self.has_clouds = True
+            elif tokens[0] == 'ic':
+                self.has_ice_clouds = True
+                self.has_clouds = True
 
     def prepare_for_polradtran(self):
         """ Prepare for output from the polradtran solver
@@ -1293,6 +1309,9 @@ class RadEnv(object):
         self.paz = xd_identity(np.deg2rad(prop_azi_angles), 'paz', 'rad')
         self.vza = xd_identity(view_zen_angles, 'vza', 'deg')
         self.vaz = xd_identity(view_azi_angles, 'vaz', 'deg')
+        self.has_water_clouds = self.base_case.has_water_clouds
+        self.has_ice_clouds = self.base_case.has_ice_clouds
+        self.has_clouds = self.base_case.has_clouds
         if n_sza:  # Setup the transmission run cases
             self.setup_trans_cases(n_sza=n_sza)
             # self.trans_vza_up = []
@@ -1338,15 +1357,16 @@ class RadEnv(object):
         between the SZA nearest the horizon and the horizon proper. Some form of logarithmic extrapolation could be
         performed, but could result in large errors due to failure of Beer's Law and other problems.
 
-        Execution and attribution of transmittance cases will provide each level with transmittance to levels
-        below and above that altitude level. Therefore the top level will have transmittances to TOA and
-        the lowest level will have transmittances to BOA (this statement subject to review, could be that
-        the top level and bottom level will have no valid transmittances to TOA and BOA respectively).
+        Execution and attribution of transmittance cases will provide each level with transmittance to the level
+        above that altitude level. Therefore the topmost level will have transmittances to TOA, but the
+        bottom level will not have transmittances (optical depths) to BOA, unless the bottom level *is* BOA.
+        It is recommended that all MORTICIA base cases for REM include BOA as an output level.
 
-        :param n_sza: The number of solar zenith angles at which to compute path transmittances and radiances.
+        :param n_sza: The number of solar zenith angles at which to compute path optical depth and radiances.
              the SZA values are computed equi-spaced in the cosine of the solar zenith angle rather that the
              SZA itself. This is to help with the problem that the slant range between levels increases
-             in linear relation to the secant of the view zenith angle
+             in linear relation to the secant of the view zenith angle. The optical depths are later
+             interpolated to the same
         :return:
         """
 
@@ -1355,9 +1375,10 @@ class RadEnv(object):
         new_option_list = []
         new_tokens_list = []
         # TODO : setup up transmission case series with AND without clouds
+        # Remove radiance options to speed up transmission series computations
+        options_to_remove = ['umu', 'phi', 'phi0']
         for (ioption, option) in enumerate(self.trans_base_case.options):
-            if (option.startswith('wc_') or option.startswith('ic_') or option.startswith('cloudcover') or
-                option == 'umu' or option == 'phi' or option == 'phi0'):
+            if any([option == removal_option for removal_option in options_to_remove]):
                 pass  # TODO : Look for other cloud options that may be important
             else:
                 new_option_list.append(option)
@@ -1368,6 +1389,7 @@ class RadEnv(object):
         # but take a look at the libRadtran/uvspec manual to see why. Essentially, the reflectivity
         # option computes the ratio of the horizontal irradiance to the horizontal irradiance at TOA.
         self.trans_base_case.alter_option(['output_quantity', 'reflectivity'])
+        self.trans_base_case.alter_option(['sza', '0.0'])
         # Calculate the view zenith angles equi-spaced in the secant of the VZA
         # First upward looking
         cosine_up = np.linspace(1.0, 0.0, n_sza + 1)[:-1]  # Drop the last element because it is horizontal (illegal)
@@ -1380,7 +1402,15 @@ class RadEnv(object):
         for i_case in range(len(cosine_up)):
             self.trans_cases.append(copy.deepcopy(self.trans_base_case))
             # Set the solar zenith angle
-            self.trans_cases[i_case].alter_option(['sza', str(self.trans_vza_up[i_case].data)])
+            sza = self.trans_vza_up[i_case].data  # Solar zenith angle
+            self.trans_cases[i_case].alter_option(['sza', str(sza)])
+            # Set cloudcover to zero if the case has water or ice clouds
+            if self.trans_base_case.has_water_clouds:
+                self.trans_cases[i_case].alter_option(['cloudcover', 'wc', '0.0'])
+            if self.trans_base_case.has_ice_clouds:
+                self.trans_cases[i_case].alter_option(['cloudcover', 'ic', '0.0'])
+            if sza > 75.0:  # Set the pseudospherical option
+                self.trans_cases[i_case].alter_option(['pseudospherical', ''])
             # Change the name and input and output filenames, the _x_ is for transmission runs
             self.trans_cases[i_case].infile = (self.trans_cases[i_case].infile[:-4] +
                                              '_x_{:04d}.INP'.format(i_case))
@@ -1391,6 +1421,17 @@ class RadEnv(object):
         # The transmission cases should be ready to run a this point.
         # The run_ipyparallel method will run these cases, but not in parallel with
         # the radiance cases.
+        # Next, create the cloudcover series to detect cloud layers
+        self.cloud_detect_cases = []
+        # If there are clouds in this case, run three cases with cloud cover fraction of 0.0, 0.5 and 1.0
+        if self.has_clouds:
+            self.cloud_detect_cases.append(copy.deepcopy(self.trans_base_case))
+            self.cloud_detect_cases[0].alter_option(['cloudcover', '0.0'])
+            self.cloud_detect_cases.append(copy.deepcopy(self.trans_base_case))
+            self.cloud_detect_cases[1].alter_option(['cloudcover', '0.5'])
+            self.cloud_detect_cases.append(copy.deepcopy(self.trans_base_case))
+            self.cloud_detect_cases[2].alter_option(['cloudcover', '1.0'])
+
 
     def run_ipyparallel(self, ipyparallel_view, stderr_to_file=False):
         """ Run a complete set of radiant environment map cases of libRadtran/uvspec using the `ipyparallel`
