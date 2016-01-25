@@ -309,9 +309,12 @@ class Case(object):
             self.rad_units = ['count', '', '']
 
     def prepare_for_source(self, tokens):
-        """ Prepare for source, particularly units of various kinds, depending on the source
-        :param tokens: uvspec option parameters (tokens)
-        :return:
+        """ Prepare for source, particularly units of various kinds, depending on the source.
+        libRadtran/uvspec source options are mainly 'solar' and 'thermal' with some additional options
+        for units.
+
+        :param tokens: uvspec 'source' keyword option parameters (tokens)
+        :return: None
         """
 
         # TODO : More work required here - see libRadtran manual under source keyword
@@ -814,6 +817,7 @@ class Case(object):
     def rad_units_str(self, latex=False):
         """ Provide a radiance units string e.g. W/sr/m^2/nm.
         If output_quantity is set to 'brightness' or 'reflectivity', rad_units will be 'K' or '' respectively.
+
         :return: Radiance units as a string
         """
 
@@ -831,6 +835,7 @@ class Case(object):
     def irrad_units_str(self, latex=False):
         """ Provide an irradiance units string e.g. W/m^2/nm.
         If output_quantity is set to 'brightness' or 'reflectivity', irrad_units will be 'K' or '' respectively.
+
         :return: Irradiance units as a string
         """
 
@@ -935,7 +940,7 @@ class Case(object):
 
         :param filename: File from which to read the output. Defaults to name of input file, but with the .OUT
         extension.
-        :return:
+        :return: None
 
         """
         #TODO check for use of header keyword
@@ -1102,10 +1107,13 @@ class Case(object):
         if not return_code and read_output:
             self.readout(filename=self.name+'.OUT')  # Read the output into the instance if the return code OK
             if purge:  # Delete the input and output files
-                os.remove(self.name+'.INP')
-                os.remove(self.name+'.INP')
-                if stderr_to_file:
-                    os.remove(self.name+'.ERR')
+                try:
+                    os.remove(self.name+'.INP')
+                    os.remove(self.name+'.INP')
+                    if stderr_to_file:
+                        os.remove(self.name+'.ERR')
+                except OSError:
+                    pass  # Just move on if file delete fails.
         return self
 
     def process_outputs(self):
@@ -1333,6 +1341,7 @@ class RadEnv(object):
         # to reduce runtime.
         new_option_list = []
         new_tokens_list = []
+        # TODO : setup up transmission case series with AND without clouds
         for (ioption, option) in enumerate(self.trans_base_case.options):
             if (option.startswith('wc_') or option.startswith('ic_') or option.startswith('cloudcover') or
                 option == 'umu' or option == 'phi' or option == 'phi0'):
@@ -1369,7 +1378,6 @@ class RadEnv(object):
         # The transmission cases should be ready to run a this point.
         # The run_ipyparallel method will run these cases, but not in parallel with
         # the radiance cases.
-
 
     def run_ipyparallel(self, ipyparallel_view, stderr_to_file=False):
         """ Run a complete set of radiant environment map cases of libRadtran/uvspec using the `ipyparallel`
@@ -1428,7 +1436,6 @@ class RadEnv(object):
         # Compile the transmittance data
 
         # Compile the path radiance data
-
 
     def run_parallel(self, n_nodes=4):
         """ Run the RadEnv in multiprocessing mode on the local host.
