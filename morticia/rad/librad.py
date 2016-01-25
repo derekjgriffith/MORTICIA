@@ -528,6 +528,9 @@ class Case(object):
         self.fluxline = ['wvl']
         for stokes in self.stokes:
             self.fluxline.extend(['down_flux' + stokes, 'up_flux' + stokes])
+        warnings.warn('The polradtran solver does not produce direct solar irradiances and will only produce' +
+                      ' output if the atmosphere file contains the altitudes specified by zout (see "zout" ' +
+                      ' in the uvspec manual). ')
 
     def append_option(self, option, origin=('user', None)):
         """ Append a libRadtran/uvspec options to this uvspec case. It will be appended at the end of the file
@@ -1148,6 +1151,9 @@ class Case(object):
         # first. This is a 5 dimensional numpy array with axes 'umu'. 'phi', 'wvl', 'zout' (or equivalent)
         # and 'stokes'. The 'wvl' axis could also be 'chn' (spectral channel) or 'wvn' (spectral wavenumber)
         # Create each of the axes individually using xd_identity
+        # TODO : Also include putting irradiance or other user output into xray.DataArray objects
+        # TODO : Want to deal with azimuthally averaged radiances as well if possible (to xray.DataArray)
+        # Azimuthally averaged radiances occur when phi is not specified
         if self.uu.size:  # OK, there is some radiance data (not azimuthally averaged)
             umu = xd_identity(self.umu, 'umu', '')  # TODO : This must change to the propagation zenith (polar) angle
             paz = self.paz
@@ -1194,6 +1200,14 @@ class RadEnv(object):
     specified in the file /libsrc_f/DISORT.MXD. If these values are changed, DISORT and uvspec must be recompiled. If
     the values are set too large, the memory requirements could easily exceed your computer's limit (there is
     currently no dynamic memory allocation in DISORT). The situation for the cdisort solver is less clear.
+
+    .. note::
+        The `polradtran` radiative transfer (RT) solver does not produce direct irradiance outputs (`edir`),
+        This presents a problem for calculation of path transmission (optical depth) between output atmospheric
+        levels (e.g. as specified by the uvspec `zout` keyword). This solver only produces total fluxes (irradiances)
+        for each of desired stokes parameters. Hence for calculation of polarised radiant environment maps (REMs), the only
+        feasible option for `MORTICIA` is to use the `mystic` solver with the `mc_polarisation` option. Currently,
+        the librad.Case uvspec output file reading functions do not cater for `mystic`.
 
     """
 
@@ -1385,6 +1399,13 @@ class RadEnv(object):
                 new_tokens_list.append(self.trans_base_case.tokens[ioption])
         self.trans_base_case.options = new_option_list
         self.trans_base_case.tokens = new_tokens_list
+        # There are no radiance calculations now, so set n_phi and n_umu to zero
+        self.trans_base_case.n_phi = 0
+        self.trans_base_case.phi = []
+        self.trans_base_case.n_umu = 0
+        self.trans_base_case.umu = []
+        self.trans_base_case.pza = []
+        self.trans_base_case.paz = []
         # Change the transmission base case to output_quantity reflectivity. THis seems counter-intuitive,
         # but take a look at the libRadtran/uvspec manual to see why. Essentially, the reflectivity
         # option computes the ratio of the horizontal irradiance to the horizontal irradiance at TOA.
@@ -1705,8 +1726,17 @@ class RadEnv(object):
             RadEnv.setup_trans_cases()
         :return: None
         """
+        # Run through all the cases in the self.trans_cases and compile the direct solar irradiance data
+        edir = np.array([])  # Build up an array of edir values
+        for trans_case in self.trans_cases:
+            edir = np.hstack((edir, trans_case.edir))
 
-        
+        # Now run through the cases in the cloud detection sequence to find layers affected by clouds
+        if self.has_clouds:
+            for librad_case in self.cloud_detect_cases:
+                pass
+
+
 
     def compute_path_radiance(self):
         """ Compute path radiances for path segments between all altitudes in the REM.
