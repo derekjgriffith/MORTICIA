@@ -310,6 +310,8 @@ class Case(object):
         elif self.solver == 'sslidar':
             self.fluxline = ['center_of_range', 'number_of_photons', 'lidar_ratio']
             self.rad_units = ['count', '', '']
+        elif self.solver == 'montecarlo':
+            self.solver = 'mystic'  # Same as mystic, use mystic
 
     def prepare_for_source(self, tokens):
         """ Prepare for source, particularly units of various kinds, depending on the source.
@@ -738,8 +740,6 @@ class Case(object):
             linecount = 1
         else:
             linecount = datashape[1]
-        print 'datashape == ', datashape
-        print 'linecount -- ', linecount
         # Deal with the sahpe of the data output and try to reshape, depending on the number of
         # wavelengths and output levels (zout, zout_sea or pressure)
         #if len(datashape) == 2:
@@ -777,7 +777,7 @@ class Case(object):
                 # setattr(self, field, np.squeeze(fluxdata[colstart:(colstart + ncols)]))
                 setattr(self, field, fluxdata[colstart:(colstart + ncols)])
                 colstart = colstart + ncols
-        else:
+        else:  # There is more than 1 line of output flux/user data
             # Some output fields, such as umu, uu, u0u, uu_down, uu_up, cmu(?) are vectors and therefore occupy
             # multiple columns, so keep track of columns and try to distribute in a reasonable way
             colstart = 0  # keep track of starting column
@@ -980,7 +980,8 @@ class Case(object):
         if self.output_user:
             fluxdata = np.loadtxt(filename)
             self.distribute_flux_data(fluxdata)
-        elif (self.n_phi == 0 and self.n_umu == 0) or self.solver == 'sslidar':  # There are no radiance blocks
+        elif ((self.n_phi == 0 and self.n_umu == 0) or self.solver == 'sslidar' or
+              self.solver == 'mystic'):  # There are no radiance blocks (sslidar). Mystic puts radiances in other files.
             fluxdata = np.loadtxt(filename)
             self.distribute_flux_data(fluxdata)
         # elif self.n_phi == 0:   # Not sure about format for n_umu > 0, n_phi == 0
@@ -992,7 +993,7 @@ class Case(object):
         #     self.raddata = raddata
         #     self.fluxdata = fluxdata
         #     self.distribute_flux_data(fluxdata)
-        else:  # radiance blocks  #TODO polradtran has different format
+        else:  # read radiance blocks  #TODO polradtran has different format
             phicheck = []
             radND = []  # full 3D/4D radiance data is here (umu, phi and wavelength)
             with open(filename, 'rt') as uvOUT:
@@ -1037,8 +1038,8 @@ class Case(object):
 
             # See if one size fits all
             # self.u0u = radND[:,1].reshape(self.n_umu, self.n_stokes, self.n_wvl, -1, order='F').squeeze()  # should actually all be zero
-            print radND.shape
-            #print radND
+            # print radND.shape
+            # print radND
             self.u0u = radND[:,1].reshape(self.n_umu, self.n_stokes, self.n_wvl, -1, order='F')
             # There is actually some radiance data
             self.uu = radND[:,2:]
@@ -1086,7 +1087,10 @@ class Case(object):
             #         self.uu = radND[:,2:]
             #         if self.uu.shape[1] / self.n_wvl > 1:  # if multiple output levels, reshape the radiance data appropriately
             #             self.uu = self.uu.reshape((self.n_umu, self.n_wvl, -1), order='F')
-
+        if self.solver == 'mystic':
+            # TODO : Read mystic fluxes and radiances from mc.flx.spc and mc.rad.spc
+            warnings.warn('Reading of mc.flx.spc and mc.rad.spc skipped. To be implemented.')
+            
     def run(self, stderr_to_file=False, write_input=True, read_output=True, block=True, purge=True):
         """ Run the libRadtran/uvspec case.
 
@@ -1095,7 +1099,7 @@ class Case(object):
 
         :param stderr_to_file: Controls whether standard error output goes to the screen or is written to a file
             having the same name as the input/output files, except with the extension .ERR.
-        :param write_input: Controls whether the input file is writte out before execution. Default is True.
+        :param write_input: Controls whether the input file is written out before execution. Default is True.
         :param read_output: Controls whether the output file is read after execution. Default is True.
         :param block: By default, this method waits until uvspec terminates. If set False, the uvspec process
             is released to background and read_output is set to False (regardless of user input).
