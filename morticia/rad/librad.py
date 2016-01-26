@@ -738,6 +738,7 @@ class Case(object):
             linecount = 1
         else:
             linecount = datashape[1]
+        print 'datashape == ', datashape
         print 'linecount -- ', linecount
         # Deal with the sahpe of the data output and try to reshape, depending on the number of
         # wavelengths and output levels (zout, zout_sea or pressure)
