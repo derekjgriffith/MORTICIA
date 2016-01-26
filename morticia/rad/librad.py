@@ -250,7 +250,7 @@ class Case(object):
         self.source_file = ''  # TOA irradiance source file
         self.n_umu = 0  # number of zenith angles (actually cosine of zenith angle)
         self.umu = []  # zenith angles for radiance calculations
-        self.uu = []  # This will be populated if there is radiance data output by the case
+        self.uu = np.array([])  # This will be populated if there is radiance data output by the case
         self.n_phi = 0  # number of azimuth radiance angles
         self.phi = [] # np.zeros(1)  # azimuth angles for radiance calculations
         self.n_levels_out = 1  # Assume only one output level, unless zout/zout_sea/pressure_out keyword is used.
@@ -722,10 +722,15 @@ class Case(object):
             uvINP.write(alldata)
 
     def distribute_flux_data(self, fluxdata):
-        """ Distribute flux data read from uvspec output file to various fields.
+        """ Distribute flux/user data read from uvspec output file to various data fields.
+        This method will look at `output_user` options and attempt to assign flux/user data in a sensible way.
+        .. note::
+            There are potentially uvspec output formats that are not possible to process or to assign correctly.
+            These are typically cases in which it is not possible to determine from the .INP and/or .OUT file
+            how this data should be assigned.
 
         :param fluxdata: Flux (irradiance) data read from uvspec output file
-        :return:
+        :return: None
         """
         #TODO rename this function to just distribute_data ?
         # First split the data amongst output levels or output wavelengths/wavenumbers
@@ -740,9 +745,9 @@ class Case(object):
             linecount = 1
         else:
             linecount = datashape[1]
-        # Deal with the sahpe of the data output and try to reshape, depending on the number of
+        # Deal with the shape of the data output and try to reshape, depending on the number of
         # wavelengths and output levels (zout, zout_sea or pressure)
-        #if len(datashape) == 2:
+        # if len(datashape) == 2:
         #    if datashape[1] != len(fields):  # number of fields in data does not match number of fields
                 # print datashape[1], ' not the same as ', len(fields) #TODO try to deal with this
         if (fields[0] == 'zout' or fields[0] == 'zout_sea' or fields[0] == 'p' or
@@ -1058,7 +1063,7 @@ class Case(object):
             #     print 'self.u0u'
             #     print self.u0u
                 # self.uu = self.uu
-            self.process_outputs()
+
             # while self.uu.shape[-1] == 1:  # Remove any hanging singleton dimensions at the end
             #    self.uu = self.uu.squeeze(axis=self.uu.ndim-1)
 
@@ -1090,7 +1095,9 @@ class Case(object):
         if self.solver == 'mystic':
             # TODO : Read mystic fluxes and radiances from mc.flx.spc and mc.rad.spc
             warnings.warn('Reading of mc.flx.spc and mc.rad.spc skipped. To be implemented.')
-            
+        # Perform further processing of outputs, mainly production of xray.DataArray versions of outputs.
+        self.process_outputs()
+
     def run(self, stderr_to_file=False, write_input=True, read_output=True, block=True, purge=True):
         """ Run the libRadtran/uvspec case.
 
@@ -1147,11 +1154,11 @@ class Case(object):
 
     def process_outputs(self):
         """ Process outputs from libRadtran into moglo.Scalar and xray.DataArray objects.
-        Currently only radiance outputs are processed.
+        Currently only radiance outputs are processed, along with a few typical flux outputs, such as `edir`.
 
         Note that this method probably does not cover all libRadtran/uvspec inputs and outputs and will most
         likely continue to evolve, perhaps breaking existing code.
-        :return:
+        :return: None
         """
         # Determine output levels if possible
         # 'cpt', being cold-point tropopause is mapped to np.nan and toa maps to np.inf
@@ -1164,43 +1171,47 @@ class Case(object):
         # TODO : Also include putting irradiance or other user output into xray.DataArray objects
         # TODO : Want to deal with azimuthally averaged radiances as well if possible (to xray.DataArray)
         # Azimuthally averaged radiances occur when phi is not specified
+        # Set up sepctral axis, output level axis and stokes component axis
+        if self.spectral_axis == 'wvl':
+            spectral_axis = xd_identity(self.wvl, 'wvl','nm')  # The spectral axis is wavelength
+        elif self.spectral_axis == 'wvn':
+            spectral_axis = xd_identity(self.wvn, 'wvn', 'cm^-1')  # The spectral axis is wavenumber
+        elif self.spectral_axis == 'chn':  # The spectral axis is channel number
+            spectral_axis = self.spectral_channels
+        levels = xd_identity(self.level_values, self.levels_out_type)  # Presume units correct
+        self.levels = levels
+        stokes = xd_identity(range(self.n_stokes), 'stokes')
+        self.stokes = stokes
+        # Convert uu radiance output to xray.DataArray
         if self.uu.size:  # OK, there is some radiance data (not azimuthally averaged)
             umu = xd_identity(self.umu, 'umu', '')  # TODO : This must change to the propagation zenith (polar) angle
             paz = self.paz
             pza = self.pza
             phi = self.phi
-            if self.spectral_axis == 'wvl':
-                spectral_axis = xd_identity(self.wvl, 'wvl','nm')  # The spectral axis is wavelength
-            elif self.spectral_axis == 'wvn':
-                spectral_axis = xd_identity(self.wvn, 'wvn', 'cm^-1')  # The spectral axis is wavenumber
-            elif self.spectral_axis == 'chn':  # The spectral axis is channel number
-                spectral_axis = self.spectral_channels
-            levels = xd_identity(self.level_values, self.levels_out_type)  # Presume units correct
-            self.levels = levels
-            stokes = xd_identity(range(self.n_stokes), 'stokes')
-            self.stokes = stokes
             # Determine the units of uu
             uu_units = self.rad_units_str()
-            # if self.output_quantity == 'radiance':
-            #     if self.rad_units[0] and self.rad_units[0][-1] == 'W':  # have flux
-            #         uu_units = self.rad_units[0] + '/sr'
-            #         if self.rad_units[1]:
-            #             uu_units += '/' + self.rad_units[1]
-            #         if self.rad_units[2]:
-            #             uu_units += '/' + self.rad_units[2]
-            #     else:
-            #         warnings.warn('Unexpected/invalid radiant units encountered for output_quantity mode.')
-            #         uu_units = self.rad_units[0]
-            # elif self.output_quantity == 'brightness':
-            #     uu_units = 'K'
-            # elif self.output_quantity == 'transmittance' or self.levels_out == 'reflectivity':
-            #     uu_units = ''
-            # print 'units : ' + uu_units
             # Build the xray.DataArray
             qty_name = {'radiance': 'specrad', 'transmittance': 'trnx', 'reflectivity': 'reflx'}[self.output_quantity]
             xd_uu = xray.DataArray(self.uu, [pza, paz, spectral_axis, levels, stokes],
-                                name=qty_name, attrs={'units': uu_units})
+                                    name=qty_name, attrs={'units': uu_units})
             self.xd_uu = xd_uu
+        # Try to process fluxline data into xray.DataArray objects
+        single_col_flux_fields = ['edir', 'edn', 'eup', 'uavgdir', 'uavgdn', 'uavgup', 'down_fluxI',
+                                  'down_fluxQ', 'down_fluxU', 'down_fluxV', 'up_fluxI',
+                                  'up_fluxQ', 'up_fluxU', 'up_fluxV','enet', 'esum']
+        for flux_field in self.fluxline:  # This could actually be output_user data as well
+            flux_units = self.irrad_units_str()  # Remember that "flux" means irradiance here
+            if flux_field in single_col_flux_fields:  # This are single column outputs
+                flux_data = getattr(self, flux_field)
+                if flux_data.shape[2] == 1:  # Remove trailing singleton dimension
+                    setattr(self, flux_field, flux_data.squeeze(axis=2))
+                else:
+                    warnings.warn('Non-singleton third dimension encountered in scalar flux data.')
+                xd_flux = xray.DataArray(getattr(self, flux_field), [spectral_axis, levels], name=flux_field,
+                                         attrs={'units': flux_units, 'long_name': long_name[flux_field]})
+                setattr(self, 'xd_' + flux_field, xd_flux)
+
+
 
 
 class RadEnv(object):
