@@ -102,6 +102,10 @@ usually denoted :math:`\Phi`, will not be referred to as "flux", but explicitly 
 with irradiance/flux or radiance per unit spectral interval, these are normally explicitly referred to as
 "spectral irradiance/flux" or "spectral radiance".
 
+The term "mean intensity" is used in libRadtran/uvspec terminology to mean the actinic flux divided by
+:math:`4\pi` steradians. Acitinic flux has the same units as irradiance/flux and could equally well be
+called actinic irradiance. A preferred term for "mean intensity" could be "actinic sterance".
+
 Camera and Imager
 -----------------
 A `Camera` object in MORTICIA does *not* include a Lens - it is a camera body, including an FPA and a
