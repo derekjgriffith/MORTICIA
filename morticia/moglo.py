@@ -93,7 +93,8 @@ long_name = {
     'up_fluxI': 'Global Upwelling Irradiance Stokes I',
     'up_fluxQ': 'Global Upwelling Irradiance Stokes Q',
     'up_fluxU': 'Global Upwelling Irradiance Stokes U',
-    'up_fluxV': 'Global Upwelling Irradiance Stokes V'
+    'up_fluxV': 'Global Upwelling Irradiance Stokes V',
+    'brightness': 'Brightness Temperature'
 
     # TODO : Include all libRadtran definitions as well from rad.librad.py
 }
@@ -161,7 +162,8 @@ default_units = {
     'zout_sea': 'km',  # Altitude above sea level
     'p': 'hPa',  # Atmospheric pressure preferred units : hectopascals
     'reflx': '',  # reflectivity
-    'trnx': ''  # transmissivity
+    'trnx': '',  # transmissivity
+    'brightness': 'K'
 }
 
 class Scalar(object):
