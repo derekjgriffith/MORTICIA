@@ -17,6 +17,7 @@ Contents:
    styleguide
    sensorpack
    radpack
+   ChapLibRadtranODandPathRadiance
 
 
 Indices and tables
