@@ -416,9 +416,9 @@ class Case(object):
         """
         self.output_process = tokens[0]
         process = tokens[0].lower()
-        if process == 'sum':  # the units become per band
-            self.mol_abs_para
-            self.process = 'sum'
+        if process == 'sum':  # the units become per band (?)
+            self.output_process = 'sum'
+            self.rad_units[2] = ''  # TODO : Check that this is correct somehow
         elif process == 'integrate':
             if not self.spectral_axis == 'wvl':
                 warnings.warn('Option output_process integrate probably not valid with band quantities')
@@ -773,11 +773,12 @@ class Case(object):
                     ncols = self.n_umu
                 else:  # All other output variables are assumed to occupy only one column
                     ncols = 1
-                setattr(self, field, np.squeeze(fluxdata[colstart:(colstart + ncols)]))
+                # setattr(self, field, np.squeeze(fluxdata[colstart:(colstart + ncols)]))
+                setattr(self, field, fluxdata[colstart:(colstart + ncols)])
                 colstart = colstart + ncols
         else:
             # Some output fields, such as umu, uu, u0u, uu_down, uu_up, cmu(?) are vectors and therefore occupy
-            # multiple columns, so keep track of columns and try to
+            # multiple columns, so keep track of columns and try to distribute in a reasonable way
             colstart = 0  # keep track of starting column
             for (ifield, field) in enumerate(fields):
                 if field == 'uu' or field == 'uu_up' or field == 'uu_down':  # Do uu_up and uu_down actually exist ?
@@ -789,7 +790,8 @@ class Case(object):
                     ncols = self.n_umu
                 else:  # All other output variables are assumed to occupy only one column
                     ncols = 1
-                setattr(self, field, np.squeeze(fluxdata[:, :, colstart:(colstart + ncols)]))
+                # setattr(self, field, np.squeeze(fluxdata[:, :, colstart:(colstart + ncols)]))
+                setattr(self, field, fluxdata[:, :, colstart:(colstart + ncols)])
                 colstart = colstart + ncols
         # Clean up zout and wavelength/wavenumber data
         # Convert levels to real numbers
@@ -1033,7 +1035,8 @@ class Case(object):
             self.phi_check = phicheck
 
             # See if one size fits all
-            self.u0u = radND[:,1].reshape(self.n_umu, self.n_stokes, self.n_wvl, -1, order='F').squeeze()  # should actually all be zero
+            # self.u0u = radND[:,1].reshape(self.n_umu, self.n_stokes, self.n_wvl, -1, order='F').squeeze()  # should actually all be zero
+            self.u0u = radND[:,1].reshape(self.n_umu, self.n_stokes, self.n_wvl, -1, order='F')
             # There is actually some radiance data
             self.uu = radND[:,2:]
             if self.uu.size:  # checks how many elements actually
