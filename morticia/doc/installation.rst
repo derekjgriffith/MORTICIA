@@ -10,8 +10,7 @@ Installation and Requirements
  utilise a Linux-based compute cluster with a libRadtran installation in the background, while all foreground
  work is performed on a Windows machine, for example. However, this setup may require
  significant setup to implement. All the required information to do this is provided in the ``ipyparallel``
- documentation. Examples are provided in the `MORTICIA` notebooks in the
-`nbMORITICIA repository on GitHub <https://github.com/derekjgriffith/nbMORTICIA>`_.
+ documentation. Examples are provided in the `MORTICIA` notebooks in the `nbMORITICIA repository on GitHub <https://github.com/derekjgriffith/nbMORTICIA>`_.
 
 MORTICIA Dependencies
 =====================
