@@ -751,7 +751,7 @@ class Case(object):
                 self.n_levels_out = len(np.unique(fluxdata[:,0]))
             fluxdata = fluxdata.reshape((self.n_levels_out, -1, linecount), order='F')
         elif fields[0] == 'wvl' or fields[0] == 'wvn':  # wavelength/wavenumber is the primary variable
-            if self.n_levels_out == 0:  # Don't know number of output levels
+            if self.n_levels_out == 0 or self.n_wvl == '?':  # Don't know number of output levels or number of wavelengths
                 self.n_wvl = len(np.unique(fluxdata[:,0]))  # Try to determine number of wavelengths/wavenumbers
                 fluxdata = fluxdata.reshape((self.n_wvl, -1, linecount), order='F')
             else:
@@ -1036,6 +1036,8 @@ class Case(object):
 
             # See if one size fits all
             # self.u0u = radND[:,1].reshape(self.n_umu, self.n_stokes, self.n_wvl, -1, order='F').squeeze()  # should actually all be zero
+            print radND.shape
+            print radND
             self.u0u = radND[:,1].reshape(self.n_umu, self.n_stokes, self.n_wvl, -1, order='F')
             # There is actually some radiance data
             self.uu = radND[:,2:]
