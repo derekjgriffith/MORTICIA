@@ -90,6 +90,18 @@ the fact that `MORTICIA` code should be improved or debugged, it should be issue
 General Terminology and Conventions
 ===================================
 
+Radiometry
+----------
+Confusion may arise over the inconsistent use of radiometric terms. In the radiative transfer (RT) community, what is
+called "flux" is called "irradiance" in the radiometry community. In the radiometry community, "flux" means
+optical power (not per unit area). In the RT community, what is called "intensity" is called "radiance" in the
+radiometry community. In the radiometry community, "intensity" means optical power per unit solid angle (not
+per unit area). In MORTICIA, the terms "flux" and "irradiance" are used interchangeably. Optical power,
+usually denoted :math:`\Phi`, will not be referred to as "flux", but explicitly as "optical power". The term
+"intensity" is avoided as inherently ambiguous and the alternative term "radiance" is preferred. When dealing
+with irradiance/flux or radiance per unit spectral interval, these are normally explicitly referred to as
+"spectral irradiance/flux" or "spectral radiance".
+
 Camera and Imager
 -----------------
 A `Camera` object in MORTICIA does *not* include a Lens - it is a camera body, including an FPA and a
