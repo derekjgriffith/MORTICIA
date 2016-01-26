@@ -1196,11 +1196,13 @@ class Case(object):
                                     name=qty_name, attrs={'units': uu_units})
             self.xd_uu = xd_uu
         # Try to process fluxline data into xray.DataArray objects
-        single_col_flux_fields = ['edir', 'edn', 'eup', 'uavgdir', 'uavgdn', 'uavgup', 'down_fluxI',
+        single_col_flux_fields = ['edir', 'edn', 'eup', 'uavgdir', 'uavgdn', 'uavgup', 'uavgglo', 'down_fluxI',
                                   'down_fluxQ', 'down_fluxU', 'down_fluxV', 'up_fluxI',
                                   'up_fluxQ', 'up_fluxU', 'up_fluxV','enet', 'esum']
         for flux_field in self.fluxline:  # This could actually be output_user data as well
             flux_units = self.irrad_units_str()  # Remember that "flux" means irradiance here
+            if flux_field.startswith('uavg'):
+                flux_units += '/sr'
             if flux_field in single_col_flux_fields:  # This are single column outputs
                 flux_data = getattr(self, flux_field)
                 if flux_data.shape[2] == 1:  # Remove trailing singleton dimension
@@ -1210,6 +1212,9 @@ class Case(object):
                 xd_flux = xray.DataArray(getattr(self, flux_field), [spectral_axis, levels], name=flux_field,
                                          attrs={'units': flux_units, 'long_name': long_name[flux_field]})
                 setattr(self, 'xd_' + flux_field, xd_flux)
+        # TODO : Would be preferable to put stokes parameters all into single xray.DataArray for polradtran
+        # TODO : Processing of 'mystic' outputs to xray.DataArray objects
+        # TODO : Mean intensity is the actinic flux divided by 4 pi, should perhaps be expressed /sr in units.
 
 
 
@@ -1527,16 +1532,17 @@ class RadEnv(object):
         # TODO : Obtain self.fluxdata from one of the self.cases
         self.fluxdata = self.casechain[0].fluxdata  # Would really want this as a xray.DataArray
         self.fluxline = self.casechain[0].fluxline
-        # Run the transmittance sequences
-        self.trans_cases = ipyparallel_view.map(Case.run, self.trans_cases)
-        # If there are clouds in the radiant environment, run the could OD detection cases
-        # These cases reveal if there are layers in the REM that include clouds
-        if self.has_clouds:
-            self.cloud_detect_cases = ipyparallel_view.map(Case.run, self.cloud_detect_cases)
-        # Compile the transmittance data
-        self.compute_path_transmittance()
-        # Compile the path radiance data
-        self.compute_path_radiance()
+        # Run the transmittance sequences if there are any
+        if self.n_sza:
+            self.trans_cases = ipyparallel_view.map(Case.run, self.trans_cases)
+            # If there are clouds in the radiant environment, run the could OD detection cases
+            # These cases reveal if there are layers in the REM that include clouds
+            if self.has_clouds:
+                self.cloud_detect_cases = ipyparallel_view.map(Case.run, self.cloud_detect_cases)
+            # Compile the transmittance data
+            self.compute_path_transmittance()
+            # Compile the path radiance data
+            self.compute_path_radiance()
 
     def run_parallel(self, n_nodes=4):
         """ Run the RadEnv in multiprocessing mode on the local host.
