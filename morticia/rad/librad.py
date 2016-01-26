@@ -241,6 +241,7 @@ class Case(object):
         self.fluxline = ['wvl', 'edir', 'edn', 'eup', 'uavgdir', 'uavgdn', 'uavgup']  # default output
         self.wvl = []  # wavelengths, wavenumbers and output levels difficult to ascertain to start with
         self.wvn = []
+        self.sza = 0.0  # default solar zenith angle for this case
         self.zout = np.zeros(1)  # If no zout (or equivalent) is given, uvspec produces output at the surface
         self.zout_sea = np.zeros(1)  # altitudes above seal level, same as zout unless ground 'altitude' provided
         self.pressure_out = []  # Only populated if pressure_out keyword is given
@@ -521,6 +522,8 @@ class Case(object):
             elif tokens[0] == 'ic':
                 self.has_ice_clouds = True
                 self.has_clouds = True
+        if keyword == 'sza':
+            self.sza = np.float(tokens[0])
 
     def prepare_for_polradtran(self):
         """ Prepare for output from the polradtran solver
@@ -1480,7 +1483,6 @@ class RadEnv(object):
             self.cloud_detect_cases.append(copy.deepcopy(self.trans_base_case))
             self.cloud_detect_cases[2].alter_option(['cloudcover', '1.0'])
 
-
     def run_ipyparallel(self, ipyparallel_view, stderr_to_file=False):
         """ Run a complete set of radiant environment map cases of libRadtran/uvspec using the `ipyparallel`
         Python package, which provides parallel computation from Jupyter notebooks and other Python launch
@@ -1755,16 +1757,14 @@ class RadEnv(object):
         :return: None
         """
         # Run through all the cases in the self.trans_cases and compile the direct solar irradiance data
-        edir = np.array([])  # Build up an array of edir values
         for trans_case in self.trans_cases:
-            edir = np.hstack((edir, trans_case.edir))
+            trans_case.xd_edir = trans_case.xd_edir.assign_coords(pza=np.deg2rad(trans_case.sza))
 
+        self.xd_edir = xray.concat([this_case.xd_edir for this_case in self.trans_cases], dim='pza')
         # Now run through the cases in the cloud detection sequence to find layers affected by clouds
         if self.has_clouds:
             for librad_case in self.cloud_detect_cases:
                 pass
-
-
 
     def compute_path_radiance(self):
         """ Compute path radiances for path segments between all altitudes in the REM.
