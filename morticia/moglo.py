@@ -77,6 +77,23 @@ long_name = {
     'sph_alb': 'Atmospheric Spherical Albedo',
     'reflx': 'Reflectivity',
     'trnx': 'Transmissivity',
+    'edir': 'Direct Solar Horizontal Irradiance',
+    'edn': 'Downwelling Diffuse Irradiance',
+    'eup': 'Upwelling Diffuse Irradiance',
+    'eglo': 'Total Downwelling Irradiance',
+    'enet': 'Net Downward Irradiance',
+    'uavgdir': 'Direct Solar Mean Intensity',
+    'uavgdn': 'Diffuse Downward Mean Intensity',
+    'uavgup': 'Diffuse Upward Mean Intensity',
+    'uavgglo': 'Global Downward Mean Intensity',
+    'down_fluxI': 'Global Downwelling Irradiance Stokes I',
+    'down_fluxQ': 'Global Downwelling Irradiance Stokes Q',
+    'down_fluxU': 'Global Downwelling Irradiance Stokes U',
+    'down_fluxV': 'Global Downwelling Irradiance Stokes V',
+    'up_fluxI': 'Global Upwelling Irradiance Stokes I',
+    'up_fluxQ': 'Global Upwelling Irradiance Stokes Q',
+    'up_fluxU': 'Global Upwelling Irradiance Stokes U',
+    'up_fluxV': 'Global Upwelling Irradiance Stokes V'
 
     # TODO : Include all libRadtran definitions as well from rad.librad.py
 }
