@@ -1352,6 +1352,7 @@ class RadEnv(object):
         self.has_water_clouds = self.base_case.has_water_clouds
         self.has_ice_clouds = self.base_case.has_ice_clouds
         self.has_clouds = self.base_case.has_clouds
+        self.n_sza = n_sza
         if n_sza:  # Setup the transmission run cases
             self.setup_trans_cases(n_sza=n_sza)
             # self.trans_vza_up = []
