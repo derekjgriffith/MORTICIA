@@ -1308,6 +1308,8 @@ class RadEnv(object):
             warnings.warn('Input n_azi to librad.RadEnv must be even. Increased by 1.')
             n_azi += 1
         self.base_case = copy.deepcopy(base_case)  # Keep a copy of the uvspec base_case
+        self.levels_out_type = self.base_case.levels_out_type
+        self.n_levels_out = self.base_case.n_levels_out
         self.trans_base_case = copy.deepcopy(base_case)  # Keep a copy for transmittance computation purposes
         view_zen_angles = np.linspace(0.0, 180.0, n_pol)  # Viewing straight down is view zenith angle of 180 deg
         prop_zen_angles = np.linspace(np.pi, 0.0, n_pol)  # Radiation travelling straight up is propagation zenith angle of 0
@@ -1769,8 +1771,29 @@ class RadEnv(object):
         # Interpolate transmission results onto the pza grid for the RadEnv
         # This is not a "harmonisation" interpolation. The transmission grid is being interpolated
         # onto another grid in pza (propagation zenith angle)
-        self.xd_edirA = xd_interp_axis_to(self.xd_edir, self.xd_uu, axis='pza', interp_method='linear',
-                                         fill_value=np.nan, assume_sorted=False)
+        self.xd_trans_toa = xd_interp_axis_to(self.xd_edir, self.xd_uu, axis='pza', interp_method='quadratic',
+                                         fill_value=1.0, assume_sorted=False)
+        self.xd_opt_depth = -np.log(self.xd_trans_toa)  # Compute the optical depths
+        # Subtract the optical depth of the level above it.
+        # This provides the optical depth from any level to the level above it
+        xd_opt_depth = -self.xd_opt_depth.diff(self.levels_out_type, label='lower')
+        # Implicitly, the optical depth from the top level is known to TOA so concat those values
+        # TODO : Explicit mention of 'zout' in following is possibly limiting, try to switch indexing
+        # to mention levels_out_type
+        levels_axis_num = xd_opt_depth.get_axis_num(self.levels_out_type)
+        levels_out_type = self.levels_out_type
+        self.xd_opt_depth = xray.concat((xd_opt_depth, self.xd_opt_depth[{levels_out_type: -1}]),
+                                        dim=levels_out_type)
+        # Now confront the problem of computing optical depths to the level below
+        # For the lowest level, the optical depths to the level below are undefined, perhaps an appropriate
+        # value is np.nan. Otherwise, the optical depth looking to the next lower level is found by
+        # flipping the OD data from the lower level along the pza axis and summing to upper level
+        for ilevel in range(self.n_levels_out-1, 0, -1):  # Start at the top and work down
+            # Create a copy of the optical depths from the level beneath ilevel
+            opt_depth_from_beneath = copy.deepcopy(self.xd_opt_depth[{levels_out_type: ilevel-1}])
+            # Flip optical depth along the pza axis
+            opt_depth_from_beneath.data = opt_depth_from_beneath[{'pza': slice(None, None, -1)}].data
+            self.xd_opt_depth[{levels_out_type: ilevel}] += opt_depth_from_beneath
         # Now run through the cases in the cloud detection sequence to find layers affected by clouds
         if self.has_clouds:
             for librad_case in self.cloud_detect_cases:
