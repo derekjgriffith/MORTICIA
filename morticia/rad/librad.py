@@ -804,9 +804,11 @@ class Case(object):
                 colstart = colstart + ncols
         # Clean up zout and wavelength/wavenumber data
         # Convert levels to real numbers
+        # TODO : What number should TOA translate to ? Maximum height defined in the atmosphere file ? Fixed number ? np.inf ?
+        # TOA -> np.inf seems to cause problems for xray
         level_dict = {'boa': self.altitude, 'BOA': self.altitude, 'sur': self.altitude,
                       'SUR': self.altitude, 'surface': self.altitude, 'SURFACE': self.altitude,
-                      'toa': np.inf, 'TOA': np.inf, 'cpt': np.nan, 'CPT': np.nan}
+                      'toa': 120.0, 'TOA': 120.0, 'cpt': np.nan, 'CPT': np.nan}
         level_values = np.array([])
         for level in self.levels_out:
             try:
@@ -1754,17 +1756,26 @@ class RadEnv(object):
 
         .. seealso::
             RadEnv.setup_trans_cases()
+
         :return: None
         """
         # Run through all the cases in the self.trans_cases and compile the direct solar irradiance data
+        # This is actually transmittance data (edir is not a flux/irradiance with output_quantity reflectivity)
         for trans_case in self.trans_cases:
-            trans_case.xd_edir = trans_case.xd_edir.assign_coords(pza=np.deg2rad(trans_case.sza))
-
+            # Add a propagation zenith angle for each sza. The pza is pi - sza (in radians)
+            trans_case.xd_edir = trans_case.xd_edir.assign_coords(pza=np.pi - np.deg2rad(trans_case.sza))
+        # Concatenate results from all transmission runs
         self.xd_edir = xray.concat([this_case.xd_edir for this_case in self.trans_cases], dim='pza')
+        # Interpolate transmission results onto the pza grid for the RadEnv
+        # This is not a "harmonisation" interpolation. The transmission grid is being interpolated
+        # onto another grid in pza (propagation zenith angle)
+        self.xd_edirA = xd_interp_axis_to(self.xd_edir, self.xd_uu, axis='pza', interp_method='quadratic',
+                                         fill_value=np.nan, assume_sorted=False)
         # Now run through the cases in the cloud detection sequence to find layers affected by clouds
         if self.has_clouds:
             for librad_case in self.cloud_detect_cases:
-                pass
+                pass  #  TODO : Cloud detection
+
 
     def compute_path_radiance(self):
         """ Compute path radiances for path segments between all altitudes in the REM.
