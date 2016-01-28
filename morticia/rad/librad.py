@@ -1776,7 +1776,8 @@ class RadEnv(object):
         # Interpolate transmission results onto the pza grid for the RadEnv
         # This is not a "harmonisation" interpolation. The transmission grid is being interpolated
         # onto another grid in pza (propagation zenith angle)
-        self.xd_trans_toa = xd_interp_axis_to(self.xd_edir, self.xd_uu, axis='pza', interp_method='linear',
+        # TODO : Check out reliability of using quadratic interpolation for transmittance
+        self.xd_trans_toa = xd_interp_axis_to(self.xd_edir, self.xd_uu, axis='pza', interp_method='quadratic',
                                          fill_value=1.0, assume_sorted=False)
         self.xd_opt_depth = -np.log(self.xd_trans_toa)  # Compute the optical depths
         # Subtract the optical depth of the level above it.
@@ -1807,11 +1808,14 @@ class RadEnv(object):
 
     def compute_path_radiance(self):
         """ Compute path radiances for path segments between all altitudes in the REM.
-        The path transmittances as well as the total radiances at each altitude are required to
+        The path transmittances (optical depth) as well as the total radiances at each altitude are required to
         calculate path radiances.
 
-        :return:
+        .. seealso:: compute_path_transmittance()
+
+        :return: None
         """
+        # The 
 
 
 
