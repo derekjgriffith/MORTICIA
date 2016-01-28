@@ -1809,13 +1809,29 @@ class RadEnv(object):
     def compute_path_radiance(self):
         """ Compute path radiances for path segments between all altitudes in the REM.
         The path transmittances (optical depth) as well as the total radiances at each altitude are required to
-        calculate path radiances.
+        calculate path radiances. If :math:`L_{pi}^{\\downarrow}` is the downwelling path radiance at level :math:`i`
+        originating between level :math:`i` and level :math:`i+1` and :math:`L_{pi}^{\\uparrow}` is the upwelling
+        path radiance at level :math:`i` originating between level :math:`i` and level :math:`i-1`, then
+
+        .. math::
+
+            L_{pi}^{\\downarrow}=L_{i}^{\\downarrow}-L_{i+1}^{\\downarrow}\\tau_{i+1}^{\\downarrow},
+
+        and
+
+        .. math::
+
+            L_{pi}^{\\uparrow}=L_{i}^{\\uparrow}-L_{i-1}^{\\uparrow}\\tau_{i-1}^{\\uparrow}.
+
+        :math:`L_{i}^{\\uparrow}` is the lower hemisphere (upwelling hemisphere) of the REM and
+        :math:`\\tau_{i}^{\\uparrow}` is the transmission between level :math:`i` and level :math:`i+1`.
+
 
         .. seealso:: compute_path_transmittance()
 
         :return: None
         """
-        # The 
+        # The
 
 
 
