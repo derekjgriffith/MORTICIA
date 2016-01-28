@@ -10,10 +10,11 @@ __author__ = 'DGriffith'
 import numpy as np
 import xray
 from morticia import ureg, Q_, U_
-from scipy.interpolate import RegularGridInterpolator, interpn
+from scipy.interpolate import RegularGridInterpolator, interp1d
 import warnings
 from operator import mul, add
 from morticia.moglo import *  # Import morticia global vocab, exceptions etc.
+import copy
 
 def xd_identity(np_vector, axis_name, units=None, attrs=None):
     """ Create an identity xray.DataArray. That is, a DataArray vector in which both the values and axis
@@ -106,6 +107,32 @@ def xd_harmonise_interp(xd_list):
         # There may be axes not present in a specific DataArray. These are omitted for that DataArray and
         # simply allowed to broadcast when performing operations with other DataArrays
     return xd_return_list
+
+def xd_interp_axis_to(from_xd, to_xd, axis, interp_method='linear', bounds_error=False, fill_value=0.0,
+                      assume_sorted=True):
+    """ Interpolate a single xray.DataArray axis from one set of coordinates to another. Since interpolation
+    occurs along a single axis, there is more flexibility in the method of interpolation that can be used.
+    The `scipy.interpoalte.interp1d` class is used to perform the interpolation.
+
+    :param from_xd: The xray>DataArray object with originating data.
+    :param to_xd: The xray>DataArray object that will provide the new coordinates to which the interpolation will
+        be carried out.
+    :param axis: The name of the axis along which to perform the interpolation.
+    :param interp_method: Is the kind of interpolation to perform. Options are as for sipy.interpolate.interp1d,
+        namely 'linear', 'nearest', 'zero', 'slinear', 'quadratic' and 'cubic', where 'slinear', 'quadratic' and
+        'cubic' produce spline interpolation of first, second or third order respectively. The default is 'linear'.
+    :return: New xray.DataArray with xd_from interpolated along given axis to coordinates provided by xd_to in
+        the given axis.
+    """
+    from_coords = copy.deepcopy(from_xd.coords)
+    interp_func = interp1d(from_xd[axis].data, from_xd.data, kind=interp_method, axis=from_xd.get_axis_num[axis],
+                            copy=False, bounds_error=bounds_error, fill_value=fill_value, assume_sorted=assume_sorted)
+    new_data = interp_func(to_xd[axis].data)  # Interpolate along the named axis
+    # Now reconstruct the xd_from DataArray
+    from_coords[axis] = to_xd[axis]  # Grab the new axis from the xd_to DataArray
+    new_from_xd = xray.DataArray(new_data, from_coords, attrs=from_xd.attrs)  # Use attributes from original
+    return new_from_xd
+
 
 def xd_harmonised_product(xd_list):
     """ Compute the harmonised product of a number of N-dimensional data arrays.
