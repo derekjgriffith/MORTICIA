@@ -808,7 +808,7 @@ class Case(object):
         # TOA -> np.inf seems to cause problems for xray
         level_dict = {'boa': self.altitude, 'BOA': self.altitude, 'sur': self.altitude,
                       'SUR': self.altitude, 'surface': self.altitude, 'SURFACE': self.altitude,
-                      'toa': 120.0, 'TOA': 120.0, 'cpt': np.nan, 'CPT': np.nan}
+                      'toa': np.inf, 'TOA': np.inf, 'cpt': np.nan, 'CPT': np.nan}
         level_values = np.array([])
         for level in self.levels_out:
             try:
@@ -988,11 +988,11 @@ class Case(object):
             print('Output file does not exist. Run uvspec.')
             return
         if self.output_user:
-            fluxdata = np.loadtxt(filename)
+            fluxdata = np.loadtxt(filename, dtype=np.float64)
             self.distribute_flux_data(fluxdata)
         elif ((self.n_phi == 0 and self.n_umu == 0) or self.solver == 'sslidar' or
               self.solver == 'mystic'):  # There are no radiance blocks (sslidar). Mystic puts radiances in other files.
-            fluxdata = np.loadtxt(filename)
+            fluxdata = np.loadtxt(filename, dtype=np.float64)
             self.distribute_flux_data(fluxdata)
         # elif self.n_phi == 0:   # Not sure about format for n_umu > 0, n_phi == 0
         #  Look at example UVSPEC_FILTER_SOLAR.INP, which indicates manual is not correct
@@ -1769,7 +1769,7 @@ class RadEnv(object):
         # Interpolate transmission results onto the pza grid for the RadEnv
         # This is not a "harmonisation" interpolation. The transmission grid is being interpolated
         # onto another grid in pza (propagation zenith angle)
-        self.xd_edirA = xd_interp_axis_to(self.xd_edir, self.xd_uu, axis='pza', interp_method='quadratic',
+        self.xd_edirA = xd_interp_axis_to(self.xd_edir, self.xd_uu, axis='pza', interp_method='linear',
                                          fill_value=np.nan, assume_sorted=False)
         # Now run through the cases in the cloud detection sequence to find layers affected by clouds
         if self.has_clouds:
