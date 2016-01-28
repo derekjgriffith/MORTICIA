@@ -456,12 +456,12 @@ class Case(object):
         # Prepare for radiances
         if keyword == 'umu':
             self.n_umu = len(tokens)  # The number of umu values
-            self.umu = np.array(tokens).astype(np.float)
+            self.umu = np.array(tokens).astype(np.float64)
             self.pza = xd_identity(np.arccos(self.umu), 'pza', 'rad')
             self.paz = xd_identity(np.deg2rad(self.phi), 'paz', 'rad')
         if keyword == 'phi':
             self.n_phi = len(tokens)
-            self.phi = np.array(tokens).astype(np.float)
+            self.phi = np.array(tokens).astype(np.float64)
             self.paz = xd_identity(np.deg2rad(self.phi), 'paz', 'rad')
         if keyword == 'output_user':
             self.output_user = [token.replace('lambda', 'wvl') for token in tokens]  # lambda is a keyword
@@ -523,7 +523,7 @@ class Case(object):
                 self.has_ice_clouds = True
                 self.has_clouds = True
         if keyword == 'sza':
-            self.sza = np.float(tokens[0])
+            self.sza = np.float64(tokens[0])
 
     def prepare_for_polradtran(self):
         """ Prepare for output from the polradtran solver
@@ -1010,7 +1010,7 @@ class Case(object):
                 # Read and append a line of flux data
                 txtline = uvOUT.readline()
                 while txtline:
-                    fluxline = np.array(txtline.split()).astype(np.float)
+                    fluxline = np.array(txtline.split()).astype(np.float64)
                     if len(fluxdata) > 0:
                         fluxdata = np.vstack((fluxdata, fluxline))
                     else:
@@ -1018,7 +1018,7 @@ class Case(object):
                     # Read the radiance block
                     if self.n_phi > 0:  # There is a line of phi angles
                         philine = uvOUT.readline()  #TODO check that phi angles are correct
-                        phicheck = np.array(philine.split()).astype(np.float)
+                        phicheck = np.array(philine.split()).astype(np.float64)
                     # Read the lines for the umu values (radiances in radiance block)
                     raddata = []  # All polarisation blocks are vstacked
                     for polComp in self.stokes:  # read a radiances block for each polarisation component
@@ -1030,7 +1030,7 @@ class Case(object):
                         # raddata = []
                         for i_umuline in range(self.n_umu):  #TODO this is possibly wrong if there is no phi specified - see manual
                             umuline = uvOUT.readline()
-                            radline = np.array(umuline.split()).astype(np.float)
+                            radline = np.array(umuline.split()).astype(np.float64)
                             if len(raddata) == 0:
                                 raddata = radline
                             else:
@@ -1319,8 +1319,8 @@ class RadEnv(object):
             prop_azi_angles = np.linspace(0.0, 360.0, n_azi)
             view_azi_angles = np.linspace(-180.0, 180.0,  n_azi)
         phi = prop_azi_angles
-        n_azi_batch = np.int(np.ceil(np.float(len(prop_azi_angles))/mxphi))
-        n_pol_batch = np.int(np.ceil(np.float(len(prop_zen_angles))/mxumu))
+        n_azi_batch = np.int(np.ceil(np.float64(len(prop_azi_angles))/mxphi))
+        n_pol_batch = np.int(np.ceil(np.float64(len(prop_zen_angles))/mxumu))
         # Create an list of lists with all these batches of librad.Case
         self.cases = [[copy.deepcopy(base_case) for i_azi in range(n_azi_batch)] for j_pol in range(n_pol_batch)]
 
