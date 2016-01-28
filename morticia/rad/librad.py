@@ -1464,8 +1464,9 @@ class RadEnv(object):
                 self.trans_cases[i_case].alter_option(['cloudcover', 'wc', '0.0'])
             if self.trans_base_case.has_ice_clouds:
                 self.trans_cases[i_case].alter_option(['cloudcover', 'ic', '0.0'])
-            if sza > 75.0:  # Set the pseudospherical option
-                self.trans_cases[i_case].alter_option(['pseudospherical', ''])
+            # TODO : Make decision about use of pseudo-spherical option - perhaps best left to base_case
+            # if sza > 75.0:  # Set the pseudospherical option - should check solver first
+            #     self.trans_cases[i_case].alter_option(['pseudospherical', ''])
             # Change the name and input and output filenames, the _x_ is for transmission runs
             self.trans_cases[i_case].infile = (self.trans_cases[i_case].infile[:-4] +
                                              '_x_{:04d}.INP'.format(i_case))
@@ -1756,6 +1757,10 @@ class RadEnv(object):
         """ Compute path transmittances from the set of libRadtran/uvspec runs executed for solar zenith angles
         of 0 to near 90 degrees.
 
+        This method computes optical depth (-log(transmittance)) of all paths from a particular level, both
+        upward and downward. Paths that lie in the horizontal "blind zone" are assigned OD of 0.0. These should
+        actually be assigned OD of np.nan or perhaps np.inf.
+
         .. seealso::
             RadEnv.setup_trans_cases()
 
@@ -1771,17 +1776,17 @@ class RadEnv(object):
         # Interpolate transmission results onto the pza grid for the RadEnv
         # This is not a "harmonisation" interpolation. The transmission grid is being interpolated
         # onto another grid in pza (propagation zenith angle)
-        self.xd_trans_toa = xd_interp_axis_to(self.xd_edir, self.xd_uu, axis='pza', interp_method='quadratic',
+        self.xd_trans_toa = xd_interp_axis_to(self.xd_edir, self.xd_uu, axis='pza', interp_method='linear',
                                          fill_value=1.0, assume_sorted=False)
         self.xd_opt_depth = -np.log(self.xd_trans_toa)  # Compute the optical depths
         # Subtract the optical depth of the level above it.
         # This provides the optical depth from any level to the level above it
         xd_opt_depth = -self.xd_opt_depth.diff(self.levels_out_type, label='lower')
+        #  TODO : Set long_name and units of optical depth
+        # xd_opt_depth.attrs['long_name'] = long_name['od']
         # Implicitly, the optical depth from the top level is known to TOA so concat those values
-        # TODO : Explicit mention of 'zout' in following is possibly limiting, try to switch indexing
-        # to mention levels_out_type
         levels_axis_num = xd_opt_depth.get_axis_num(self.levels_out_type)
-        levels_out_type = self.levels_out_type
+        levels_out_type = self.levels_out_type  # just to shorten it
         self.xd_opt_depth = xray.concat((xd_opt_depth, self.xd_opt_depth[{levels_out_type: -1}]),
                                         dim=levels_out_type)
         # Now confront the problem of computing optical depths to the level below
