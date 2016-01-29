@@ -24,9 +24,16 @@ Contents:
    intro
    how_to_use
    styleguide
+<<<<<<< HEAD
    for_developers
    packages
    01a-SpectralChannelsAndFilters
+=======
+   sensorpack
+   radpack
+   ChapLibRadtranODandPathRadiance
+
+>>>>>>> 6014380141c34aa7c4e078b339fb8d9144078f31
 
 Indices and tables
 ==================

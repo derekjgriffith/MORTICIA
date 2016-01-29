@@ -60,7 +60,9 @@ long_name = {
     'doffset': 'Digital Offset',
     'dnoise': 'RMS Digital-Equivalent Noise',
     'spfcut': 'Diffraction Cutoff Spatial Frequency',
-    'vza': 'View Zenith Angle',
+    'vza': 'View Zenith Angle',  # degrees
+    'vpa': 'View Polar Angle',  # same as vza, but in radians
+    'vea': 'View Elevation Angle',  # complement of the VZA
     'vaz': 'View Azimuth Angle',
     'svaz': 'Solar-Relative View Azimuth Angle',
     'pza': 'Propagation Zenith Angle',  # in radians
@@ -75,6 +77,24 @@ long_name = {
     'sph_alb': 'Atmospheric Spherical Albedo',
     'reflx': 'Reflectivity',
     'trnx': 'Transmissivity',
+    'edir': 'Direct Solar Horizontal Irradiance',
+    'edn': 'Downwelling Diffuse Irradiance',
+    'eup': 'Upwelling Diffuse Irradiance',
+    'eglo': 'Total Downwelling Irradiance',
+    'enet': 'Net Downward Irradiance',
+    'uavgdir': 'Direct Solar Actinic Sterance',
+    'uavgdn': 'Diffuse Downward Actinic Sterance',
+    'uavgup': 'Diffuse Upward Actinic Sterance',
+    'uavgglo': 'Global Downward Actinic Sterance',
+    'down_fluxI': 'Global Downwelling Irradiance Stokes I',
+    'down_fluxQ': 'Global Downwelling Irradiance Stokes Q',
+    'down_fluxU': 'Global Downwelling Irradiance Stokes U',
+    'down_fluxV': 'Global Downwelling Irradiance Stokes V',
+    'up_fluxI': 'Global Upwelling Irradiance Stokes I',
+    'up_fluxQ': 'Global Upwelling Irradiance Stokes Q',
+    'up_fluxU': 'Global Upwelling Irradiance Stokes U',
+    'up_fluxV': 'Global Upwelling Irradiance Stokes V',
+    'brightness': 'Brightness Temperature'
 
     # TODO : Include all libRadtran definitions as well from rad.librad.py
 }
@@ -126,8 +146,10 @@ default_units = {
     'mtf': '',
     'spfcut': '1/mm',
     'spfa': '1/mrad',
-    'vza': 'deg', ## View zenith angle
+    'vza': 'deg',  # View zenith angle
+    'vpa': 'rad',  # Same as vza, but in radians
     'vaz': 'deg',  # View azimuth angle
+    'vea' : 'deg',  # View elevation angle (complement of the view zenith angle)
     'pza': 'rad',  # Propagation zenith angle
     'svaz': 'deg',  # Solar-relative view azimuth angle
     'umu': '',  # Cosine of the propagation zenith
@@ -140,7 +162,8 @@ default_units = {
     'zout_sea': 'km',  # Altitude above sea level
     'p': 'hPa',  # Atmospheric pressure preferred units : hectopascals
     'reflx': '',  # reflectivity
-    'trnx': ''  # transmissivity
+    'trnx': '',  # transmissivity
+    'brightness': 'K'
 }
 
 class Scalar(object):

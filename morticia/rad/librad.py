@@ -75,6 +75,7 @@ from morticia.moglo import *
 from morticia.tools.xd import *
 import copy
 from itertools import chain  #Used in RadEnv constructor
+import matplotlib.pyplot as plt
 
 uvsOptions = writeLex.loadOptions()  # Load all options into a global dictionary of uvspec option specifications.
 
@@ -182,7 +183,7 @@ indexVars = ['lambda', 'wavelength', 'wvl', 'wvn', 'zout', 'zout_sea', 'p', 'cth
 # cold point tropopause and top of atmosphere)
 re_isSingleOutputLevel = '(^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$)|(^boa$)|(^sur$)|(^surface$)|(^cpt$)|(^toa$)'
 
-class Case():
+class Case(object):
     """ Class which encapsulates a run case of libRadtran/uvspec.
     This class has methods to read libRadtran/uvspec input files, write uvspec input files, run uvspec in parallel on
     multiple compute nodes and read uvspec output files. An important use-case is that of reading a uvspec input
@@ -193,12 +194,42 @@ class Case():
     # Definitions of some of the possible uvspec output variables
 
     def __init__(self, casename='', filename=None, optionlist=None):
-        """ A libRadtran/uvspec case
+        """ Instantiate a libRadtran/uvspec case, typically by reading a uvspec .INP file.
+
         :param casename: A user-defined name for the libRadtran/uvspec case
         :param filename: An optional filename from which to read the libRadtran/uvspec input
         :param optionlist: A list of option keywords and parameteres (tokens). The keyword existence
-         is verified. Besides that, no error checking is performed automatically (yet).
-        :return:
+            is verified. Besides that, no error checking is performed automatically.
+        :return: None
+
+        .. todo::
+            Implement checking of uvspec input keyword tokens (parameters)
+
+        >>> # Read a libRadtran/uvspec case from a .INP file and display the expanded input
+        >>> import morticia.rad.librad as librad
+        >>> libRadCase = librad.Case(filename='./examples/UVSPEC_AEROSOL.INP')  # Read uvspec input and expand includes, if any
+        >>> print libRadCase   # This prints the uvspec input file, compare to contents of UVSPEC_AEROSOL.INP
+        atmosphere_file ../data/atmmod/afglus.dat
+        source solar ../data/solar_flux/atlas_plus_modtran
+        mol_modify O3 300. DU
+        day_of_year 170
+        albedo 0.2
+        sza 32.0
+        rte_solver disort
+        number_of_streams 6
+        wavelength 299.0 341.0
+        slit_function_file ../examples/TRI_SLIT.DAT
+        spline 300 340 1
+        quiet
+        aerosol_vulcan 1
+        aerosol_haze 6
+        aerosol_season 1
+        aerosol_visibility 20.0
+        aerosol_angstrom 1.1 0.2
+        aerosol_modify ssa scale 0.85
+        aerosol_modify gg set 0.70
+        aerosol_file tau ../examples/AERO_TAU.DAT
+
         """
         self.name = casename
         self.error_txt = []
@@ -210,6 +241,7 @@ class Case():
         self.fluxline = ['wvl', 'edir', 'edn', 'eup', 'uavgdir', 'uavgdn', 'uavgup']  # default output
         self.wvl = []  # wavelengths, wavenumbers and output levels difficult to ascertain to start with
         self.wvn = []
+        self.sza = 0.0  # default solar zenith angle for this case
         self.zout = np.zeros(1)  # If no zout (or equivalent) is given, uvspec produces output at the surface
         self.zout_sea = np.zeros(1)  # altitudes above seal level, same as zout unless ground 'altitude' provided
         self.pressure_out = []  # Only populated if pressure_out keyword is given
@@ -219,7 +251,7 @@ class Case():
         self.source_file = ''  # TOA irradiance source file
         self.n_umu = 0  # number of zenith angles (actually cosine of zenith angle)
         self.umu = []  # zenith angles for radiance calculations
-        self.uu = []  # This will be populated if there is radiance data output by the case
+        self.uu = np.array([])  # This will be populated if there is radiance data output by the case
         self.n_phi = 0  # number of azimuth radiance angles
         self.phi = [] # np.zeros(1)  # azimuth angles for radiance calculations
         self.n_levels_out = 1  # Assume only one output level, unless zout/zout_sea/pressure_out keyword is used.
@@ -239,6 +271,9 @@ class Case():
         self.wavelength_index = []  # set by 'wavelength_index' keyword
         self.wavelength_index_range = []  # for use where range() would be applicable
         self.output_process = 'none'  # Default is to output spectral data. See output_process in uvspec manual
+        self.has_ice_clouds = False  # Default, unless discovered otherwise
+        self.has_water_clouds = False  # ditto
+        self.has_clouds = False  # either water or ice clouds
         if filename is not None:
             if not filename:
                 # Open a dialog to get the filename
@@ -276,11 +311,16 @@ class Case():
         elif self.solver == 'sslidar':
             self.fluxline = ['center_of_range', 'number_of_photons', 'lidar_ratio']
             self.rad_units = ['count', '', '']
+        elif self.solver == 'montecarlo':
+            self.solver = 'mystic'  # Same as mystic, use mystic
 
     def prepare_for_source(self, tokens):
-        """ Prepare for source, particularly units of various kinds, depending on the source
-        :param tokens: uvspec option parameters (tokens)
-        :return:
+        """ Prepare for source, particularly units of various kinds, depending on the source.
+        libRadtran/uvspec source options are mainly 'solar' and 'thermal' with some additional options
+        for units.
+
+        :param tokens: uvspec 'source' keyword option parameters (tokens)
+        :return: None
         """
 
         # TODO : More work required here - see libRadtran manual under source keyword
@@ -379,9 +419,9 @@ class Case():
         """
         self.output_process = tokens[0]
         process = tokens[0].lower()
-        if process == 'sum':  # the units become per band
-            self.mol_abs_para
-            self.process = 'sum'
+        if process == 'sum':  # the units become per band (?)
+            self.output_process = 'sum'
+            self.rad_units[2] = ''  # TODO : Check that this is correct somehow
         elif process == 'integrate':
             if not self.spectral_axis == 'wvl':
                 warnings.warn('Option output_process integrate probably not valid with band quantities')
@@ -416,12 +456,12 @@ class Case():
         # Prepare for radiances
         if keyword == 'umu':
             self.n_umu = len(tokens)  # The number of umu values
-            self.umu = np.array(tokens).astype(np.float)
+            self.umu = np.array(tokens).astype(np.float64)
             self.pza = xd_identity(np.arccos(self.umu), 'pza', 'rad')
             self.paz = xd_identity(np.deg2rad(self.phi), 'paz', 'rad')
         if keyword == 'phi':
             self.n_phi = len(tokens)
-            self.phi = np.array(tokens).astype(np.float)
+            self.phi = np.array(tokens).astype(np.float64)
             self.paz = xd_identity(np.deg2rad(self.phi), 'paz', 'rad')
         if keyword == 'output_user':
             self.output_user = [token.replace('lambda', 'wvl') for token in tokens]  # lambda is a keyword
@@ -469,6 +509,21 @@ class Case():
             self.wavelength_index_range = range(int(tokens[0]), int(tokens[1]) + 1)
         if keyword == 'output_process':
             self.prepare_for_output_process(tokens)
+        if keyword == 'wc_file':
+            self.has_water_clouds = True
+            self.has_clouds = True
+        if keyword == 'ic_file':
+            self.has_ice_clouds = True
+            self.has_clouds = True
+        if keyword == 'profile_file':
+            if tokens[0] == 'wc':
+                self.has_water_clouds = True
+                self.has_clouds = True
+            elif tokens[0] == 'ic':
+                self.has_ice_clouds = True
+                self.has_clouds = True
+        if keyword == 'sza':
+            self.sza = np.float64(tokens[0])
 
     def prepare_for_polradtran(self):
         """ Prepare for output from the polradtran solver
@@ -478,6 +533,9 @@ class Case():
         self.fluxline = ['wvl']
         for stokes in self.stokes:
             self.fluxline.extend(['down_flux' + stokes, 'up_flux' + stokes])
+        warnings.warn('The polradtran solver does not produce direct solar irradiances and will only produce' +
+                      ' output if the atmosphere file contains the altitudes specified by zout (see "zout" ' +
+                      ' in the uvspec manual). ')
 
     def append_option(self, option, origin=('user', None)):
         """ Append a libRadtran/uvspec options to this uvspec case. It will be appended at the end of the file
@@ -667,10 +725,15 @@ class Case():
             uvINP.write(alldata)
 
     def distribute_flux_data(self, fluxdata):
-        """ Distribute flux data read from uvspec output file to various fields
+        """ Distribute flux/user data read from uvspec output file to various data fields.
+        This method will look at `output_user` options and attempt to assign flux/user data in a sensible way.
+        .. note::
+            There are potentially uvspec output formats that are not possible to process or to assign correctly.
+            These are typically cases in which it is not possible to determine from the .INP and/or .OUT file
+            how this data should be assigned.
 
         :param fluxdata: Flux (irradiance) data read from uvspec output file
-        :return:
+        :return: None
         """
         #TODO rename this function to just distribute_data ?
         # First split the data amongst output levels or output wavelengths/wavenumbers
@@ -685,10 +748,9 @@ class Case():
             linecount = 1
         else:
             linecount = datashape[1]
-
-        # Deal with the sahpe of the data output and try to reshape, depending on the number of
+        # Deal with the shape of the data output and try to reshape, depending on the number of
         # wavelengths and output levels (zout, zout_sea or pressure)
-        #if len(datashape) == 2:
+        # if len(datashape) == 2:
         #    if datashape[1] != len(fields):  # number of fields in data does not match number of fields
                 # print datashape[1], ' not the same as ', len(fields) #TODO try to deal with this
         if (fields[0] == 'zout' or fields[0] == 'zout_sea' or fields[0] == 'p' or
@@ -720,11 +782,12 @@ class Case():
                     ncols = self.n_umu
                 else:  # All other output variables are assumed to occupy only one column
                     ncols = 1
-                setattr(self, field, np.squeeze(fluxdata[colstart:(colstart + ncols)]))
+                # setattr(self, field, np.squeeze(fluxdata[colstart:(colstart + ncols)]))
+                setattr(self, field, fluxdata[colstart:(colstart + ncols)])
                 colstart = colstart + ncols
-        else:
+        else:  # There is more than 1 line of output flux/user data
             # Some output fields, such as umu, uu, u0u, uu_down, uu_up, cmu(?) are vectors and therefore occupy
-            # multiple columns, so keep track of columns and try to
+            # multiple columns, so keep track of columns and try to distribute in a reasonable way
             colstart = 0  # keep track of starting column
             for (ifield, field) in enumerate(fields):
                 if field == 'uu' or field == 'uu_up' or field == 'uu_down':  # Do uu_up and uu_down actually exist ?
@@ -736,10 +799,13 @@ class Case():
                     ncols = self.n_umu
                 else:  # All other output variables are assumed to occupy only one column
                     ncols = 1
-                setattr(self, field, np.squeeze(fluxdata[:, :, colstart:(colstart + ncols)]))
+                # setattr(self, field, np.squeeze(fluxdata[:, :, colstart:(colstart + ncols)]))
+                setattr(self, field, fluxdata[:, :, colstart:(colstart + ncols)])
                 colstart = colstart + ncols
         # Clean up zout and wavelength/wavenumber data
         # Convert levels to real numbers
+        # TODO : What number should TOA translate to ? Maximum height defined in the atmosphere file ? Fixed number ? np.inf ?
+        # TOA -> np.inf seems to cause problems for xray
         level_dict = {'boa': self.altitude, 'BOA': self.altitude, 'sur': self.altitude,
                       'SUR': self.altitude, 'surface': self.altitude, 'SURFACE': self.altitude,
                       'toa': np.inf, 'TOA': np.inf, 'cpt': np.nan, 'CPT': np.nan}
@@ -783,6 +849,7 @@ class Case():
     def rad_units_str(self, latex=False):
         """ Provide a radiance units string e.g. W/sr/m^2/nm.
         If output_quantity is set to 'brightness' or 'reflectivity', rad_units will be 'K' or '' respectively.
+
         :return: Radiance units as a string
         """
 
@@ -800,6 +867,7 @@ class Case():
     def irrad_units_str(self, latex=False):
         """ Provide an irradiance units string e.g. W/m^2/nm.
         If output_quantity is set to 'brightness' or 'reflectivity', irrad_units will be 'K' or '' respectively.
+
         :return: Irradiance units as a string
         """
 
@@ -904,7 +972,7 @@ class Case():
 
         :param filename: File from which to read the output. Defaults to name of input file, but with the .OUT
         extension.
-        :return:
+        :return: None
 
         """
         #TODO check for use of header keyword
@@ -920,10 +988,11 @@ class Case():
             print('Output file does not exist. Run uvspec.')
             return
         if self.output_user:
-            fluxdata = np.loadtxt(filename)
+            fluxdata = np.loadtxt(filename, dtype=np.float64)
             self.distribute_flux_data(fluxdata)
-        elif (self.n_phi == 0 and self.n_umu == 0) or self.solver == 'sslidar':  # There are no radiance blocks
-            fluxdata = np.loadtxt(filename)
+        elif ((self.n_phi == 0 and self.n_umu == 0) or self.solver == 'sslidar' or
+              self.solver == 'mystic'):  # There are no radiance blocks (sslidar). Mystic puts radiances in other files.
+            fluxdata = np.loadtxt(filename, dtype=np.float64)
             self.distribute_flux_data(fluxdata)
         # elif self.n_phi == 0:   # Not sure about format for n_umu > 0, n_phi == 0
         #  Look at example UVSPEC_FILTER_SOLAR.INP, which indicates manual is not correct
@@ -934,14 +1003,14 @@ class Case():
         #     self.raddata = raddata
         #     self.fluxdata = fluxdata
         #     self.distribute_flux_data(fluxdata)
-        else:  # radiance blocks  #TODO polradtran has different format
+        else:  # read radiance blocks  #TODO polradtran has different format
             phicheck = []
             radND = []  # full 3D/4D radiance data is here (umu, phi and wavelength)
             with open(filename, 'rt') as uvOUT:
                 # Read and append a line of flux data
                 txtline = uvOUT.readline()
                 while txtline:
-                    fluxline = np.array(txtline.split()).astype(np.float)
+                    fluxline = np.array(txtline.split()).astype(np.float64)
                     if len(fluxdata) > 0:
                         fluxdata = np.vstack((fluxdata, fluxline))
                     else:
@@ -949,7 +1018,7 @@ class Case():
                     # Read the radiance block
                     if self.n_phi > 0:  # There is a line of phi angles
                         philine = uvOUT.readline()  #TODO check that phi angles are correct
-                        phicheck = np.array(philine.split()).astype(np.float)
+                        phicheck = np.array(philine.split()).astype(np.float64)
                     # Read the lines for the umu values (radiances in radiance block)
                     raddata = []  # All polarisation blocks are vstacked
                     for polComp in self.stokes:  # read a radiances block for each polarisation component
@@ -961,7 +1030,7 @@ class Case():
                         # raddata = []
                         for i_umuline in range(self.n_umu):  #TODO this is possibly wrong if there is no phi specified - see manual
                             umuline = uvOUT.readline()
-                            radline = np.array(umuline.split()).astype(np.float)
+                            radline = np.array(umuline.split()).astype(np.float64)
                             if len(raddata) == 0:
                                 raddata = radline
                             else:
@@ -978,7 +1047,10 @@ class Case():
             self.phi_check = phicheck
 
             # See if one size fits all
-            self.u0u = radND[:,1].reshape(self.n_umu, self.n_stokes, self.n_wvl, -1, order='F').squeeze()  # should actually all be zero
+            # self.u0u = radND[:,1].reshape(self.n_umu, self.n_stokes, self.n_wvl, -1, order='F').squeeze()  # should actually all be zero
+            # print radND.shape
+            # print radND
+            self.u0u = radND[:,1].reshape(self.n_umu, self.n_stokes, self.n_wvl, -1, order='F')
             # There is actually some radiance data
             self.uu = radND[:,2:]
             if self.uu.size:  # checks how many elements actually
@@ -996,7 +1068,7 @@ class Case():
             #     print 'self.u0u'
             #     print self.u0u
                 # self.uu = self.uu
-            self.process_outputs()
+
             # while self.uu.shape[-1] == 1:  # Remove any hanging singleton dimensions at the end
             #    self.uu = self.uu.squeeze(axis=self.uu.ndim-1)
 
@@ -1025,8 +1097,13 @@ class Case():
             #         self.uu = radND[:,2:]
             #         if self.uu.shape[1] / self.n_wvl > 1:  # if multiple output levels, reshape the radiance data appropriately
             #             self.uu = self.uu.reshape((self.n_umu, self.n_wvl, -1), order='F')
+        if self.solver == 'mystic':
+            # TODO : Read mystic fluxes and radiances from mc.flx.spc and mc.rad.spc
+            warnings.warn('Reading of mc.flx.spc and mc.rad.spc skipped. To be implemented.')
+        # Perform further processing of outputs, mainly production of xray.DataArray versions of outputs.
+        self.process_outputs()
 
-    def run(self, stderr_to_file=False, write_input=True, read_output=True, block=True):
+    def run(self, stderr_to_file=False, write_input=True, read_output=True, block=True, purge=True):
         """ Run the libRadtran/uvspec case.
 
         This will run the libRadtran/uvspec Case instance provided. Some control is provided regarding the handling of
@@ -1034,14 +1111,20 @@ class Case():
 
         :param stderr_to_file: Controls whether standard error output goes to the screen or is written to a file
             having the same name as the input/output files, except with the extension .ERR.
-        :param write_input: Controls whether the input file is writte out before execution. Default is True.
+        :param write_input: Controls whether the input file is written out before execution. Default is True.
         :param read_output: Controls whether the output file is read after execution. Default is True.
         :param block: By default, this method waits until uvspec terminates. If set False, the uvspec process
             is released to background and read_output is set to False (regardless of user input).
+        :param purge: If set True, the input and output files from this run will be deleted after the run is complete
+            and the outputs have been read. Will only be honoured if read_output is also True. Default is True.
         :return: The shell command string executed in order to run the case and the return status of the command.
         """
         # Write input file by default
+        # Note that the location of the following imports is actually important, since this run code may be
+        # executed on a foreign host with a different operating system to the machine calling for the
+        # RT computations.
         import subprocess
+        import os
         if write_input:
             self.write(filename=self.name+'.INP')
         # Spawn a sub-process using the subprocess module
@@ -1064,15 +1147,23 @@ class Case():
                 return_code = 1
         if not return_code and read_output:
             self.readout(filename=self.name+'.OUT')  # Read the output into the instance if the return code OK
+            if purge:  # Delete the input and output files
+                try:
+                    os.remove(self.name+'.INP')
+                    os.remove(self.name+'.OUT')
+                    if stderr_to_file:
+                        os.remove(self.name+'.ERR')
+                except OSError:
+                    pass  # Just move on if file delete fails.
         return self
 
     def process_outputs(self):
         """ Process outputs from libRadtran into moglo.Scalar and xray.DataArray objects.
-        Currently only radiance outputs are processed.
+        Currently only radiance outputs are processed, along with a few typical flux outputs, such as `edir`.
 
         Note that this method probably does not cover all libRadtran/uvspec inputs and outputs and will most
         likely continue to evolve, perhaps breaking existing code.
-        :return:
+        :return: None
         """
         # Determine output levels if possible
         # 'cpt', being cold-point tropopause is mapped to np.nan and toa maps to np.inf
@@ -1082,46 +1173,58 @@ class Case():
         # first. This is a 5 dimensional numpy array with axes 'umu'. 'phi', 'wvl', 'zout' (or equivalent)
         # and 'stokes'. The 'wvl' axis could also be 'chn' (spectral channel) or 'wvn' (spectral wavenumber)
         # Create each of the axes individually using xd_identity
+        # TODO : Also include putting irradiance or other user output into xray.DataArray objects
+        # TODO : Want to deal with azimuthally averaged radiances as well if possible (to xray.DataArray)
+        # Azimuthally averaged radiances occur when phi is not specified
+        # Set up sepctral axis, output level axis and stokes component axis
+        if self.spectral_axis == 'wvl':
+            spectral_axis = xd_identity(self.wvl, 'wvl','nm')  # The spectral axis is wavelength
+        elif self.spectral_axis == 'wvn':
+            spectral_axis = xd_identity(self.wvn, 'wvn', 'cm^-1')  # The spectral axis is wavenumber
+        elif self.spectral_axis == 'chn':  # The spectral axis is channel number
+            spectral_axis = self.spectral_channels
+        levels = xd_identity(self.level_values, self.levels_out_type)  # Presume units correct
+        self.levels = levels
+        stokes = xd_identity(range(self.n_stokes), 'stokes')
+        self.stokes = stokes
+        # Convert uu radiance output to xray.DataArray
         if self.uu.size:  # OK, there is some radiance data (not azimuthally averaged)
             umu = xd_identity(self.umu, 'umu', '')  # TODO : This must change to the propagation zenith (polar) angle
             paz = self.paz
             pza = self.pza
             phi = self.phi
-            if self.spectral_axis == 'wvl':
-                spectral_axis = xd_identity(self.wvl, 'wvl','nm')  # The spectral axis is wavelength
-            elif self.spectral_axis == 'wvn':
-                spectral_axis = xd_identity(self.wvn, 'wvn', 'cm^-1')  # The spectral axis is wavenumber
-            elif self.spectral_axis == 'chn':  # The spectral axis is channel number
-                spectral_axis = self.spectral_channels
-            levels = xd_identity(self.level_values, self.levels_out_type)  # Presume units correct
-            self.levels = levels
-            stokes = xd_identity(range(self.n_stokes), 'stokes')
-            self.stokes = stokes
             # Determine the units of uu
             uu_units = self.rad_units_str()
-            # if self.output_quantity == 'radiance':
-            #     if self.rad_units[0] and self.rad_units[0][-1] == 'W':  # have flux
-            #         uu_units = self.rad_units[0] + '/sr'
-            #         if self.rad_units[1]:
-            #             uu_units += '/' + self.rad_units[1]
-            #         if self.rad_units[2]:
-            #             uu_units += '/' + self.rad_units[2]
-            #     else:
-            #         warnings.warn('Unexpected/invalid radiant units encountered for output_quantity mode.')
-            #         uu_units = self.rad_units[0]
-            # elif self.output_quantity == 'brightness':
-            #     uu_units = 'K'
-            # elif self.output_quantity == 'transmittance' or self.levels_out == 'reflectivity':
-            #     uu_units = ''
-            # print 'units : ' + uu_units
             # Build the xray.DataArray
             qty_name = {'radiance': 'specrad', 'transmittance': 'trnx', 'reflectivity': 'reflx'}[self.output_quantity]
             xd_uu = xray.DataArray(self.uu, [pza, paz, spectral_axis, levels, stokes],
-                                name=qty_name, attrs={'units': uu_units})
+                                    name=qty_name, attrs={'units': uu_units})
             self.xd_uu = xd_uu
+        # Try to process fluxline data into xray.DataArray objects
+        single_col_flux_fields = ['edir', 'edn', 'eup', 'uavgdir', 'uavgdn', 'uavgup', 'uavgglo', 'down_fluxI',
+                                  'down_fluxQ', 'down_fluxU', 'down_fluxV', 'up_fluxI',
+                                  'up_fluxQ', 'up_fluxU', 'up_fluxV','enet', 'esum']
+        for flux_field in self.fluxline:  # This could actually be output_user data as well
+            flux_units = self.irrad_units_str()  # Remember that "flux" means irradiance here
+            if flux_field.startswith('uavg'):
+                flux_units += '/sr'
+            if flux_field in single_col_flux_fields:  # This are single column outputs
+                flux_data = getattr(self, flux_field)
+                if flux_data.shape[2] == 1:  # Remove trailing singleton dimension
+                    setattr(self, flux_field, flux_data.squeeze(axis=2))
+                else:
+                    warnings.warn('Non-singleton third dimension encountered in scalar flux data.')
+                xd_flux = xray.DataArray(getattr(self, flux_field), [spectral_axis, levels], name=flux_field,
+                                         attrs={'units': flux_units, 'long_name': long_name[flux_field]})
+                setattr(self, 'xd_' + flux_field, xd_flux)
+        # TODO : Would be preferable to put stokes parameters all into single xray.DataArray for polradtran
+        # TODO : Processing of 'mystic' outputs to xray.DataArray objects
+        # TODO : Mean intensity is the actinic flux divided by 4 pi, should perhaps be expressed /sr in units.
 
 
-class RadEnv():
+
+
+class RadEnv(object):
     """ RadEnv is a class to encapsulate a large number of uvspec runs to cover a large number of sightlines over the
     whole sphere. A radiance map over the complete sphere is called a radiant environment map. The uvspec utility can
     only handle a limited number of sighlines per run, determined by the maximum number of polar and azimuthal angles
@@ -1129,9 +1232,17 @@ class RadEnv():
     the values are set too large, the memory requirements could easily exceed your computer's limit (there is
     currently no dynamic memory allocation in DISORT). The situation for the cdisort solver is less clear.
 
+    .. note::
+        The `polradtran` radiative transfer (RT) solver does not produce direct irradiance outputs (`edir`),
+        This presents a problem for calculation of path transmission (optical depth) between output atmospheric
+        levels (e.g. as specified by the uvspec `zout` keyword). This solver only produces total fluxes (irradiances)
+        for each of desired stokes parameters. Hence for calculation of polarised radiant environment maps (REMs), the only
+        feasible option for `MORTICIA` is to use the `mystic` solver with the `mc_polarisation` option. Currently,
+        the librad.Case uvspec output file reading functions do not cater for `mystic`.
+
     """
 
-    def __init__(self, base_case, n_pol, n_azi, mxumu=48, mxphi=19, hemi=False):
+    def __init__(self, base_case, n_pol, n_azi, mxumu=48, mxphi=19, hemi=False, n_sza=0):
         """ Create a set of uvspec runs covering the whole sphere to calculate a full radiant environment map.
         Where the base_case is the uvspec case on which to base the environmental map, Name is the name to give the
         environmental map and n_pol and n_azi are the number of polar and azimuthal sightline angles to generate. The
@@ -1141,15 +1252,23 @@ class RadEnv():
         file is /libsrc_f/POLRADTRAN.MXD. Other solvers may have different restrictions. A warning will be issued if
         the solver is not in the DISORT/POLRADTRAN family.
 
-        :param base_case: librad.Case object providing the case on which the environment map is to be based
+        :param base_case: librad.Case object providing the case on which the environment map is to be based. Note
+            that not any basecase can be used. As a general guideline, the basecase should have standard irradiance
+            outputs (i.e. should not use the `output_user` keyword). It should also not the use `output_process` or
+            `output_quantity` keywords, which change the units and/or format of the libRadtran/uvspec output.
+             Minimal validation of the basecase is performed. However, use with `mol_abs_param` such as `kato` and
+             `fu` is important for `MORTICIA` and these are supported (k-distribution or `correlated-k`
+             parametrizations).
         :param n_pol: Number of polar angles (view/propagation zenith angles)
-        :param n_azi: Number of azimuthal angles
-        :param mxumu: Maximum number of polar angles per case
-        :param mxphi: Maximum number of azimuthal angles per case
+        :param n_azi: Number of azimuthal angles.
+        :param mxumu: Maximum number of polar angles per case.
+        :param mxphi: Maximum number of azimuthal angles per case.
         :param hemi: If set True, will generate only a single hemisphere being on one side of
             the solar principle plane. Default is False i.e. the environment map covers the full sphere.
             Note that if hemi=True, the number of REM samples in azimuth becomes n_azi :math:`\\times` 2.
-            This is the recommended mode (hemi=True) for MORTICIA purposes.
+            This is the recommended mode (hemi=True) for MORTICIA purposes, since it reduces execution time.
+        :param n_sza: The number of solar zenith angles (SZA) at which to perform transmittance and path radiance
+            computations. Each SZA will result in another run of the base case (no radiances)
 
         The solver cdisort may have dynamic memory allocation, so the warning is still issued because the situation
         is less clear.
@@ -1185,6 +1304,14 @@ class RadEnv():
         if n_pol % 2:  # check comment below about Matlab polar angles
             warnings.warn('Input n_pol to librad.RadEnv must be even. Increased by 1.')
             n_pol += 1
+        if n_azi % 2:
+            warnings.warn('Input n_azi to librad.RadEnv must be even. Increased by 1.')
+            n_azi += 1
+        self.base_case = copy.deepcopy(base_case)  # Keep a copy of the uvspec base_case
+        self.levels_out_type = self.base_case.levels_out_type
+        self.n_levels_out = self.base_case.n_levels_out
+        self.solver = self.base_case.solver  # Radiative transfer solver
+        self.trans_base_case = copy.deepcopy(base_case)  # Keep a copy for transmittance computation purposes
         view_zen_angles = np.linspace(0.0, 180.0, n_pol)  # Viewing straight down is view zenith angle of 180 deg
         prop_zen_angles = np.linspace(np.pi, 0.0, n_pol)  # Radiation travelling straight up is propagation zenith angle of 0
         umu = np.cos(prop_zen_angles)  # Negative umu is upward-looking, downwards propagating
@@ -1195,8 +1322,8 @@ class RadEnv():
             prop_azi_angles = np.linspace(0.0, 360.0, n_azi)
             view_azi_angles = np.linspace(-180.0, 180.0,  n_azi)
         phi = prop_azi_angles
-        n_azi_batch = np.int(np.ceil(np.float(len(prop_azi_angles))/mxphi))
-        n_pol_batch = np.int(np.ceil(np.float(len(prop_zen_angles))/mxumu))
+        n_azi_batch = np.int(np.ceil(np.float64(len(prop_azi_angles))/mxphi))
+        n_pol_batch = np.int(np.ceil(np.float64(len(prop_zen_angles))/mxumu))
         # Create an list of lists with all these batches of librad.Case
         self.cases = [[copy.deepcopy(base_case) for i_azi in range(n_azi_batch)] for j_pol in range(n_pol_batch)]
 
@@ -1230,7 +1357,142 @@ class RadEnv():
         self.paz = xd_identity(np.deg2rad(prop_azi_angles), 'paz', 'rad')
         self.vza = xd_identity(view_zen_angles, 'vza', 'deg')
         self.vaz = xd_identity(view_azi_angles, 'vaz', 'deg')
+        self.has_water_clouds = self.base_case.has_water_clouds
+        self.has_ice_clouds = self.base_case.has_ice_clouds
+        self.has_clouds = self.base_case.has_clouds
+        self.n_sza = n_sza
+        if n_sza:  # Setup the transmission run cases
+            self.setup_trans_cases(n_sza=n_sza)
+            # self.trans_vza_up = []
         self.uu = np.array([])
+
+    def setup_trans_cases(self, n_sza=32):
+        """ Setup a list of cases for computing the transmission matrices between every level defined in the
+        REM (and at every wavelength and stokes parameter combination). The computation of  transmittance between
+        levels is accomplished in `MORTICIA` using libRadtran/uvspec by computing the direct solar irradiance
+        transmittance for multiple zenith angles.
+
+        Note that if there is an optically thick cloud layer between two levels in the REM, the transmittance
+        will compute as zero or very small. This will also result in the incorrect/noisy computation of path
+        radiances between the two levels. This situation is unavoidable. The recommended approach is that
+        REMS be computed with altitude levels that all lie between cloud layers (i.e. no levels in the REM
+        span a cloud layer). The user, or the code which uses the REMs should see to this. Essentially it must
+        be recognised that optical surveillance is not possible through optically thick cloud layers.
+
+        The REM is provided with a cloud flag that indicates if the base case incorporates clouds. The approach to
+        computing inter-level transmittance (optical depth is the stored parameter, since this scales more
+        closely in a linear fashion with distance) in the presence of cloud is to vary the 'cloudcover'
+        keyword parameter (water and ice clouds independently). This is done for solar zenith angle of zero.
+        The optical thickness from TOA to the level in question is then computed as a function of cloud cover
+        fraction (CCF). The optical depth between levels (i.e the optical depth of a layer between two levels)
+        is computed as the difference in optical depth to TOA of the lower level minus the optical depth to TOA
+        of the upper level. If there is no difference in the layer optical depth when the CCF is varied from
+        zero to some positive value (say 0.1, but not as high as 1), then the layer is free of cloud.
+
+        A flag per layer is thus obtained which indicates if the layer contains cloud. If it does, the transmittance
+        will compute as zero between the two levels in question. This means that the cloud base is not resolved
+        to better than the level resolution in the REM. It is probably then quite important to ensure that
+        cloud base altitude statistics are available in the theatre climatology.
+
+        An upgrade to cloud handling could be to read the cloud profile files in order to obtain the exact vertical
+        location of the cloud layers.
+
+        Another inherent and unavoidable problem with computation of path optical depths and radiances using
+        libRadtran/uvspec is that precisely horizontal paths cannot be dealt with using one-dimensional RT
+        solvers. Therefore in this case, the maximum range that can be dealt with depends on the height difference
+        between the REM levels and the maximum solar zenith angle (SZA) used for computation of optical depth.
+
+        A further implication of the above point is that path transmittances and path radiances cannot be interpolated
+        between the SZA nearest the horizon and the horizon proper. Some form of logarithmic extrapolation could be
+        performed, but could result in large errors due to failure of Beer's Law and other problems.
+
+        Execution and attribution of transmittance cases will provide each level with transmittance to the level
+        above that altitude level. Therefore the topmost level will have transmittances to TOA, but the
+        bottom level will not have transmittances (optical depths) to BOA, unless the bottom level *is* BOA.
+        It is recommended that all MORTICIA base cases for REM include BOA as an output level.
+
+        :param n_sza: The number of solar zenith angles at which to compute path optical depth and radiances.
+             the SZA values are computed equi-spaced in the cosine of the solar zenith angle rather that the
+             SZA itself. This is to help with the problem that the slant range between levels increases
+             in linear relation to the secant of the view zenith angle. The optical depths are later
+             interpolated to the same
+        :return:
+        """
+
+        # Start by removing any cloud options in the transmission base_case, as well as any radiance options
+        # to reduce runtime.
+        new_option_list = []
+        new_tokens_list = []
+        # TODO : setup up transmission case series with AND without clouds
+        # Remove radiance options to speed up transmission series computations
+        options_to_remove = ['umu', 'phi', 'phi0']
+        for (ioption, option) in enumerate(self.trans_base_case.options):
+            if any([option == removal_option for removal_option in options_to_remove]):
+                pass  # TODO : Look for other cloud options that may be important
+            else:
+                new_option_list.append(option)
+                new_tokens_list.append(self.trans_base_case.tokens[ioption])
+        self.trans_base_case.options = new_option_list
+        self.trans_base_case.tokens = new_tokens_list
+        # There are no radiance calculations now, so set n_phi and n_umu to zero
+        self.trans_base_case.n_phi = 0
+        self.trans_base_case.phi = []
+        self.trans_base_case.n_umu = 0
+        self.trans_base_case.umu = []
+        self.trans_base_case.pza = []
+        self.trans_base_case.paz = []
+        # Change the transmission base case to output_quantity reflectivity. THis seems counter-intuitive,
+        # but take a look at the libRadtran/uvspec manual to see why. Essentially, the reflectivity
+        # option computes the ratio of the horizontal irradiance to the horizontal irradiance at TOA.
+        self.trans_base_case.alter_option(['output_quantity', 'reflectivity'])
+        self.trans_base_case.alter_option(['sza', '0.0'])
+        # Calculate the view zenith angles equi-spaced in the secant of the VZA
+        # First upward looking
+        cosine_up = np.linspace(1.0, 0.0, n_sza + 1)[:-1]  # Drop the last element because it is horizontal (illegal)
+        # Calculate the view-zenith angles in radians
+        vpa_up = np.arccos(cosine_up)  # view polar angle looking upwards
+        # If less than the minimum depression angle for the REM, add a point
+        rem_pza_limit = np.pi/2.0 - 0.99 * (np.abs(self.pza[1].data - self.pza[0]))/2.0
+        if vpa_up[-1] < rem_pza_limit:
+            vpa_up = np.hstack((vpa_up, rem_pza_limit))
+        self.trans_vza_up = xd_identity(vpa_up, 'vza', 'rad')
+        # Now build a list of uvspec runs, based on trans_base_case
+        # The list is called trans_cases
+        self.trans_cases = []
+        for i_case in range(len(vpa_up)):
+            self.trans_cases.append(copy.deepcopy(self.trans_base_case))
+            # Set the solar zenith angle
+            sza = self.trans_vza_up[i_case].data  # Solar zenith angle
+            self.trans_cases[i_case].alter_option(['sza', str(sza)])
+            # Set cloudcover to zero if the case has water or ice clouds
+            if self.trans_base_case.has_water_clouds:
+                self.trans_cases[i_case].alter_option(['cloudcover', 'wc', '0.0'])
+            if self.trans_base_case.has_ice_clouds:
+                self.trans_cases[i_case].alter_option(['cloudcover', 'ic', '0.0'])
+            # Set pseudospherical option above sza of 75 degrees and solver is disort or twostr
+            if sza > 75.0 and any([self.solver == thesolver for thesolver in ['disort', 'disort2', 'sdisort',
+                                                           'spsdisort', 'fdisort1', 'fdisort2', 'twostr']]):
+                self.trans_cases[i_case].alter_option(['pseudospherical', ''])
+            # Change the name and input and output filenames, the _x_ is for transmission runs
+            self.trans_cases[i_case].infile = (self.trans_cases[i_case].infile[:-4] +
+                                             '_x_{:04d}.INP'.format(i_case))
+            self.trans_cases[i_case].outfile = (self.trans_cases[i_case].outfile[:-4] +
+                                             '_x_{:04d}.OUT'.format(i_case))
+            self.trans_cases[i_case].name = (self.trans_cases[i_case].name +
+                                             '_x_{:04d}'.format(i_case))
+        # The transmission cases should be ready to run a this point.
+        # The run_ipyparallel method will run these cases, but not in parallel with
+        # the radiance cases.
+        # Next, create the cloudcover series to detect cloud layers
+        self.cloud_detect_cases = []
+        # If there are clouds in this case, run three cases with cloud cover fraction of 0.0, 0.5 and 1.0
+        if self.has_clouds:
+            self.cloud_detect_cases.append(copy.deepcopy(self.trans_base_case))
+            self.cloud_detect_cases[0].alter_option(['cloudcover', '0.0'])
+            self.cloud_detect_cases.append(copy.deepcopy(self.trans_base_case))
+            self.cloud_detect_cases[1].alter_option(['cloudcover', '0.5'])
+            self.cloud_detect_cases.append(copy.deepcopy(self.trans_base_case))
+            self.cloud_detect_cases[2].alter_option(['cloudcover', '1.0'])
 
     def run_ipyparallel(self, ipyparallel_view, stderr_to_file=False):
         """ Run a complete set of radiant environment map cases of libRadtran/uvspec using the `ipyparallel`
@@ -1277,7 +1539,26 @@ class RadEnv():
         # Concatenate the cases in umu and phi
         self.xd_uu = xray.concat([xray.concat([case_uu.xd_uu for case_uu in self.cases[jj]], dim='paz')
                                                  for jj in range(len(self.cases))], dim='pza')
-        #self.xd_uu = xray.DataArray(self.uu, [self.pza, self.paz, self.wvl, self.])
+        #self.xd_uu = xray.DataArray(self.uu, [self.pza, self.paz, self.spectral, self.levels, self.stokes])
+        # Replace the values in the xray.DataArray with the exact original values in the zenith and azimuth
+        # directions. Not doing this gave rise to a very subtle bug in spherical harmonic fitting
+        self.xd_uu['pza'] = self.pza
+        self.xd_uu['paz'] = self.paz
+        # Also need to obtain the irradiances from one of the cases - they should actually all be the same
+        # TODO : Obtain self.fluxdata from one of the self.cases
+        self.fluxdata = self.casechain[0].fluxdata  # Would really want this as a xray.DataArray
+        self.fluxline = self.casechain[0].fluxline
+        # Run the transmittance sequences if there are any
+        if self.n_sza:
+            self.trans_cases = ipyparallel_view.map(Case.run, self.trans_cases)
+            # If there are clouds in the radiant environment, run the could OD detection cases
+            # These cases reveal if there are layers in the REM that include clouds
+            if self.has_clouds:
+                self.cloud_detect_cases = ipyparallel_view.map(Case.run, self.cloud_detect_cases)
+            # Compile the transmittance data
+            self.compute_path_transmittance()
+            # Compile the path radiance data
+            self.compute_path_radiance()
 
     def run_parallel(self, n_nodes=4):
         """ Run the RadEnv in multiprocessing mode on the local host.
@@ -1305,7 +1586,7 @@ class RadEnv():
         for case in self.casechain:
             del case.uu
 
-    def sph_harm_fit(self, degree):
+    def sph_harm_fit(self, degree, method='trapz'):
         """ Fit spherical harmonics to the radiant environment map (REM).
         One set of coefficients per wavelength or spectral channel will be fitted. The coefficients for each spectral
         bin/channel comprise one coefficient for order :math:`-m` to :math:`+m` for :math:`m = 0, 1, 2, ..., n`.
@@ -1338,7 +1619,7 @@ class RadEnv():
         The definition of the complex basis functions is consistent with the
         `scipy.special <http://docs.scipy.org/doc/scipy-0.16.0/reference/generated/scipy.special.sph_harm.html>`_
         definition of the spherical harmonics. Therefore, for fitting of the Sloan/Ramamoorthi/Hanrahan basis, the
-        first definitions is used above, that is :math:`y_{n}^{m}` calculated from the `scipy.special` function
+        first definition is used above, that is :math:`y_{n}^{m}` can be calculated from the `scipy.special` function
         :math:`Y_{n}^{m}` as:
 
         .. math::
@@ -1348,14 +1629,26 @@ class RadEnv():
             Y_{n}^{0} & m=0
             \\end{cases}.
 
-        :param degree: Spherical harmonics up to this degree :math:`n`, for all orders :math:`m` will be fitted,
+        The fitted coefficients of the spherical harmonics are computed by multiplying the REM by each of the
+        harmonics and performing double numerical integration over zenith and azimuth angle as:
+
+        .. math::
+            L_{n}^{m}=\\int_{\\theta=0}^{\\pi}\\int_{\\phi=0}^{2\\pi}L(\\theta,\\phi)y_{n}^{m}(\\theta,\\phi)\\sin\\theta d\\theta d\\phi,
+
+        where :math:`L_{n}^{m}` are the coefficients and :math:`L(\\theta,\\phi)` is the REM.
+
+        :param degree: Spherical harmonics up to this degree :math:`n`, for all orders :math:`m` will be fitted.
+        :param method: Integration method by which the coefficients are computed. 'trapz' for trapezoidal integration,
+            'sum' for simple summation and 'simpson' for Simpson's Rule. The 'trapz' method seems to be
+            considerably more accurate than 'sum' or 'simpson'. Therefore 'trapz' is the default.
         :return:
         """
         from scipy.special import sph_harm
         azi_angles = self.paz.data  # Propagation zenith angles in radians
         pol_angles = self.pza.data   # Propagation polar (zenith) angles in radians
         azi_ang_delta = azi_angles[1] - azi_angles[0]
-        pol_ang_delta = pol_angles[1] - pol_angles[0]
+        pol_ang_delta = abs(pol_angles[1] - pol_angles[0])
+        # print azi_ang_delta, pol_ang_delta
         # Angles to be meshgridded - is this really necessary
         # TODO : Check if meshgridding is really necessary
         azi_angles, pol_angles = np.meshgrid(azi_angles, pol_angles)
@@ -1363,35 +1656,219 @@ class RadEnv():
         # TODO : Symmetry checking still required
         # if self.hemi:  # Sun-symmetric REM
         sph_harm_coeff = []
-        if self.hemi:  # Calculating over only one hemisphere (integration over a hemisphere)
-            for n in range(degree + 1):
-                sph_harm_coeff.append([])  # Add another list of coefficients for order m = 0 to n
-                for m in range(-n, n + 1):
-                    sph_harm_coeff[n].append(0.0)  # Add another coefficient for order m
-                    # Compute the Sloan/Ramamoorthi/Hanrahan spherical harmonic basis
-                    if m == 0:
-                        y_mn = sph_harm(0, n, azi_angles, pol_angles)
-                    else:
-                        y_mn = (-1.0)**m * np.sqrt(2.0) * sph_harm(m, n, azi_angles, pol_angles)
-                    if m >= 0:
-                        # Take the real part, since we are using a real basis
-                        y_mn = y_mn.real
-                    elif m < 0:
-                        y_mn = y_mn.imag
-                    # Create xray.DataArray
-                    y_mn = xray.DataArray(y_mn, [self.pza, self.paz])
-                    # Compute the integrand
-                    inner_integrand = self.xd_uu * y_mn * sin_pol_angles
-                    # Compute the coefficients
-                    # First integrate over the propagation zenith angle
+        # If calculating over one hemisphere of a symmetrical REM with sun in the north-south line,
+        # The sine (imaginary) coefficients are zero and the cos (real components) are doubled
+        # SO should just run m = 0 to n, take twice the real part if hemi, otherwise full complex calc
+        for n in range(degree + 1):
+            sph_harm_coeff.append([])  # Add another list of coefficients for order m = 0 to n
+            for m in range(0, n + 1):
+                sph_harm_coeff[n].append(None)  # Add another coefficient for order m
+                condon_short = (-1.0)**m * np.sqrt(2)
+                # Compute the complex spherical harmonic basis
+                if m == 0:
+                    y_mn = sph_harm(0, n, azi_angles, pol_angles)
+                else:
+                    y_mn = condon_short * sph_harm(m, n, azi_angles, pol_angles)  # Ramamoorthi normalisation
+                if self.hemi:
+                    y_mn = y_mn.real * 2.0
+                # Create xray.DataArray
+                y_mn = xray.DataArray(y_mn, [self.pza, self.paz])
+                # Compute the integrand
+                inner_integrand = y_mn * self.xd_uu * sin_pol_angles
+                # Compute the coefficients by integration by various methods
+                if method == 'sum':  # Integrate by simple summation
+                    # First integrate over the propagation zenith angle using summation
                     outer_integrand = inner_integrand.sum(dim='pza') * pol_ang_delta
+                    # Then integrate over propagation azimuth
+                    sph_harm_coeff[n][m] = outer_integrand.sum(dim='paz') * azi_ang_delta
+                elif method == 'trapz':  # Integrate using the trapezoidal rule (seems best)
+                    outer_integrand = (inner_integrand.isel(pza=0) +
+                                            2.0 * inner_integrand.isel(pza=slice(1, -1)).sum(dim='pza') +
+                                       inner_integrand.isel(pza=-1)) * pol_ang_delta / 2.0
                     # Then integrate over the propagation azimuth angle
-                    # There is a factor of 2 here because it is only one hemisphere
-                    sph_harm_coeff[n][m + n] = 2.0 * outer_integrand.sum(dim='paz') * azi_ang_delta
-        else:  # Perform integration over the full sphere
-            pass
+                    sph_harm_coeff[n][m] = (outer_integrand.isel(paz=0) +
+                                              2.0 * outer_integrand.isel(paz=slice(1, -1)).sum(dim='paz') +
+                                            outer_integrand.isel(paz=-1)) * azi_ang_delta / 2.0
+                elif method == 'simpson':  # The following is integration by Simpsons rule
+                    outer_integrand = (inner_integrand.isel(pza=0) +
+                                            4.0 * inner_integrand.isel(pza=slice(1, -1, 2)).sum(dim='pza') +
+                                            2.0 * inner_integrand.isel(pza=slice(2, -2, 2)).sum(dim='pza') +
+                                       inner_integrand.isel(pza=-1)) * pol_ang_delta / 3.0
+                    # Then integrate over the propagation azimuth angle
+                    sph_harm_coeff[n][m] = (outer_integrand.isel(paz=0) +
+                                              4.0 * outer_integrand.isel(paz=slice(1, -1, 2)).sum(dim='paz') +
+                                              2.0 * outer_integrand.isel(paz=slice(2, -2, 2)).sum(dim='paz') +
+                                            outer_integrand.isel(paz=-1)) * azi_ang_delta / 3.0
+                else:
+                    warnings.warn('Unknown integration method ' + method + ' encountered in sph_harm_fit.')
         self.sph_harm_coeff = sph_harm_coeff
         return sph_harm_coeff
+
+    def sph_harm_fat(self, degree):
+        """ This code was used for debugging purposes - ignore
+        :param degree:
+        :return:
+        """
+        from scipy.special import sph_harm
+        azi_angles = self.paz.data  # Propagation zenith angles in radians
+        pol_angles = self.pza.data   # Propagation polar (zenith) angles in radians
+        azi_ang_delta = azi_angles[1] - azi_angles[0]
+        pol_ang_delta = np.abs(pol_angles[1] - pol_angles[0])
+        # print azi_ang_delta, pol_ang_delta
+        # Angles to be meshgridded - is this really necessary
+        # TODO : Check if meshgridding is really necessary
+        azi_angles, pol_angles = np.meshgrid(azi_angles, pol_angles)
+        sin_pol_angles = xray.DataArray(np.sin(pol_angles), [self.pza, self.paz])
+        # TODO : Symmetry checking still required
+        # if self.hemi:  # Sun-symmetric REM
+        sph_harm_coeff_cos = []
+        sph_harm_coeff_sin = []
+        # If calculating over one hemisphere of a symmetrical REM with sun in the north-south line,
+        # The sine (imaginary) coefficients are zero and the cos (real components) are doubled
+        # SO should just run m = 0 to n, take twice the real part if hemi, otherwise full complex calc
+        for n in range(degree + 1):
+            sph_harm_coeff_cos.append([])
+            sph_harm_coeff_sin.append([])# Add another list of coefficients for order m = 0 to n
+            for m in range(0, n + 1):
+                sph_harm_coeff_cos[n].append(None)# Add another coefficient for order m
+                sph_harm_coeff_sin[n].append(None)
+                # Compute the complex spherical harmonic basis
+                if m == 0:
+                    y_mn = sph_harm(0, n, azi_angles, pol_angles)  # Small imaginary components may arise - drop
+                else:
+                    y_mn = (-1.0)**m * np.sqrt(2.0) * sph_harm(m, n, azi_angles, pol_angles)  # Ramamoorthi normalisation
+                if self.hemi:  # integrate over hemisphere, therefore need a factor of 2
+                    y_mn = y_mn * 2.0  # equivalent of taking only the cosine components times 2
+                # Create xray.DataArray
+                y_mn_cos = xray.DataArray(y_mn.real, [self.pza, self.paz])
+                y_mn_sin = xray.DataArray(y_mn.imag, [self.pza, self.paz])
+                # Compute the integrand
+                inner_integrand_cos = self.xd_uu * y_mn_cos * sin_pol_angles
+                # Compute the coefficients
+                # First integrate over the propagation zenith angle using summation (very slight overestimate)
+                outer_integrand_cos = inner_integrand_cos.sum(dim='pza') * pol_ang_delta
+                # Then integrate over the propagation azimuth angle
+                sph_harm_coeff_cos[n][m] = outer_integrand_cos.sum(dim='paz') * azi_ang_delta
+
+                # Compute the sin integrand
+                inner_integrand_sin = self.xd_uu * y_mn_sin * sin_pol_angles
+                # Compute the coefficients
+                # First integrate over the propagation zenith angle using summation (very slight overestimate)
+                outer_integrand_sin = inner_integrand_sin.sum(dim='pza') * pol_ang_delta
+                # Then integrate over the propagation azimuth angle
+                sph_harm_coeff_sin[n][m] = outer_integrand_sin.sum(dim='paz') * azi_ang_delta
+        self.sph_harm_coeff_cos = sph_harm_coeff_cos
+        self.sph_harm_coeff_cos = sph_harm_coeff_cos
+        return sph_harm_coeff_cos, sph_harm_coeff_sin
+
+    def compute_path_transmittance(self):
+        """ Compute path transmittances from the set of libRadtran/uvspec runs executed for solar zenith angles
+        of 0 to near 90 degrees.
+
+        This method computes optical depth (-log(transmittance)) of all paths from a particular level, both
+        upward and downward. Paths that lie in the horizontal "blind zone" are assigned OD of 0.0. These should
+        actually be assigned OD of np.nan or perhaps np.inf.
+
+        .. seealso::
+            RadEnv.setup_trans_cases()
+
+        :return: None
+        """
+        # Run through all the cases in the self.trans_cases and compile the direct solar irradiance data
+        # This is actually transmittance data (edir is not a flux/irradiance with output_quantity reflectivity)
+        for trans_case in self.trans_cases:
+            # Add a propagation zenith angle for each sza. The pza is pi - sza (in radians)
+            # trans_case.xd_edir = trans_case.xd_edir.assign_coords(pza=np.pi - np.deg2rad(trans_case.sza))
+            trans_case.xd_edir = trans_case.xd_edir.assign_coords(pza=np.deg2rad(trans_case.sza))
+        # Concatenate results from all transmission runs
+        self.xd_edir = xray.concat([this_case.xd_edir for this_case in self.trans_cases], dim='pza')
+        # Interpolate transmission results onto the pza grid for the RadEnv
+        # This is not a "harmonisation" interpolation. The transmission grid is being interpolated
+        # onto another grid in pza (propagation zenith angle)
+        # TODO : Check out reliability of using quadratic/cubic interpolation for transmittance
+        self.xd_trans_toa = xd_interp_axis_to(self.xd_edir, self.xd_uu, axis='pza', interp_method='linear',
+                                              fill_value=1.0, assume_sorted=False)
+        self.xd_opt_depth = -np.log(self.xd_trans_toa)  # Compute the optical depths from a level to TOA
+        # Subtract the optical depth of the level above it.
+        # This provides the optical depth from any level to the level above it
+        xd_opt_depth = -self.xd_opt_depth.diff(self.levels_out_type, label='lower')
+        #  TODO : Set long_name and units of optical depth
+        # xd_opt_depth.attrs['long_name'] = long_name['od']
+        # Implicitly, the optical depth from the top level is known to TOA so concat those values
+        levels_axis_num = xd_opt_depth.get_axis_num(self.levels_out_type)
+        levels_out_type = self.levels_out_type  # just to shorten it
+        self.xd_opt_depth = xray.concat((xd_opt_depth, self.xd_opt_depth[{levels_out_type: -1}]),
+                                        dim=levels_out_type)
+        # Now confront the problem of computing optical depths to the level below
+        # For the lowest level, the optical depths to the level below are undefined, perhaps an appropriate
+        # value is np.nan. Otherwise, the optical depth looking to the next lower level is found by
+        # flipping the OD data from the lower level along the pza axis and summing to upper level
+        for ilevel in range(self.n_levels_out-1, 0, -1):  # Start at the top and work down
+            # Create a copy of the optical depths from the level beneath ilevel
+            opt_depth_from_beneath = copy.deepcopy(self.xd_opt_depth[{levels_out_type: ilevel-1}])
+            # Flip optical depth along the pza axis
+            opt_depth_from_beneath.data = opt_depth_from_beneath[{'pza': slice(None, None, -1)}].data
+            self.xd_opt_depth[{levels_out_type: ilevel}] += opt_depth_from_beneath
+            # Replace optical depths of zero with nan
+            # self.xd_opt_depth[{levels_out_type: ilevel}]
+        # Now compute the transmittance between levels as np.exp(optical_depth)
+        self.xd_trans = np.exp(-self.xd_opt_depth)
+        # TODO : Put in correct long_name and and units (unitless actually)
+        # Now run through the cases in the cloud detection sequence to find layers affected by clouds
+        if self.has_clouds:
+            for librad_case in self.cloud_detect_cases:
+                pass  #  TODO : Cloud detection
+
+
+    def compute_path_radiance(self):
+        """ Compute path radiances for path segments between all altitudes in the REM.
+        The path transmittances (optical depth) as well as the total radiances at each altitude are required to
+        calculate path radiances. If :math:`L_{pi}^{\\downarrow}` is the downwelling path radiance at level :math:`i`
+        originating between level :math:`i` and level :math:`i+1` and :math:`L_{pi}^{\\uparrow}` is the upwelling
+        path radiance at level :math:`i` originating between level :math:`i` and level :math:`i-1`, then
+
+        .. math::
+
+            L_{pi}^{\\downarrow}=L_{i}^{\\downarrow}-L_{i+1}^{\\downarrow}\\tau_{i+1}^{\\downarrow},
+
+        and
+
+        .. math::
+
+            L_{pi}^{\\uparrow}=L_{i}^{\\uparrow}-L_{i-1}^{\\uparrow}\\tau_{i-1}^{\\uparrow}.
+
+        :math:`L_{i}^{\\uparrow}` is the lower hemisphere (upwelling hemisphere) of the REM and
+        :math:`\\tau_{i}^{\\uparrow}` is the transmission between level :math:`i` and level :math:`i+1`.
+
+
+        .. seealso:: RadEnv.compute_path_transmittance()
+
+        :return: None
+        """
+        # First compute the product of radiance and transmittance at every level
+        self.xd_uu_times_tau = self.xd_trans * self.xd_uu
+        # The upper and lower hemispheres of the path radiance REMs have to be computed separately as shown in
+        # the docstring equations. Typical up/downwelling indexing is xd_uu[xd_uu['pza'] < np.pi/2].
+        # Run through the levels first from bottom level to top, computing the downwelling path radiance
+        # to the level above.
+        # Initialise path radiance to something having same units etc.
+        self.xd_path_radiance = copy.deepcopy(self.xd_uu)  # Initialise to total radiance
+        for ilevel in range(0, self.n_levels_out - 1):
+            # Set up hemispherical indexing for this level
+            hemi_index_level = {self.levels_out_type: ilevel, 'pza': self.xd_path_radiance['pza'] > np.pi/2}
+            # Setup hemisperhical indexing for next level up
+            hemi_index_above = {self.levels_out_type: ilevel + 1, 'pza': self.xd_path_radiance['pza'] > np.pi/2}
+            self.xd_path_radiance[hemi_index_level] = (self.xd_uu[hemi_index_level] -
+                                                       self.xd_uu_times_tau[hemi_index_above])
+        # Now run from top level down to bottom, computing upwelling path radiance
+        for ilevel in range(self.n_levels_out - 1, 1, -1):
+            # Set up hemispherical indexing for this level
+            hemi_index_level = {self.levels_out_type: ilevel, 'pza': self.xd_path_radiance['pza'] < np.pi/2}
+            # Setup hemisperhical indexing for next level down
+            hemi_index_below = {self.levels_out_type: ilevel - 1, 'pza': self.xd_path_radiance['pza'] < np.pi/2}
+            self.xd_path_radiance[hemi_index_level] = (self.xd_uu[hemi_index_level] -
+                                                       self.xd_uu_times_tau[hemi_index_below])
+
 
 
 
