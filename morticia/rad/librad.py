@@ -1450,11 +1450,15 @@ class RadEnv(object):
         cosine_up = np.linspace(1.0, 0.0, n_sza + 1)[:-1]  # Drop the last element because it is horizontal (illegal)
         # Calculate the view-zenith angles in radians
         vpa_up = np.arccos(cosine_up)  # view polar angle looking upwards
+        # If less than the minimum depression angle for the REM, add a point
+        rem_pza_limit = np.pi/2.0 - 0.99 * (np.abs(self.pza[1].data - self.pza[0]))/2.0
+        if vpa_up[-1] < rem_pza_limit:
+            vpa_up = np.hstack((vpa_up, rem_pza_limit))
         self.trans_vza_up = xd_identity(vpa_up, 'vza', 'rad')
         # Now build a list of uvspec runs, based on trans_base_case
         # The list is called trans_cases
         self.trans_cases = []
-        for i_case in range(len(cosine_up)):
+        for i_case in range(len(vpa_up)):
             self.trans_cases.append(copy.deepcopy(self.trans_base_case))
             # Set the solar zenith angle
             sza = self.trans_vza_up[i_case].data  # Solar zenith angle
@@ -1770,16 +1774,17 @@ class RadEnv(object):
         # This is actually transmittance data (edir is not a flux/irradiance with output_quantity reflectivity)
         for trans_case in self.trans_cases:
             # Add a propagation zenith angle for each sza. The pza is pi - sza (in radians)
-            trans_case.xd_edir = trans_case.xd_edir.assign_coords(pza=np.pi - np.deg2rad(trans_case.sza))
+            # trans_case.xd_edir = trans_case.xd_edir.assign_coords(pza=np.pi - np.deg2rad(trans_case.sza))
+            trans_case.xd_edir = trans_case.xd_edir.assign_coords(pza=np.deg2rad(trans_case.sza))
         # Concatenate results from all transmission runs
         self.xd_edir = xray.concat([this_case.xd_edir for this_case in self.trans_cases], dim='pza')
         # Interpolate transmission results onto the pza grid for the RadEnv
         # This is not a "harmonisation" interpolation. The transmission grid is being interpolated
         # onto another grid in pza (propagation zenith angle)
-        # TODO : Check out reliability of using quadratic interpolation for transmittance
-        self.xd_trans_toa = xd_interp_axis_to(self.xd_edir, self.xd_uu, axis='pza', interp_method='quadratic',
-                                         fill_value=1.0, assume_sorted=False)
-        self.xd_opt_depth = -np.log(self.xd_trans_toa)  # Compute the optical depths
+        # TODO : Check out reliability of using quadratic/cubic interpolation for transmittance
+        self.xd_trans_toa = xd_interp_axis_to(self.xd_edir, self.xd_uu, axis='pza', interp_method='linear',
+                                              fill_value=1.0, assume_sorted=False)
+        self.xd_opt_depth = -np.log(self.xd_trans_toa)  # Compute the optical depths from a level to TOA
         # Subtract the optical depth of the level above it.
         # This provides the optical depth from any level to the level above it
         xd_opt_depth = -self.xd_opt_depth.diff(self.levels_out_type, label='lower')
@@ -1800,6 +1805,11 @@ class RadEnv(object):
             # Flip optical depth along the pza axis
             opt_depth_from_beneath.data = opt_depth_from_beneath[{'pza': slice(None, None, -1)}].data
             self.xd_opt_depth[{levels_out_type: ilevel}] += opt_depth_from_beneath
+            # Replace optical depths of zero with nan
+            # self.xd_opt_depth[{levels_out_type: ilevel}]
+        # Now compute the transmittance between levels as np.exp(optical_depth)
+        self.xd_trans = np.exp(-self.xd_opt_depth)
+        # TODO : Put in correct long_name and and units (unitless actually)
         # Now run through the cases in the cloud detection sequence to find layers affected by clouds
         if self.has_clouds:
             for librad_case in self.cloud_detect_cases:
@@ -1827,11 +1837,33 @@ class RadEnv(object):
         :math:`\\tau_{i}^{\\uparrow}` is the transmission between level :math:`i` and level :math:`i+1`.
 
 
-        .. seealso:: compute_path_transmittance()
+        .. seealso:: RadEnv.compute_path_transmittance()
 
         :return: None
         """
-        # The
+        # First compute the product of radiance and transmittance at every level
+        self.xd_uu_times_tau = self.xd_trans * self.xd_uu
+        # The upper and lower hemispheres of the path radiance REMs have to be computed separately as shown in
+        # the docstring equations. Typical up/downwelling indexing is xd_uu[xd_uu['pza'] < np.pi/2].
+        # Run through the levels first from bottom level to top, computing the downwelling path radiance
+        # to the level above.
+        # Initialise path radiance to something having same units etc.
+        self.xd_path_radiance = copy.deepcopy(self.xd_uu)  # Initialise to total radiance
+        for ilevel in range(0, self.n_levels_out - 1):
+            # Set up hemispherical indexing for this level
+            hemi_index_level = {self.levels_out_type: ilevel, 'pza': self.xd_path_radiance['pza'] > np.pi/2}
+            # Setup hemisperhical indexing for next level up
+            hemi_index_above = {self.levels_out_type: ilevel + 1, 'pza': self.xd_path_radiance['pza'] > np.pi/2}
+            self.xd_path_radiance[hemi_index_level] = (self.xd_uu[hemi_index_level] -
+                                                       self.xd_uu_times_tau[hemi_index_above])
+        # Now run from top level down to bottom, computing upwelling path radiance
+        for ilevel in range(self.n_levels_out - 1, 1, -1):
+            # Set up hemispherical indexing for this level
+            hemi_index_level = {self.levels_out_type: ilevel, 'pza': self.xd_path_radiance['pza'] < np.pi/2}
+            # Setup hemisperhical indexing for next level down
+            hemi_index_below = {self.levels_out_type: ilevel - 1, 'pza': self.xd_path_radiance['pza'] < np.pi/2}
+            self.xd_path_radiance[hemi_index_level] = (self.xd_uu[hemi_index_level] -
+                                                       self.xd_uu_times_tau[hemi_index_below])
 
 
 
