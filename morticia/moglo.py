@@ -94,7 +94,8 @@ long_name = {
     'up_fluxQ': 'Global Upwelling Irradiance Stokes Q',
     'up_fluxU': 'Global Upwelling Irradiance Stokes U',
     'up_fluxV': 'Global Upwelling Irradiance Stokes V',
-    'brightness': 'Brightness Temperature'
+    'brightness': 'Brightness Temperature',
+    'od': 'Optical Depth'
 
     # TODO : Include all libRadtran definitions as well from rad.librad.py
 }
