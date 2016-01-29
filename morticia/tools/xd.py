@@ -124,13 +124,14 @@ def xd_interp_axis_to(from_xd, to_xd, axis, interp_method='linear', bounds_error
     :return: New xray.DataArray with xd_from interpolated along given axis to coordinates provided by xd_to in
         the given axis.
     """
-    from_coords = copy.deepcopy(from_xd.coords)
-    interp_func = interp1d(from_xd[axis].data, from_xd.data, kind=interp_method, axis=from_xd.get_axis_num[axis],
+    from_dims = from_xd.dims
+    from_axes = [copy.deepcopy(from_xd[this_axis]) for this_axis in from_dims]
+    interp_func = interp1d(from_xd[axis].data, from_xd.data, kind=interp_method, axis=from_xd.get_axis_num(axis),
                             copy=False, bounds_error=bounds_error, fill_value=fill_value, assume_sorted=assume_sorted)
     new_data = interp_func(to_xd[axis].data)  # Interpolate along the named axis
     # Now reconstruct the xd_from DataArray
-    from_coords[axis] = to_xd[axis]  # Grab the new axis from the xd_to DataArray
-    new_from_xd = xray.DataArray(new_data, from_coords, attrs=from_xd.attrs)  # Use attributes from original
+    from_axes[from_xd.get_axis_num(axis)] = to_xd[axis]  # Grab the new axis from the xd_to DataArray
+    new_from_xd = xray.DataArray(new_data, from_axes, attrs=from_xd.attrs)  # Use attributes from original
     return new_from_xd
 
 
