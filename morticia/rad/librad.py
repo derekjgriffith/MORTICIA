@@ -1310,6 +1310,7 @@ class RadEnv(object):
         self.base_case = copy.deepcopy(base_case)  # Keep a copy of the uvspec base_case
         self.levels_out_type = self.base_case.levels_out_type
         self.n_levels_out = self.base_case.n_levels_out
+        self.solver = self.base_case.solver  # Radiative transfer solver
         self.trans_base_case = copy.deepcopy(base_case)  # Keep a copy for transmittance computation purposes
         view_zen_angles = np.linspace(0.0, 180.0, n_pol)  # Viewing straight down is view zenith angle of 180 deg
         prop_zen_angles = np.linspace(np.pi, 0.0, n_pol)  # Radiation travelling straight up is propagation zenith angle of 0
@@ -1468,9 +1469,10 @@ class RadEnv(object):
                 self.trans_cases[i_case].alter_option(['cloudcover', 'wc', '0.0'])
             if self.trans_base_case.has_ice_clouds:
                 self.trans_cases[i_case].alter_option(['cloudcover', 'ic', '0.0'])
-            # TODO : Make decision about use of pseudo-spherical option - perhaps best left to base_case
-            # if sza > 75.0:  # Set the pseudospherical option - should check solver first
-            #     self.trans_cases[i_case].alter_option(['pseudospherical', ''])
+            # Set pseudospherical option above sza of 75 degrees and solver is disort or twostr
+            if sza > 75.0 and any([self.solver == thesolver for thesolver in ['disort', 'disort2', 'sdisort',
+                                                           'spsdisort', 'fdisort1', 'fdisort2', 'twostr']]):
+                self.trans_cases[i_case].alter_option(['pseudospherical', ''])
             # Change the name and input and output filenames, the _x_ is for transmission runs
             self.trans_cases[i_case].infile = (self.trans_cases[i_case].infile[:-4] +
                                              '_x_{:04d}.INP'.format(i_case))
