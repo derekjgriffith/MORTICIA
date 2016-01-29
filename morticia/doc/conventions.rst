@@ -93,7 +93,8 @@ General Terminology and Conventions
 Radiometry
 ----------
 Confusion may arise over the inconsistent use of radiometric terms. In the radiative transfer (RT) community, what is
-called "flux" is called "irradiance" in the radiometry community. In the radiometry community, "flux" means
+called "flux" (or more helpfully "flux density") is called "irradiance" in the radiometry community.
+In the radiometry community, "flux" means
 optical power (not per unit area). In the RT community, what is called "intensity" is called "radiance" in the
 radiometry community. In the radiometry community, "intensity" means optical power per unit solid angle (not
 per unit area). In MORTICIA, the terms "flux" and "irradiance" are used interchangeably. Optical power,
@@ -103,8 +104,9 @@ with irradiance/flux or radiance per unit spectral interval, these are normally 
 "spectral irradiance/flux" or "spectral radiance".
 
 The term "mean intensity" is used in libRadtran/uvspec terminology to mean the actinic flux divided by
-:math:`4\pi` steradians. Acitinic flux has the same units as irradiance/flux and could equally well be
+:math:`4\pi` steradians. Actinic flux has the same units as irradiance/flux and could equally well be
 called actinic irradiance. A preferred term for "mean intensity" could be "actinic sterance".
+Actinic flux could also be referred to as "scalar irradiance".
 
 Camera and Imager
 -----------------
