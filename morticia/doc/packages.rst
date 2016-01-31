@@ -63,6 +63,15 @@ The LibRadTran module concerns itself with calculations for the radiant environm
 
 .. automodule:: librad
    :members:
+
+Radiometric Utilities Module
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The radiometric utilitties module, `radute` contains utility code for handling of radiometric quantities. This
+includes a class `Flt` for reading, writing, creating and plotting of MODTRAN-style .flt (spectral response/filter
+function) files.
+
+.. automodule:: radute
+   :members:
    
 
    
