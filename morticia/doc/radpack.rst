@@ -7,6 +7,5 @@ Atmospheric radiative transfer is performed by the libRadtran suite of tools (ht
 .. automodule:: librad
    :members:
 
-.. automodule:: radute
+.. automodule:: libute
    :members:
-
