@@ -36,6 +36,7 @@ _micrometres = _micronsymbol + "m"
 def srfgen(center, fwhm, n=101, shape='gauss', yedge=0.001, wvmin=None, wvmax=None, centerflat=0.0,
            oob=np.nextafter(0.0, 1), peakval=1.0, units='nm'):
     """ Generate a spectral filter or spectral response function of various shapes
+
     :param center: center wavelength of the filter in nm
     :param fwhm: full width at half maximum of the filter  in nm
     :param n: number of spectral samples in the filter (minimum of 3, default 101), should be odd
@@ -47,7 +48,7 @@ def srfgen(center, fwhm, n=101, shape='gauss', yedge=0.001, wvmin=None, wvmax=No
     :param oob: out-of-band leakage, default 0.0, must be <= yedge
     :param peakval: simply scales the peak of the filter function to this value (default 1.0)
     :param units: spectral axis units, either 'nm', 'cm^-1' or 'um' (nanometers, wavenumber per cm or microns)
-    will be returned
+        will be returned
     :return: wvlnm, y, wvn, wvlum (wavelengths in nm, filter values, wavenumbers per cm and wavelengths in microns)
     """
     if n < 3:
@@ -126,6 +127,7 @@ def srfgen(center, fwhm, n=101, shape='gauss', yedge=0.001, wvmin=None, wvmax=No
 def tophat(center, fwhm, delta=0.0, wvmin=None, wvmax=None, oob=0.0, units='nm'):
     """ Return tophat/box filter defined by 6 points
     Can also specify out-of-band values and extreme limits, which adds upper and lower bound points
+
     :param center: center wavelength in nm
     :param fwhm: full width at half max in nm
     :param delta: smallest x-coordinate increment, default see np.nextafter
@@ -133,7 +135,7 @@ def tophat(center, fwhm, delta=0.0, wvmin=None, wvmax=None, oob=0.0, units='nm')
     :param wvmax: maximum wavelength to reach default None
     :param oob: out-of-band leakage
     :param units: spectral axis units, either 'nm', 'cm^-1' or 'um' (nanometers, wavenumber per cm or microns)
-    will be returned
+        will be returned
     :return: wvlnm, y, wvn, wvlum (wavelengths in nm, filter values, wavenumbers per cm and wavelengths in microns)
     """
     edgelo = center - fwhm/2.0
@@ -185,26 +187,25 @@ class Flt:
         a list of filter definitions are provided for use with rad.srfgen().
         If not empty, inputs centers through to oobs must be either scalar or have the same number of list elements as
         the filterheaders list. If scalar, the value will be replicated up to the number of filterheader values.
+
         :param name: Name of the set of filters. If the filterheaders input to this constructor function
-        is empty, an attempt will be made to read the data from a file called name + '.flt'
+            is empty, an attempt will be made to read the data from a file called name + '.flt'
         :param units: Spectral coordinate units for the filter, 'nm', 'um' or 'cm^-1'
         :param filterheaders: List of strings, one header for each filter/SRF in the set.
         :param filters: A list of numpy arrays. Each list element must comprise a 2-column numpy array with the
-        spectral coordinate (wavelength in nm or micron or wavenumber per cm) in the first column and the filter
-        magnitude in the second column.
+            spectral coordinate (wavelength in nm or micron or wavenumber per cm) in the first column and the filter
+            magnitude in the second column.
         :param centres: rather than provide filters, the inputs to rad.srfgen can be provided, this is a list of center
-        wavelengths in nm
+            wavelengths in nm
         :param fwhms: list of full width at half maximum in nm
         :param shapes: list of strings providing the shapes of the filters (see rad.srfgen for alternatives)
         :param yedges: list of yedge values (see rad.srfgen)
         :param centerflats: list of centerflat values (see rad.srfgen). Note that giving a centerflat value adds this
-        amount ot the fwhm of the filters (broadens the resulting width to centerflat + fwhm)
+            amount ot the fwhm of the filters (broadens the resulting width to centerflat + fwhm)
         :param peakvals: list of peak values of the filters
         :param wvmins: list of minimum wavelength limits in nm
         :param wvmaxs: list of maximum wavelength limits in nm
         :param oobs: list of out-of-band leakage values
-        :param
-
         :return: MODTRAN-style filter/SRF object
         """
         self.name = name
@@ -342,6 +343,7 @@ class Flt:
     def __repr__(self, format='  %f'):
         """ Return representation of a .flt MODTRAN-style spectral filter or SRF. This is the same as the format in
          the .flt file is written.
+
         :param format: format in which to present the numeric data, default is '  %f'
         :return: File representation of .flt object
         """
@@ -363,9 +365,10 @@ class Flt:
 
     def write(self, filename=None, format='  %f'):
         """ Write a MODTRAN-style .flt file for this filter/SRF set
+
         :param filename: Optional filename without extension. If not given, the filter name will be used with
         :param format: Format specifier as for np.savetext for writing the data, default is '  %f'
-        extension .flt
+            extension .flt
         :return: None
         """
         selfrep = self.__repr__(format=format)
@@ -379,7 +382,7 @@ class Flt:
             fltfile.write(selfrep)
 
     def plot(self):
-        """ Plot a MODTRAN-style set of filter/SRF curves
+        """ Plot a MODTRAN-style set of filter/SRF curves.
 
         :return: None
         """
@@ -447,10 +450,10 @@ class Flt:
                                                   'title': self.name})
         return xd_flt_harmonised
 
-class SpectralChannels(object):
-    """ The SpectralChannels class defines any band-limited spectral distribution function. This could be
+class SpectralChannel(object):
+    """ The SpectralChannel class defines any band-limited spectral distribution function. This could be
     the spectral response functions of a sensor, or the spectral transmittance of an optical filter, the spectral
-    spectral radiance, irradiance or any other band-limited spectral quantity. The actual spectral distribution
+    radiance, irradiance or any other band-limited spectral quantity. The actual spectral distribution
     function is represented by an xray.DataArray object with a wavelength axis in preferred units of 'nm'.
 
     SpectralChannels is a list of channels that can be indexed in the usual way, by the global channel index
@@ -462,7 +465,7 @@ class SpectralChannels(object):
     _channel_group_dict = {}  # Dictionary of channels indexed by group name
     def __init__(self, sdf=None, group='', channels='all'):
         """ Create one or a group of spectral distribution functions
-        :param sdf: The spectral distribution function as an xray.DataArray
+        :param sdf: The spectral distribution function as an xray.DataArray object.
         :param group:
         :param channels:
         :return:
