@@ -170,6 +170,9 @@ def tophat(center, fwhm, delta=0.0, wvmin=None, wvmax=None, oob=0.0, units='nm')
 
 
 class Flt(object):
+    """ Encapsulates a MODTRAN-style .flt spectral response function/filter function definition file.
+
+    """
 
     def __init__(self, name, units='nm', filterheaders=[], filters=[], centers=[],
                  fwhms=[], shapes=['gauss'], yedges=[0.001], centerflats=[0.0], peakvals=[1.0], wvmins=[], wvmaxs=[],
@@ -474,6 +477,7 @@ class SpectralChannel(object):
     _channel_group_dict = {}  # Dictionary of channels indexed by group name
     def __init__(self, sdf=None, group='', channels='all'):
         """ Create one or a group of spectral distribution functions
+
         :param sdf: The spectral distribution function as an xray.DataArray object.
         :param group:
         :param channels:
