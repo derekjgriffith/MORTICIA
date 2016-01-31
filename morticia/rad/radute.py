@@ -169,14 +169,7 @@ def tophat(center, fwhm, delta=0.0, wvmin=None, wvmax=None, oob=0.0, units='nm')
     return wvl, y, wvn, wvlum
 
 
-class Flt:
-    @staticmethod  # Some input parameter checking for Flt constructor
-    def checkparm(parmname, parm, nfilters):
-        if len(parm) == 1:
-            parm *= nfilters
-        elif len(parm) != nfilters:
-            raise ValueError('Number of ' + parmname + ' must equal number of filterheaders in rad.flt instantiation')
-        return parm
+class Flt(object):
 
     def __init__(self, name, units='nm', filterheaders=[], filters=[], centers=[],
                  fwhms=[], shapes=['gauss'], yedges=[0.001], centerflats=[0.0], peakvals=[1.0], wvmins=[], wvmaxs=[],
@@ -278,8 +271,24 @@ class Flt:
 
         # Convert the wavelengths to microns or wavenumbers
 
+    @staticmethod  # Some input parameter checking for Flt constructor
+    def checkparm(parmname, parm, nfilters):
+        """ Input parameter checking for Flt constructor
+
+        :param parmname: Name of parameter fpr checking
+        :param parm: Parameter value
+        :param nfilters: Number of filters
+        :return: Checked parameter
+        """
+        if len(parm) == 1:
+            parm *= nfilters
+        elif len(parm) != nfilters:
+            raise ValueError('Number of ' + parmname + ' must equal number of filterheaders in rad.flt instantiation')
+        return parm
+
     def read(self, filename, name='Unknown'):
         """ Read a .flt format spectral band filter definitions file (MODTRAN format)
+
         :param filename:
         :return: object of class Flt, if the file is a well-formatted MODTRAN-style .flt file
         """
