@@ -266,13 +266,12 @@ class Flt(object):
         else:
             use_wvmaxs = [[] for ie in range(nfilters)]
         for ifilt in range(nfilters):
-            wvl, y, wvn, wu = srfgen(center=use_centers[ifilt], fwhm=use_fwhms[ifilt], shape=use_shapes[ifilt],
-                                 yedge=use_yedges[ifilt], wvmin=use_wvmins[ifilt], wvmax=use_wvmaxs[ifilt],
-                                 centerflat=use_centerflats[ifilt], oob=use_oobs[ifilt], peakval=use_peakvals[ifilt])
+            wvl, y, wvn, wu = srfgen(center=centers[ifilt], fwhm=fwhms[ifilt], shape=shapes[ifilt],
+                                 yedge=yedges[ifilt], wvmin=wvmins[ifilt], wvmax=use_wvmaxs[ifilt],
+                                 centerflat=centerflats[ifilt], oob=oobs[ifilt], peakval=peakvals[ifilt])
             use_filters.append(np.vstack((wvl, y, wvn, wu)).T)
         self.filters = use_filters
 
-        # Convert the wavelengths to microns or wavenumbers
 
     @staticmethod  # Some input parameter checking for Flt constructor
     def checkparm(parmname, parm, nfilters):
