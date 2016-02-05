@@ -34,4 +34,15 @@ In principle, any Python 2.7 installation that can meet the dependencies should 
 - ``ipyparallel`` is used for parallel computation in IPython/Jupyter notebooks as well as other Python launch modes.
 - ``dill`` will be required if running libRadtran on remote machines using ``ipyparallel``
 - ``paramiko`` will be required for authentication when using ``ipyparallel`` across machine boundaries
+- ``openexr`` for writing environment maps to OpenEXR files
+
+Obtatining working installations on Windows is sometimes problematic. Unofficial Python Wheel dsitributions for
+Windows can be obtained from `Christoph Gohlke <http://www.kaij.org/blog/?p=123>`_.
+
+For example, the ``OpenEXR`` package may have to be downloaded as a Python Wheel and installed from the command-line
+with ``pip``::
+
+    C:\Ananconda> pip install OpenEXR-1.2.0-cp27-none-win_amd64.whl
+
+
 
