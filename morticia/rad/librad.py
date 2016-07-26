@@ -68,7 +68,7 @@ import writeLex  # This imports all the libradtran option definitions
 import os
 import easygui  # For file open dialogs
 import numpy as np
-import xray
+import xarray as xr
 import re
 import warnings
 from morticia.moglo import *
@@ -1100,7 +1100,7 @@ class Case(object):
         if self.solver == 'mystic':
             # TODO : Read mystic fluxes and radiances from mc.flx.spc and mc.rad.spc
             warnings.warn('Reading of mc.flx.spc and mc.rad.spc skipped. To be implemented.')
-        # Perform further processing of outputs, mainly production of xray.DataArray versions of outputs.
+        # Perform further processing of outputs, mainly production of xr.DataArray versions of outputs.
         self.process_outputs()
 
     def run(self, stderr_to_file=False, write_input=True, read_output=True, block=True, purge=True):
@@ -1158,7 +1158,7 @@ class Case(object):
         return self
 
     def process_outputs(self):
-        """ Process outputs from libRadtran into moglo.Scalar and xray.DataArray objects.
+        """ Process outputs from libRadtran into moglo.Scalar and xr.DataArray objects.
         Currently only radiance outputs are processed, along with a few typical flux outputs, such as `edir`.
 
         Note that this method probably does not cover all libRadtran/uvspec inputs and outputs and will most
@@ -1173,8 +1173,8 @@ class Case(object):
         # first. This is a 5 dimensional numpy array with axes 'umu'. 'phi', 'wvl', 'zout' (or equivalent)
         # and 'stokes'. The 'wvl' axis could also be 'chn' (spectral channel) or 'wvn' (spectral wavenumber)
         # Create each of the axes individually using xd_identity
-        # TODO : Also include putting irradiance or other user output into xray.DataArray objects
-        # TODO : Want to deal with azimuthally averaged radiances as well if possible (to xray.DataArray)
+        # TODO : Also include putting irradiance or other user output into xr.DataArray objects
+        # TODO : Want to deal with azimuthally averaged radiances as well if possible (to xr.DataArray)
         # Azimuthally averaged radiances occur when phi is not specified
         # Set up sepctral axis, output level axis and stokes component axis
         if self.spectral_axis == 'wvl':
@@ -1187,7 +1187,7 @@ class Case(object):
         self.levels = levels
         stokes = xd_identity(range(self.n_stokes), 'stokes')
         self.stokes = stokes
-        # Convert uu radiance output to xray.DataArray
+        # Convert uu radiance output to xr.DataArray
         if self.uu.size:  # OK, there is some radiance data (not azimuthally averaged)
             umu = xd_identity(self.umu, 'umu', '')  # TODO : This must change to the propagation zenith (polar) angle
             paz = self.paz
@@ -1195,12 +1195,12 @@ class Case(object):
             phi = self.phi
             # Determine the units of uu
             uu_units = self.rad_units_str()
-            # Build the xray.DataArray
+            # Build the xr.DataArray
             qty_name = {'radiance': 'specrad', 'transmittance': 'trnx', 'reflectivity': 'reflx'}[self.output_quantity]
-            xd_uu = xray.DataArray(self.uu, [pza, paz, spectral_axis, levels, stokes],
+            xd_uu = xr.DataArray(self.uu, [pza, paz, spectral_axis, levels, stokes],
                                     name=qty_name, attrs={'units': uu_units})
             self.xd_uu = xd_uu
-        # Try to process fluxline data into xray.DataArray objects
+        # Try to process fluxline data into xr.DataArray objects
         single_col_flux_fields = ['edir', 'edn', 'eup', 'uavgdir', 'uavgdn', 'uavgup', 'uavgglo', 'down_fluxI',
                                   'down_fluxQ', 'down_fluxU', 'down_fluxV', 'up_fluxI',
                                   'up_fluxQ', 'up_fluxU', 'up_fluxV','enet', 'esum']
@@ -1214,11 +1214,11 @@ class Case(object):
                     setattr(self, flux_field, flux_data.squeeze(axis=2))
                 else:
                     warnings.warn('Non-singleton third dimension encountered in scalar flux data.')
-                xd_flux = xray.DataArray(getattr(self, flux_field), [spectral_axis, levels], name=flux_field,
+                xd_flux = xr.DataArray(getattr(self, flux_field), [spectral_axis, levels], name=flux_field,
                                          attrs={'units': flux_units, 'long_name': long_name[flux_field]})
                 setattr(self, 'xd_' + flux_field, xd_flux)
-        # TODO : Would be preferable to put stokes parameters all into single xray.DataArray for polradtran
-        # TODO : Processing of 'mystic' outputs to xray.DataArray objects
+        # TODO : Would be preferable to put stokes parameters all into single xr.DataArray for polradtran
+        # TODO : Processing of 'mystic' outputs to xr.DataArray objects
         # TODO : Mean intensity is the actinic flux divided by 4 pi, should perhaps be expressed /sr in units.
 
 
@@ -1530,23 +1530,23 @@ class RadEnv(object):
         # if self.hemi:  # Double up in the azimuth direction, but flip as well
         #     self.uu = np.hstack([self.uu, self.uu[:,::-1,...]])
         #     # Perform doubling up in all azimuth variables
-        #     self.pza = xray.concat((self.pza, self.pza + np.pi), dim='pza')
-        #     self.phi = xray.concat((self.phi, self.phi + 180), dim='phi')
-        #     self.vaz = xray.concat((self.vaz, self.vaz + 180), dim='vaz')  # view azimuth angle
+        #     self.pza = xr.concat((self.pza, self.pza + np.pi), dim='pza')
+        #     self.phi = xr.concat((self.phi, self.phi + 180), dim='phi')
+        #     self.vaz = xr.concat((self.vaz, self.vaz + 180), dim='vaz')  # view azimuth angle
         # Delete the individual results in an attempt to save memory
         for case in self.casechain:
             del case.uu
         # Concatenate the cases in umu and phi
-        self.xd_uu = xray.concat([xray.concat([case_uu.xd_uu for case_uu in self.cases[jj]], dim='paz')
+        self.xd_uu = xr.concat([xr.concat([case_uu.xd_uu for case_uu in self.cases[jj]], dim='paz')
                                                  for jj in range(len(self.cases))], dim='pza')
-        #self.xd_uu = xray.DataArray(self.uu, [self.pza, self.paz, self.spectral, self.levels, self.stokes])
-        # Replace the values in the xray.DataArray with the exact original values in the zenith and azimuth
+        #self.xd_uu = xr.DataArray(self.uu, [self.pza, self.paz, self.spectral, self.levels, self.stokes])
+        # Replace the values in the xr.DataArray with the exact original values in the zenith and azimuth
         # directions. Not doing this gave rise to a very subtle bug in spherical harmonic fitting
         self.xd_uu['pza'] = self.pza
         self.xd_uu['paz'] = self.paz
         # Also need to obtain the irradiances from one of the cases - they should actually all be the same
         # TODO : Obtain self.fluxdata from one of the self.cases
-        self.fluxdata = self.casechain[0].fluxdata  # Would really want this as a xray.DataArray
+        self.fluxdata = self.casechain[0].fluxdata  # Would really want this as a xr.DataArray
         self.fluxline = self.casechain[0].fluxline
         # Run the transmittance sequences if there are any
         if self.n_sza:
@@ -1652,7 +1652,7 @@ class RadEnv(object):
         # Angles to be meshgridded - is this really necessary
         # TODO : Check if meshgridding is really necessary
         azi_angles, pol_angles = np.meshgrid(azi_angles, pol_angles)
-        sin_pol_angles = xray.DataArray(np.sin(pol_angles), [self.pza, self.paz])
+        sin_pol_angles = xr.DataArray(np.sin(pol_angles), [self.pza, self.paz])
         # TODO : Symmetry checking still required
         # if self.hemi:  # Sun-symmetric REM
         sph_harm_coeff = []
@@ -1671,8 +1671,8 @@ class RadEnv(object):
                     y_mn = condon_short * sph_harm(m, n, azi_angles, pol_angles)  # Ramamoorthi normalisation
                 if self.hemi:
                     y_mn = y_mn.real * 2.0
-                # Create xray.DataArray
-                y_mn = xray.DataArray(y_mn, [self.pza, self.paz])
+                # Create xr.DataArray
+                y_mn = xr.DataArray(y_mn, [self.pza, self.paz])
                 # Compute the integrand
                 inner_integrand = y_mn * self.xd_uu * sin_pol_angles
                 # Compute the coefficients by integration by various methods
@@ -1718,7 +1718,7 @@ class RadEnv(object):
         # Angles to be meshgridded - is this really necessary
         # TODO : Check if meshgridding is really necessary
         azi_angles, pol_angles = np.meshgrid(azi_angles, pol_angles)
-        sin_pol_angles = xray.DataArray(np.sin(pol_angles), [self.pza, self.paz])
+        sin_pol_angles = xr.DataArray(np.sin(pol_angles), [self.pza, self.paz])
         # TODO : Symmetry checking still required
         # if self.hemi:  # Sun-symmetric REM
         sph_harm_coeff_cos = []
@@ -1739,9 +1739,9 @@ class RadEnv(object):
                     y_mn = (-1.0)**m * np.sqrt(2.0) * sph_harm(m, n, azi_angles, pol_angles)  # Ramamoorthi normalisation
                 if self.hemi:  # integrate over hemisphere, therefore need a factor of 2
                     y_mn = y_mn * 2.0  # equivalent of taking only the cosine components times 2
-                # Create xray.DataArray
-                y_mn_cos = xray.DataArray(y_mn.real, [self.pza, self.paz])
-                y_mn_sin = xray.DataArray(y_mn.imag, [self.pza, self.paz])
+                # Create xr.DataArray
+                y_mn_cos = xr.DataArray(y_mn.real, [self.pza, self.paz])
+                y_mn_sin = xr.DataArray(y_mn.imag, [self.pza, self.paz])
                 # Compute the integrand
                 inner_integrand_cos = self.xd_uu * y_mn_cos * sin_pol_angles
                 # Compute the coefficients
@@ -1781,7 +1781,7 @@ class RadEnv(object):
             # trans_case.xd_edir = trans_case.xd_edir.assign_coords(pza=np.pi - np.deg2rad(trans_case.sza))
             trans_case.xd_edir = trans_case.xd_edir.assign_coords(pza=np.deg2rad(trans_case.sza))
         # Concatenate results from all transmission runs
-        self.xd_edir = xray.concat([this_case.xd_edir for this_case in self.trans_cases], dim='pza')
+        self.xd_edir = xr.concat([this_case.xd_edir for this_case in self.trans_cases], dim='pza')
         # Interpolate transmission results onto the pza grid for the RadEnv
         # This is not a "harmonisation" interpolation. The transmission grid is being interpolated
         # onto another grid in pza (propagation zenith angle)
@@ -1797,7 +1797,7 @@ class RadEnv(object):
         # Implicitly, the optical depth from the top level is known to TOA so concat those values
         levels_axis_num = xd_opt_depth.get_axis_num(self.levels_out_type)
         levels_out_type = self.levels_out_type  # just to shorten it
-        self.xd_opt_depth = xray.concat((xd_opt_depth, self.xd_opt_depth[{levels_out_type: -1}]),
+        self.xd_opt_depth = xr.concat((xd_opt_depth, self.xd_opt_depth[{levels_out_type: -1}]),
                                         dim=levels_out_type)
         # Now confront the problem of computing optical depths to the level below
         # For the lowest level, the optical depths to the level below are undefined, perhaps an appropriate
