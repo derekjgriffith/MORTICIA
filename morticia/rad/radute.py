@@ -9,7 +9,7 @@ __author__ = 'DGriffith, ARamkilowan'
 
 import numpy as np
 import pandas as pd
-import xray
+import xarray as xr
 import StringIO
 import matplotlib.pyplot as plt
 import easygui  # for simple file/open dialogs and such
@@ -426,7 +426,7 @@ class Flt(object):
         for ifilt in range(self.nfilters):
             wvl = xd_identity(self.filters[ifilt][:,0], 'wvl', self.units)
             #print wvl
-            xd_flt_list.append(xray.DataArray(self.filters[ifilt][:,1], [wvl], name='srf',
+            xd_flt_list.append(xr.DataArray(self.filters[ifilt][:,1], [wvl], name='srf',
                                                 attrs={'long_name': long_name['srf'],
                                                        'labels': self.filterheaders[ifilt],
                                                        'units': default_units['srf'],
@@ -435,24 +435,24 @@ class Flt(object):
         return xd_flt_list
 
     def flt_as_xd_harmonised(self, quantity_name='srf', chn_start_index=0):
-        """ Convert the Flt class object into a single, wavelength-harmonised xray.DataArray.
+        """ Convert the Flt class object into a single, wavelength-harmonised xr.DataArray.
 
         :param quantity_name: The name of the quantity as defined the long_names variable in moglo.py. Defaults to
             'srf', a Spectral Response Function, but could also be a transmission functions 'trn' or other spectral
             quantity known to moglo.py.
         :param chn_start_index: Use this parameter to select the starting channel number. Defaults to zero.
-        :return: The set of Flt filters as a single, wavelength-harmonised xray.DataArray object. The filter
+        :return: The set of Flt filters as a single, wavelength-harmonised xr.DataArray object. The filter
             headers are returned in an attribute called 'labels'. The fileheader of the Flt object is
             returned in an attribute called 'title' (netCDF recommendation)
         """
-        xd_flt_list = self.flt_as_xd()  # Create a list of xray.DataArray objects
+        xd_flt_list = self.flt_as_xd()  # Create a list of xr.DataArray objects
         # Harmonise the wavelength axes
         xd_flt_list_harmonised = xd_harmonise_interp(xd_flt_list)
         xd_attrs_update(xd_flt_list_harmonised)  # Update the attribute
         chn_indices = range(chn_start_index, chn_start_index + len(xd_flt_list))
         # Compile the list into a single object
         flt_data = np.vstack([xd_flt_list_harmonised[ifilt].data for ifilt in range(len(xd_flt_list))])
-        xd_flt_harmonised = xray.DataArray(flt_data.T, [(xd_flt_list_harmonised[0]['wvl']),
+        xd_flt_harmonised = xr.DataArray(flt_data.T, [(xd_flt_list_harmonised[0]['wvl']),
                                                       ('chn', chn_indices,
                                                          {'labels': self.filterheaders})],
                                            name=quantity_name,
@@ -465,7 +465,7 @@ class SpectralChannel(object):
     """ The SpectralChannel class defines any band-limited spectral distribution function. This could be
     the spectral response functions of a sensor, or the spectral transmittance of an optical filter, the spectral
     radiance, irradiance or any other band-limited spectral quantity. The actual spectral distribution
-    function is represented by an xray.DataArray object with a wavelength axis in preferred units of 'nm'.
+    function is represented by an xr.DataArray object with a wavelength axis in preferred units of 'nm'.
 
     SpectralChannels is a list of channels that can be indexed in the usual way, by the global channel index
     """
@@ -477,7 +477,7 @@ class SpectralChannel(object):
     def __init__(self, sdf=None, group='', channels='all'):
         """ Create one or a group of spectral distribution functions
 
-        :param sdf: The spectral distribution function as an xray.DataArray object.
+        :param sdf: The spectral distribution function as an xr.DataArray object.
         :param group:
         :param channels:
         :return:
