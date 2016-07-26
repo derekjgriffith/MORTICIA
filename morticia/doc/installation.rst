@@ -19,7 +19,8 @@ MORTICIA Dependencies
 `Continuum Analytics <https://www.continuum.io/>`_ and this is the recommended distribution for ``MORTICIA`` users.
 In principle, any Python 2.7 installation that can meet the dependencies should also work.
 
-``MORTICIA`` makes use of a variety of other Python packages. The most important of these are:
+``MORTICIA`` makes use of a variety of other Python packages. Many `MORTICIA` dependencies are included in the
+Anaconda package. The most important of are:
 
 - ``numpy`` and ``scipy`` : The mainstay of technical computing in Python.
 - ``matplotlib`` : Plotting.
@@ -28,7 +29,7 @@ In principle, any Python 2.7 installation that can meet the dependencies should 
 - ``pandas`` : For handling time-series and data in a tabular/relational view.
 - ``pint`` : for handling unit checking and conversion. Note that using ``pint`` for all numerical operations is not
   recommended and not done in ``MORTICIA``. Rather, a ``pint`` Quantity object can be carried as metadata to an
-  xray.DataArray object and checked (for example using Python ``assert``) at object construction time or judiciously
+  xarray.DataArray object and checked (for example using Python ``assert``) at object construction time or judiciously
   so that there is no significant performance impact of any unit checking.
 - ``astropy`` and ``pyephem`` : for various astronomy-related calculations (sun, moon position). ``astropy`` may be part
   of the Anaconda distribution, which is continually growing.
@@ -79,7 +80,7 @@ following general steps must be followed:
   the `ipengine` command.
 - Note that it is generally very important to ensure that the same version of all dependent Python packages is
   running on all compute nodes. Once all dependencies have been installed, make sure that all packages are updated
-  or upgraded, in particular the ``xray`` package (`pip install --upgrade xray`).
+  or upgraded, in particular the ``xarray`` package (`pip install --upgrade xarray`).
 - On Windows, it may be necessary to run the command window as Administrator to get the necessary priveledges for
   package installation and upgrading.
 
@@ -105,6 +106,6 @@ in Windows or::
 in Linux.
 
 Not all packages required by `MORTICIA` or `nbMORTICIA` are included with Anaconda. These will have to be installed
-manually using `conda` or `pip`. Missing packages could include `pint`, '`easygui`, `dill` and `xray`. If the
-development environment is not cloned from root, it may be necessary to install many more packages, including basics
+manually using `conda` or `pip`. Missing packages could include `paramiko`, `pint`, '`easygui`, `dill`, `ipyparallel` and `xarray`. If the
+development environment is not cloned from root, it will be necessary to install many more packages, including basics
 such as `numpy`.
