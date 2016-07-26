@@ -10,7 +10,8 @@ Installation and Requirements
  utilise a Linux-based compute cluster with a libRadtran installation in the background, while all foreground
  work is performed on a Windows machine, for example. However, this setup may require
  significant setup to implement. All the required information to do this is provided in the ``ipyparallel``
- documentation. Examples are provided in the ``MORTICIA`` notebooks in the `nbMORITICIA repository on GitHub <https://github.com/derekjgriffith/nbMORTICIA>`_.
+ documentation. Examples are provided in the ``MORTICIA`` notebooks in the
+ `nbMORITICIA repository on GitHub <https://github.com/derekjgriffith/nbMORTICIA>`_.
 
 MORTICIA Dependencies
 =====================
@@ -45,8 +46,6 @@ with ``pip``::
 
     C:\Ananconda> pip install OpenEXR-1.2.0-cp27-none-win_amd64.whl
 
-
-
 Setup of ``ipyparallel``
 ========================
 In order to run Python processes for ``MORTICIA`` in parallel on a compute cluster, the ``ipyparallel`` package is required. The
@@ -74,4 +73,38 @@ following general steps must be followed:
 - Copy the `ipcontroller-client.json` file to the client that will require compute resources in the
   ``IPYTHONDIR/profile_default/security` directory. On Windows this is typically `C:\Users\myself\.ipython\profile_default\`.
   Additional profile directories can be created as required.
+- If the controller is restarted for any reason, the above `.json` files will be overwritten and the above file copy
+  operations must be repeated.
+- The compute engines can now be started on the relevant machines in the desired working directory using
+  the `ipengine` command.
+- Note that it is generally very important to ensure that the same version of all dependent Python packages is
+  running on all compute nodes. Once all dependencies have been installed, make sure that all packages are updated
+  or upgraded, in particular the ``xray`` package (`pip install --upgrade xray`).
+- On Windows, it may be necessary to run the command window as Administrator to get the necessary priveledges for
+  package installation and upgrading.
 
+MORTICIA Development
+====================
+Contributing to MORTICIA or the MORTICIA notebooks requires setup of a development environment using ``conda``.
+Depending on whether development is done in the Python 2.7 or a Python 3.3 context, this may entail creating a
+development environment called mordevpy27 or mordevpy33. If the development environment is to use the same Python
+as the Anaconda root environment, this can be done as a simple clone. Once a full installation of Anaconda has
+been completed, an Anaconda or normal terminal can be opened and the development environment cloned from the root
+using::
+
+    > conda create --name mordevpy27 --clone root
+
+Once the clone has completed, the environment can be activated with::
+
+    > activate mordevpy27
+
+in Windows or::
+
+    > source activate mordevpy27
+
+in Linux.
+
+Not all packages required by `MORTICIA` or `nbMORTICIA` are included with Anaconda. These will have to be installed
+manually using `conda` or `pip`. Missing packages could include `pint`, '`easygui`, `dill` and `xray`. If the
+development environment is not cloned from root, it may be necessary to install many more packages, including basics
+such as `numpy`.
