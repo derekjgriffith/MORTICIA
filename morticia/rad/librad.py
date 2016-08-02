@@ -1155,7 +1155,7 @@ class Case(object):
         :param check_output: If set True, the uvspec command is executed using the subprocess.check_output call, which
             will place the standard output from the run in self.check_output. This is useful for diagnostic
             purposes.
-        :return: Returns self. This is important for running across networks. 
+        :return: Returns self. This is important for running across networks.
         """
         # Write input file by default
         # Note that the location of the following imports is actually important, since this run code may be
@@ -1185,16 +1185,16 @@ class Case(object):
                 return_code = 1
         if not return_code and read_output:
             self.readout(filename=self.name+'.OUT')  # Read the output into the instance if the return code OK
-            if stderr_to_file:
-                self.readerr(filename=self.name+'.ERR')  # Read and attach any error output
-            if purge:  # Delete the input and output files
-                try:
-                    os.remove(self.name+'.INP')
-                    os.remove(self.name+'.OUT')
-                    if stderr_to_file:
-                        os.remove(self.name+'.ERR')
-                except OSError:
-                    pass  # Just move on if file delete fails.
+        if stderr_to_file and read_output:
+            self.readerr(filename=self.name+'.ERR')  # Read and attach any error output
+        if purge and read_output:  # Delete the input and output files
+            try:
+                os.remove(self.name+'.INP')
+                os.remove(self.name+'.OUT')
+                if stderr_to_file:
+                    os.remove(self.name+'.ERR')
+            except OSError:
+                pass  # Just move on if file delete fails.
         self.run_return_code = return_code  # Add the return code to self
         return self
 
