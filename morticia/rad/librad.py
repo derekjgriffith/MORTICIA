@@ -1155,7 +1155,7 @@ class Case(object):
         :param check_output: If set True, the uvspec command is executed using the subprocess.check_output call, which
             will place the standard output from the run in self.check_output. This is useful for diagnostic
             purposes.
-        :return: The exit code from running uvspec. Will be non-zero for failed run.
+        :return: Returns self. This is important for running across networks. 
         """
         # Write input file by default
         # Note that the location of the following imports is actually important, since this run code may be
@@ -1196,7 +1196,7 @@ class Case(object):
                 except OSError:
                     pass  # Just move on if file delete fails.
         self.run_return_code = return_code  # Add the return code to self
-        return return_code
+        return self
 
     def process_outputs(self):
         """ Process outputs from libRadtran into moglo.Scalar and xr.DataArray objects.
