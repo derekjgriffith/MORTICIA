@@ -233,6 +233,8 @@ class Case(object):
         """
         self.name = casename
         self.error_txt = []
+        self.stderr = ''  # Error output from the uvspec run may be read into this
+        self.run_return_code = -1  # Will be set when uvspec run is executed
         self.options = []  # options is a list [option_name (string), option_tokens (list of strings),
         self.tokens = []  # option keyword parameters (tokens)
         self.optionobj = []  # option object from writeLex
@@ -283,6 +285,7 @@ class Case(object):
             opdata, line_nos, path = Case.read(path=filename)
             self.infile = path
             self.outfile = self.infile[:-4] + '.OUT'
+            self.errfile = self.infile[:-4] + '.ERR'
             # option_object, source_file_nos (filename, line_number)]
             # Process the results into lists of options
             for (optnumber, option) in enumerate(opdata):
@@ -702,6 +705,7 @@ class Case(object):
 
     def __repr__(self):
         """ libRadtran/uvspec input data
+
         :return: The uvspec input data as it would appear in an input file.
         """
         uvsinp = []
@@ -1103,21 +1107,55 @@ class Case(object):
         # Perform further processing of outputs, mainly production of xr.DataArray versions of outputs.
         self.process_outputs()
 
-    def run(self, stderr_to_file=False, write_input=True, read_output=True, block=True, purge=True):
+
+    def readerr(self, filename=None):
+        """ Read any error output from the uvspec run and attach it to the self object in the self.stderr property
+
+        It is important to check error output to see if the uvspec run was successful or what diagnostics were
+        provided.
+
+        WARNING : If the 'verbose' option is used in the uvspec input file, the error output file can be VERY large.
+        The 'verbose' option prints a large amount of information relating to setup of the RT problem. Please refer to
+        the libRadtran manual in respect of using 'verbose'. It is encouraged in the beginning stages of setting up
+        an RT problem to verify correctness, but with (perhaps) a single wavelength to reduce the stderr output
+        volume.
+
+        :param filename: The name of te error file to read. If not provided, the default filename will be used. If
+            provided as the empty string '', a file/open dialog will be presented.
+        :return: True if a file was read and False if the file was not found.
+        """
+        if filename is None:
+            filename = self.errfile
+        elif filename == '':
+            filename = easygui.fileopenbox(msg='Please select the uvspec error output file.', filetypes=["*.ERR"])
+        if not os.path.isfile(filename):
+            print('Error output file does not exist. Run uvspec with stderr redirected to an output file.')  ##TODO use an exception
+            self.stderr = ''
+            return False
+        # Read the entire error file and attach as the stderr field
+        with open(filename, 'rt') as sterrfid:
+            self.stderr = sterrfid.readlines()
+        return True
+
+    def run(self, stderr_to_file=True, write_input=True, read_output=True, block=True, purge=True, check_output=False):
         """ Run the libRadtran/uvspec case.
 
         This will run the libRadtran/uvspec Case instance provided. Some control is provided regarding the handling of
         the standard error output from uvspec. This function only returns when uvspec terminates.
 
         :param stderr_to_file: Controls whether standard error output goes to the screen or is written to a file
-            having the same name as the input/output files, except with the extension .ERR.
+            having the same name as the input/output files, except with the extension .ERR. Default is true.
+            Any error output
         :param write_input: Controls whether the input file is written out before execution. Default is True.
         :param read_output: Controls whether the output file is read after execution. Default is True.
         :param block: By default, this method waits until uvspec terminates. If set False, the uvspec process
             is released to background and read_output is set to False (regardless of user input).
         :param purge: If set True, the input and output files from this run will be deleted after the run is complete
             and the outputs have been read. Will only be honoured if read_output is also True. Default is True.
-        :return: The shell command string executed in order to run the case and the return status of the command.
+        :param check_output: If set True, the uvspec command is executed using the subprocess.check_output call, which
+            will place the standard output from the run in self.check_output. This is useful for diagnostic
+            purposes.
+        :return: The exit code from running uvspec. Will be non-zero for failed run.
         """
         # Write input file by default
         # Note that the location of the following imports is actually important, since this run code may be
@@ -1141,12 +1179,14 @@ class Case(object):
                 with open(self.name+'.INP', 'rt') as stin, \
                      open(self.name+'.OUT', 'wt') as stout, \
                      open(self.name+'.ERR', 'wt') as sterr:
-                    return_code = subprocess.call(['uvspec'], stdin=stin, stdout=stout, sterr=sterr)
+                     return_code = subprocess.call(['uvspec'], stdin=stin, stdout=stout, sterr=sterr)
             except OSError:  # the uvspec command likely does not exist
                 warnings.warn('Unable to spawn uvspec process. Probably not installed system-wide on platform.')
                 return_code = 1
         if not return_code and read_output:
             self.readout(filename=self.name+'.OUT')  # Read the output into the instance if the return code OK
+            if stderr_to_file:
+                self.readerr(filename=self.name+'.ERR')  # Read and attach any error output
             if purge:  # Delete the input and output files
                 try:
                     os.remove(self.name+'.INP')
@@ -1155,7 +1195,8 @@ class Case(object):
                         os.remove(self.name+'.ERR')
                 except OSError:
                     pass  # Just move on if file delete fails.
-        return self
+        self.run_return_code = return_code  # Add the return code to self
+        return return_code
 
     def process_outputs(self):
         """ Process outputs from libRadtran into moglo.Scalar and xr.DataArray objects.
