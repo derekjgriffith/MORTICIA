@@ -1179,7 +1179,7 @@ class Case(object):
                 with open(self.name+'.INP', 'rt') as stin, \
                      open(self.name+'.OUT', 'wt') as stout, \
                      open(self.name+'.ERR', 'wt') as sterr:
-                     return_code = subprocess.call(['uvspec'], stdin=stin, stdout=stout, sterr=sterr)
+                     return_code = subprocess.call(['uvspec'], stdin=stin, stdout=stout, stderr=sterr)
             except OSError:  # the uvspec command likely does not exist
                 warnings.warn('Unable to spawn uvspec process. Probably not installed system-wide on platform.')
                 return_code = 1
