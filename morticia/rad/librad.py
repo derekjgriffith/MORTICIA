@@ -183,6 +183,39 @@ indexVars = ['lambda', 'wavelength', 'wvl', 'wvn', 'zout', 'zout_sea', 'p', 'cth
 # cold point tropopause and top of atmosphere)
 re_isSingleOutputLevel = '(^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$)|(^boa$)|(^sur$)|(^surface$)|(^cpt$)|(^toa$)'
 
+def lookup_nearest_in_file(filename, values_and_offsets, column_number=0):
+    """ Look up the nearest value in a free form text file of numeric data
+
+    :param filename: File in which to look up the values
+    :param column_number: Column number in which to search, starting from 0 - the default is 0
+    :param values_and_offsets: An array with the values to search for (nominal values) in the first column and the
+        minimum offsets to allow from the nominal values. Negative offsets will return the largest value which is
+        less than the nominal value by at least the absolute value of the offset. Postitive offsets will return the
+        value which is greater than the nominal value by at least the absolute offset value.
+    :return: List of lookup values which are nearest to the nominal values by at least the offset values.
+
+    In the tradition of libRadtran data files, lines starting with # are considered to be comments.
+    The data in the column is assumed to be in monotonic, increasing order.
+    Very large files should probably not be the subject of this function.
+
+    Example::
+
+        import morticia.rad.librad as librad
+        wavelengths  = librad.lookup_nearest_in_file('Solar_irradiance_Thuillier_2002.txt', [[385.0, -1.0], [955, 1.0]])
+
+    """
+    values_and_offsets = np.asarray(values_and_offsets, dtype=np.float)
+    # Read the whole file and select required column
+    the_data = np.genfromtxt(filename)[:, column_number]
+    nearest = np.zeros(values_and_offsets.shape[0])
+    for ind_value, value in enumerate(values_and_offsets[:, 0]):
+        ind_nearest = np.sum(the_data <= value + values_and_offsets[ind_value, 1])   # split the file
+        if values_and_offsets[ind_value, 1] < 0.0:
+            ind_nearest -= 1
+        nearest[ind_value] = the_data[ind_nearest]
+    return nearest
+
+
 class Case(object):
     """ Class which encapsulates a run case of libRadtran/uvspec.
     This class has methods to read libRadtran/uvspec input files, write uvspec input files, run uvspec in parallel on
@@ -561,7 +594,7 @@ class Case(object):
 
         :param option: List of keyword and tokens (parameters) to provide to the option keyword (list of strings).
         :param origin: A 2-tuple noting the "origin" of the change to this keyword. Default ('user', None)
-        :return:
+        :return: None
         """
         try:
             ioption = self.options.index(option[0])
@@ -571,6 +604,29 @@ class Case(object):
             self.tokens[ioption] = option[1:]  # The tokens following the keyword (list of strings)
             self.filorigin[ioption] = origin  # The origin of this keyword
             self.prepare_for_keyword(option[0], option[1:])
+
+    def set_option(self, *superlist):
+        """ Set a uvspec input option with flexible input format
+
+        :param superlist: All set_option arguments are collected into a list which are coverted to strings
+            (if not already strings), splitting each resulting string at spaces.
+        :return: None
+
+        Example::
+
+            import morticia.rad.librad as librad
+            libRadCase = librad.Case(casename='MyExample')  # Creates a blank libRadtran/uvspec case
+            libRadCase.set_option('source solar', '../data/solar_flux/atlas_plus_modtran')
+            libRadCase.set_option('wavelength', 300, 400)  # can provide literal numerics
+            print libRadCase
+
+        """
+        from itertools import chain
+        optionlist = [str(element).split() for element in superlist]
+        # now flatten the list
+        option = list(chain(*optionlist))
+        # and use alter_option to do the work
+        self.alter_option(option)
 
     def del_option(self, option, all=True):
         """ Delete a uvspec input option matching the given option.
