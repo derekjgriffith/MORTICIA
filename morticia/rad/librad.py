@@ -171,6 +171,13 @@ for thisVar in uvspecOutVars:
         del outVars[thisVar]  # delete the template entry
 uvspecOutVars = outVars  # copy the updated dict back to the original
 
+# Some uvspec keywords can appear multiple times e.g.
+# mol_modify can appear for many gas species individually.
+# Keywords with multiple forms of this nature are called boson_keywords
+boson_keywords = ['mol_modify', 'brdf_rossli', 'polradtran', 'brdf_hapke', 'sslidar', 'sdisort',
+                  'ck_lowtran_absorption', 'mol_tau_file', 'aerosol_modify', 'mixing_ratio',
+                  'mol_file', 'brfdf_rpv', 'aerosol_file', 'brdf_cam', 'crs_file']
+
 # For the output_user option, only certain variables are allowed as first and second index variables,
 # These are wavelength (lambda, wvn), zout, zout_sea, p (pressure)
 # The only two index variables that are allowed together is one height variable and one wavelength/number variable
@@ -582,10 +589,15 @@ class Case(object):
         uvspec options.
         :return:
         """
+        # Lookup the option in the available options
+        the_option = uvsOptions[option[0]]  # this will raise ValueError if it does not exist
+        # Check to see if it has logicals and if so, check first token against the logicals
+        #TODO checking of the logicals
+
+        self.optionobj.append(the_option)  # The option object
         self.options.append(option[0])  # the option keyword (string)
         self.tokens.append(option[1:])  # The tokens following the keyword (list of strings)
         self.filorigin.append(origin)  # The origin of this keyword
-        self.optionobj.append(uvsOptions[option[0]])  # The option object
         # Make any possible preparations for occurance of this keyword
         self.prepare_for_keyword(option[0],option[1:])
 
@@ -599,7 +611,7 @@ class Case(object):
         """
         try:
             ioption = self.options.index(option[0])
-        except ValueError:
+        except ValueError:  # The option is not currently being used in this case
             self.append_option(option, origin)  # just append the option if not found
         else:
             self.tokens[ioption] = option[1:]  # The tokens following the keyword (list of strings)
@@ -613,13 +625,13 @@ class Case(object):
             (if not already strings), splitting each resulting string at spaces.
         :return: None
 
-        Example::
+        Example:
 
-            import morticia.rad.librad as librad
-            libRadCase = librad.Case(casename='MyExample')  # Creates a blank libRadtran/uvspec case
-            libRadCase.set_option('source solar', '../data/solar_flux/atlas_plus_modtran')
-            libRadCase.set_option('wavelength', 300, 400)  # can provide literal numerics
-            print libRadCase
+        >>> import morticia.rad.librad as librad
+        >>> libRadCase = librad.Case(casename='MyExample')  # Creates a blank libRadtran/uvspec case
+        >>> libRadCase.set_option('source solar', '../data/solar_flux/atlas_plus_modtran')
+        >>> libRadCase.set_option('wavelength', 300, 400)  # can provide literal numerics
+        >>> print libRadCase
 
         """
         from itertools import chain
