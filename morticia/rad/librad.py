@@ -198,10 +198,11 @@ def lookup_nearest_in_file(filename, values_and_offsets, column_number=0):
     The data in the column is assumed to be in monotonic, increasing order.
     Very large files should probably not be the subject of this function.
 
-    Example::
-
-        import morticia.rad.librad as librad
-        wavelengths  = librad.lookup_nearest_in_file('Solar_irradiance_Thuillier_2002.txt', [[385.0, -1.0], [955, 1.0]])
+    The following excample will fetch the Thuillier solar spectrum wavelengths that span the range of
+    385 nm to 955 nm with a margin of 2 nm on either side. This is useful when setting the uspec 'wavelength'
+    keyword, which must give wavelengths that are actually listed in the source solar sepctrum file.
+    >>> import morticia.rad.librad as librad
+    >>> wavelengths  = librad.lookup_nearest_in_file('data/Solar_irradiance_Thuillier_2002.txt', [[385.0, -2.0], [955, 2.0]])
 
     """
     values_and_offsets = np.asarray(values_and_offsets, dtype=np.float)
