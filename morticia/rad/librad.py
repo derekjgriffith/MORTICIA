@@ -584,22 +584,28 @@ class Case(object):
     def append_option(self, option, origin=('user', None)):
         """ Append a libRadtran/uvspec options to this uvspec case. It will be appended at the end of the file
 
-        :param option: A list containing the keyword and keyword parameters (tokens)
+        :param option: A list containing the keyword and keyword parameters (tokens). Boson keywords must be passed
+            in "welded". e.g. x.append_option(['mol_modify O3', '270.0',  'DU'])
         :param origin: A 2-tuple giving the origin of the option and a "line number" reference. Default ('user', None)
         uvspec options.
         :return:
         """
-        # Lookup the option in the available options
-        the_option = uvsOptions[option[0]]  # this will raise ValueError if it does not exist
+        # May have a boson keyword passed in, so split at spaces
+        option0split = option[0].split()
+        if len(option0split) > 1:
+            # Lookup the option in the available options
+            the_option = uvsOptions[option0split[0]]  # this will raise ValueError if it does not exist
+        else:
+            the_option = uvsOptions[option[0]]
         # Check to see if it has logicals and if so, check first token against the logicals
         #TODO checking of the logicals
-
+        # Check if this is a
         self.optionobj.append(the_option)  # The option object
         self.options.append(option[0])  # the option keyword (string)
         self.tokens.append(option[1:])  # The tokens following the keyword (list of strings)
         self.filorigin.append(origin)  # The origin of this keyword
         # Make any possible preparations for occurance of this keyword
-        self.prepare_for_keyword(option[0],option[1:])
+        self.prepare_for_keyword(option0split[0], option0split[1:] + option[1:])
 
     def alter_option(self, option, origin=('user', None)):
         """ Alter the parameters of a uvspec input option. If the option is not found, the option is appended with
@@ -609,6 +615,11 @@ class Case(object):
         :param origin: A 2-tuple noting the "origin" of the change to this keyword. Default ('user', None)
         :return: None
         """
+        # check if this is a boson_keyword
+        if option[0] in boson_keywords:
+            # Weld together the first tokens with a space in between
+            option[0] = option[0] + ' ' + option[1]
+            del option[1]
         try:
             ioption = self.options.index(option[0])
         except ValueError:  # The option is not currently being used in this case
@@ -616,7 +627,8 @@ class Case(object):
         else:
             self.tokens[ioption] = option[1:]  # The tokens following the keyword (list of strings)
             self.filorigin[ioption] = origin  # The origin of this keyword
-            self.prepare_for_keyword(option[0], option[1:])
+            option0split = option[0].split()
+            self.prepare_for_keyword(option0split[0], option0split[1:] + option[1:])
 
     def set_option(self, *superlist):
         """ Set a uvspec input option with flexible input format
