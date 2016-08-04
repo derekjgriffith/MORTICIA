@@ -175,7 +175,7 @@ uvspecOutVars = outVars  # copy the updated dict back to the original
 # mol_modify can appear for many gas species individually.
 # Keywords with multiple forms of this nature are called boson_keywords
 boson_keywords = ['mol_modify', 'brdf_rossli', 'polradtran', 'brdf_hapke', 'sslidar', 'sdisort',
-                  'ck_lowtran_absorption', 'mol_tau_file', 'aerosol_modify', 'mixing_ratio',
+                  'ck_lowtran_absorption', 'mol_tau_file', 'aerosol_modify', 'aerosol_file', 'mixing_ratio',
                   'mol_file', 'brfdf_rpv', 'aerosol_file', 'brdf_cam', 'crs_file']
 
 # For the output_user option, only certain variables are allowed as first and second index variables,
