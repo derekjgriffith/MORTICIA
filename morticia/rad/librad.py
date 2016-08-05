@@ -223,6 +223,48 @@ def lookup_nearest_in_file(filename, values_and_offsets, column_number=0):
         nearest[ind_value] = the_data[ind_nearest]
     return nearest
 
+def angstrom_law(wavelength, alpha, beta):
+    """ Calculation of aerosol optical thickness according to the Angstrom law.
+    The Angstrom law is a simple power law that typifies aerosol optical thickness (aka optical depth) variation
+    with wavelength. The Angstrom law is expressed as
+    .. math::
+        \tau_{aer}=\beta\lambda^{-\alpha}
+
+    The Angstrom law can be used to set aerosol optical thickness in libRadtran/uvspec using the `aerosol_angstrom`
+    keyword.
+
+    :param wavelength: Wavelength(s) at which to compute the aerosol optical thickness. If any of the wavelengths
+        are greater than 100, then wavelengths are assumed to be in nm, otherwise wavelengths are assumed to be in
+        microns.
+    :param alpha: The Angstrom alpha exponent.
+    :param beta: The Angstrom beta (aerosol optical thickness at a wavelength of 1000 nm) parameter
+    :return: Aerosol optical thickness at given wavelengths with Angstrom alpha and beta parameters as provided.
+
+    .. sealso::
+        librad.angstrom_law_fit, the libRadtran manual
+    """
+    if np.any(wavelength > 100.0):
+        wavelength = wavelength / 1000.0
+    return beta * wavelength ** (-alpha)
+
+def angstrom_law_fit(wavelength, aot):
+    """ Uses scipy.optimize to fit the Angstrom power law to an array of aerosol optical thickness values given
+    at an array of wavelengths.
+
+    :param wavelength: Wavelengths at which the aerosol optical thickness (aka optical depth) is provided in the aot
+        input. If any of the wavelengths is larger than 100, then wavelengths are assumed to be in nm, otherwise
+        wavelengths are assumed to be in microns.
+    :param aot: Aerosol optical thickness at the given wavelengths
+    :return: Angstrom alpha and beta parameters that best fit the input AOT data in the least squares sense.
+
+    .. seealso::
+        librad.angstrom_law
+    """
+    from scipy.optimize import curve_fit
+    if np.any(wavelength > 100.0):
+        wavelength = wavelength / 1000.0
+    popt, pcov = curve_fit(angstrom_law, wavelength, aot)
+    return popt[0], popt[1]
 
 class Case(object):
     """ Class which encapsulates a run case of libRadtran/uvspec.
