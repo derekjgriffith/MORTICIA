@@ -266,6 +266,41 @@ def angstrom_law_fit(wavelength, aot):
     popt, pcov = curve_fit(angstrom_law, wavelength, aot)
     return popt[0], popt[1]
 
+def king_byrne_formula(wavelength, alpha_0, alpha_1, alpha_2):
+    """ The King Byrne formula for aerosol optical depth variation with wavelength.
+    The King Byrne formula is
+    .. math::
+        \tau_{aer}=e^{\alpha_{0}}\lambda^{\alpha_{1}}\lambda^{-\alpha_{2}}
+
+    :param wavelength: Wavelengths at which the aerosol optical thickness (aka optical depth) is provided in the aot
+        input. If any of the wavelengths is larger than 100, then wavelengths are assumed to be in nm, otherwise
+        wavelengths are assumed to be in microns.
+    :param alpha_0: The :math:`\alpha_0` parameter
+    :param alpha_1: The :math:`\alpha_1` parameter
+    :param alpha_2: The :math:`\alpha_2` parameter
+    :return: Aerosol optical thickness at given wavelengths calculated with the King Byrne formula
+
+    """
+    if np.any(wavelength > 100.0):
+        wavelength = wavelength / 1000.0
+    return np.exp(alpha_0) * wavelength**alpha_1 * wavelength**(-alpha_2)
+
+def king_byrne_formula_fit(wavelength, aot):
+    """ Uses scipi.optimize to fit the King Byrne formula to an array of aerosol optical thickness values
+    provided at the given wavelengths
+
+    :param wavelength: Wavelengths at which the aerosol optical thickness (aka optical depth) is provided in the aot
+        input. If any of the wavelengths is larger than 100, then wavelengths are assumed to be in nm, otherwise
+        wavelengths are assumed to be in microns.
+    :param aot: Aerosol optical thickness at the given wavelengths
+    :return: The :math:`\alpha_0`, :math:`\alpha_1` and :math:`\alpha_2` 
+    """
+    from scipy.optimize import curve_fit
+    if np.any(wavelength > 100.0):
+        wavelength = wavelength / 1000.0
+    alpha_parameters, pcov = curve_fit(king_byrne_formula, wavelength, aot)
+    return alpha_parameters[0], alpha_parameters[1], alpha_parameters[2]
+
 class Case(object):
     """ Class which encapsulates a run case of libRadtran/uvspec.
     This class has methods to read libRadtran/uvspec input files, write uvspec input files, run uvspec in parallel on
