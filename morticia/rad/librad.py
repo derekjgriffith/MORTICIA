@@ -283,7 +283,7 @@ def king_byrne_formula(wavelength, alpha_0, alpha_1, alpha_2):
     """
     if np.any(wavelength > 100.0):
         wavelength = wavelength / 1000.0
-    return np.exp(alpha_0) * wavelength**alpha_1 * wavelength**(-alpha_2)
+    return np.exp(alpha_0) * wavelength**alpha_1 * wavelength**(alpha_2 * np.log(wavelength))
 
 def king_byrne_formula_fit(wavelength, aot):
     """ Uses scipi.optimize to fit the King Byrne formula to an array of aerosol optical thickness values
@@ -293,7 +293,7 @@ def king_byrne_formula_fit(wavelength, aot):
         input. If any of the wavelengths is larger than 100, then wavelengths are assumed to be in nm, otherwise
         wavelengths are assumed to be in microns.
     :param aot: Aerosol optical thickness at the given wavelengths
-    :return: The :math:`\alpha_0`, :math:`\alpha_1` and :math:`\alpha_2` 
+    :return: The :math:`\alpha_0`, :math:`\alpha_1` and :math:`\alpha_2`
     """
     from scipy.optimize import curve_fit
     if np.any(wavelength > 100.0):
