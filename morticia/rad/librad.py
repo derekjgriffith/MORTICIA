@@ -353,6 +353,7 @@ class Case(object):
         self.error_txt = []
         self.stderr = ''  # Error output from the uvspec run may be read into this
         self.run_return_code = -1  # Will be set when uvspec run is executed
+        self.purge = True  # This will purge uvspec input, output and error files after run, unless set False
         self.options = []  # options is a list [option_name (string), option_tokens (list of strings),
         self.tokens = []  # option keyword parameters (tokens)
         self.optionobj = []  # option object from writeLex
@@ -1310,6 +1311,7 @@ class Case(object):
             is released to background and read_output is set to False (regardless of user input).
         :param purge: If set True, the input and output files from this run will be deleted after the run is complete
             and the outputs have been read. Will only be honoured if read_output is also True. Default is True.
+            To prevent purging for a particular librad.Case, set the individual case property to False.
         :param check_output: If set True, the uvspec command is executed using the subprocess.check_output call, which
             will place the standard output from the run in self.check_output. This is useful for diagnostic
             purposes.
@@ -1345,7 +1347,7 @@ class Case(object):
             self.readout(filename=self.name+'.OUT')  # Read the output into the instance if the return code OK
         if stderr_to_file and read_output:
             self.readerr(filename=self.name+'.ERR')  # Read and attach any error output
-        if purge and read_output:  # Delete the input and output files
+        if self.purge and purge and read_output:  # Delete the input and output files
             try:
                 os.remove(self.name+'.INP')
                 os.remove(self.name+'.OUT')
