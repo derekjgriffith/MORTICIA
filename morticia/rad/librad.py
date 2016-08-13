@@ -1411,15 +1411,18 @@ class Case(object):
             flux_units = self.irrad_units_str()  # Remember that "flux" means irradiance here
             if flux_field.startswith('uavg'):
                 flux_units += '/sr'
-            if flux_field in single_col_flux_fields:  # This are single column outputs
+            if flux_field in single_col_flux_fields:  # These are single column outputs
                 flux_data = getattr(self, flux_field)
                 if flux_data.shape[2] == 1:  # Remove trailing singleton dimension
                     setattr(self, flux_field, flux_data.squeeze(axis=2))
                 else:
                     warnings.warn('Non-singleton third dimension encountered in scalar flux data.')
-                xd_flux = xr.DataArray(getattr(self, flux_field), [spectral_axis, levels], name=flux_field,
+                try:
+                    xd_flux = xr.DataArray(getattr(self, flux_field), [spectral_axis, levels], name=flux_field,
                                          attrs={'units': flux_units, 'long_name': long_name[flux_field]})
-                setattr(self, 'xd_' + flux_field, xd_flux)
+                    setattr(self, 'xd_' + flux_field, xd_flux)
+                except:
+                    warnings.warn('Unable to convert flux data to xarray.')
         # TODO : Would be preferable to put stokes parameters all into single xr.DataArray for polradtran
         # TODO : Processing of 'mystic' outputs to xr.DataArray objects
         # TODO : Mean intensity is the actinic flux divided by 4 pi, should perhaps be expressed /sr in units.
