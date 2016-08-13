@@ -1213,8 +1213,8 @@ class Case(object):
 
             # See if one size fits all
             # self.u0u = radND[:,1].reshape(self.n_umu, self.n_stokes, self.n_wvl, -1, order='F').squeeze()  # should actually all be zero
-            # print radND.shape
-            # print radND
+            print radND.shape
+            print radND
             self.u0u = radND[:,1].reshape(self.n_umu, self.n_stokes, self.n_wvl, -1, order='F')
             # There is actually some radiance data
             self.uu = radND[:,2:]
