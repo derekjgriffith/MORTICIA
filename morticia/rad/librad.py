@@ -869,7 +869,9 @@ class Case(object):
         """
         uvsinp = []
         for (ioption, keyword) in enumerate(self.options):
-            uvsinp.append(keyword + ' ' + ' '.join(self.tokens[ioption]))  #TODO add comments
+            theTokens =  re.sub('[\[\],]', '', (' '.join(self.tokens[ioption])))  # Remove any square brackets or commas
+            optionLine = (keyword + ' ' + theTokens).replace('  ', ' ')  # replace any double spaces with single spaces
+            uvsinp.append(optionLine)  #TODO add comments
         return '\n'.join(uvsinp)
 
     def write(self, filename=''):
