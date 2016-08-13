@@ -1213,11 +1213,16 @@ class Case(object):
 
             # See if one size fits all
             # self.u0u = radND[:,1].reshape(self.n_umu, self.n_stokes, self.n_wvl, -1, order='F').squeeze()  # should actually all be zero
-            print radND.shape
-            print radND
-            self.u0u = radND[:,1].reshape(self.n_umu, self.n_stokes, self.n_wvl, -1, order='F')
+            #print radND.shape
+            #print radND
+            if radND.ndim == 1:
+                self.u0u = radND[1]
+                self.uu = radND[2:]
+            else:
+                self.u0u = radND[:,1].reshape(self.n_umu, self.n_stokes, self.n_wvl, -1, order='F')
+                self.uu = radND[:,2:]
             # There is actually some radiance data
-            self.uu = radND[:,2:]
+
             if self.uu.size:  # checks how many elements actually
                 self.uu = self.uu.reshape((self.n_umu, self.n_stokes, max(self.n_phi, 1), self.n_wvl, -1), order='F')
                 self.uu = self.uu.transpose([0, 2, 3, 4, 1])  # transpose so that the nstokes axis is last
@@ -1385,7 +1390,12 @@ class Case(object):
         elif self.spectral_axis == 'wvn':
             spectral_axis = xd_identity(self.wvn, 'wvn', 'cm^-1')  # The spectral axis is wavenumber
         elif self.spectral_axis == 'chn':  # The spectral axis is channel number
-            spectral_axis = self.spectral_channels
+            if self.wvl:
+                spectral_axis = xd_identity(self.wvl, 'wvl','nm')
+            elif self.wvn:
+                spectral_axis = xd_identity(self.wvn, 'wvn', 'cm^-1')
+        else:
+            spectral_axis = xd_identity(np.nan, 'unknown', 'unknown')  # Don't know what is going on, so just put in something
         levels = xd_identity(self.level_values, self.levels_out_type)  # Presume units correct
         self.levels = levels
         stokes = xd_identity(range(self.n_stokes), 'stokes')
@@ -1400,6 +1410,8 @@ class Case(object):
             uu_units = self.rad_units_str()
             # Build the xr.DataArray
             qty_name = {'radiance': 'specrad', 'transmittance': 'trnx', 'reflectivity': 'reflx'}[self.output_quantity]
+            #print 'self.uu' , self.uu, ' ndim=', self.uu.ndim
+            #print spectral_axis
             xd_uu = xr.DataArray(self.uu, [pza, paz, spectral_axis, levels, stokes],
                                     name=qty_name, attrs={'units': uu_units})
             self.xd_uu = xd_uu
