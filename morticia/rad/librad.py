@@ -934,7 +934,7 @@ class Case(object):
             fluxdata = fluxdata.reshape((self.n_levels_out, -1, linecount), order='F')  #TODO provide warning or something
         # Want wavelength to be first variable, so swap first and second axes if there are 2 or more axes
         if fluxdata.ndim >= 2:
-            np.swapaxes(fluxdata, 0, 1)
+            fluxdata = np.swapaxes(fluxdata, 0, 1)
         self.fluxdata = fluxdata  # retain the flux data in the instance, reshaped as well as possible
         if linecount == 1:  # here the data is actually distributed, single line a special case
             # Some output fields, such as umu, uu, u0u, uu_down, uu_up, cmu(?) are vectors and therefore occupy
