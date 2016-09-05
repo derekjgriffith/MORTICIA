@@ -924,17 +924,27 @@ class Case(object):
                 # Try just using the number of unique values in the first column
                 self.n_levels_out = len(np.unique(fluxdata[:,0]))
             fluxdata = fluxdata.reshape((self.n_levels_out, -1, linecount), order='F')
+            # Want wavelength to be first variable, so swap first and second axes if there are 2 or more axes
+            if fluxdata.ndim >= 2:
+                fluxdata = np.swapaxes(fluxdata, 0, 1)
         elif fields[0] == 'wvl' or fields[0] == 'wvn':  # wavelength/wavenumber is the primary variable
             if self.n_levels_out == 0:  # Don't know number of output levels
                 self.n_wvl = len(np.unique(fluxdata[:,0]))  # Try to determine number of wavelengths/wavenumbers
                 fluxdata = fluxdata.reshape((-1, self.n_wvl, linecount), order='F')
+                # Want wavelength to be first variable, so swap first and second axes if there are 2 or more axes
+                if fluxdata.ndim >= 2:
+                    fluxdata = np.swapaxes(fluxdata, 0, 1)
             else:
                 fluxdata = fluxdata.reshape((self.n_levels_out, -1, linecount), order='F')
+                # Want wavelength to be first variable, so swap first and second axes if there are 2 or more axes
+                if fluxdata.ndim >= 2:
+                    fluxdata = np.swapaxes(fluxdata, 0, 1)
         else:  # Assume secondary variable is zout
             fluxdata = fluxdata.reshape((self.n_levels_out, -1, linecount), order='F')  #TODO provide warning or something
-        # Want wavelength to be first variable, so swap first and second axes if there are 2 or more axes
-        if fluxdata.ndim >= 2:
-            fluxdata = np.swapaxes(fluxdata, 0, 1)
+            # Want wavelength to be first variable, so swap first and second axes if there are 2 or more axes
+            if fluxdata.ndim >= 2:
+                fluxdata = np.swapaxes(fluxdata, 0, 1)
+
         self.fluxdata = fluxdata  # retain the flux data in the instance, reshaped as well as possible
         if linecount == 1:  # here the data is actually distributed, single line a special case
             # Some output fields, such as umu, uu, u0u, uu_down, uu_up, cmu(?) are vectors and therefore occupy
