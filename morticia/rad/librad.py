@@ -927,11 +927,11 @@ class Case(object):
         elif fields[0] == 'wvl' or fields[0] == 'wvn':  # wavelength/wavenumber is the primary variable
             if self.n_levels_out == 0:  # Don't know number of output levels
                 self.n_wvl = len(np.unique(fluxdata[:,0]))  # Try to determine number of wavelengths/wavenumbers
-                fluxdata = fluxdata.reshape((self.n_wvl, -1, linecount), order='F')
+                fluxdata = fluxdata.reshape((-1, self.n_wvl, linecount), order='F')
             else:
-                fluxdata = fluxdata.reshape((-1, self.n_levels_out, linecount), order='F')
+                fluxdata = fluxdata.reshape((self.n_levels_out, -1, linecount), order='F')
         else:  # Assume secondary variable is zout
-            fluxdata = fluxdata.reshape((-1, self.n_levels_out, linecount), order='F')  #TODO provide warning or something
+            fluxdata = fluxdata.reshape((self.n_levels_out, -1, linecount), order='F')  #TODO provide warning or something
         self.fluxdata = fluxdata  # retain the flux data in the instance, reshaped as well as possible
         if linecount == 1:  # here the data is actually distributed, single line a special case
             # Some output fields, such as umu, uu, u0u, uu_down, uu_up, cmu(?) are vectors and therefore occupy
