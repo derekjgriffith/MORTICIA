@@ -648,8 +648,6 @@ class Case(object):
                 self.has_clouds = True
         if keyword == 'sza':
             self.sza = np.float64(tokens[0])
-        if keyword == 'wavelength_grid_file':  # will not actually set the wavelenth grid
-            self.wavelength_grid_file = tokens[0]
 
     def prepare_for_polradtran(self):
         """ Prepare for output from the polradtran solver
@@ -776,6 +774,7 @@ class Case(object):
         """
         self.wavelength_grid_file = self.name + '_wvl_grid.dat'
         self.wavelength_grid = np.vstack(wvl_grid.flatten())  # should be a numpy array of floats, force to column
+        self.set_option('wavelength_grid_file', self.wavelength_grid_file)
 
     def unset_wavelength_grid(self):
         """ Remove the wavelength grid file and associated grid data for this librad.Case.
