@@ -391,6 +391,8 @@ class Case(object):
         self.spectral_axis = 'wvl'  # By default RT calculations are spectral, with wavelength as the variable
         self.wavelength_index = []  # set by 'wavelength_index' keyword
         self.wavelength_index_range = []  # for use where range() would be applicable
+        self.wavelength_grid_file = ''  # This is the name of the wavelength grid file if the option is used
+        self.wavelength_grid = None  # Only gets set by self.set_wavelength_grid(wavelength_grid_points)
         self.output_process = 'none'  # Default is to output spectral data. See output_process in uvspec manual
         self.has_ice_clouds = False  # Default, unless discovered otherwise
         self.has_water_clouds = False  # ditto
@@ -646,6 +648,8 @@ class Case(object):
                 self.has_clouds = True
         if keyword == 'sza':
             self.sza = np.float64(tokens[0])
+        if keyword == 'wavelength_grid_file':  # will not actually set the wavelenth grid
+            self.wavelength_grid_file = tokens[0]
 
     def prepare_for_polradtran(self):
         """ Prepare for output from the polradtran solver
@@ -753,6 +757,36 @@ class Case(object):
             for (ioption, option) in enumerate(self.options):
                 self.prepare_for_keyword(self.options[ioption], self.tokens[ioption])
         return deletedsomething
+
+    def set_wavelength_grid(self, wvl_grid):
+        """ Set the internal RT solver wavelength grid for this librad.Case
+
+        This method sets the internal grid for the RT calculations in libRadtran. Study the libRadtran manual
+        before trying to use this option. Once this function has been used, the option wavelength_grid_file
+        will be activated and the grid file will be *casename_wvl_grid.dat*, where the casename is the name of
+        the librad.Case. When the case is Run, the wavelength grid file will be written out to the current
+        directory before uvspec is executed. By default (unless purge is disabled), the file will also
+        automatically be deleted once the tun terminates.
+
+        :param wvl_grid: An np.array of floats that provide the wavelengths in nm at which to perform the
+            internal radiative transfer calculation.
+        :return: None
+
+        .. seealso: unset_wavelength_grid
+        """
+        self.wavelength_grid_file = self.name + '_wvl_grid.dat'
+        self.wavelength_grid = np.vstack(wvl_grid.flatten())  # should be a numpy array of floats, force to column
+
+    def unset_wavelength_grid(self):
+        """ Remove the wavelength grid file and associated grid data for this librad.Case.
+
+        :return: None
+
+        .. seealso: set_wavelength_grid()
+        """
+        self.wavelength_grid_file = ''
+        self.wavelength_grid = None
+        self.del_option('wavelength_grid_file')
 
     @staticmethod
     def read(path, includes_seen=[]):
@@ -1345,6 +1379,9 @@ class Case(object):
         import os
         if write_input:
             self.write(filename=self.name+'.INP')
+        # Write the wavelength grid file if grid data is provided
+        if self.wavelength_grid is not None:
+            np.savetxt(self.wavelength_grid_file, self.wavelength_grid, fmt='%10.4f')
         # Spawn a sub-process using the subprocess module
         if not stderr_to_file:
             try:
@@ -1373,6 +1410,8 @@ class Case(object):
                 os.remove(self.name+'.OUT')
                 if stderr_to_file:
                     os.remove(self.name+'.ERR')
+                if self.wavelength_grid is not None:  # Remove the wavelength grid file
+                    os.remove(self.wavelength_grid_file)
             except OSError:
                 pass  # Just move on if file delete fails.
         self.run_return_code = return_code  # Add the return code to self
