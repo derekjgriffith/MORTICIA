@@ -1490,6 +1490,40 @@ class Case(object):
         # TODO : Processing of 'mystic' outputs to xr.DataArray objects
         # TODO : Mean intensity is the actinic flux divided by 4 pi, should perhaps be expressed /sr in units.
 
+    def split_case_by_wavelength(self, n_sub_ranges, overlap):
+        """ Split a librad.Case into a list of cases with wavelength sub-ranges
+        This function can be useful to distribute a case over a compute cluster. Equal wavelength interval sub-cases
+        should have similar runtimes. Use ipyparallel to run the list on a cluster. If the wavelength range
+        is sufficiently large, consider setting n_sub_ranges to the number of available processors.
+
+        This function only works with a librad.Case that uses the `wavelength` option keyword. Cases that make use of
+        other methods to set the wavelength range will not work.
+
+        :param n_sub_ranges: Number of cases in the list, which is also the number of wavelength sub-ranges.
+        :param overlap: Amount of wavelength overlap between subrange cases.
+        :return: List of librad.Case
+        """
+        # Obtain the wavelength range of the master case.
+        if 'wavelength' in self.options:
+            # Obtain the list index
+            i_wvl_option = self.options.index('wavelength')
+            # Obtain the wavelength range
+            wvl_range_tokens = self.tokens[i_wvl_option]
+            wvl_min = float(wvl_range_tokens[0])
+            wvl_max = float(wvl_range_tokens[1])
+            # Get the split points
+            wvl_splits = np.linspace(wvl_min, wvl_max, n_sub_ranges + 1)
+            import copy  # need copy to make deep copies of self
+            caselist = [copy.deepcopy(self) for icase in range(n_sub_ranges)]
+            # Now run through the cases and set the wavelength sub-ranges
+            for i_split, this_case in enumerate(caselist):
+                this_case.set_option('wavelength', wvl_splits[i_split] - overlap * np.sign(np.float(i_split)),
+                                     wvl_splits[i_split + 1])
+                this_case.name += '{:04d}'.format(i_split)  # really important to change the name to avoid clashes at runtime
+            return caselist
+        else:
+            return []  # Return an empty list if the 'wavelength' option does not occur
+
 
 
 
