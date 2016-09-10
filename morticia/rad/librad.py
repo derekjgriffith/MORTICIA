@@ -1502,6 +1502,8 @@ class Case(object):
         :param n_sub_ranges: Number of cases in the list, which is also the number of wavelength sub-ranges.
         :param overlap: Amount of wavelength overlap between subrange cases.
         :return: List of librad.Case
+
+        .. seealso:: merge_caselist_by_wavelength
         """
         # Obtain the wavelength range of the master case.
         if 'wavelength' in self.options:
@@ -1524,7 +1526,29 @@ class Case(object):
         else:
             return []  # Return an empty list if the 'wavelength' option does not occur
 
+    @staticmethod
+    def merge_caselist_by_wavelength(caselist, attr_name):
+        """ Merges data in a particular attribute (property) of a list of librad.Case
 
+        This function can be used to merge data from a list of runs created using the function
+        split_case_by_wavelength.
+
+        :param caselist: list of librad.Case after all cases have been run
+        :param attr_name: name of attribute to merge e.g. 'edir'
+        :return: merged wavelengths, requested attribute as numnpy arrays
+
+        .. seealso:: split_case_by_wavelength
+
+        """
+        wvl_merged = np.array([])  # will put merged array of wavelengths in here
+        data_merged = np.array([])  # merged data to go in here
+        for this_case in caselist:
+            wvl_merged = np.concatenate((wvl_merged, this_case.wvl))
+            data_merged = np.concatenate((data_merged, getattr(this_case, attr_name)))
+        # remove duplicate wavelength data
+        wvl_merged, merge_indices = np.unique(wvl_merged, return_index=True)
+        data_merged = data_merged[merge_indices, ...]
+        return wvl_merged, data_merged
 
 
 class RadEnv(object):
