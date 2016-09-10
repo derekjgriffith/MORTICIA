@@ -1540,15 +1540,16 @@ class Case(object):
         .. seealso:: split_case_by_wavelength
 
         """
-        wvl_merged = np.array([])  # will put merged array of wavelengths in here
-        data_merged = np.array([])  # merged data to go in here
+        wvl_merged = caselist[0].wvl  # will put merged array of wavelengths in here
+        data_merged = getattr(caselist[0], attr_name)  # merged data to go in here
+        caselist = caselist[1:]
         for this_case in caselist:
             wvl_merged = np.concatenate((wvl_merged, this_case.wvl))
             data_merged = np.concatenate((data_merged, getattr(this_case, attr_name)))
         # remove duplicate wavelength data
         wvl_merged, merge_indices = np.unique(wvl_merged, return_index=True)
         data_merged = data_merged[merge_indices, ...]
-        return wvl_merged, data_merged
+        return np.vstack(wvl_merged), data_merged
 
 
 class RadEnv(object):
