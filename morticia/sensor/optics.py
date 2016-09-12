@@ -24,14 +24,14 @@ __project__ = 'MORTICIA'
         > 150.0 and < 15000.0 : Assume the spectral variable is wavelength in nm
         > 15000.0 : Issue a warning
 
-Dependencies : numpy (as np), pandas (as pd) and xray
+Dependencies : numpy (as np), pandas (as pd) and xarray
                easygui, pint, warnings
 """
 
 
 import numpy as np
 import pandas as pd
-import xray
+import xarray as xr
 import warnings
 import logging  # TODO set up global logging if required.
 
@@ -39,7 +39,7 @@ import logging  # TODO set up global logging if required.
 # Import units registry from parent to avoid duplicates
 from morticia import ureg, Q_, U_
 
-# Import tools related to xray DataArray and related unit checking/conversion
+# Import tools related to xarray DataArray and related unit checking/conversion
 from morticia.tools.xd import *
 
 # As a general rule, where relevant and present, optical parameters are passed in in the order
@@ -51,7 +51,7 @@ from morticia.tools.xd import *
 # vary along rows rather than in the third dimension.
 
 # TODO : Review the above statements. In general it may not be a good idea to remove singleton dimensions, other
-# TODO : than trailing singleton dimensions. The real fix is to use xray.DataArray
+# TODO : than trailing singleton dimensions. The real fix is to use xarray.DataArray
 
 
 # Possible strategy for dealing with units.
@@ -61,7 +61,7 @@ from morticia.tools.xd import *
 
 
 def mtf(spf, wvl, fno):
-    """ Compute the simple (optimally focussed) diffraction Modulation Transfer Function (MTF) of a prefect lens with an
+    """ Compute the simple (optimally focussed) diffraction Modulation Transfer Function (MTF) of a perfect lens with an
     unobscured circular aperture.
 
     :param spf: Spatial frequencies in the image at which to compute the MTF
@@ -468,7 +468,7 @@ class Lens(object):
             must be a scalar value.
         :param trn: The spectral transmission function, typically a function of wavelength. The spectral
             transmittance function must be
-        :type trn: xray.DataArray
+        :type trn: xarray.DataArray
         :param wfe: The wavefront error must be expressed in waves (unitless). It can be a function of
             wavelength (wvl) and field position (flr) , but not focus (fldz). If no input is provided, the wfe
             will default to zero over the same spectral region as the lens transmission function.
@@ -496,7 +496,7 @@ class Lens(object):
         # Check units of efl and convert
         self.efl = Scalar('efl', *efl)  # convert efl units to default units
         self.fno = Scalar('fno', fno, '')  # fno is unitless
-        self.trn = trn  # this should be an xray.DataArray
+        self.trn = trn  # this should be an xarray.DataArray
         if obs:
             if obs < 0.0 or obs > 1.0: warnings.warn('Obscuration ratio for optics.Lens must be from 0.0 to 1.0')
             self.obs = Scalar('obs', obs, '')  # Obscuration is unitless
@@ -547,7 +547,7 @@ class Lens(object):
         else:
             wfe_max = 0.0
             # Default to zero
-            wfe = xray.DataArray([0.0, 0.0], [('wvl', [wvl_min, wvl_max], {'units': 'nm'})], name='wfe',
+            wfe = xr.DataArray([0.0, 0.0], [('wvl', [wvl_min, wvl_max], {'units': 'nm'})], name='wfe',
                                  attrs={'units': ''})
         if wfe_max >= 0.5:
             warnings.warn('WFE for optics.Lens exceeds 0.5 waves. ATF generally invalid for large WFE.')
@@ -598,7 +598,7 @@ class Lens(object):
             the_mtf = np.maximum(the_mtf, 0.0)
             # print the_mtf
             # Recreate a data array
-            the_mtf = xray.DataArray(the_mtf, [self.spf, self.wvl], name='mtf')
+            the_mtf = xr.DataArray(the_mtf, [self.spf, self.wvl], name='mtf')
         else:  # Compute the unobscured MTF
             phi = np.arccos(self.fno.data * self.spf * 1.0e-6 * self.wvl)
             csphi = np.cos(phi) * np.sin(phi)
