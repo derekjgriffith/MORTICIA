@@ -31,6 +31,7 @@ long_name = {
     'flux': 'Optical Flux',
     'fldy': 'Field Position in x',
     'fldx': 'Field Position in y',
+    'fldr': 'Radial Field Position',
     'fldz': 'Defocus',
     'fldo': 'Field Orientation',  # Typically horizontal/vertical, across/along track, sagittal/tangential
     'obs': 'Obscuration Ratio',
@@ -117,6 +118,7 @@ default_units = {
     'specirr': 'W/m^/nm',
     'fldx': 'mm',
     'fldy': 'mm',
+    'fldr': 'mm',
     'fldz': 'mm',
     'flux': 'W',
     'asr': 'A/W',
