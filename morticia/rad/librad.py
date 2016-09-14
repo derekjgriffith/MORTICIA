@@ -800,8 +800,12 @@ class Case(object):
         The ``umu`` input to libRadtran/uvspec is the cosine of the zenith angle of light propagation
         from target to sensor. Hence ``umu`` is positive for downward-looking (upward-propagating) cases.
 
-        :param sza: solar zenith angle in degrees from the zenith
-        :param saa: solar azimuth angle in degrees from north through east
+        Also, from the libRadtran manual :
+        phi = phi0 indicates that the sensor looks into the direction of the sun, while
+        phi-phi0 = 180$^\circ$ means that the sun is at the back of the sensor
+
+        :param sza: solar zenith angle in degrees from the zenith (range 0 to 90 degrees)
+        :param saa: solar azimuth angle in degrees from north through east (range zero to )
         :param oza: observation zenith angle in degrees from the zenith. Note that this is the zenith angle
             of a vector pointing from the target/scene to the observer (satellite/sensor).
         :param oaa: observation azimuth angle in degrees from north through east. Note again that this is the
@@ -811,9 +815,9 @@ class Case(object):
         self.set_option('sza', sza)  # deg. This one is straightforward
         # Now when entering solar and observation zenith angles, it is necessary to provide the azimuth of light propagation
         # rather than the azimuth of the view direction, which is 180 deg different
-        phi0 = 180.0 - saa
-        if phi0 < 0.0:
-            phi0 += 360.0  # Keep phi0 in the range from 0.0 to 360.0
+        phi0 = saa + 180.0
+        if phi0 > 360.0:
+            phi0 -= 360.0  # Keep phi0 in the range from 0.0 to 360.0
         self.set_option('phi0', phi0)  # solar radiation propagation azimuth from north through east
         self.set_option('phi', oaa)  # This is the azimuth of the satellite as seen from the target - also azimuth of light propgation
         self.set_option('umu', np.cos(np.deg2rad(oza))) # For downward-looking (upward propagating) umu is positive
