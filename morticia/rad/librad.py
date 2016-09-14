@@ -787,6 +787,37 @@ class Case(object):
         self.wavelength_grid = None
         self.del_option('wavelength_grid_file')
 
+    def set_view_geometry(self, sza=0.0, saa=0.0, oza=0.0, oaa=0.0):
+        ''' Set the Case view geometry relative to the sun
+
+        Sets the sun and observer zenith and azimuth angles. Note that libRadtran/uvspec sets the light
+        propagation azimuth angle in the ``phi`` and ``phi0`` inputs. This is 180$^\circ$ different in
+        azimuth to the direction of viewing. The ``phi0`` input is the direction of solar light propagation
+        from the sun and is 180$^\circ$ from the saa input here. However, the ``phi`` input is the direction
+        of light propagation from target to sensor and is therefore *the same* as the oaa input to this
+        function.
+
+        The ``umu`` input to libRadtran/uvspec is the cosine of the zenith angle of light propagation
+        from target to sensor. Hence ``umu`` is positive for downward-looking (upward-propagating) cases.
+
+        :param sza: solar zenith angle in degrees from the zenith
+        :param saa: solar azimuth angle in degrees from north through east
+        :param oza: observation zenith angle in degrees from the zenith. Note that this is the zenith angle
+            of a vector pointing from the target/scene to the observer (satellite/sensor).
+        :param oaa: observation azimuth angle in degrees from north through east. Note again that this is the
+            azimuth angle of a vector pointing from the target/scene to the observer.
+        :return: None
+        '''
+        self.set_option('sza', sza)  # deg. This one is straightforward
+        # Now when entering solar and observation zenith angles, it is necessary to provide the azimuth of light propagation
+        # rather than the azimuth of the view direction, which is 180 deg different
+        phi0 = 180.0 - saa
+        if phi0 < 0.0:
+            phi0 += 360.0  # Keep phi0 in the range from 0.0 to 360.0
+        self.set_option('phi0', phi0)  # solar radiation propagation azimuth from north through east
+        self.set_option('phi', oaa)  # This is the azimuth of the satellite as seen from the target - also azimuth of light propgation
+        self.set_option('umu', np.cos(np.deg2rad(oza))) # For downward-looking (upward propagating) umu is positive
+
     @staticmethod
     def read(path, includes_seen=[]):
         """ Reads a libRadtran input file. This will construct the libRadtran case from the contents of the .INP file
