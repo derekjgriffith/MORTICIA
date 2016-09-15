@@ -1415,7 +1415,7 @@ class Case(object):
             self.write(filename=self.name+'.INP')
         # Write the wavelength grid file if grid data is provided
         if self.wavelength_grid is not None:
-            np.savetxt(self.wavelength_grid_file, self.wavelength_grid, fmt='%10.4f')
+            np.savetxt(self.wavelength_grid_file, self.wavelength_grid, fmt='%13.7f')
         # Spawn a sub-process using the subprocess module
         if not stderr_to_file:
             try:
