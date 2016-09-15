@@ -1300,9 +1300,9 @@ class Case(object):
                 self.u0u = radND[1]
                 self.uu = radND[2:]
             else:
+                #TODO Should there not be a transpose operation here to get desired order ?
                 self.u0u = radND[:,1].reshape(self.n_umu, self.n_stokes, -1, self.n_wvl, order='F')
                 self.uu = radND[:,2:]
-                #TODO Should there not be a transpose operation here to get desired order ?
             # There is actually some radiance data
             if self.uu.size:  # checks how many elements actually
                 self.uu = self.uu.reshape((self.n_umu, self.n_stokes, max(self.n_phi, 1), -1, self.n_wvl), order='F')
