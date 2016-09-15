@@ -1300,17 +1300,18 @@ class Case(object):
                 self.u0u = radND[1]
                 self.uu = radND[2:]
             else:
-                self.u0u = radND[:,1].reshape(self.n_umu, self.n_stokes, self.n_wvl, -1, order='F')
+                self.u0u = radND[:,1].reshape(self.n_umu, self.n_stokes, -1, self.n_wvl, order='F')
                 self.uu = radND[:,2:]
+                #TODO Should there not be a transpose operation here to get desired order ?
             # There is actually some radiance data
-
             if self.uu.size:  # checks how many elements actually
-                self.uu = self.uu.reshape((self.n_umu, self.n_stokes, max(self.n_phi, 1), self.n_wvl, -1), order='F')
-                self.uu = self.uu.transpose([0, 2, 3, 4, 1])  # transpose so that the nstokes axis is last
+                self.uu = self.uu.reshape((self.n_umu, self.n_stokes, max(self.n_phi, 1), -1, self.n_wvl), order='F')
+                # transpose so that the nstokes axis is last and wavelength is 3rd (also 3rd last)
+                self.uu = self.uu.transpose([0, 2, 4, 3, 1])  # transpose so that the nstokes axis is last
             else:
                 self.uu = np.array([])
             # At this point, uu should be 5 dimensional (possibly with singleton dimensions) in order of
-            # 'umu', 'phi', 'wv', 'zout' (or equivalent) and stokes
+            # 'umu', 'phi', 'wvl', 'zout' (or equivalent) and stokes
             # if self.uu.shape[3] == 0:  # singleton dimension in zout
             #     print 'Singleton in zout dimension, n_wvl = '
             #     print self.n_wvl
