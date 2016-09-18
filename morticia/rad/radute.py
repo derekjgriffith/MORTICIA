@@ -417,9 +417,9 @@ class Flt(object):
         plt.hold(False)
 
     def flt_as_xd(self):
-        """ Convert an Flt class object to a list of xray DataArray objects
+        """ Convert an Flt class object to a list of xarray DataArray objects
 
-        :return: The set of Flt filters as a list of xray DataArray objects, with a wavelength coordinate
+        :return: The set of Flt filters as a list of xarray DataArray objects, with a wavelength coordinate
             axis ('wvl', long_name = 'Wavelength'
         """
         xd_flt_list = []
@@ -461,21 +461,29 @@ class Flt(object):
                                                   'title': self.name})
         return xd_flt_harmonised
 
-class SpectralChannel(object):
-    """ The SpectralChannel class defines any band-limited spectral distribution function. This could be
+
+class SpectralDistribution(object):
+    """ The SpectralDistribution class defines any band-limited spectral distribution function. This could be
     the spectral response functions of a sensor, or the spectral transmittance of an optical filter, the spectral
     radiance, irradiance or any other band-limited spectral quantity. The actual spectral distribution
     function is represented by an xr.DataArray object with a wavelength axis in preferred units of 'nm'.
-
-    SpectralChannels is a list of channels that can be indexed in the usual way, by the global channel index
     """
-    _channel_counter = 0  # This is a class global counter, incremented for each channel, so that every
-                          # defined channel gets a unique number
-    _channel_list = []  # The global list of spectral channels indexed self.ichn
-    _channel_groups = []  # Global list of channel group names
-    _channel_group_dict = {}  # Dictionary of channels indexed by group name
-    def __init__(self, sdf=None, group='', channels='all'):
-        """ Create one or a group of spectral distribution functions
+    # SpectralChannels is a list of channels that can be indexed in the usual way, by the global channel index
+    # _channel_counter = 0  # This is a class global counter, incremented for each channel, so that every
+    #                       # defined distribution function gets a unique number
+    # _channel_list = []  # The global list of spectral channels indexed self.ichn
+    # _channel_groups = []  # Global list of channel group names
+    # _channel_group_dict = {}  # Dictionary of channels indexed by group name
+    def __init__(self, sdf=None, canned=None):
+        """ Create a spectral distribution function in one of a number of ways:
+        explicit
+        canned
+        functional
+        There are a number of "canned" sets of spectral distribution functions. Currently available are:
+        Kato
+        Fu
+        avhrr_kratz
+
 
         :param sdf: The spectral distribution function as an xr.DataArray object.
         :param group:
