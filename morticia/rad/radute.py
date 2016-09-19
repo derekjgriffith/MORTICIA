@@ -461,6 +461,87 @@ class Flt(object):
                                                   'title': self.name})
         return xd_flt_harmonised
 
+# Definitions for Kato spectral channels, [centre_wavelength, lower_wavelength, upper_wavelength]
+# Kato wavelengths are in nm
+kato_channels = np.array([
+    [ 256.300,  240.1185,  272.4815],
+    [ 277.948,  272.4815,  283.4140],
+    [ 295.127,  283.4140,  306.8408],
+    [ 317.306,  306.8408,  327.7722],
+    [ 345.136,  327.7722,  362.5000],
+    [ 385.000,  362.5000,  407.5000],
+    [ 429.773,  407.5000,  452.0458],
+    [ 484.863,  452.0458,  517.6806],
+    [ 528.840,  517.6806,  540.0000],
+    [ 544.800,  540.0000,  549.5000],
+    [ 558.050,  549.5000,  566.6000],
+    [ 585.800,  566.6000,  605.0000],
+    [ 615.000,  605.0000,  625.0000],
+    [ 645.850,  625.0000,  666.7000],
+    [ 675.439,  666.7000,  684.1772],
+    [ 694.313,  684.1772,  704.4486],
+    [ 723.531,  704.4486,  742.6139],
+    [ 767.046,  742.6139,  791.4788],
+    [ 817.968,  791.4788,  844.4581],
+    [ 866.714,  844.4581,  888.9693],
+    [ 931.938,  888.9693,  974.9063],
+    [1010.320,  974.9063, 1045.7440],
+    [1119.970, 1045.7440, 1194.1880],
+    [1355.060, 1194.1880, 1515.9400],
+    [1564.700, 1515.9400, 1613.4510],
+    [1789.120, 1613.4510, 1964.7980],
+    [2059.130, 1964.7980, 2153.4640],
+    [2214.330, 2153.4640, 2275.1900],
+    [2638.540, 2275.1900, 3001.8930],
+    [3318.660, 3001.8930, 3635.4170],
+    [3813.210, 3635.4170, 3991.0030],
+    [4298.320, 3991.0030, 4605.6540]])
+kato_units = 'nm'
+
+fu_channels = np.array([
+    [ 0.55,   0.20000,      0.68966],
+    [ 1.00,   0.68966,      1.29870],
+    [ 1.60,   1.29870,      1.90476],
+    [ 2.20,   1.90476,      2.50000],
+    [ 3.00,   2.50000,      3.50877],
+    [ 3.70,   3.50877,      4.00000],
+    [ 4.90,   4.54545,      5.26316],
+    [ 5.60,   5.26316,      5.88235],
+    [ 6.50,   5.88235,      7.14286],
+    [ 7.60,   7.14286,      8.00000],
+    [ 8.50,   8.00000,      9.09091],
+    [ 9.60,   9.09091,     10.20410],
+    [11.30,  10.20410,     12.50000],
+    [13.70,  12.50000,     14.92540],
+    [16.60,  14.92540,     18.51850],
+    [21.50,  18.51850,     25.00000],
+    [30.00,  25.00000,     35.71430],
+    [70.00,  35.71430,  10000.00000]])
+fu_units = 'um'
+
+avhrr_kratz_channels = np.array([
+    # channel 1 (band 5 actually contributes to channel 1 and 2)
+    [  0.569917,  0.561798,  0.578035],    # avhrr15.f
+    [  0.590222,  0.578035,  0.602410],    # avhrr14.f
+    [  0.613705,  0.602410,  0.625000],    # avhrr13.f
+    [  0.657328,  0.625000,  0.689655],    # avhrr12.f
+    [  0.720768,  0.689655,  0.751880],    # avhrr11.f
+    # channel 2
+    [  0.763537,  0.751880,  0.775194],    # avhrr24.f
+    [  0.842143,  0.775194,  0.909091],    # avhrr23.f
+    [  0.944741,  0.909091,  0.980392],    # avhrr22.f
+    [  1.011030,  0.980392,  1.041667],    # avhrr21.f
+    # channel 3
+    [  3.55005,  3.496503,  3.603604],    # avhrr35.f
+    [  3.65023,  3.603604,  3.696858],    # avhrr34.f
+    [  3.74957,  3.696858,  3.802281],    # avhrr32.f
+    [  3.85427,  3.802281,  3.906250],    # avhrr32.f
+    [  3.96116,  3.906250,  4.016064],    # avhrr31.f
+    # channel 4
+    [ 10.8365,  10.309278, 11.363636],    # avhrr41.f
+    # channel 5
+    [ 11.9318,  11.363636, 12.500000]])   # avhrr51.f
+avhrr_kratz_units = 'um'
 
 class SpectralDistribution(object):
     """ The SpectralDistribution class defines any band-limited spectral distribution function. This could be
@@ -474,23 +555,99 @@ class SpectralDistribution(object):
     # _channel_list = []  # The global list of spectral channels indexed self.ichn
     # _channel_groups = []  # Global list of channel group names
     # _channel_group_dict = {}  # Dictionary of channels indexed by group name
-    def __init__(self, sdf=None, canned=None):
+    def __init__(self, limits, sdf=None, canned=None, analytical=None):
         """ Create a spectral distribution function in one of a number of ways:
         explicit
         canned
         functional
+
         There are a number of "canned" sets of spectral distribution functions. Currently available are:
-        Kato
-        Fu
+        kato
+        fu
         avhrr_kratz
 
+        Note that SpectralDistribution represents only a single distribution function. To represent collections
+        of distribution functions that form a "space", use the SpectralSpace
 
+        A SpectralDistribution generally has an interpolator function or analytical function that will
+        provide the value of the SpectralDistribution at any wavelength. This function must always produce
+        a value of zero outside the band limits of the distribution.
+
+        Sampled spectral distributions that use an interpolation scheme
+        :param limits: These are the hard limits, outside of which the sdf is absolutely zero. Hard limits
+            are explicitly checked for and zero is returned without any attempt to evaluate the interpolator
+            or analytical function which defines the distribution
+        :param bandlimits: These are the in-band limits of the
         :param sdf: The spectral distribution function as an xr.DataArray object.
         :param group:
         :param channels:
         :return:
         """
         pass
+
+    def kato(self, i_channel, resolution=0.001):
+        """ Return a Kato correlated-k channel definition as a SpectralDistribution. Only a single channel can
+        be represented. Use a SpectralSpace
+
+        :param i_channel: the single kato channel to be obtained. Integer 1 to 32
+        :param resolution: this is the spectral resolution in nm of the band edges. Default 0.001 nm
+          which is typically adequate.
+        :return: A SpectralDistribution object defining the requested Kato channel
+
+        .. seealso: the libRadtran manual
+        """
+
+        pass
+
+    def fu(self, i_channel, resolution=0.001):
+        """
+
+        :param i_channel: the single Fu channel to be obtained. Integer 1 to 18
+        :param resolution: this is the spectral resolution in nm of the band edges. Default 0.001 nm
+        :return: A SpectralDistribution object defining the requested Fu channel
+
+        .. seealso: the libRadtran manual
+        """
+        pass
+
+    def avhrr_kratz(self, i_channel, resolution=0.001):
+        """
+
+        :param i_channel: The single AVHRR Kratz channel to obtain. Integer 1 to 16
+        :param resolution: this is the spectral resolution in nm of the band edges. Default 0.001 nm
+        :return: A SpectralDistribution object defining the requested avhrr_kratz channel
+
+        .. seealso: the libRadtran manual
+        """
+        pass
+
+    def sensor_channel(self, sensor_name, channel_name):
+        """
+
+        :param sensor_name:
+        :param channel_name:
+        :return:
+        """
+
+class SpectralSpace(object):
+    """ A SpectralSpace is a set (represented as a list) of SpectralDistribution objects.
+
+    For example, the full Kato correlated-k list of spectral slices constitutes a SpectralSpace.
+    A sub-range of of Kato or other correlated-k channels (Fu or avhrr_kratz) also qualify.
+    The spectral response functions of a sensor can also be represented using a SpectralSpace.
+
+    An important use of SpectralSpaces is to compute "projections" which could also be through of as
+    "dot products". The projection of one SpectralSpace into another comprises multplying the
+    distribution functions and integrating over wavelength to obtain a set of weights. The integral is
+    typically also normalised to retain equivalent units.
+
+    Here are some examples:
+    A set of spectral end-member functions can be represented as a SpectralSpace. These end-members might
+     be propagated to calculate an end-member response at a camera focal plane. The end-members are projected
+     onto the spectral response functions of the
+
+    Notes: A SpectralSpace is generally not orthogonal
+    """
 
 
 
