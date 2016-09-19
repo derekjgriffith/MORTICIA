@@ -555,37 +555,17 @@ class SpectralDistribution(object):
     # _channel_list = []  # The global list of spectral channels indexed self.ichn
     # _channel_groups = []  # Global list of channel group names
     # _channel_group_dict = {}  # Dictionary of channels indexed by group name
-    def __init__(self, limits, sdf=None, canned=None, analytical=None):
+    def __init__(self, extreme_limits, in_band_limits):
         """ Create a spectral distribution function in one of a number of ways:
-        explicit
-        canned
-        functional
 
-        There are a number of "canned" sets of spectral distribution functions. Currently available are:
-        kato
-        fu
-        avhrr_kratz
-
-        Note that SpectralDistribution represents only a single distribution function. To represent collections
-        of distribution functions that form a "space", use the SpectralSpace
-
-        A SpectralDistribution generally has an interpolator function or analytical function that will
-        provide the value of the SpectralDistribution at any wavelength. This function must always produce
-        a value of zero outside the band limits of the distribution.
-
-        Sampled spectral distributions that use an interpolation scheme
-        :param limits: These are the hard limits, outside of which the sdf is absolutely zero. Hard limits
-            are explicitly checked for and zero is returned without any attempt to evaluate the interpolator
-            or analytical function which defines the distribution
-        :param bandlimits: These are the in-band limits of the
-        :param sdf: The spectral distribution function as an xr.DataArray object.
-        :param group:
-        :param channels:
-        :return:
+        :return: A SpectralDistribution object
         """
         pass
 
-    def kato(self, i_channel, resolution=0.001):
+    # Use @classmethod, where the class of object instance is passed implicitly, instead of self
+    # This syntax is used to create alternative constructors
+    @classmethod
+    def kato(cls, i_channel, resolution=0.001):
         """ Return a Kato correlated-k channel definition as a SpectralDistribution. Only a single channel can
         be represented. Use a SpectralSpace
 
@@ -597,9 +577,11 @@ class SpectralDistribution(object):
         .. seealso: the libRadtran manual
         """
 
-        pass
+        obj = cls()
+        return obj
 
-    def fu(self, i_channel, resolution=0.001):
+    @classmethod
+    def fu(cls, i_channel, resolution=0.001):
         """
 
         :param i_channel: the single Fu channel to be obtained. Integer 1 to 18
@@ -608,9 +590,11 @@ class SpectralDistribution(object):
 
         .. seealso: the libRadtran manual
         """
-        pass
+        obj = cls()
+        return obj
 
-    def avhrr_kratz(self, i_channel, resolution=0.001):
+    @classmethod
+    def avhrr_kratz(cls, i_channel, resolution=0.001):
         """
 
         :param i_channel: The single AVHRR Kratz channel to obtain. Integer 1 to 16
@@ -619,15 +603,20 @@ class SpectralDistribution(object):
 
         .. seealso: the libRadtran manual
         """
-        pass
+        obj = cls()
+        return obj
 
-    def sensor_channel(self, sensor_name, channel_name):
+    @classmethod
+    def sensor_channel(cls, sensor_name, channel_name):
         """
 
         :param sensor_name:
         :param channel_name:
         :return:
         """
+
+        obj = cls()
+        return obj
 
 class SpectralSpace(object):
     """ A SpectralSpace is a set (represented as a list) of SpectralDistribution objects.
