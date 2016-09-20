@@ -16,6 +16,9 @@ __project__ = 'MORTICIA'
         spf : spatial frequencies, conventionally (for lenses) in cy/mm at the image plane
         fno : focal ratios (ratio of effective focal length to aperture diameter
         wvn : wavenumbers, conventionally in cm^-1
+        fldx : field position in the x-direction
+        fldy : field position in the y-direction
+        fldo : field orientation (direction)
 
         As a basic check when dealing with wavelengths, the following can be observed
         If the wavelength is:
@@ -553,7 +556,7 @@ class Lens(object):
             warnings.warn('WFE for optics.Lens exceeds 0.5 waves. ATF generally invalid for large WFE.')
         defocus_max = 3.5 * 8.0 * 1.0e-6 * wvl_mean * fno**2.0 * np.sqrt(wfe_allowed**2.0 - wfe_max**2.0)
         # Calculate defocus positions in mm
-        z_defocus = np.linspace(0.0, defocus_max, 10)  # 10 defocus positions in mm
+        z_defocus = np.linspace(0.0, defocus_max.data, 10)  # 10 defocus positions in mm
         # Turn this into an identity DataArray
         z_defocus = xd_identity(z_defocus, 'fldz')
         # Now calculate the wfe values for the different defocus positions, bearing in mind that the wfe could
