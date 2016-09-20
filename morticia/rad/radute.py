@@ -546,8 +546,8 @@ avhrr_kratz_units = 'um'
 class SpectralDistribution(object):
     """ The SpectralDistribution class defines any band-limited spectral distribution function. This could be
     the spectral response functions of a sensor, or the spectral transmittance of an optical filter, the spectral
-    radiance, irradiance or any other band-limited spectral quantity. The actual spectral distribution
-    function is represented by an xr.DataArray object with a wavelength axis in preferred units of 'nm'.
+    radiance, irradiance or any other band-limited spectral quantity.
+
     """
     # SpectralChannels is a list of channels that can be indexed in the usual way, by the global channel index
     # _channel_counter = 0  # This is a class global counter, incremented for each channel, so that every
@@ -555,8 +555,10 @@ class SpectralDistribution(object):
     # _channel_list = []  # The global list of spectral channels indexed self.ichn
     # _channel_groups = []  # Global list of channel group names
     # _channel_group_dict = {}  # Dictionary of channels indexed by group name
-    def __init__(self, extreme_limits, in_band_limits):
-        """ Create a spectral distribution function in one of a number of ways:
+    def __init__(self, extreme_limits, in_band_limits=None, in_band_threshold=0.01):
+        """ Create a basic, spectral distribution function with certain spectral band limits
+
+        By default, wavelenths are specified in nm for SpectralDistribution and SpectralSpace objects.
 
         :return: A SpectralDistribution object
         """
@@ -567,7 +569,7 @@ class SpectralDistribution(object):
     @classmethod
     def kato(cls, i_channel, resolution=0.001):
         """ Return a Kato correlated-k channel definition as a SpectralDistribution. Only a single channel can
-        be represented. Use a SpectralSpace
+        be represented. Use a SpectralSpace to get multiple Kato channels
 
         :param i_channel: the single kato channel to be obtained. Integer 1 to 32
         :param resolution: this is the spectral resolution in nm of the band edges. Default 0.001 nm
@@ -582,7 +584,7 @@ class SpectralDistribution(object):
 
     @classmethod
     def fu(cls, i_channel, resolution=0.001):
-        """
+        """ Return a Fu correlated-k channel as a SpectralDistribution
 
         :param i_channel: the single Fu channel to be obtained. Integer 1 to 18
         :param resolution: this is the spectral resolution in nm of the band edges. Default 0.001 nm
@@ -607,11 +609,29 @@ class SpectralDistribution(object):
         return obj
 
     @classmethod
-    def sensor_channel(cls, sensor_name, channel_name):
+    def spectral_slice(cls, extreme_limits, in_band_limits, resolution=0.001, oob_leakage=0.0):
+        """ Create a SpectralDistribution object as a simple spectral slice
+
+        :param extreme_limits:
+        :param in_band_limits:
+        :param resolution:
+        :param oob_leakage:
+        :return:
         """
 
-        :param sensor_name:
-        :param channel_name:
+    @classmethod
+    def sensor_channel(cls, platform_series, platform_name, sensor_name, channel_name):
+        """ Load a spectral response file from the libRadtran-compatible library as a SpectralDistribution
+
+        The available response function filter files can be viewed in the sub-directory rad/radata/filter.
+        Note that only a single channel can be loaded using this method. To load multiple channels, use
+        SpectralSpace.sensor_channels().
+
+        :param platform_series: Name of the series of platforms on which the sensor is carried e.g. 'landsat'
+        :param platform_name: Name of the specific satellite/platform on which the sensor is carried
+            e.g. 'landsat7'
+        :param sensor_name: Name of the specific sensor on the platform e.g. 'tm' or 'etm'
+        :param channel_name: Name of the specific spectral channel on the given sensor e.g.
         :return:
         """
 
@@ -625,18 +645,30 @@ class SpectralSpace(object):
     A sub-range of of Kato or other correlated-k channels (Fu or avhrr_kratz) also qualify.
     The spectral response functions of a sensor can also be represented using a SpectralSpace.
 
-    An important use of SpectralSpaces is to compute "projections" which could also be through of as
+    An important use of SpectralSpaces is to compute "projections" which could also be thought of as
     "dot products". The projection of one SpectralSpace into another comprises multplying the
     distribution functions and integrating over wavelength to obtain a set of weights. The integral is
     typically also normalised to retain equivalent units.
 
     Here are some examples:
     A set of spectral end-member functions can be represented as a SpectralSpace. These end-members might
-     be propagated to calculate an end-member response at a camera focal plane. The end-members are projected
-     onto the spectral response functions of the
+    be propagated to calculate an end-member response at a camera focal plane. The end-members are projected
+    onto the spectral response functions of the sensor to get the sensor responses to each of the end-members.
 
-    Notes: A SpectralSpace is generally not orthogonal
+    Notes: A SpectralSpace is not generally orthogonal unless specifically designed so by the user.
     """
+
+    @classmethod
+    def from_flt_file(cls, filename, re_select=None):
+        """ Create a SpectralSpace list of SpectralDistribution objects by reading a MODTRAN-compatible
+        "filter function" .flt file.
+
+        :param filename: The MODTRAN-compatible .flt file from which to read the filter functions.
+        :param re_select: Select a sub-set of the channels using a regular expression filter. Only the channel
+            names/descriptions that match the regular expression will be included. The default is to read
+            all channels in the file.
+        :return:
+        """
 
 
 
