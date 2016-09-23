@@ -46,6 +46,17 @@ class setup_spectral_group():
 			non_parents=['wavelength_index'],
 		)
 
+		wavelength_step = option(
+			name='wavelength_step',
+			group='spectral',
+			helpstr='Set the wavelength step (in nm) in conjunction with the wavelength range.',
+			documentation=['wavelength_step'],
+			gui_inputs=(),
+			tokens=[],
+			parents=['uvspec'],
+			non_parents=['wavelength_index'],
+		)
+
 		wavelength_index = option(
 			name='wavelength_index',
 			group='spectral',
