@@ -61,9 +61,6 @@ The relevant code here is taken from libRadtran version 2.0
 # TODO Dealing with exceptions, warnings. Keywords missing from the options library etc.
 # TODO dealing with setting of units based on whatever is known about inputs/outputs, thermal is W/m^2/cm^-1
 
-
-_isfloatnum = '^[-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?$'  # regular expression for matching tokens to floating point
-
 import writeLex  # This imports all the libradtran option definitions
 import os
 import easygui  # For file open dialogs
@@ -76,6 +73,8 @@ from morticia.tools.xd import *
 import copy
 from itertools import chain  #Used in RadEnv constructor
 import matplotlib.pyplot as plt
+
+_isfloatnum = '^[-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?$'  # regular expression for matching tokens to floating point
 
 uvsOptions = writeLex.loadOptions()  # Load all options into a global dictionary of uvspec option specifications.
 
@@ -393,6 +392,7 @@ class Case(object):
         self.wavelength_index_range = []  # for use where range() would be applicable
         self.wavelength_grid_file = ''  # This is the name of the wavelength grid file if the option is used
         self.wavelength_grid = None  # Only gets set by self.set_wavelength_grid(wavelength_grid_points)
+        self.wavelength_file = ''  # This associated with the keyword 'wavelength filename'
         self.output_process = 'none'  # Default is to output spectral data. See output_process in uvspec manual
         self.has_ice_clouds = False  # Default, unless discovered otherwise
         self.has_water_clouds = False  # ditto
@@ -1496,7 +1496,8 @@ class Case(object):
             # Determine the units of uu
             uu_units = self.rad_units_str()
             # Build the xr.DataArray
-            qty_name = {'radiance': 'specrad', 'transmittance': 'trnx', 'reflectivity': 'reflx'}[self.output_quantity]
+            qty_name = {'radiance': 'specrad', 'transmittance': 'trnx', 'reflectivity': 'reflx',
+                        'brightness': 'brightness'}[self.output_quantity]
             #print 'self.uu' , self.uu, ' ndim=', self.uu.ndim
             #print spectral_axis
             xd_uu = xr.DataArray(self.uu, [pza, paz, spectral_axis, levels, stokes],
