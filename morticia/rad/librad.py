@@ -76,6 +76,15 @@ import matplotlib.pyplot as plt
 
 _isfloatnum = '^[-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?$'  # regular expression for matching tokens to floating point
 
+# Definitions of basic Shettle/Fenn aerosols in libRadtran
+shettle_aerosol_haze = {'Rural': 1, 'Maritime': 4, 'Urban': 5,
+                    'Tropospheric': 6}  # Shettle/Fenn type aerosols.
+# Seasonal modifications for Shettle/Fenn aerosools
+shettle_aerosol_season = {'Spring-summer': 1, 'Fall-winter': 2}
+# Shettle aerosol type above 2 km - largely stratospheric component
+# driven by large volcanic eruptions
+shettle_aerosol_vulcan = {'Background': 1, 'Moderate': 2, 'High': 3, 'Extreme': 4}
+
 uvsOptions = writeLex.loadOptions()  # Load all options into a global dictionary of uvspec option specifications.
 
 # The following dictionary provides units for some of the source solar files provided with libRadtran
