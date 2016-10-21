@@ -309,6 +309,43 @@ def king_byrne_formula_fit(wavelength, aot):
     alpha_parameters, pcov = curve_fit(king_byrne_formula, wavelength, aot)
     return alpha_parameters[0], alpha_parameters[1], alpha_parameters[2]
 
+def koschmieder_vis(ext_550=None, aot_550=None, scale_height=None, rayleigh_ext=0.01159):
+    ''' Compute visibility in km using the Koschmieder relationship
+     .. math::
+        V_K = \frac{\ln 50}{\epsilon_{aer} + \epsilon{ray}}
+
+        OR
+
+     .. math:
+        V_K = \frac{\ln 50}{\tau_{aer}/ H + \epsilon_{ray}}
+
+        where :math:`V_K` is the visibility in km, :math:`\epsilon_{aer}` is the aerosol extinction coefficient at
+        550 nm in units of inverse km, :math:`\tau_{aer}` is the vertical aerosol optical depth at 550 nm,
+        and :math:`\epsilon_{aer}` is the Rayleigh extinction coefficient, in units of inverse km.
+
+        :math:`H` is the scale height or effective mixing layer height assuming that all aerosols are in the mixing
+        layer. The boundary layer height is usually a good approximation.
+
+    Provide either ext_550 OR aot_550 together with scale_height - the Rayleigh extinction coefficient is optional.
+    :param ext_550: aerosol extinction coefficient at 550nm in units of inverse km
+    :param aot_550: vertical aerosol optical thickness
+    :param scale_height: effective boundary layer height (ABL/mixing height if all aerosols in the mixing layer) in km
+    :param rayleigh_ext: Rayleigh extinction coefficient, defaults to 0.01159 per km.
+    :return: Visibility in km according to the Koschmieder relationship
+    '''
+    try:
+        vis = np.log(50) / (ext_550 + rayleigh_ext)
+        if (aot_550 is not None) or (scale_height is not None):
+            warnings.warn('aot_550 and/or scale_height inputs igonored in librad.koschmieder_vis calculation.')
+    except TypeError:
+        try:
+            vis = np.log(50) / (aot_550 / scale_height + rayleigh_ext)
+        except TypeError:
+            warnings.warn('Invalid input combination for librad.koschmieder_vis calculation provided.')
+            return None
+    return vis
+
+
 class Case(object):
     """ Class which encapsulates a run case of libRadtran/uvspec.
     This class has methods to read libRadtran/uvspec input files, write uvspec input files, run uvspec in parallel on
