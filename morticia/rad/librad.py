@@ -236,7 +236,8 @@ def angstrom_law(wavelength, alpha, beta):
     The Angstrom law is a simple power law that typifies aerosol optical thickness (aka optical depth) variation
     with wavelength. The Angstrom law is expressed as
     .. math::
-        \tau_{aer}=\beta\lambda^{-\alpha}
+
+        \\tau_{aer}=\\beta\\lambda^{-\\alpha}
 
     The Angstrom law can be used to set aerosol optical thickness in libRadtran/uvspec using the `aerosol_angstrom`
     keyword.
@@ -248,7 +249,7 @@ def angstrom_law(wavelength, alpha, beta):
     :param beta: The Angstrom beta (aerosol optical thickness at a wavelength of 1000 nm) parameter
     :return: Aerosol optical thickness at given wavelengths with Angstrom alpha and beta parameters as provided.
 
-    .. sealso::
+    .. seealso::
         librad.angstrom_law_fit, the libRadtran manual
     """
     if np.any(wavelength > 100.0):
@@ -277,15 +278,17 @@ def angstrom_law_fit(wavelength, aot):
 def king_byrne_formula(wavelength, alpha_0, alpha_1, alpha_2):
     """ The King Byrne formula for aerosol optical depth variation with wavelength.
     The King Byrne formula is
+
     .. math::
-        \tau_{aer}=e^{\alpha_{0}}\lambda^{\alpha_{1}}\lambda^{-\alpha_{2}}
+
+        \\tau_{aer}=e^{\\alpha_{0}}\\lambda^{\\alpha_{1}}\\lambda^{-\\alpha_{2}}
 
     :param wavelength: Wavelengths at which the aerosol optical thickness (aka optical depth) is provided in the aot
         input. If any of the wavelengths is larger than 100, then wavelengths are assumed to be in nm, otherwise
         wavelengths are assumed to be in microns.
-    :param alpha_0: The :math:`\alpha_0` parameter
-    :param alpha_1: The :math:`\alpha_1` parameter
-    :param alpha_2: The :math:`\alpha_2` parameter
+    :param alpha_0: The :math:`\\alpha_0` parameter
+    :param alpha_1: The :math:`\\alpha_1` parameter
+    :param alpha_2: The :math:`\\alpha_2` parameter
     :return: Aerosol optical thickness at given wavelengths calculated with the King Byrne formula
 
     """
@@ -294,14 +297,14 @@ def king_byrne_formula(wavelength, alpha_0, alpha_1, alpha_2):
     return np.exp(alpha_0) * wavelength**alpha_1 * wavelength**(alpha_2 * np.log(wavelength))
 
 def king_byrne_formula_fit(wavelength, aot):
-    """ Uses scipi.optimize to fit the King Byrne formula to an array of aerosol optical thickness values
+    """ Uses scipy.optimize to fit the King Byrne formula to an array of aerosol optical thickness values
     provided at the given wavelengths
 
     :param wavelength: Wavelengths at which the aerosol optical thickness (aka optical depth) is provided in the aot
         input. If any of the wavelengths is larger than 100, then wavelengths are assumed to be in nm, otherwise
         wavelengths are assumed to be in microns.
     :param aot: Aerosol optical thickness at the given wavelengths
-    :return: The :math:`\alpha_0`, :math:`\alpha_1` and :math:`\alpha_2`
+    :return: The :math:`\\alpha_0`, :math:`\\alpha_1` and :math:`\\alpha_2`
     """
     from scipy.optimize import curve_fit
     if np.any(wavelength > 100.0):
@@ -312,26 +315,32 @@ def king_byrne_formula_fit(wavelength, aot):
 def koschmieder_vis(ext_550=None, aot_550=None, scale_height=None, rayleigh_ext=0.01159):
     ''' Compute visibility in km using the Koschmieder relationship
      .. math::
-        V_K = \frac{\ln 50}{\epsilon_{aer} + \epsilon{ray}}
 
-        OR
+        V_K = \\frac{\\ln 50}{\\epsilon_{aer} + \\epsilon_{ray}}
 
-     .. math:
-        V_K = \frac{\ln 50}{\tau_{aer}/ H + \epsilon_{ray}}
+     Or,
 
-        where :math:`V_K` is the visibility in km, :math:`\epsilon_{aer}` is the aerosol extinction coefficient at
-        550 nm in units of inverse km, :math:`\tau_{aer}` is the vertical aerosol optical depth at 550 nm,
-        and :math:`\epsilon_{aer}` is the Rayleigh extinction coefficient, in units of inverse km.
+     .. math::
 
-        :math:`H` is the scale height or effective mixing layer height assuming that all aerosols are in the mixing
-        layer. The boundary layer height is usually a good approximation.
+        V_K = \\frac{\\ln 50}{\\tau_{aer}/ H + \\epsilon_{ray}}
 
-    Provide either ext_550 OR aot_550 together with scale_height - the Rayleigh extinction coefficient is optional.
-    :param ext_550: aerosol extinction coefficient at 550nm in units of inverse km
+     where :math:`V_K` is the visibility in km, :math:`\\epsilon_{aer}` is the aerosol extinction coefficient at
+     550 nm in units of inverse km, :math:`\\tau_{aer}` is the vertical aerosol optical depth at 550 nm,
+     and :math:`\\epsilon_{aer}` is the Rayleigh extinction coefficient, in units of inverse km.
+
+     :math:`H` is the scale height or effective mixing layer height assuming that all aerosols are in the mixing
+     layer. The boundary layer height is usually a good approximation.
+
+    Provide either ``ext_550`` OR ``aot_550`` together with ``scale_height``.
+    The Rayleigh extinction coefficient is optional.
+
+    :param ext_550: aerosol extinction coefficient :math:`\\tau_{aer}` at 550nm in units of inverse km
     :param aot_550: vertical aerosol optical thickness
     :param scale_height: effective boundary layer height (ABL/mixing height if all aerosols in the mixing layer) in km
     :param rayleigh_ext: Rayleigh extinction coefficient, defaults to 0.01159 per km.
     :return: Visibility in km according to the Koschmieder relationship
+
+    The relationship used here is taken from the MODTRAN manual.
     '''
     try:
         vis = np.log(50) / (ext_550 + rayleigh_ext)
@@ -344,7 +353,6 @@ def koschmieder_vis(ext_550=None, aot_550=None, scale_height=None, rayleigh_ext=
             warnings.warn('Invalid input combination for librad.koschmieder_vis calculation provided.')
             return None
     return vis
-
 
 class Case(object):
     """ Class which encapsulates a run case of libRadtran/uvspec.
@@ -713,7 +721,7 @@ class Case(object):
         :param option: A list containing the keyword and keyword parameters (tokens). Boson keywords must be passed
             in "welded". e.g. x.append_option(['mol_modify O3', '270.0',  'DU'])
         :param origin: A 2-tuple giving the origin of the option and a "line number" reference. Default ('user', None)
-        uvspec options.
+            uvspec options.
         :return:
         """
         # May have a boson keyword passed in, so split at spaces
@@ -839,7 +847,7 @@ class Case(object):
         Sets the sun and observer zenith and azimuth angles. Note that libRadtran/uvspec sets the light
         propagation azimuth angle in the ``phi`` and ``phi0`` inputs. This is 180$^\circ$ different in
         azimuth to the direction of viewing. The ``phi0`` input is the direction of solar light propagation
-        from the sun and is 180$^\circ$ from the saa input here. However, the ``phi`` input is the direction
+        from the sun and is :math:`180^\\circ` from the saa input here. However, the ``phi`` input is the direction
         of light propagation from target to sensor and is therefore *the same* as the oaa input to this
         function.
 
@@ -848,7 +856,7 @@ class Case(object):
 
         Also, from the libRadtran manual :
         phi = phi0 indicates that the sensor looks into the direction of the sun, while
-        phi-phi0 = 180$^\circ$ means that the sun is at the back of the sensor
+        phi-phi0 = 180 deg means that the sun is behind the sensor.
 
         :param sza: solar zenith angle in degrees from the zenith (range 0 to 90 degrees)
         :param saa: solar azimuth angle in degrees from north through east (range zero to )
@@ -1007,6 +1015,7 @@ class Case(object):
         """ Distribute flux/user data read from uvspec output file to various data fields.
         This method will look at `output_user` options and attempt to assign flux/user data in a sensible way.
         .. note::
+
             There are potentially uvspec output formats that are not possible to process or to assign correctly.
             These are typically cases in which it is not possible to determine from the .INP and/or .OUT file
             how this data should be assigned.
@@ -1194,7 +1203,7 @@ class Case(object):
         For the solvers ``disort``, ``sdisort``, ``spsdisort`` and presumably also ``disort2``, the irradiance (flux) outputs default
         to
         ::
-         lambda edir edn eup uavgdir uavgdn uavgup
+            lambda edir edn eup uavgdir uavgdn uavgup
 
         If radiances (intensities) have been requested with the umu
         (cosine zenith angles input), each line of flux data is followed
