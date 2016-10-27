@@ -392,13 +392,17 @@ class Flt(object):
         with open(filename, 'wt') as fltfile:
             fltfile.write(selfrep)
 
-    def plot(self):
+    def plot(self, filter_numbers = None):
         """ Plot a MODTRAN-style set of filter/SRF curves.
+
+        :param filter_numbers: List of filter numbers to plot, defaults to all filters. Filter indices start at 0.
 
         :return: None
         """
         plt.hold(True)
-        for ifilt in range(self.nfilters):
+        if filter_numbers is None:
+            filter_numbers = range(self.nfilters)
+        for ifilt in filter_numbers:
             if self.unitsheader == 'W':
                 plt.plot(self.filters[ifilt][:, 2], self.filters[ifilt][:,1])
             elif self.unitsheader == 'N':
