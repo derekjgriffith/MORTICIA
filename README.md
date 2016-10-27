@@ -8,7 +8,7 @@ an open-source optical remote sensing and surveillance modelling framework writt
 surveillance system are deployed or to be deployed. Besides the engineering characteristics of the optical remote sensing or 
 surveillance system, the atmosphere plays a key role in determining system effectiveness. In the case of a 
 surveillance system, effectiveness may be quantified in terms of the range at which targets can be 
-Detected, Recognised or Identified (DRI) 
+Detected, Recognised or Identified (DRI). 
   
   Some of the key capabilities of ``MORTICIA`` are:
 
@@ -26,7 +26,7 @@ Detected, Recognised or Identified (DRI)
  + Surface reflectance climatology (e.g. vegetation state)
  + Atmospheric turbulence climatology
  
-The atmopsheric turbulence climatology is especially important for high resolution, long range optical 
+The atmospheric turbulence climatology is especially important for high resolution, long range optical 
 surveillance systems deployed within the Atmospheric Boundary Layer (ABL). High resolution space sensors are
 impacted less by turbulence in general.
  
@@ -47,7 +47,6 @@ impacted less by turbulence in general.
  + target geometry and optical characteristics
  + sensor characteristics
  + radiant environment maps (using the libRadtran radiative transfer code)
- 
  
 ## Documentation
  Code documentation for ``MORTICIA`` is generated using [Sphinx](http://sphinx-doc.org).
