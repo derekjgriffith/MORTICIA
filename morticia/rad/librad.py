@@ -1532,9 +1532,9 @@ class Case(object):
         elif self.spectral_axis == 'wvn':
             spectral_axis = xd_identity(self.wvn, 'wvn', 'cm^-1')  # The spectral axis is wavenumber
         elif self.spectral_axis == 'chn':  # The spectral axis is channel number
-            if self.wvl:
+            if np.any(self.wvl):
                 spectral_axis = xd_identity(self.wvl, 'wvl','nm')
-            elif self.wvn:
+            elif np.any(self.wvn):
                 spectral_axis = xd_identity(self.wvn, 'wvn', 'cm^-1')
         else:
             spectral_axis = xd_identity(np.nan, 'unknown', 'unknown')  # Don't know what is going on, so just put in something
