@@ -2291,8 +2291,129 @@ class RadEnv(object):
 
 
 
+    def write_openexr(self, filename, chan_names=None, chan_per_exr=3, normalise=False, half=False, repeat_azi=1,
+                      use_mitsuba_wvl=False):
+        """Write a radiant environment as an OpenEXR file or set of OpenEXR files.
+
+        Use of this method requires that the OpenEXR package be installed on your platform. This can be a problem
+        for Windows. However, it should be possible to find a Python wheel (.whl) file for Windows which will
+        enable installation if pip cannot do the job.
+
+        :param filename: Name of the file to which the OpenEXR environment map should be written. If multiple exr
+            files are written, this will be the filename prefix. No default.
+        :param chan_names: String or list of strings giving the names to be used for the channels. For example
+            give 'RGB' if channels 'R', 'G' and 'B' if RGB files are to be written. This is the same as giving
+            ['R', 'G', 'B']. If there are insufficient channel names for all the wavelengths, the names are
+            reused.
+        :param chan_per_exr: Number of spectral channels to write per exr file. Default is 3.
+        :param normalise: Boolean. Normalise all channels to the maximum value (in any one file). Default False.
+            Normalisation will make ti possible to display the .exr file in IrfanView or mtsgui (Mitsuba GUI), but
+            will destroy the radiometric correctness.
+        :param half: Boolean. Use float16 instead of default float32. Halves data size at cost of radiometric
+            resolution.
+        :param repeat_azi: Integer. Repeat the data in the REM azimuthal direction. This is mostly a convenience for
+            display purposes when the REM has no azimuthal variation (e.g. in the thermal bands).
+        :param use_mitsuba_wvl: Boolean. If set True, write channels using the Mitsuba wavelength assignments i.e.
+            remap wavelengths to the 360 nm to 830 nm range. Setting this flag True will also scale the radiance
+            values to W/m^2/sr/nm, which are the canonical units for Mitsuba rendering in the context of MORTICIA.
+
+        :return:
+        """
+        import OpenEXR
+        import Imath
+
+        datashape = self.xd_uu[:,:,0,0,0].shape
+        wvl = self.xd_uu.wvl.data  # Might not exist, but assume it does
+        n_wvl = np.float(wvl.size)  # Number of wavelengths
+        wvl_units = self.xd_uu.wvl.units
+        rad_units = self.xd_uu.units
+
+        zout = self.xd_uu.zout.data  # output levels
+        n_zout = zout.size  # Number of output levels
+        n_exr_files = np.int(np.ceil(n_wvl / chan_per_exr))
+        #print wvl
+        #print n_wvl
+        #print
+        #print n_exr_files
+        #print
+        xd_uu = self.xd_uu[:,:,:,:,0].data  # elevation/azi, wvl, zout and polarization - take only first pol component
+        #  (I)
+        if half:  # Use 16-bit floating point values
+            np_type = np.float16
+            imath_type = Imath.PixelType.HALF
+        else:  # Use 32 bit floating point values
+            np_type = np.float32
+            imath_type = Imath.PixelType.FLOAT
+        imath_chan = Imath.Channel(Imath.PixelType(imath_type))
+        # Generate channel names
+        if use_mitsuba_wvl:  # Map wavelength channels to equally space channels in the 360 nmto 830 nm range
+            channel_names=[]
+            channel_interval = (830.0 - 360.0) / (chan_per_exr)
+            chan_start = np.arange(360.0, 830.0, channel_interval)
+            chan_stop = chan_start + channel_interval
+            for i_chan, chan_start_wvl in enumerate(chan_start):
+                channel_names.append('{:.2f}'.format(chan_start[i_chan]) + '-' + '{:.2f}'.format(chan_stop[i_chan]) +
+                                     wvl_units)
+            if rad_units[0:2] == 'mW':
+                xd_uu = xd_uu/1000.0  # Convert to W/m^2 ....
+                rad_units = rad_units[1:]
+
+        else:  # Use provided channel names or default channel names
+            if chan_names is None:
+                channel_names = []
+                if chan_per_exr == 3:
+                    channel_names = 'RGB'
+                else:
+                    for i_chan, wvl_chan in enumerate(wvl):
+                        channel_names.append('{:.3f}'.format(wvl_chan) + '-' + '{:.3f}'.format(wvl_chan) + wvl_units)
+            else:
+                channel_names = chan_names
+        n_channel_names = len(channel_names)
+        #print channel_names
 
 
+        # Run through EXR files and write them out
+        for i_zout, zout_value in enumerate(zout):
+            for i_exr in range(n_exr_files):
+                # Generate the file header
+                theheader = OpenEXR.Header(datashape[1] * repeat_azi, datashape[0])
+                # Add some metadata
+                theheader['generatedBy'] = 'morticia.rad.librad'
+                theheader['zout'] = str(zout_value)
+                theheader['zout_units'] = 'km'
+                theheader['rad_units'] = rad_units
+                theheader['wvl_units'] = wvl_units
+                theheader['wvl'] = 'np.' + repr(wvl)
+                channels = []
+                i_channels = []
+                chan_data = {}
+                chan_max = 0.0
+                for i_chan in range(i_exr * chan_per_exr, (i_exr + 1) * chan_per_exr):
+                    if i_chan > n_wvl - 1:
+                        break
+                    # Append the channel names
+                    this_channel_name = channel_names[int(np.mod(i_chan, n_channel_names))]
+                    channels.append(this_channel_name)
+                    i_channels.append(i_chan)
+                    # Build the channel data
+                    single_chan_data = xd_uu[:,:,i_chan,i_zout].astype(np_type)
+                    if repeat_azi > 1:
+                        single_chan_data = np.tile(single_chan_data, (1, repeat_azi))
+                    if normalise:
+                        single_channel_max = np.max(single_chan_data)
+                        chan_max = max(chan_max, single_channel_max)
+                    chan_data[this_channel_name] = single_chan_data
+                if normalise:
+                    for channel_key in chan_data:
+                        chan_data[channel_key] /= chan_max
+                theheader['channels'] = dict([(c, imath_chan) for c in channels])
+                theheader['i_channels'] = str(i_channels)
+                exr_filename = filename + '{:04d}'.format(min(i_channels)) + '_' + '{:04d}'.format(max(i_channels)) + \
+                                'z' + str(zout_value) + '.exr'
+                #print exr_filename
+                exr = OpenEXR.OutputFile(exr_filename, theheader)
+                exr.writePixels(dict([this_channel, chan_data[this_channel].tostring()] for this_channel in channels))
+                exr.close()
 
 
 
