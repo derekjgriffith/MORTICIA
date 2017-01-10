@@ -1645,6 +1645,7 @@ class Case(object):
 
 
 class RadEnv(object):
+
     """ RadEnv is a class to encapsulate a large number of uvspec runs to cover a large number of sightlines over the
     whole sphere. A radiance map over the complete sphere is called a radiant environment map. The uvspec utility can
     only handle a limited number of sighlines per run, determined by the maximum number of polar and azimuthal angles
@@ -1662,7 +1663,8 @@ class RadEnv(object):
 
     """
 
-    def __init__(self, base_case, n_pol, n_azi, mxumu=48, mxphi=19, hemi=False, n_sza=0):
+    def __init__(self, base_case, n_pol, n_azi, mxumu=48, mxphi=19, hemi=False, n_sza=0): #, albedos=None,
+                 #sur_temperatures=None):
         """ Create a set of uvspec runs covering the whole sphere to calculate a full radiant environment map.
         Where the base_case is the uvspec case on which to base the environmental map, Name is the name to give the
         environmental map and n_pol and n_azi are the number of polar and azimuthal sightline angles to generate. The
@@ -1678,7 +1680,8 @@ class RadEnv(object):
             `output_quantity` keywords, which change the units and/or format of the libRadtran/uvspec output.
              Minimal validation of the basecase is performed. However, use with `mol_abs_param` such as `kato` and
              `fu` is important for `MORTICIA` and these are supported (k-distribution or `correlated-k`
-             parametrizations).
+             parametrizations). Use of `output_process per_nm` is appropriate for `source thermal` REMs to get
+             radiance units per nanometre rather than per inverse cm.
         :param n_pol: Number of polar angles (view/propagation zenith angles)
         :param n_azi: Number of azimuthal angles.
         :param mxumu: Maximum number of polar angles per case.
@@ -1689,6 +1692,17 @@ class RadEnv(object):
             This is the recommended mode (hemi=True) for MORTICIA purposes, since it reduces execution time.
         :param n_sza: The number of solar zenith angles (SZA) at which to perform transmittance and path radiance
             computations. Each SZA will result in another run of the base case (no radiances)
+
+            The following not implemented
+        :param albedo: List of surface albedo values at which to run the entire REM. Default is None, which means
+            that the surface albedo will default to whatever is specified in the base_case. If not specified in the
+            base_case, the surface albedo will default to zero. Surface albedo is only valid for `source solar`
+            RT calculations.
+        :param sur_temperatures: List/array of surface temperatures at which to run a `source thermal` REM. The
+            default is None, which will cause the surface temperature to default to whatever is specified in the
+            base_case. If sur_temperature is not specified in the case_case, the surface temperature will default to
+            the temperature of the lowest level in the atmospheric temperature profile.
+
 
         The solver cdisort may have dynamic memory allocation, so the warning is still issued because the situation
         is less clear.
@@ -1769,6 +1783,8 @@ class RadEnv(object):
         self.hemi = hemi
         self.n_azi = n_azi
         self.n_pol = n_pol
+        #self.albedos = albedos  # Surface albedos at which to run the REMs
+        #self.sur_temperatures = sur_temperatures  # Surface temperatures at which to run the REM
         self.n_azi_batch = n_azi_batch
         self.n_pol_batch = n_pol_batch
         self.phi = xd_identity(prop_azi_angles, 'phi', 'deg')
@@ -2317,27 +2333,34 @@ class RadEnv(object):
             remap wavelengths to the 360 nm to 830 nm range. Setting this flag True will also scale the radiance
             values to W/m^2/sr/nm, which are the canonical units for Mitsuba rendering in the context of MORTICIA.
 
+        Notes
+        -----
+        Polarization is not dealt with. Only the first Stokes component (I) is written to the EXR files.
+        The number of channel names should be equal to the number of channels per EXR file, but this is not
+        enforced.
+        Irfanview can display three-component, normalised EXR files only. The Mitsuba GUI (mtsgui) can display
+        EXR files with any number of channels, but it is necessary to step through the channels (using [ and ])
+        and they are displayed in grayscale. Even mtsgui will clip EXR files having radiance values exceeding 1.0.
+
+
         :return:
         """
         import OpenEXR
         import Imath
 
-        datashape = self.xd_uu[:,:,0,0,0].shape
+
         wvl = self.xd_uu.wvl.data  # Might not exist, but assume it does
         n_wvl = np.float(wvl.size)  # Number of wavelengths
         wvl_units = self.xd_uu.wvl.units
         rad_units = self.xd_uu.units
-
         zout = self.xd_uu.zout.data  # output levels
         n_zout = zout.size  # Number of output levels
         n_exr_files = np.int(np.ceil(n_wvl / chan_per_exr))
-        #print wvl
-        #print n_wvl
-        #print
-        #print n_exr_files
-        #print
-        xd_uu = self.xd_uu[:,:,:,:,0].data  # elevation/azi, wvl, zout and polarization - take only first pol component
-        #  (I)
+        # Currently cannot handle polarization, stick to output of the first stokes component (I)
+        xd_uu = self.xd_uu[:,:,:,:,0].data  # Zero in last index is stokes I
+        if self.hemi:  # Need to double up by reflection left right
+            xd_uu = np.concatenate((xd_uu[:, ::-1, ...], xd_uu), axis=1)
+        datashape = xd_uu[:,:,0,0].shape
         if half:  # Use 16-bit floating point values
             np_type = np.float16
             imath_type = Imath.PixelType.HALF
@@ -2369,9 +2392,11 @@ class RadEnv(object):
             else:
                 channel_names = chan_names
         n_channel_names = len(channel_names)
-        #print channel_names
-
-
+        # Number of channel names should be equal to the number of channels per exr
+        if n_channel_names != chan_per_exr:
+            warnings.warn('Number of channel names should equal number of channels per EXR file when writing'
+                          '.exr files from REMs.')
+        # print channel_names
         # Run through EXR files and write them out
         for i_zout, zout_value in enumerate(zout):
             for i_exr in range(n_exr_files):
