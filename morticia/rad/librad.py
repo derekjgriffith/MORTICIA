@@ -1663,8 +1663,7 @@ class RadEnv(object):
 
     """
 
-    def __init__(self, base_case, n_pol, n_azi, mxumu=48, mxphi=19, hemi=False, n_sza=0): #, albedos=None,
-                 #sur_temperatures=None):
+    def __init__(self, base_case, n_pol, n_azi, mxumu=48, mxphi=19, hemi=False, n_sza=0):
         """ Create a set of uvspec runs covering the whole sphere to calculate a full radiant environment map.
         Where the base_case is the uvspec case on which to base the environmental map, Name is the name to give the
         environmental map and n_pol and n_azi are the number of polar and azimuthal sightline angles to generate. The
@@ -1692,16 +1691,6 @@ class RadEnv(object):
             This is the recommended mode (hemi=True) for MORTICIA purposes, since it reduces execution time.
         :param n_sza: The number of solar zenith angles (SZA) at which to perform transmittance and path radiance
             computations. Each SZA will result in another run of the base case (no radiances)
-
-            The following not implemented
-        :param albedo: List of surface albedo values at which to run the entire REM. Default is None, which means
-            that the surface albedo will default to whatever is specified in the base_case. If not specified in the
-            base_case, the surface albedo will default to zero. Surface albedo is only valid for `source solar`
-            RT calculations.
-        :param sur_temperatures: List/array of surface temperatures at which to run a `source thermal` REM. The
-            default is None, which will cause the surface temperature to default to whatever is specified in the
-            base_case. If sur_temperature is not specified in the case_case, the surface temperature will default to
-            the temperature of the lowest level in the atmospheric temperature profile.
 
 
         The solver cdisort may have dynamic memory allocation, so the warning is still issued because the situation
@@ -2441,5 +2430,57 @@ class RadEnv(object):
                 exr.close()
 
 
+class HyperRadEnv(RadEnv):
+    """A higher dimensional form of radiant environment map REM. This class inherits from RadEnv.
+     A RadEnv instance has mandatory radiance data dimensions of propagation zenith angle (pza), propaation azimuth
+     angle (paz), wavelength, height above surface (zout) and stokes parameter. These are the outputs that can all
+     be obtained from a single run of libRadtran. The HyperRadEnv allows for increasing the dimensionality of the
+     REM dataset using other (typically scalar) inputs to libRadtran. Most significant amongst these are solar
+     zenith angle (sza), surface albedo (albedo) and surface temperature (sur_temperature). Solar zenith angle and
+     albedo are only applicable in `source solar` runs, while sur_temperature is only applicable in `source thermal`
+     REMs.
+
+     Other possible higher dimensions that can be added include:
+     Aerosol loading as specified by visibility or optical depth
 
 
+
+    """
+
+    def __init__(self, base_case, n_pol, n_azi, hyper_axes, mxumu=48, mxphi=19, hemi=False, n_sza=0):
+        """ Create a set of uvspec runs covering the whole sphere to calculate a full radiant environment map.
+        Where the base_case is the uvspec case on which to base the environmental map, Name is the name to give the
+        environmental map and n_pol and n_azi are the number of polar and azimuthal sightline angles to generate. The
+        mxumu and mxphi are the maximum number of polar and azimuth angles to calculate in a single run of uvspec.
+        The default values are mxumu = 48, and mxphi = 19. These values are taken from the standard libRadtran
+        distribution (/libsrc_f/DISORT.MXD) maximum parameter file. If using the polradtran solver, the corresponding
+        file is /libsrc_f/POLRADTRAN.MXD. Other solvers may have different restrictions. A warning will be issued if
+        the solver is not in the DISORT/POLRADTRAN family.
+
+        :param base_case: librad.Case object providing the case on which the environment map is to be based. Note
+            that not any basecase can be used. As a general guideline, the basecase should have standard irradiance
+            outputs (i.e. should not use the `output_user` keyword). It should also not the use `output_process` or
+            `output_quantity` keywords, which change the units and/or format of the libRadtran/uvspec output.
+             Minimal validation of the basecase is performed. However, use with `mol_abs_param` such as `kato` and
+             `fu` is important for `MORTICIA` and these are supported (k-distribution or `correlated-k`
+             parametrizations). Use of `output_process per_nm` is appropriate for `source thermal` REMs to get
+             radiance units per nanometre rather than per inverse cm.
+        :param n_pol: Number of polar angles (view/propagation zenith angles)
+        :param n_azi: Number of azimuthal angles.
+        :param hyper_axes: Dictionary of libRadtran keywords, with a list (or numpy array) of values to assign  to
+            that keyword to create multiple copies of the REM e.g. {'sza': [0.0 30.0 45.0]} will create 3 runs of the
+            REM with these solar zenith angles. Note that the number of REMs goes up very rapidly. If 3 surface
+            albedo values as well as 3 solar zenith angles, the compute overhead goes up by a factor of 9.
+            In general, the keywords should have a scalar and numeric input (such as `albedo`, `sza` and
+            `sur_temperature`). This input parameter is mandatory and there is no default.
+        :param mxumu: Maximum number of polar angles per case.
+        :param mxphi: Maximum number of azimuthal angles per case.
+        :param hemi: If set True, will generate only a single hemisphere being on one side of
+            the solar principle plane. Default is False i.e. the environment map covers the full sphere.
+            Note that if hemi=True, the number of REM samples in azimuth becomes n_azi :math:`\\times` 2.
+            This is the recommended mode (hemi=True) for MORTICIA purposes, since it reduces execution time.
+        :param n_sza: The number of solar zenith angles (SZA) at which to perform transmittance and path radiance
+            computations. Each SZA will result in another run of the base case (no radiances)
+
+
+        """
