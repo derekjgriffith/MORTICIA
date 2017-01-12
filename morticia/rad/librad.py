@@ -1996,6 +1996,7 @@ class RadEnv(object):
             self.compute_path_radiance()
         if purge:
             del self.casechain
+            del self.cases
 
     def run_parallel(self, n_nodes=4):
         """ Run the RadEnv in multiprocessing mode on the local host.
