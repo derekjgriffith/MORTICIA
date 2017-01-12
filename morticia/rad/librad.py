@@ -1970,9 +1970,16 @@ class RadEnv(object):
         self.xd_uu['pza'] = self.pza
         self.xd_uu['paz'] = self.paz
         # Also need to obtain the irradiances from one of the cases - they should actually all be the same
-        # TODO : Obtain self.fluxdata from one of the self.cases
-        self.fluxdata = self.casechain[0].fluxdata  # Would really want this as a xr.DataArray
-        self.fluxline = self.casechain[0].fluxline
+        fluxdata = self.casechain[0].fluxdata  # Would really want this as a xr.DataArray
+        fluxline = self.casechain[0].fluxline
+        irrad_units = self.casechain[0].irrad_units_str()
+        # Promote irradiance data from
+        for flux_component in fluxline:
+            if hasattr(self.casechain[0], 'xd_' + flux_component):
+                setattr(self, 'xd_' + flux_component, getattr(self.casechain[0], 'xd_' + flux_component))
+        self.fluxdata = fluxdata
+        self.fluxline = fluxline
+        self.irrad_units = irrad_units
         # Run the transmittance sequences if there are any
         if self.n_sza:
             self.trans_cases = ipyparallel_view.map(Case.run, self.trans_cases)
@@ -2336,8 +2343,6 @@ class RadEnv(object):
         """
         import OpenEXR
         import Imath
-
-
         wvl = self.xd_uu.wvl.data  # Might not exist, but assume it does
         n_wvl = np.float(wvl.size)  # Number of wavelengths
         wvl_units = self.xd_uu.wvl.units
@@ -2348,7 +2353,8 @@ class RadEnv(object):
         # Currently cannot handle polarization, stick to output of the first stokes component (I)
         xd_uu = self.xd_uu[:,:,:,:,0].data  # Zero in last index is stokes I
         if self.hemi:  # Need to double up by reflection left right
-            xd_uu = np.concatenate((xd_uu[:, ::-1, ...], xd_uu), axis=1)
+            # Note that this puts azimuth
+            xd_uu = np.concatenate((xd_uu, xd_uu[:, -2:0:-1, ...]), axis=1)
         datashape = xd_uu[:,:,0,0].shape
         if half:  # Use 16-bit floating point values
             np_type = np.float16
@@ -2385,7 +2391,6 @@ class RadEnv(object):
         if n_channel_names != chan_per_exr:
             warnings.warn('Number of channel names should equal number of channels per EXR file when writing'
                           '.exr files from REMs.')
-        # print channel_names
         # Run through EXR files and write them out
         for i_zout, zout_value in enumerate(zout):
             for i_exr in range(n_exr_files):
