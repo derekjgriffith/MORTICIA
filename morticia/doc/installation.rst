@@ -24,8 +24,8 @@ Anaconda package. The most important of are:
 
 - ``numpy`` and ``scipy`` : The mainstay of technical computing in Python.
 - ``matplotlib`` : Plotting.
-- ``xray`` : A package for handling N-dimensional data arrays and datasets with named axes. Also for reading and writing
-  data from netCDF format files.
+- ``xarray`` : A package for handling N-dimensional data arrays and datasets with named axes. Also for reading and
+writing data from netCDF format files.
 - ``pandas`` : For handling time-series and data in a tabular/relational view.
 - ``pint`` : for handling unit checking and conversion. Note that using ``pint`` for all numerical operations is not
   recommended and not done in ``MORTICIA``. Rather, a ``pint`` Quantity object can be carried as metadata to an
@@ -38,6 +38,7 @@ Anaconda package. The most important of are:
 - ``dill`` will be required if running libRadtran on remote machines using ``ipyparallel``
 - ``paramiko`` will be required for authentication when using ``ipyparallel`` across machine boundaries
 - ``openexr`` for writing environment maps to OpenEXR files
+- ``Mitsuba`` for physically-based rendering of scenes (version 0.5.0)
 
 Obtatining working installations on Windows is sometimes problematic. Unofficial Python Wheel dsitributions for
 Windows can be obtained from `Christoph Gohlke <http://www.kaij.org/blog/?p=123>`_.
@@ -46,6 +47,29 @@ For example, the ``OpenEXR`` package may have to be downloaded as a Python Wheel
 with ``pip``::
 
     C:\Ananconda> pip install OpenEXR-1.2.0-cp27-none-win_amd64.whl
+
+Environment maps written in the OpenEXR format are used for integration with the Mitsuba rendering system.
+
+Mitsuba
+-------
+
+For physically-based rendering of target scenes, the preferred rendering system is `Mitsuba <http://www
+.mitsuba-renderer.org/>`_. Mitsuba must be compiled in the spectral mode with the number of spectral bins
+set to 4 or more. The optimal number of bins depends on numerous factors, such as
+- If Mitsuba is to be run in parallel mode across a number of network compute resources
+- The complexity of the scenes to be rendered
+- The number of spectral bins that are actually required for the problem at hand
+
+Mitsuba has a number of "integrators", being the plugins that actually implement different rendering schemes.
+The path tracer (``path``) is the integrator to be selected for general purposes, where there is direct and indirect
+illumination of the scene. For faster renders, the direct illumination integrator (``direct``) provides good quality
+renders without indirect illumination components. For the path tracer, the Hammersley QMC sampler is preferred, with
+as many as 256 samples per pixel or more to reduce monte carlo noise.
+
+See the mitsuba documentation for further details.
+
+A specific limitation with Mitsuba is that compilations with different numbers of spectral bins are not compatible
+with one another. It is useful to have an RGB version of Mitsuba available to compute distance maps of a scene
 
 Setup of ``ipyparallel``
 ========================
@@ -83,6 +107,10 @@ following general steps must be followed:
   or upgraded, in particular the ``xarray`` package (`pip install --upgrade xarray`).
 - On Windows, it may be necessary to run the command window as Administrator to get the necessary priveledges for
   package installation and upgrading.
+
+It is very important to keep the ``MORTICIA`` code the same on all platforms in use. Git pull the code and restart the
+compute engines on the compute nodes if the ``MORTICIA`` codebase is altered. Also restart on the host. The typical
+symptom of code that is out of sync when using `ipyparallel` is a PicklingError exception.
 
 MORTICIA Development
 ====================
