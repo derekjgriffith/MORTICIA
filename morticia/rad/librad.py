@@ -155,6 +155,7 @@ uvspecOutVars = {
     'T': 'Temperature [K]',
     'T_d': 'Dewpoint temperature [K]',
     'T_sur': 'Surface temperature [K]',
+    'sur_temperature': 'Surface Temperature [K]',
     'theta': 'Potential temperature [K]',
     'theta_e': 'Equivalent potential temperature [K]',
     'rh': 'Relative humidity over water [%]',
@@ -1772,8 +1773,6 @@ class RadEnv(object):
         self.hemi = hemi
         self.n_azi = n_azi
         self.n_pol = n_pol
-        #self.albedos = albedos  # Surface albedos at which to run the REMs
-        #self.sur_temperatures = sur_temperatures  # Surface temperatures at which to run the REM
         self.n_azi_batch = n_azi_batch
         self.n_pol_batch = n_pol_batch
         self.phi = xd_identity(prop_azi_angles, 'phi', 'deg')
