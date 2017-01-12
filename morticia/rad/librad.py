@@ -1919,7 +1919,7 @@ class RadEnv(object):
             self.cloud_detect_cases.append(copy.deepcopy(self.trans_base_case))
             self.cloud_detect_cases[2].alter_option(['cloudcover', '1.0'])
 
-    def run_ipyparallel(self, ipyparallel_view, stderr_to_file=False):
+    def run_ipyparallel(self, ipyparallel_view, stderr_to_file=False, purge=False):
         """ Run a complete set of radiant environment map cases of libRadtran/uvspec using the `ipyparallel`
         Python package, which provides parallel computation from Jupyter notebooks and other Python launch
         modes.
@@ -1940,6 +1940,9 @@ class RadEnv(object):
 
         :param stderr_to_file: If set to True, standard error output will be sent to a file. use only for debugging
             purposes.
+        :param purge: Boolean. If set True, the actual libRadtran cases that are executed to make up the REM are
+            deleted in order to reduce the size of the object. If the object is purged, it is not possible to rerun
+            the REM. Default is False - no purging (or minimal purging) is performed.
         :return:
         """
         # The following does work, but the list casechain is completely reassigned
@@ -1991,6 +1994,8 @@ class RadEnv(object):
             self.compute_path_transmittance()
             # Compile the path radiance data
             self.compute_path_radiance()
+        if purge:
+            del self.casechain
 
     def run_parallel(self, n_nodes=4):
         """ Run the RadEnv in multiprocessing mode on the local host.
