@@ -2210,15 +2210,14 @@ class RadEnv(object):
         # This is actually transmittance data (edir is not a flux/irradiance with output_quantity reflectivity)
         for trans_case in self.trans_cases:
             # Add a propagation zenith angle for each sza. The pza is pi - sza (in radians)
-            # trans_case.xd_edir = trans_case.xd_edir.assign_coords(pza=np.pi - np.deg2rad(trans_case.sza))
             trans_case.xd_edir = trans_case.xd_edir.assign_coords(pza=np.deg2rad(trans_case.sza))
         # Concatenate results from all transmission runs
-        self.xd_edir = xr.concat([this_case.xd_edir for this_case in self.trans_cases], dim='pza')
+        self.xd_edir_trans = xr.concat([this_case.xd_edir for this_case in self.trans_cases], dim='pza')
         # Interpolate transmission results onto the pza grid for the RadEnv
         # This is not a "harmonisation" interpolation. The transmission grid is being interpolated
         # onto another grid in pza (propagation zenith angle)
         # TODO : Check out reliability of using quadratic/cubic interpolation for transmittance
-        self.xd_trans_toa = xd_interp_axis_to(self.xd_edir, self.xd_uu, axis='pza', interp_method='linear',
+        self.xd_trans_toa = xd_interp_axis_to(self.xd_edir_trans, self.xd_uu, axis='pza', interp_method='linear',
                                               fill_value=1.0, assume_sorted=False)
         self.xd_opt_depth = -np.log(self.xd_trans_toa)  # Compute the optical depths from a level to TOA
         # Subtract the optical depth of the level above it.
