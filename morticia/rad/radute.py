@@ -642,6 +642,15 @@ class SpectralDistribution(object):
         obj = cls()
         return obj
 
+    def decimate_resolution(self):
+        """ Reduce the number of sample points representing the spectral distribution in an intelligent way.
+
+        This procedure only works for positive spectral power distributions.
+
+        :return:
+        """
+
+
 class SpectralSpace(object):
     """ A SpectralSpace is a set (represented as a list) of SpectralDistribution objects.
 
@@ -675,6 +684,79 @@ class SpectralSpace(object):
         """
 
 
+
+# Some simple OpenEXR utility functions for integration with Numpy
+# For more complex OpenEXR handling, use a class
+def readOpenEXR(filename):
+    """ Simple read function for an OpenEXR file
+
+    Use of this function requires that the OpenEXR package be installed.
+    :param filename: The name of the OpenEXR file
+    :return channel_names: List of image channel names found in the OpenEXR file
+    :return im_dict: All image data in a dictionary keyed by channel names or channel groups. Channels are grouped
+        into RGB triplets if the channel names have the form prefix.R, prefix.G and prefix.B.
+        All image data is returned as numpy arrays.
+    :return header: OpenEXR header as a dictionary.
+    """
+    import OpenEXR
+    import Imath
+    if not OpenEXR.isOpenExrFile(filename):
+        raise IOError('OpenEXR file was not found, or file is not OpenEXR.')
+    exr_file = OpenEXR.InputFile(filename)
+    header = exr_file.header()  # Returns a dict
+    channel_names = header['channels'].keys()
+    data_window = header['dataWindow']
+    size = (data_window.max.x - data_window.min.x + 1, data_window.max.y - data_window.min.y + 1)
+    # Read all channels
+    im_FLOAT = np.array([], dtype=np.float32)
+    im_HALF = np.array([], dtype=np.float16)
+    im_UINT = np.array([], dtype=np.uint32)
+    im_dict = {}
+    triplets = {}
+    for i_chan, chan_name in enumerate(channel_names):
+        pixel_type = str(header['channels'][chan_name]).split()[0]
+        if pixel_type == 'FLOAT':
+            imath_type = Imath.PixelType(Imath.PixelType.FLOAT)
+        elif pixel_type == 'HALF':
+            imath_type = Imath.PixelType(Imath.PixelType.HALF)
+        elif pixel_type == 'UINT':
+            imath_type = Imath.PixelType(Imath.PixelType.UINT)
+        chan_data_str = exr_file.channel(chan_name, imath_type)
+        if pixel_type == 'FLOAT':
+            chan_data = np.fromstring(chan_data_str, dtype=np.float32).reshape((size[1], size[0]))
+            if im_FLOAT.size == 0:
+                im_FLOAT = chan_data
+            else:
+                im_FLOAT= np.dstack((im_FLOAT, chan_data))
+        elif pixel_type == 'HALF':
+            chan_data = np.fromstring(chan_data_str, dtype=np.float16).reshape((size[1], size[0]))
+            if im_HALF.size == 0:
+                im_HALF = chan_data
+            else:
+                im_HALF = np.dstack((im_HALF, chan_data))
+        elif pixel_type == 'UINT':
+            chan_data = np.fromstring(chan_data_str, dtype=np.uint32).reshape((size[1], size[0]))
+            if im_UINT.size == 0:
+                im_UINT = chan_data
+            else:
+                im_UINT = np.dstack((im_UINT, chan_data))
+        else:
+            raise ValueError('Unknown image pixel type in OpenEXR file.')
+        im_dict[chan_name] = chan_data
+        rgbya = chan_name[-1]  # red, green, blue, luminance, transparency
+        prefix = chan_name.split('.')[0]
+        if prefix == rgbya:
+            prefix = 'rgb'
+        if rgbya in 'RGB':
+            if (prefix in triplets):
+                triplets[prefix][rgbya] = chan_name
+            else:
+                triplets[prefix] = {rgbya: chan_name}
+    for triplet in triplets:
+        im_dict[triplet] = np.dstack((im_dict[triplets[triplet]['R']],
+                                      im_dict[triplets[triplet]['G']],
+                                      im_dict[triplets[triplet]['B']]))
+    return channel_names, im_dict, header
 
 
 
