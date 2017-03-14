@@ -2,8 +2,8 @@ The Mitsuba Rendering System
 ============================
 `Mitsuba <http://www.mitsuba-renderer.org/>`_ is an open-source, research grade, physically-based rendering system in
  the spirit of `PBRT <http://www.pbrt.org/>`_. Mitsuba meets most of the needs of ``MORTICIA``, specifically
- - Capable of spectral rendering with an arbitrary number of spectral bins (recompilation of Mitsuba is required when
-  altering the number of spectral bins).
+ - Capable of spectral radiometric rendering with an arbitrary number of spectral bins (recompilation of Mitsuba is
+ required when  altering the number of spectral bins).
  - Capable of using spectral radiant environment maps with any number of spectral bins in the lat/long format. These
  environment maps can be generated and written to OpenEXR files using the `morticia.rad.librad.RadEnv` class.
  - Option to output linear and unprocessed radiometric quantities. That is, if the input quantities are absolute
@@ -60,7 +60,7 @@ is mainly because all plugins, which are implemented as shared libraries (DLLs o
 the same number of spectral bins.
 - For a specific installation of ``MORTICIA``, the least confusing approach is to have all instances of Mitsuba across
 all harnessed compute platforms compiled with the same number of spectral bins.
-- Note that if depth maps are required from Mitsuba, then in must be compiled in the standard RGB mode. Hence it
+- Note that if depth maps are required from Mitsuba, then it must be compiled in the standard RGB mode. Hence it
 can be useful to have a 3-channel Mitsuba compilation available on one of the available compute servers, strictly
 for the purpose of computing depth maps for a scene. Depth maps are useful for rendering purposes when the scene
 contains objects at a variety of distances (say an aircraft and a ground plane).
@@ -105,8 +105,8 @@ Mitsuba Integrators
 Mitsuba has a number of "integrators", being the plugins that actually implement different rendering schemes.
 The path tracer (``path``) is the integrator to be selected for general purposes, where there is direct and indirect
 illumination of the scene. For faster renders, the direct illumination integrator (``direct``) provides good quality
-renders without indirect illumination components. For the path tracer, the Hammersley QMC sampler is preferred, with
-as many as 256 samples per pixel or more to reduce monte carlo noise.
+renders without indirect illumination components. For the path tracer, the Hammersley QMC or Halton sampler is
+preferred, with as many as 256 samples per pixel or more to reduce monte carlo noise.
 
 If volumetric (participating) media such as smoke or fog are involved, the extended volumetric path tracer
 (``volpath``) should be considered.
@@ -158,11 +158,66 @@ General Notes on Mitsuba
 ------------------------
 
 As with libRadtran, Mitsuba is not provided with ``MORTICIA``. Those wishing to use the capabilities of libRadtran or
- Mitsuba will have to download, compile and install those packages on any required compute platforms and set up
- supporting libraries. Correct usage of libRadtran and Mitsuba require significant insight into the relevant
- knowledge domains. An effort is made to provide reasonable defaults for the many inputs that these packages require.
+Mitsuba will have to download, compile and install those packages on any required compute platforms and set up
+supporting libraries. Correct usage of libRadtran and Mitsuba require significant insight into the relevant
+knowledge domains. An effort is made to provide reasonable defaults for the many inputs that these packages require.
 
- The Mitsuba GUI (`mtsgui`) can only read OpenEXR files with more than 3 channels if compiled with the
- SPECTRAL_SAMPLES flag set higher than 3.
+The Mitsuba GUI (`mtsgui`) can only read OpenEXR files with more than 3 channels if compiled with the
+SPECTRAL_SAMPLES flag set higher than 3.
 
+Mitsuba Workflows
+=================
+The organisation of a scene in Mitsuba follows the general practice within PBRT-like rendering systems. The Mitsuba
+scene definition file is eXtensible Markup Language (XML) and the manual provides details on how to define the various
+elements of a scene. One of the fastest ways to load geometry is to convert all shapes into one or more Mitsuba
+serialized geometry files (extension `.serialized`). The .xml scene file then accesses any number of shapes from these
+binary files. Geometry can be created using a large variety of tools or converted from `.obj` or `.dae` (Collada)
+format. The Blender application can also be used to both create and convert geometry elements to either of these
+formats, which can then be converted to Mitsuba format using the `mtsgui` tool provided with Mitsuba.
+
+The very simple `.stl` format can be used for plain geometry creation and import into Blender. Many CAD applications
+such as DesignSpark Mechanical can export `.stl` format files.
+
+Once a collection of indexed shapes are available in a `.serialized` file, the contents of the `.xml` scene file will
+reference the shapes by index and apply BSDFs, textures, radiance and other properties to the shapes. Some properties
+(e.g. texture) can be varied within a shape by using UV coordinate mapping. Simnple shape geometry (spheres, cubes,
+cylinders etc.) can be created within the `.xml` scene file, but complex geometry is best contained in the
+native Mitsuba `.serialized` format.
+
+Blender
+-------
+
+The `Blender <https://www.blender.org/>_` application can be used for 3D model imports, editing, texturing and
+exporting to Collada (`.dae`) or
+`.obj` file formats which can then be imported into `Mitsuba`. `Blender` is a very capable environment for these
+purposes, but has a complex and unique user interface together with a steep learning curve. Background knowledge
+with respect to meshes, UV-mapping and texturing are generally required.
+
+Restructuring of 3D models or renaming of model components is best done in Blender, or in the originating CAD software.
+
+Another useful tool for mesh visualisation, texturing, analysis, repair and format conversion is
+`MeshLab <http://www.meshlab.net/>_`
+
+
+
+Transforming Mitsuba Scene Files
+--------------------------------
+Mitsuba scene files can be transformed using `XSLT` and queried using `XQuery`. The Python package `lxml` can perform
+`XSLT` transformations. Microsoft Visual Studio Code is a free and powerful editor system and there is an extension
+called `XML Tools` by Josh Johnson, which allows experimentation with `XQuery` and `XPath`.
+The `BaseX` XML database system can also be used to manage XML documents and execute `XQuery` queries.
+
+Viewing Mitsuba Outputs
+-----------------------
+In full, High Dynamic Range (HDR) spectral radiometric mode, `Mitsuba` output radiances to an OpenEXR file with
+multiple (>4)
+spectral channels. These files can be viewed in `mtsgui`, but only if the OpenEXR file has exactly the number of
+channels for which `Mitsuba` (and therefore `mtsgui`) has been compiled. A more general OpenEXR viewer, which
+allows channel selection as well gain and gamma adjustments for easier viewing, is
+`mrViewer <http://mrviewer.sourceforge.net/>_`. While `IrfanView (http://mrviewer.sourceforge.net/)_` is a popular
+and useful general image viewer, it cannot deal with HDR OpenEXR files from `Mitsuba`.
+
+The recommended OpenEXR viewer for use in conjunction with `MORTICIA` and `Mitsuba` is therefore
+`mrViewer <http://mrviewer.sourceforge.net/>_`. It can also be used to view Radiant Environment Maps (REM)
+calculated by `libRadtran`/`MORTICIA`.
 
