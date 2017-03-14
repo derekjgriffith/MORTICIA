@@ -5,23 +5,24 @@ The Mitsuba Rendering System
  - Capable of spectral radiometric rendering with an arbitrary number of spectral bins (recompilation of Mitsuba is
  required when  altering the number of spectral bins).
  - Capable of using spectral radiant environment maps with any number of spectral bins in the lat/long format. These
- environment maps can be generated and written to OpenEXR files using the `morticia.rad.librad.RadEnv` class.
+ environment maps can be generated using the `libRadtran`/`MORTICIA` integration and written to OpenEXR files using the
+ `morticia.rad.librad.RadEnv` class.
  - Option to output linear and unprocessed radiometric quantities. That is, if the input quantities are absolute
  radiometric quantities, then the output radiances are physically correctly scaled.
  - Capable of making any object an emitter with a specific spectral radiance. This is required when creating
  renderings in the thermal spectrum. A current weakness in this area is that Mitsuba cannot model the effect of
- "angular emissivity", where the emissivity of a material varies with viewing angle. This results in very "flat"
+ "angular emissivity", where the emissivity of a material varies with viewing angle. This can result in very "flat"
  renderings of curved objects in the thermal spectrum.
  - Large variety of physically-based surface BSDF models.
  - Highly modular source code structure, making it possible to add integrators, BSDF models, emitters etc. in a
  relatively simple manner. For example, an emitter having radiance that depends on viewing angle could be
  implemented in order to simulate angular emissivity effects.
- - Scene file format is XML, allowing for simple generation and pre-processing of scene files.
+ - Scene file format is XML, allowing for simple generation and pre-processing of scene files with a variety of
+XML tools.
  - Python interface for scene generation and full control of the rendering process.
  - Mitsuba has fully-integrated and scalable parallel computing capability that can harness compute cores across a
  private network.
  - Mitsuba has a GUI (``mtsgui``) which is very useful for a number of visualisation purposes.
-
 
 
 Spectral Rendering
@@ -187,7 +188,7 @@ native Mitsuba `.serialized` format.
 Blender
 -------
 
-The `Blender <https://www.blender.org/>_` application can be used for 3D model imports, editing, texturing and
+The `Blender <https://www.blender.org/>`_ application can be used for 3D model imports, editing, texturing and
 exporting to Collada (`.dae`) or
 `.obj` file formats which can then be imported into `Mitsuba`. `Blender` is a very capable environment for these
 purposes, but has a complex and unique user interface together with a steep learning curve. Background knowledge
@@ -195,9 +196,24 @@ with respect to meshes, UV-mapping and texturing are generally required.
 
 Restructuring of 3D models or renaming of model components is best done in Blender, or in the originating CAD software.
 
-Another useful tool for mesh visualisation, texturing, analysis, repair and format conversion is
-`MeshLab <http://www.meshlab.net/>_`
+The Collada (`.dae`) exporter may still have a number of bugs. Missing or displaced components can occur, especially
+ in the case of animation components. Joining components into single parts based on BSDFs can reduce the amount
+ of editing required on the imported `Mitsuba` model.
 
+`Blend Swap <http://www.blendswap.com/>`_ can be a useful source of Creative Commons 3D models.
+
+Another useful tool for mesh visualisation, texturing, analysis, repair and format conversion is
+`MeshLab <http://www.meshlab.net/>`_.
+
+
+Sourcing of Models
+------------------
+Models can be obtained from a variety of online sources. There is large variance in the quality and organisation
+of these models. Many free and commercial models are available (e.g. search `Yobi3D <http://www.yobi3d.com/>`_).
+The licencing of the models must be carefully observed. Commercial models may not be distributed.
+Many models are available under Creative Commons licencing, which has various levels of usage restriction.
+
+A large repository of mainly commercial models can be found at `TurboSquid <https://www.turbosquid.com/>`_
 
 
 Transforming Mitsuba Scene Files
@@ -214,10 +230,10 @@ multiple (>4)
 spectral channels. These files can be viewed in `mtsgui`, but only if the OpenEXR file has exactly the number of
 channels for which `Mitsuba` (and therefore `mtsgui`) has been compiled. A more general OpenEXR viewer, which
 allows channel selection as well gain and gamma adjustments for easier viewing, is
-`mrViewer <http://mrviewer.sourceforge.net/>_`. While `IrfanView (http://mrviewer.sourceforge.net/)_` is a popular
+`mrViewer <http://mrviewer.sourceforge.net/>`_. While `IrfanView <http://mrviewer.sourceforge.net/`_ is a popular
 and useful general image viewer, it cannot deal with HDR OpenEXR files from `Mitsuba`.
 
 The recommended OpenEXR viewer for use in conjunction with `MORTICIA` and `Mitsuba` is therefore
-`mrViewer <http://mrviewer.sourceforge.net/>_`. It can also be used to view Radiant Environment Maps (REM)
+`mrViewer <http://mrviewer.sourceforge.net/>`_. It can also be used to view Radiant Environment Maps (REM)
 calculated by `libRadtran`/`MORTICIA`.
 
