@@ -27,6 +27,7 @@ Anaconda package. The most important of are:
 - ``xarray`` : A package for handling N-dimensional data arrays and datasets with named axes. Also for reading and
 writing data from netCDF format files.
 - ``pandas`` : For handling time-series and data in a tabular/relational view.
+- ``lxml`` : For reading, writing, querying and transforming files in the `XML` format (eXtensible Markup Language).
 - ``pint`` : for handling unit checking and conversion. Note that using ``pint`` for all numerical operations is not
   recommended and not done in ``MORTICIA``. Rather, a ``pint`` Quantity object can be carried as metadata to an
   xarray.DataArray object and checked (for example using Python ``assert``) at object construction time or judiciously
@@ -38,9 +39,22 @@ writing data from netCDF format files.
 - ``dill`` will be required if running libRadtran on remote machines using ``ipyparallel``
 - ``paramiko`` will be required for authentication when using ``ipyparallel`` across machine boundaries
 - ``openexr`` for writing environment maps to OpenEXR files
-- ``Mitsuba`` for physically-based rendering of scenes (version 0.5.0)
 
-Obtatining working installations on Windows is sometimes problematic. Unofficial Python Wheel dsitributions for
+For physically based and detailed optical rendering, ``MORTICIA`` interfaces to the
+`Mitsuba <http://www.mitsuba-renderer.org/>_`  rendering system.
+
+
+Other useful auxiliary applications include:
+
+- `mrViewer <http://mrviewer.sourceforge.net/>`_ for viewing floating point or multi-channel OpenEXR files.
+- `Blender <https://www.blender.org/>`_ for 3D model import, editing, texturing and export to Collada format for
+import into ``Mitsuba``.
+- `MeshLab <http://www.meshlab.net/>`_ for import, visualisation, analysis, repair and format conversion of geometry
+meshes
+for import into `Blender` or directly into `Mitsuba`.
+
+Obtaining working installations for all of these packages on Windows is sometimes problematic. Unofficial Python Wheel
+distributions for
 Windows can be obtained from `Christoph Gohlke <http://www.kaij.org/blog/?p=123>`_.
 
 For example, the ``OpenEXR`` package may have to be downloaded as a Python Wheel and installed from the command-line
