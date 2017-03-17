@@ -5,7 +5,8 @@ The Mitsuba Rendering System
  - Capable of spectral radiometric rendering with an arbitrary number of spectral bins (recompilation of Mitsuba is
  required when  altering the number of spectral bins).
  - Capable of using spectral radiant environment maps with any number of spectral bins in the lat/long format. These
- environment maps can be generated using the `libRadtran`/`MORTICIA` integration and written to OpenEXR files using the
+ environment maps can be generated using the `libRadtran`/``MORTICIA`` integration and written to OpenEXR files using
+  the
  `morticia.rad.librad.RadEnv` class.
  - Option to output linear and unprocessed radiometric quantities. That is, if the input quantities are absolute
  radiometric quantities, then the output radiances are physically correctly scaled.
@@ -35,7 +36,7 @@ set to 4 or more. The optimal number of bins depends on numerous factors, such a
 
 Note that Mitsuba assumes that all spectral samples lie in the range of 360 nm to 830 nm (this will be called the
 "visible spectrum" assumption). Certain features of Mitsuba rely on this assumption. However, for ``MORTICIA`` the need
-to to cover any spectral region in the
+is to cover any spectral region in the
 optical domain. For example, the black body models in Mitsuba rely on the visible spectrum assumption. Any files
 written using Mitsuba film models that output RGB, sRGB, XYZ color spaces also rely on the visible spectrum assumption.
 The Mitsuba black body models are avoided in MORTICIA and spectra are given without wavelengths in Mitsuba scene
@@ -69,6 +70,26 @@ contains objects at a variety of distances (say an aircraft and a ground plane).
 It is possible to establish how many spectral bins a particular installation of Mitsuba has been compiled for within
 the `mtsgui` GUI utility. Go to Help->About and look for the compilation flag `SPECTRUM_SAMPLES`.
 
+Setting up Mitsuba
+------------------
+Refer to the Mitsuba manual for configuration and compilation. Having selected and copied a configuration file
+to the file `config.py` in the root Mitsuba directory, edit this file and look in the CXXFLAGS parameter for
+'-DSPECTRUM_SAMPLES=3' and change the number of spectrum samples to 4 or higher. The number of samples (bins) to use
+depends on the factors listed in the previous section. If no other configuration is required, Mitsuba is then compiled
+using `scons` as specified in the manual. For general multispectral work (e.g. using the Kato parametrization), consider
+using 8 spectral bins. A full Kato run (all wavelengths) has 32 bins. This would require 4 runs of Mitsuba if
+compiled with 8 bins. A Kato run over the VNIR spectrum is 16 bins, which would require 2 runs.
+
+On Linux, suppose the root folder for Mitsuba is ~/Mitsuba/mitsuba and the `bash` shell is being used. Add the following
+lines to the `.bashrc` file in the home directory:
+
+# Set up Mitsuba
+export MITSUBA_PYVER=2.7
+source Mitsuba/mitsuba/setpath.sh
+
+This should give access to `mtsgui` and the `mitsuba` render command from any non-login shell.
+
+
 Emitters in Mitsuba
 -------------------
 The `sky`, `sun` and `sunsky` emitters within Mitsuba scenes are only used in the MORTICIA context for creating
@@ -82,15 +103,18 @@ Coordinate System in Mitsuba
 The environment maps (``envmap`` emitter) in Mitsuba is the only place in the documentation where the coordinate
 system is mentioned in absolute terms. This coordinate system has +Y towards the zenith and -Y to nadir. The +X
 direction is towards the left when viewing with +Y upwards. The natural (topocentric) coordinate system for ``MORTICIA``
- is with +Z towards the zenith and -Z at nadir. +X is towards the east and +Y towards the north, giving a
- right-handed coordinate system. In the broader context, the earth-centered, earth-fixed (ECEF) system also known as
- the earth-centered rotational (ECR) coordinate system is also right-handed with +Z towards the north pole, +X
- through the prime meridian (Greenwich) and +Y through 90 degrees longitude measured positive east from the prime
- merdian.
+is with +Z towards the zenith and -Z at nadir. +X is towards the north and +Y towards the east, giving a
+left-handed coordinate system. In the broader context, the earth-centered, earth-fixed (ECEF) system also known as
+the earth-centered rotational (ECR) coordinate system is right-handed with +Z towards the north pole, +X
+through the prime meridian (Greenwich) and +Y through 90 degrees longitude measured positive east from the prime
+merdian.
 
- A ccordinate transform is therefore required whe moving from ``MORTICIA`` coordinates to Mitsuba world
- coordinates. The recommended method is to transform the REM coordinates in Mitsuba so that the +Z axis is upward.
- This is typically as follows::
+The Mitsuba world coordinate system is left-handed (as for PBRT) +Y typically towards the zenith, while the ``MORTICIA``
+coordinate system is left-handed with +Z towards the zenith.
+A coordinate transform is therefore required whe moving from ``MORTICIA`` coordinates to Mitsuba world
+coordinates. The recommended method is to transform the REM coordinates in Mitsuba so that the +Z axis is upward by
+rotating +90 degrees about the x-axis.
+This is typically as follows::
 
 <emitter type="envmap" >
  <string name="filename" value="REMfromMORTICIA.exr"/>
@@ -98,6 +122,17 @@ direction is towards the left when viewing with +Y upwards. The natural (topocen
   <rotate x="1" angle="90"/>
  </transform>
 </emitter>
+
+Target models (vehicles, personnel etc.) should be edited so that they are orientated with +z upwards and such that the
+normal direction of travel is +x (north in MORTICIA space). The model should be implemented as a shapegroup in the
+Mitsuba scene file. This allows for orientation and placement of the entire target model in Mitsuba world coordinates.
+It also allows for multiple instances of the target to be created in the Mitsuba scene file at lower computational cost.
+
+The default origin of the world topocentric coordinate system is assumed to be a point at sea level and at nadir from
+the location of the sensor. That is, the x-coordinate and y-coordinate are zero and the z-coordinate is equal to the
+height (altitude) of the sensor above mean sea level (AMSL).
+
+Sensor transformations in the Mitusba scene file should use the *lookat* form.
 
 
 Mitsuba Integrators
@@ -205,7 +240,6 @@ The Collada (`.dae`) exporter may still have a number of bugs. Missing or displa
 Another useful tool for mesh visualisation, texturing, analysis, repair and format conversion is
 `MeshLab <http://www.meshlab.net/>`_.
 
-
 Sourcing of Models
 ------------------
 Models can be obtained from a variety of online sources. There is large variance in the quality and organisation
@@ -215,6 +249,12 @@ Many models are available under Creative Commons licencing, which has various le
 
 A large repository of mainly commercial models can be found at `TurboSquid <https://www.turbosquid.com/>`_
 
+MORTICIA Interaction with Mitsuba
+---------------------------------
+Mitsuba provides a powerful Python API which exposes most of the functionality of the C++ API. Documentation can be
+found at the `Mitsuba Python bindings <http://www.mitsuba-renderer.org/api/group__libpython.html>`_ web page.
+This is the primary way in which MORTICIA interacts with Mitsuba. An alternative method is to interact via Mitsuba
+`.xml` scene files using the `lxml` package. The Jupyter notebook examples will show interaction via the Python API.
 
 Transforming Mitsuba Scene Files
 --------------------------------
@@ -236,4 +276,6 @@ and useful general image viewer, it cannot deal with HDR OpenEXR files from `Mit
 The recommended OpenEXR viewer for use in conjunction with `MORTICIA` and `Mitsuba` is therefore
 `mrViewer <http://mrviewer.sourceforge.net/>`_. It can also be used to view Radiant Environment Maps (REM)
 calculated by `libRadtran`/`MORTICIA`.
+
+
 
