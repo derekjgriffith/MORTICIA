@@ -8,7 +8,7 @@ __author__ = 'DGriffith'
 # Could import some or all CF definitions from XML file.
 
 import numpy as np
-import xray
+import xarray as xray
 from morticia import ureg, Q_, U_
 from scipy.interpolate import RegularGridInterpolator, interp1d
 import warnings
