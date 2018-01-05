@@ -13,6 +13,8 @@ Installation and Requirements
  documentation. Examples are provided in the ``MORTICIA`` notebooks in the
  `nbMORITICIA repository on GitHub <https://github.com/derekjgriffith/nbMORTICIA>`_.
 
+ The recommended Linux platform is Debian 9 (stretch) or Ubuntu based on Debian stetch (16.04 or later).
+
 MORTICIA Dependencies
 =====================
 ``MORTICIA`` has been developed using the `Anaconda <https://www.continuum.io/downloads>`_ distribution from
@@ -64,12 +66,32 @@ with ``pip``::
 
 Environment maps written in the OpenEXR format are used for integration with the Mitsuba rendering system.
 
+Git
+----
+
+The code management and revision control system `Git` is used for source control in the `MORTICIA` and several
+dependent projects e.g. Mitsuba.
+
+Install Git on the relevant platform(s) using `sudo apt-get install git` on Debian or Ubuntu or by downloading an
+installer from the `Git download page <https://git-scm.com/downloads>`_.
+
 Mitsuba
 -------
 
 For physically-based rendering of target scenes, the preferred rendering system is `Mitsuba <http://www
-.mitsuba-renderer.org/>`_. Mitsuba must be compiled in the spectral mode with the number of spectral bins
-set to 4 or more. The optimal number of bins depends on numerous factors, such as
+.mitsuba-renderer.org/>`_.
+
+Mitsuba can be obtained in several forms, including simple installers for Windows at the `Mitsuba download
+page <https://www.mitsuba-renderer.org/download.html/>`_. For serious multi-spectral or hyperspectral work, Mitsuba
+must be compiled from source. The source code is also available from the Mitsuba download page, but the `Mitsuba Github
+repository <https://github.com/mitsuba-renderer/mitsuba>`_ may have more recent code and bug fixes. Subscribe to
+Watch on the Mitsuba Github repository to stay informed informed about the latest activity on Mistuba development. If
+ the Git repository is used, it is important to obtain also the latest Mitsuba manual, which may have to be built
+ from the `TeX` source.
+
+For multispectral or hyperspectral work, Mitsuba must be compiled from source in the spectral mode with the number of
+spectral bins set to 4 or more. The Mitsuba manual contains detailed instructions for compilation of Mitsuba and how
+to set the number of spectral bins. The optimal number of bins depends on numerous factors, such as
 - If Mitsuba is to be run in parallel mode across a number of network compute resources
 - The complexity of the scenes to be rendered
 - The number of spectral bins that are actually required for the problem at hand
@@ -80,10 +102,16 @@ illumination of the scene. For faster renders, the direct illumination integrato
 renders without indirect illumination components. For the path tracer, the Hammersley QMC sampler is preferred, with
 as many as 256 samples per pixel or more to reduce monte carlo noise.
 
-See the mitsuba documentation for further details.
+The Collada Document Object Model (DOM) allows for Mitsuba to make use of 3D model geometry in the Collada `.dae`
+file format. Mitsuba is therefore preferably compiled including the Collada DOM as per the instructions in the Mitsuba
+ manual. This is not mandatory provided that 3D object models are available in file formats that are natively
+ supported in Mitsuba
+
+See the Mitsuba documentation for further details.
 
 A specific limitation with Mitsuba is that compilations with different numbers of spectral bins are not compatible
-with one another. It is useful to have an RGB version of Mitsuba available to compute distance maps of a scene
+with one another. It is useful to have an RGB version of Mitsuba available to compute distance maps of a scene.
+
 
 Setup of ``ipyparallel``
 ========================
