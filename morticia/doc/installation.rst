@@ -78,23 +78,28 @@ installer from the `Git download page <https://git-scm.com/downloads>`_.
 Mitsuba
 -------
 
-For physically-based rendering of target scenes, the preferred rendering system is `Mitsuba <http://www
+For physically-based rendering of target scenes, the supported rendering system is `Mitsuba <http://www
 .mitsuba-renderer.org/>`_.
 
 Mitsuba can be obtained in several forms, including simple installers for Windows at the `Mitsuba download
 page <https://www.mitsuba-renderer.org/download.html/>`_. For serious multi-spectral or hyperspectral work, Mitsuba
 must be compiled from source. The source code is also available from the Mitsuba download page, but the `Mitsuba Github
 repository <https://github.com/mitsuba-renderer/mitsuba>`_ may have more recent code and bug fixes. Subscribe to
-Watch on the Mitsuba Github repository to stay informed informed about the latest activity on Mistuba development. If
+Watch on the Mitsuba Github repository to stay informed about the latest activity on Mistuba development. If
  the Git repository is used, it is important to obtain also the latest Mitsuba manual, which may have to be built
- from the `TeX` source.
+ from the `TeX` source. The latest manual also contains the latest build instruction.
 
 For multispectral or hyperspectral work, Mitsuba must be compiled from source in the spectral mode with the number of
 spectral bins set to 4 or more. The Mitsuba manual contains detailed instructions for compilation of Mitsuba and how
-to set the number of spectral bins. The optimal number of bins depends on numerous factors, such as
+to set the number of spectral bins (SPECTRAL_SAMPLES compilation flag). The optimal number of bins depends on numerous
+factors,
+such as
 - If Mitsuba is to be run in parallel mode across a number of network compute resources
 - The complexity of the scenes to be rendered
 - The number of spectral bins that are actually required for the problem at hand
+
+When compiling Mitsuba on a remote compute server, it is best to add the MTS_GUI_SOFTWARE_FALLBACK compilation
+ flag. See the Mitsuba manual for further details.
 
 Mitsuba has a number of "integrators", being the plugins that actually implement different rendering schemes.
 The path tracer (``path``) is the integrator to be selected for general purposes, where there is direct and indirect
@@ -105,12 +110,34 @@ as many as 256 samples per pixel or more to reduce monte carlo noise.
 The Collada Document Object Model (DOM) allows for Mitsuba to make use of 3D model geometry in the Collada `.dae`
 file format. Mitsuba is therefore preferably compiled including the Collada DOM as per the instructions in the Mitsuba
  manual. This is not mandatory provided that 3D object models are available in file formats that are natively
- supported in Mitsuba
+ supported in Mitsuba (`.serial` format). 
 
 See the Mitsuba documentation for further details.
 
 A specific limitation with Mitsuba is that compilations with different numbers of spectral bins are not compatible
-with one another. It is useful to have an RGB version of Mitsuba available to compute distance maps of a scene.
+with one another. It is useful to have an RGB version of Mitsuba available to compute distance maps of a scene. This
+is best done on the local host, which should have an RGB version of Mitsuba installed (and will therefore not bw able
+ to cooperate using `mtssrv` with remote compute nodes).
+
+Issues with Mitsuba on Debian 9
+===============================
+
+Currently (Jan 2018), Debian 9 (stretch) is not yet officially supported by Mituba.
+
+Debian 9 (stretch) is the current preferred platform for remote compute nodes whe using `MORTICA`. Note the following
+with respect to Debian 9:
+- Use the Github distribution of Mitsuba and compile from source
+- Do not install Qt or prevent Mitsuba from attempting to compile the GUI (`mtsgui`) by manually setting the hasQt
+variable to False in the file build/SConscript.configure. Attempting to compile the GUI results in Mitusba build
+errors on Debian stretch.
+- Do not install the Collada DOM. Currently it causes Mitsuba build errors on Debian stretch. Building the Collada DOM
+from source may work. However, it is best to convert Collada models to the much more efficient Mitusba `.serial` format
+before using them in heavy modelling work. This can be done using a local install of RGB Mistuba and `mtsgui`.
+- Build and install Mitsuba before Anaconda.
+- Build OpenEXR from source and perform a system-wide install (IlmBase and OpenEXR). The stretch repository version
+does not appear to work with Mitsuba.
+- Ubuntu versions from 16.04 are based on Debian stretch and may therefore be suitable for `MORTICIA` remote compute
+node purposes.
 
 
 Setup of ``ipyparallel``
@@ -138,7 +165,7 @@ following general steps must be followed:
 - Copy the `ipcontroller-engine.json` file to a similar location on the machine that will host the compute engines. If
   this is the same machine on which the controller itself is running, then this step may not be required.
 - Copy the `ipcontroller-client.json` file to the client that will require compute resources in the
-  ``IPYTHONDIR/profile_default/security` directory. On Windows this is typically `C:\Users\myself\.ipython\profile_default\`.
+  ``IPYTHONDIR/profile_default/security` directory. On Windows this is typically `C:\Users\(your_username)\.ipython\profile_default\`.
   Additional profile directories can be created as required.
 - If the controller is restarted for any reason, the above `.json` files will be overwritten and the above file copy
   operations must be repeated.
