@@ -1593,8 +1593,8 @@ class Case(object):
     def split_case_by_wavelength(self, n_sub_ranges, overlap):
         """ Split a librad.Case into a list of cases with wavelength sub-ranges
         This function can be useful to distribute a case over a compute cluster. Equal wavelength interval sub-cases
-        should have similar runtimes. Use ipyparallel to run the list on a cluster. If the wavelength range
-        is sufficiently large, consider setting n_sub_ranges to the number of available processors.
+        should have similar runtimes. Use ipyparallel or dask distributed to run the list on a cluster. If the
+        wavelength range is sufficiently large, consider setting n_sub_ranges to the number of available processors.
 
         This function only works with a librad.Case that uses the `wavelength` option keyword. Cases that make use of
         other methods to set the wavelength range will not work.
@@ -1996,6 +1996,83 @@ class RadEnv(object):
             # These cases reveal if there are layers in the REM that include clouds
             if self.has_clouds:
                 self.cloud_detect_cases = ipyparallel_view.map(Case.run, self.cloud_detect_cases)
+            # Compile the transmittance data
+            self.compute_path_transmittance()
+            # Compile the path radiance data
+            self.compute_path_radiance()
+        if purge:
+            del self.casechain
+            del self.cases
+
+    def run_dask_parallel(self, dask_client, stderr_to_file=False, purge=False):
+        """ Run a complete set of radiant environment map cases of libRadtran/uvspec using the `dask.distributed`
+        Python package, which provides parallel computation from Jupyter notebooks and other Python launch
+        modes.
+        Typical code for setting up the dask distributed computation scheduler:
+            .. code-block:: python
+
+               from dask.distributed import Client
+               # For dask, only need the IP number and port of the scheduler process
+               scheduler_ip = '146.64.246.94'
+               scheduler_port = '8786'
+               dask_client = Client(scheduler_ip + ':' + scheduler_port)
+
+
+        :param dask_client: dask.distributed client as set up in above example (see dask.distributed documentation.)
+
+        :param stderr_to_file: If set to True, standard error output will be sent to a file. use only for debugging
+            purposes.
+        :param purge: Boolean. If set True, the actual libRadtran cases that are executed to make up the REM are
+            deleted in order to reduce the size of the object. If the object is purged, it is not possible to rerun
+            the REM. Default is False - no purging (or minimal purging) is performed.
+        :return:
+        """
+        self.casechain_futures = dask_client.map(Case.run, self.casechain)
+        # Gather the results
+        self.casechain = dask_client.gather(self.casechain_futures)
+        # Now recreate the list of lists view
+        self.cases = [[self.casechain[i_pol * self.n_azi_batch + i_azi] for i_azi in range(self.n_azi_batch)]
+                                                                        for i_pol in range(self.n_pol_batch)]
+        # Compile the radiance results into one large array
+        self.uu = np.hstack([np.vstack([self.cases[i_pol][i_azi].uu for i_pol in range(self.n_pol_batch)])
+                                                                    for i_azi in range(self.n_azi_batch)])
+        # if self.hemi:  # Double up in the azimuth direction, but flip as well
+        #     self.uu = np.hstack([self.uu, self.uu[:,::-1,...]])
+        #     # Perform doubling up in all azimuth variables
+        #     self.pza = xr.concat((self.pza, self.pza + np.pi), dim='pza')
+        #     self.phi = xr.concat((self.phi, self.phi + 180), dim='phi')
+        #     self.vaz = xr.concat((self.vaz, self.vaz + 180), dim='vaz')  # view azimuth angle
+        # Delete the individual results in an attempt to save memory
+        for case in self.casechain:
+            del case.uu
+        # Concatenate the cases in umu and phi
+        self.xd_uu = xr.concat([xr.concat([case_uu.xd_uu for case_uu in self.cases[jj]], dim='paz')
+                                                 for jj in range(len(self.cases))], dim='pza')
+        #self.xd_uu = xr.DataArray(self.uu, [self.pza, self.paz, self.spectral, self.levels, self.stokes])
+        # Replace the values in the xr.DataArray with the exact original values in the zenith and azimuth
+        # directions. Not doing this gave rise to a very subtle bug in spherical harmonic fitting
+        self.xd_uu['pza'] = self.pza
+        self.xd_uu['paz'] = self.paz
+        # Also need to obtain the irradiances from one of the cases - they should actually all be the same
+        fluxdata = self.casechain[0].fluxdata  # Would really want this as a xr.DataArray
+        fluxline = self.casechain[0].fluxline
+        irrad_units = self.casechain[0].irrad_units_str()
+        # Promote irradiance data from
+        for flux_component in fluxline:
+            if hasattr(self.casechain[0], 'xd_' + flux_component):
+                setattr(self, 'xd_' + flux_component, getattr(self.casechain[0], 'xd_' + flux_component))
+        self.fluxdata = fluxdata
+        self.fluxline = fluxline
+        self.irrad_units = irrad_units
+        # Run the transmittance sequences if there are any
+        if self.n_sza:
+            self.trans_case_futures = dask_client.map(Case.run, self.trans_cases)
+            self.trans_cases = dask_client.gather(self.trans_case_futures)
+            # If there are clouds in the radiant environment, run the could OD detection cases
+            # These cases reveal if there are layers in the REM that include clouds
+            if self.has_clouds:
+                self.cloud_detect_case_futures = dask_client.map(Case.run, self.cloud_detect_cases)
+                self.cloud_detect_cases = dask_client.gather(self.cloud_detect_case_futures)
             # Compile the transmittance data
             self.compute_path_transmittance()
             # Compile the path radiance data
