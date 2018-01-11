@@ -63,7 +63,10 @@ The relevant code here is taken from libRadtran version 2.0
 
 import writeLex  # This imports all the libradtran option definitions
 import os
-import easygui  # For file open dialogs
+# easygui is only imported on demand
+# If easygui is imported on an ipyparallel compute engine, the engine goes into a Qt event loop and blocks so that
+# it never exits.
+# import easygui  # For file open dialogs
 import numpy as np
 import xarray as xr
 import re
@@ -455,6 +458,7 @@ class Case(object):
         if filename is not None:
             if not filename:
                 # Open a dialog to get the filename
+                import easygui
                 filename = easygui.fileopenbox(msg='Please select a uvspec input file.', filetypes=["*.INP"])
             elif filename[-4:].lower() != '.inp':
                 filename += '.INP'
@@ -1005,6 +1009,7 @@ class Case(object):
         :return:
         """
         if not filename:
+            import easygui
             filename = easygui.filesavebox(msg='Please save the uvspec input file.', filetypes=["*.INP"])
         if filename[-4:].lower() != '.inp':
             filename += '.INP'
@@ -1284,6 +1289,7 @@ class Case(object):
         if filename is None:
             filename = self.outfile
         elif filename == '':
+            import easygui
             filename = easygui.fileopenbox(msg='Please select the uvspec output file.', filetypes=["*.OUT"])
         fluxdata = []
         if not os.path.isfile(filename):
@@ -1431,6 +1437,7 @@ class Case(object):
         if filename is None:
             filename = self.errfile
         elif filename == '':
+            import easygui
             filename = easygui.fileopenbox(msg='Please select the uvspec error output file.', filetypes=["*.ERR"])
         if not os.path.isfile(filename):
             print('Error output file does not exist. Run uvspec with stderr redirected to an output file.')  ##TODO use an exception
