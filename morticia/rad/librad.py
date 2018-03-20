@@ -285,7 +285,7 @@ def king_byrne_formula(wavelength, alpha_0, alpha_1, alpha_2):
 
     .. math::
 
-        \\tau_{aer}=e^{\\alpha_{0}}\\lambda^{\\alpha_{1}}\\lambda^{-\\alpha_{2}}
+        \\tau_{aer}(\\lambda)=e^{\\alpha_{0}}\\lambda^{\\alpha_{1}}\\lambda^{\\alpha_{2}\\log(\\lambda)}
 
     :param wavelength: Wavelengths at which the aerosol optical thickness (aka optical depth) is provided in the aot
         input. If any of the wavelengths is larger than 100, then wavelengths are assumed to be in nm, otherwise
@@ -455,6 +455,7 @@ class Case(object):
         self.has_ice_clouds = False  # Default, unless discovered otherwise
         self.has_water_clouds = False  # ditto
         self.has_clouds = False  # either water or ice clouds
+        self.verbose = False  # Default verbose output to false
         if filename is not None:
             if not filename:
                 # Open a dialog to get the filename
@@ -707,6 +708,10 @@ class Case(object):
                 self.has_clouds = True
         if keyword == 'sza':
             self.sza = np.float64(tokens[0])
+        if keyword == 'verbose':
+            self.verbose = True
+        if keyword == 'quiet':
+            self.verbose = False
 
     def prepare_for_polradtran(self):
         """ Prepare for output from the polradtran solver
@@ -1808,7 +1813,7 @@ class RadEnv(object):
         radiances between the two levels. This situation is unavoidable. The recommended approach is that
         REMS be computed with altitude levels that all lie between cloud layers (i.e. no levels in the REM
         span a cloud layer). The user, or the code which uses the REMs should see to this. Essentially it must
-        be recognised that optical surveillance is not possible through optically thick cloud layers.
+        be recognised that optical surveillance/remote sensing is not possible through optically thick cloud layers.
 
         The REM is provided with a cloud flag that indicates if the base case incorporates clouds. The approach to
         computing inter-level transmittance (optical depth is the stored parameter, since this scales more
@@ -1837,6 +1842,13 @@ class RadEnv(object):
         between the SZA nearest the horizon and the horizon proper. Some form of logarithmic extrapolation could be
         performed, but could result in large errors due to failure of Beer's Law and other problems.
 
+        The best way of handling the problem of exactly horizontal paths is with knowledge of the attenuation
+        coefficient in the relevant layer. This can probably be obtained using verbose output from uvspec, but this
+        is likely a very cumbersome option. A less cumbersome option may be to compute the mean attenuation
+        coefficient for path segments between levels alongside computation of path segment optical depths. This only
+        requires additional computation of path segment lengths (plane parallel geometry). Scattering and absorption
+        coefficients could be obtained in the same way.
+
         Execution and attribution of transmittance cases will provide each level with transmittance to the level
         above that altitude level. Therefore the topmost level will have transmittances to TOA, but the
         bottom level will not have transmittances (optical depths) to BOA, unless the bottom level *is* BOA.
@@ -1846,7 +1858,7 @@ class RadEnv(object):
              the SZA values are computed equi-spaced in the cosine of the solar zenith angle rather that the
              SZA itself. This is to help with the problem that the slant range between levels increases
              in linear relation to the secant of the view zenith angle. The optical depths are later
-             interpolated to the same
+             interpolated to the same sightlines as the REM itself.
         :return:
         """
 
@@ -1872,14 +1884,15 @@ class RadEnv(object):
         self.trans_base_case.umu = []
         self.trans_base_case.pza = []
         self.trans_base_case.paz = []
-        # Change the transmission base case to output_quantity reflectivity. THis seems counter-intuitive,
+        # Change the transmission base case to output_quantity reflectivity. This seems counter-intuitive,
         # but take a look at the libRadtran/uvspec manual to see why. Essentially, the reflectivity
         # option computes the ratio of the horizontal irradiance to the horizontal irradiance at TOA.
         self.trans_base_case.alter_option(['output_quantity', 'reflectivity'])
         self.trans_base_case.alter_option(['sza', '0.0'])
         # Calculate the view zenith angles equi-spaced in the secant of the VZA
         # First upward looking
-        cosine_up = np.linspace(1.0, 0.0, n_sza + 1)[:-1]  # Drop the last element because it is horizontal (illegal)
+        cosine_up = np.linspace(1.0, 0.0, n_sza, endpoint=False)  # Drop the last element because it is horizontal (
+        # illegal)
         # Calculate the view-zenith angles in radians
         vpa_up = np.arccos(cosine_up)  # view polar angle looking upwards
         # If less than the minimum depression angle for the REM, add a point
@@ -1911,7 +1924,7 @@ class RadEnv(object):
                                              '_x_{:04d}.OUT'.format(i_case))
             self.trans_cases[i_case].name = (self.trans_cases[i_case].name +
                                              '_x_{:04d}'.format(i_case))
-        # The transmission cases should be ready to run a this point.
+        # The transmission cases should be ready to run at this point.
         # The run_ipyparallel method will run these cases, but not in parallel with
         # the radiance cases.
         # Next, create the cloudcover series to detect cloud layers
@@ -2068,7 +2081,7 @@ class RadEnv(object):
         if self.n_sza:
             self.trans_case_futures = dask_client.map(Case.run, self.trans_cases)
             self.trans_cases = dask_client.gather(self.trans_case_futures)
-            # If there are clouds in the radiant environment, run the could OD detection cases
+            # If there are clouds in the radiant environment, run the cloud OD detection cases
             # These cases reveal if there are layers in the REM that include clouds
             if self.has_clouds:
                 self.cloud_detect_case_futures = dask_client.map(Case.run, self.cloud_detect_cases)
@@ -2340,6 +2353,12 @@ class RadEnv(object):
                 pass  #  TODO : Cloud detection
 
 
+    def compute_path_length(self):
+        """ Compute the path segment lengths between all altitudes in the REM.
+        The path length computation is currently based on plane parallel geometry. It is computed
+        as the difference in level height divided by the cosine of the view zenith angle (VZA).
+        """
+
     def compute_path_radiance(self):
         """ Compute path radiances for path segments between all altitudes in the REM.
         The path transmittances (optical depth) as well as the total radiances at each altitude are required to
@@ -2407,7 +2426,7 @@ class RadEnv(object):
             reused.
         :param chan_per_exr: Number of spectral channels to write per exr file. Default is 3.
         :param normalise: Boolean. Normalise all channels to the maximum value (in any one file). Default False.
-            Normalisation will make ti possible to display the .exr file in IrfanView or mtsgui (Mitsuba GUI), but
+            Normalisation will make it possible to display the .exr file in IrfanView or mtsgui (Mitsuba GUI), but
             will destroy the radiometric correctness.
         :param half: Boolean. Use float16 instead of default float32. Halves data size at cost of radiometric
             resolution.
@@ -2425,7 +2444,7 @@ class RadEnv(object):
         Irfanview can display three-component, normalised EXR files only. The Mitsuba GUI (mtsgui) can display
         EXR files with any number of channels, but it is necessary to step through the channels (using [ and ])
         and they are displayed in grayscale. Even mtsgui will clip EXR files having radiance values exceeding 1.0.
-
+        The mrviewer application is recommended for viewing og EXR files.
 
         :return:
         """
