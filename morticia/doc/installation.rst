@@ -110,7 +110,7 @@ as many as 256 samples per pixel or more to reduce monte carlo noise.
 The Collada Document Object Model (DOM) allows for Mitsuba to make use of 3D model geometry in the Collada `.dae`
 file format. Mitsuba is therefore preferably compiled including the Collada DOM as per the instructions in the Mitsuba
  manual. This is not mandatory provided that 3D object models are available in file formats that are natively
- supported in Mitsuba (`.serial` format). 
+ supported in Mitsuba (`.serial` format).
 
 See the Mitsuba documentation for further details.
 
@@ -139,6 +139,18 @@ does not appear to work with Mitsuba.
 - Ubuntu versions from 16.04 are based on Debian stretch and may therefore be suitable for `MORTICIA` remote compute
 node purposes.
 
+Cesium and CZML
+===============
+`Cesium <http://cesiumjs.org>`_ is a javascript/browser-based system for 4D (XYZT) simulation and display. An example
+ of the Cesium viewer can be seen at the `CesiumJS website <https://cesiumjs.org/Cesium/Build/Apps/CesiumViewer/index.html>`_
+
+
+Setup of Dask Distributed
+=========================
+The ``dask`` and ``distributed`` packages provide distributed parallel processing similar to that provided by
+``ipyparallel``, but without security of any kind. Because ``dask.distributed`` is so easy to use, it is the
+preferred option for trusted networks.
+
 
 Setup of ``ipyparallel``
 ========================
@@ -154,7 +166,10 @@ following general steps must be followed:
 - Create a working directory on each machine in the cluster. The compute engines will be started in this working
   directory. If using ``libRadtran``, the work directoy should be a sub-directory of the directory containing the
   `libRadtran` `data` directory unless other arrangements have been made for `libRadtran` to locate relevant input
-   data.
+   data. The recommended name of this directory is `work`.
+- Open a detachable terminal using the `screen` command or using the `byobu` package. Use one detachable screen in
+  which to start the `ipcontroller` and another in which to run the engines. Rename these screen sessions to make them
+  easier to locate later on, using `ctrl-a :sessionname ipcontroller`.
 - Run the `ipcontroller --ip=*` command in the working directory to start the cluster controller process listening
   on all interfaces. This should only be done if your cluster resides on a trusted network. Consult the documentation
   at `ipython.org <https://ipython.org/ipython-doc/2/parallel/parallel_process.html>`_ for further details.
@@ -162,15 +177,17 @@ following general steps must be followed:
   connect to the controller.
   Make a note of the full pathnames of these .json files. They are typically in `~/.ipython/profile_default/security` with
   names `ipcontroller-client.json` and `ipcontroller-engine.json`.
+- Detach from the `ipcontroller` screen session.
 - Copy the `ipcontroller-engine.json` file to a similar location on the machine that will host the compute engines. If
   this is the same machine on which the controller itself is running, then this step may not be required.
 - Copy the `ipcontroller-client.json` file to the client that will require compute resources in the
   ``IPYTHONDIR/profile_default/security` directory. On Windows this is typically `C:\Users\(your_username)\.ipython\profile_default\`.
   Additional profile directories can be created as required.
 - If the controller is restarted for any reason, the above `.json` files will be overwritten and the above file copy
-  operations must be repeated.
+  operations must be repeated. This can be avoided by using `ipcontroller --reuse`.
 - The compute engines can now be started on the relevant machines in the desired working directory using
-  the `ipengine` command.
+  the `ipengine` command. Preferably start another detachable `screen` or `byobu` session for this and rename the
+  session to `ipengine`.
 - Note that it is generally very important to ensure that the same version of all dependent Python packages is
   running on all compute nodes. Once all dependencies have been installed, make sure that all packages are updated
   or upgraded, in particular the ``xarray`` package (`pip install --upgrade xarray`).
@@ -180,6 +197,8 @@ following general steps must be followed:
 It is very important to keep the ``MORTICIA`` code the same on all platforms in use. Git pull the code and restart the
 compute engines on the compute nodes if the ``MORTICIA`` codebase is altered. Also restart on the host. The typical
 symptom of code that is out of sync when using `ipyparallel` is a PicklingError exception.
+
+
 
 MORTICIA Development
 ====================
@@ -203,6 +222,12 @@ in Windows or::
 in Linux.
 
 Not all packages required by `MORTICIA` or `nbMORTICIA` are included with Anaconda. These will have to be installed
-manually using `conda` or `pip`. Missing packages could include `paramiko`, `pint`, '`easygui`, `dill`, `ipyparallel` and `xarray`. If the
-development environment is not cloned from root, it will be necessary to install many more packages, including basics
+manually using `conda` or `pip`. Missing packages may include `paramiko`, `pint`, '`easygui`, `dill`, `ipyparallel` and
+ `xarray`. If the development environment is not cloned from root, it will be necessary to install many more
+ packages, including basics
 such as `numpy`.
+
+Keeping Installations Synchronised
+==================================
+`MORTICIA` generally requires multiple platforms, including a remote compute server/cluster. It is necessary to keep
+all components up-to-date on all platforms.
