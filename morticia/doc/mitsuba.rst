@@ -28,8 +28,8 @@ XML tools.
 
 Spectral Rendering
 ------------------
-Mitsuba must be compiled in the spectral mode with the number of spectral bins
-set to 4 or more. The optimal number of bins depends on numerous factors, such as
+For full radiometrically accurate rendering, Mitsuba must be compiled in the spectral mode with the number of spectral
+bins set to 4 or more. The optimal number of bins depends on numerous factors, such as
 - If Mitsuba is to be run in parallel mode across a number of network compute resources
 - The complexity of the scenes to be rendered
 - The number of spectral bins that are actually required for the problem at hand
@@ -56,16 +56,11 @@ Mitsuba runs, with each run dealing with a subset of spectral bins. Parallel run
  of Mitsuba with more spectral bins.
 - When writing REMs to OpenEXR files for Mitsuba to use as environment maps, each EXR file must have the correct
 number of channels (spectral bins).
-- It does not appear to be possible to run multiple copies of Mitsuba with different numbers of spectral bins on a
-single compute platform. This
-is mainly because all plugins, which are implemented as shared libraries (DLLs on Windows), must be compiled with
-the same number of spectral bins.
-- For a specific installation of ``MORTICIA``, the least confusing approach is to have all instances of Mitsuba across
-all harnessed compute platforms compiled with the same number of spectral bins.
-- Note that if depth maps are required from Mitsuba, then it must be compiled in the standard RGB mode. Hence it
-can be useful to have a 3-channel Mitsuba compilation available on one of the available compute servers, strictly
-for the purpose of computing depth maps for a scene. Depth maps are useful for rendering purposes when the scene
-contains objects at a variety of distances (say an aircraft and a ground plane).
+- MORTICIA requires access to an RGB installation as well as a full spectral installation of Mitsuba on the main
+host platform (the user host). Since it is difficult to compile a spectral Mitsuba for Windows, it is
+recommended that the main host platform be Linux, preferably Ubuntu 12.04 LTS.
+- Problems have also been encountered accessing a runnning instance of mtssrv (parallel Mitsuba render service) on
+a Linux platform from a Windows platform. This is another reason to use Linux exclusively.
 
 It is possible to establish how many spectral bins a particular installation of Mitsuba has been compiled for within
 the `mtsgui` GUI utility. Go to Help->About and look for the compilation flag `SPECTRUM_SAMPLES`.
@@ -93,7 +88,7 @@ This should give access to `mtsgui` and the `mitsuba` render command from any no
 Emitters in Mitsuba
 -------------------
 The `sky`, `sun` and `sunsky` emitters within Mitsuba scenes are only used in the MORTICIA context for creating
-presentation images. These emitter types must be avoided for quantitative work. Instead a REM from libRadtran is used
+presentation images. These emitter types must be avoided for quantitative work. Instead, a REM from libRadtran is used
  within an `envmap` emitter type for the diffuse component and a `directional` emitter for the direct solar component.
 
  In the thermal spectrum, the `directional` emitter falls away and only the `source thermal` environment map is used.
@@ -212,11 +207,13 @@ format. The Blender application can also be used to both create and convert geom
 formats, which can then be converted to Mitsuba format using the `mtsgui` tool provided with Mitsuba.
 
 The very simple `.stl` format can be used for plain geometry creation and import into Blender. Many CAD applications
-such as DesignSpark Mechanical can export `.stl` format files.
+such as DesignSpark Mechanical can export `.stl` format files. `FreeCad <https://www.freecadweb.org/>`_ is another free
+and open source tool that can be used to create geometry or convert geometry to or from `.step`, `.dae`, `.obj`, `.stl`
+or other file formats.
 
 Once a collection of indexed shapes are available in a `.serialized` file, the contents of the `.xml` scene file will
 reference the shapes by index and apply BSDFs, textures, radiance and other properties to the shapes. Some properties
-(e.g. texture) can be varied within a shape by using UV coordinate mapping. Simnple shape geometry (spheres, cubes,
+(e.g. texture) can be varied within a shape by using UV coordinate mapping. Simple shape geometry (spheres, cubes,
 cylinders etc.) can be created within the `.xml` scene file, but complex geometry is best contained in the
 native Mitsuba `.serialized` format.
 
