@@ -145,12 +145,6 @@ Cesium and CZML
  of the Cesium viewer can be seen at the `CesiumJS website <https://cesiumjs.org/Cesium/Build/Apps/CesiumViewer/index.html>`_
 
 
-Setup of Dask Distributed
-=========================
-The ``dask`` and ``distributed`` packages provide distributed parallel processing similar to that provided by
-``ipyparallel``, but without security of any kind. Because ``dask.distributed`` is so easy to use, it is the
-preferred option for trusted networks.
-
 
 Setup of ``ipyparallel``
 ========================
@@ -191,12 +185,19 @@ following general steps must be followed:
 - Note that it is generally very important to ensure that the same version of all dependent Python packages is
   running on all compute nodes. Once all dependencies have been installed, make sure that all packages are updated
   or upgraded, in particular the ``xarray`` package (`pip install --upgrade xarray`).
-- On Windows, it may be necessary to run the command window as Administrator to get the necessary priveledges for
+- On Windows, it may be necessary to run the command window as Administrator to get the necessary privileges for
   package installation and upgrading.
 
 It is very important to keep the ``MORTICIA`` code the same on all platforms in use. Git pull the code and restart the
-compute engines on the compute nodes if the ``MORTICIA`` codebase is altered. Also restart on the host. The typical
+compute engines on the compute nodes if the ``MORTICIA`` codebase is altered. Also restart on the host. A common
 symptom of code that is out of sync when using `ipyparallel` is a PicklingError exception.
+
+Setup of Dask Distributed
+=========================
+The ``dask`` and ``distributed`` packages provide distributed parallel processing similar to that provided by
+``ipyparallel``, but without security of any kind. Because ``dask.distributed`` is so easy to use, it is the
+preferred option for trusted networks. See the example Jupyter notebooks on calculation of radiant environment maps
+using libRadtran.
 
 
 
