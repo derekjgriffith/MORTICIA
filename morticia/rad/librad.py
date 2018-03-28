@@ -98,8 +98,8 @@ sourceSolarUnits = {
     'atlas_plus_modtran_ph': ['count/s', 'cm^2', 'nm'],  # count photons
     'atlas2': ['mW', 'm^2', 'nm'],
     'atlas3': ['mW', 'm^2', 'nm'],
-    'fu': ['W', 'm^2', ''],  # in band
-    'kato': ['W', 'm^2', ''],  # in band
+    'fu': ['W', 'm^2', ''],  # in band. Check output units, usually W/m^2 for 'source thermal'
+    'kato': ['W', 'm^2', ''],  # in band. Check output units
     'kurudz_0.1nm.dat': ['mW', 'm^2', 'nm'],
     'kurudz_1.0nm.dat': ['mW', 'm^2', 'nm'],
     'NewGuey2003.dat': ['mW', 'm^2', 'nm'],
@@ -108,7 +108,7 @@ sourceSolarUnits = {
 
 # Units generally depend on the units in the solar flux file, but may be dictated by the correlated-k band model
 uvspecOutVars = {
-    'lambda': 'Wavelength [nm]',  # Cannot be used in Python because lambda is a keyword use 'wvl
+    'lambda': 'Wavelength [nm]',  # Cannot be used in Python because lambda is a keyword. Instead use 'wvl'
     'wavelength': 'Wavelength [nm]', # scalar per line
     'wavenumber': 'Wavenumber [cm^1]',  # abbreviate to wvn
     'wvn': 'Wavenumber [cm^-1]',
@@ -566,17 +566,20 @@ class Case(object):
             self.mol_abs_param = 'kato'
             self.spectral_res = ''
             self.spectral_axis = 'chn'
+            self.rad.units[0] = 'W'  # W rather than mW for Kato
             self.rad_units[2] = ''  # band integrated quantity out
         elif tokens[0] == 'kato2':
             self.mol_abs_param = 'kato2'
             self.spectral_res = ''
             self.spectral_axis = 'chn'
+            self.rad.units[0] = 'W'  # W rather than mW for Kato
             self.rad_units[2] = ''  # band integrated quantity
         elif tokens[0] == 'kato2.96':
             self.mol_abs_param = 'kato2.96'
             self.spectral_res = ''
             self.spectral_axis = 'chn'
-            self.rad_units[2] = ''  # band integrated quanitity
+            self.rad.units[0] = 'W'  # W rather than mW for Kato
+            self.rad_units[2] = ''  # band integrated quantity
         elif tokens[0] == 'fu':
             self.mol_abs_param = 'fu'
             self.spectral_res = ''
@@ -1468,6 +1471,7 @@ class Case(object):
             is released to background and read_output is set to False (regardless of user input).
         :param purge: If set True, the input and output files from this run will be deleted after the run is complete
             and the outputs have been read. Will only be honoured if read_output is also True. Default is True.
+            To prevent purging for a particular librad.Case, set the individual case property to False.
             To prevent purging for a particular librad.Case, set the individual case property to False.
         :param check_output: If set True, the uvspec command is executed using the subprocess.check_output call, which
             will place the standard output from the run in self.check_output. This is useful for diagnostic
