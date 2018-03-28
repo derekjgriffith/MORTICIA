@@ -566,19 +566,19 @@ class Case(object):
             self.mol_abs_param = 'kato'
             self.spectral_res = ''
             self.spectral_axis = 'chn'
-            self.rad.units[0] = 'W'  # W rather than mW for Kato
+            self.rad_units[0] = 'W'  # W rather than mW for Kato
             self.rad_units[2] = ''  # band integrated quantity out
         elif tokens[0] == 'kato2':
             self.mol_abs_param = 'kato2'
             self.spectral_res = ''
             self.spectral_axis = 'chn'
-            self.rad.units[0] = 'W'  # W rather than mW for Kato
+            self.rad_units[0] = 'W'  # W rather than mW for Kato
             self.rad_units[2] = ''  # band integrated quantity
         elif tokens[0] == 'kato2.96':
             self.mol_abs_param = 'kato2.96'
             self.spectral_res = ''
             self.spectral_axis = 'chn'
-            self.rad.units[0] = 'W'  # W rather than mW for Kato
+            self.rad_units[0] = 'W'  # W rather than mW for Kato
             self.rad_units[2] = ''  # band integrated quantity
         elif tokens[0] == 'fu':
             self.mol_abs_param = 'fu'
