@@ -479,7 +479,11 @@ class Case(object):
                     print('Warning, keyword option ' +  option[0] + ' not found in options library.')
                 # Make any possible preparations for occurance of this keyword
                 self.prepare_for_keyword(option[0],option[1:])
-        if not self.name:  # set the name as the basname of the filename, excluding the extension
+        else:  # Not reading from file, use casename for filenames
+            self.infile = casename + '.INP'
+            self.outfile = casename + '.OUT'
+            self.errfile = casename + '.ERR'
+        if not self.name:  # set the name as the basename of the filename, excluding the extension
             self.name = os.path.basename(self.infile)[:-4]
         #TODO Build the case from the option list ?
 
@@ -1775,6 +1779,7 @@ class RadEnv(object):
                 # Set the umu and phi keyword parameters
                 self.cases[ipol][iazi].alter_option(['phi'] + [str(x) for x in batch_azi])
                 self.cases[ipol][iazi].alter_option(['umu'] + [str(x) for x in batch_pol])
+                # Set up individual case names
                 self.cases[ipol][iazi].infile = (self.cases[ipol][iazi].infile[:-4] +
                                                  '_{:04d}_{:04d}.INP'.format(ipol, iazi))
                 self.cases[ipol][iazi].outfile = (self.cases[ipol][iazi].outfile[:-4] +
@@ -2448,7 +2453,7 @@ class RadEnv(object):
         Irfanview can display three-component, normalised EXR files only. The Mitsuba GUI (mtsgui) can display
         EXR files with any number of channels, but it is necessary to step through the channels (using [ and ])
         and they are displayed in grayscale. Even mtsgui will clip EXR files having radiance values exceeding 1.0.
-        The mrviewer application is recommended for viewing og EXR files.
+        The mrviewer application is recommended for viewing of EXR files.
 
         :return:
         """
