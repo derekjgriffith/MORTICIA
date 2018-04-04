@@ -27,19 +27,45 @@ Class for Mitsuba support
 """
 #import lxml
 import numpy as np
-# The following is messy, but nothing else seems to work.
-# Putting Mitsuba path into morticia.pth does not work.
+# Read the Mitsuba manual section on Python integration. On windows it is necessary to explicitly specify the location
+# of the Mitsuba installation as follows:
+
 import os, sys
-# NOTE: remember to specify paths using FORWARD slashes (i.e. '/' instead of
-# '\' to avoid pitfalls with string escaping)
-# Configure the search path for the Python extension module
-sys.path.append('D:/Projects/MORTICIA/Render/Mitsuba 0.5.0/python/2.7')
-# Ensure that Python will be able to find the Mitsuba core libraries
-os.environ['PATH'] = 'D:/Projects/MORTICIA/Render/Mitsuba 0.5.0' + os.pathsep + os.environ['PATH']
+if sys.platform == 'win32':
+    # NOTE: remember to specify paths using FORWARD slashes (i.e. '/' instead of
+    # '\' to avoid pitfalls with string escaping)
+    # Configure the search path for the Python extension module
+    # Replace strings below with location of your Mitsuba
+    sys.path.append('D:/Projects/MORTICIA/Render/Mitsuba 0.5.0/python/2.7')
+    # Ensure that Python will be able to find the Mitsuba core libraries
+    os.environ['PATH'] = 'D:/Projects/MORTICIA/Render/Mitsuba 0.5.0' + os.pathsep + os.environ['PATH']
+else:
+    pass  # Assume that user has done the necessary
+    # On Linux, ensure that the `source setpath.sh` appears in your .bashrc
 
 import warnings
 import mitsuba.core as mitcor
 import mitsuba.render as mitren
+import re
+
+
+def probe_mitsuba_SPECTRUM_SAMPLES():
+    """
+    Determine the number of SPECTRUM_SAMPLES for which this Mitsuba has been compiled.
+    This is a messy and indirect solution and the Python API may have a direct method hidden somewhere.
+    :return: The number of SPECTRUM_SAMPLES used when the available Mitsuba binary was compiled. See the Mitsuba
+    manual for further details on the SPECTRUM_SAMPLES compilation switch.
+    """
+    # Instantiate a spectrum with 2 samples and process the error message
+    spectrum_samples = None
+    scan_match = re.compile('main \[core\.cpp:\d*\] Spectrum: expected (\d*) arguments')
+    try:
+        myspectrum = mitcor.Spectrum([1.0, 1.0])
+    except RuntimeError, error:
+        spectrum_samples = int(re.match(scan_match, error.message).groups()[0])
+    return spectrum_samples
+
+SPECTRUM_SAMPLES = probe_mitsuba_SPECTRUM_SAMPLES()
 
 class Transform(object):
     """
@@ -118,6 +144,17 @@ class Transform(object):
 
     def __rmul__(self, other):
         self.xform = other * self
+
+class Animation(object):
+    """
+    This class encapsulates animation transformations for Mitsuba objects (mainly target geometry components and
+    sensor locations). Animations provide a series of at a sequence of times. The time is assumed to be in seconds
+    relative to the epoch (start time) of the scenario. The animation transformation is then a list of Transform
+    objects with associated elapsed time in seconds.
+
+    Unclear right now if Mitsuba Python bindings include the render Animation transformations.
+    """
+    pass
 
 
 class Mitsuba(object):
@@ -208,22 +245,26 @@ class Mitsuba(object):
         # Just calculate the direction in the required coordinate frame add the directional light
         altitude = np.pi/2.0 - np.deg2rad(sza)
         azimuth = np.deg2rad(saz)
-        z = np.sin(altitude)
+        z = np.sin(altitude)  # Z-axis is towards the zenith
         hyp = np.cos(altitude)
-        y = hyp * np.cos(azimuth)
-        x = hyp * np.sin(azimuth)
-        light_direction = (-x, -y , -z)  # Light travels in opposite direction to vector towards the sun
+        y = hyp * np.sin(azimuth)
+        x = hyp * np.cos(azimuth)
+        light_direction = (-x, -y, -z)  # Light travels in opposite direction to vector towards the sun
         self.add_directional_light(direction=light_direction, irradiance=irradiance, samplingWeight=samplingWeight)
 
-    def add_radiant_environment_map(self, filename, scale=1.0, toWorld=None, gamma=1.0, cache=None, samplingWeight=1.0):
+    def add_radiant_environment_map(self, filename, saz=0.0, scale=1.0, toWorld=None, gamma=1.0, cache=None,
+                                    samplingWeight=1.0):
         """
-        Add a radiant enviroment map (envmap) to a Mitsuba scene taken from a file (typically OpenEXR format).
+        Add a radiant environment map (envmap) to a Mitsuba scene taken from a file (typically OpenEXR format).
         :param filename: Filename of the file to fetch the REM from. Supports any image format supported by Mitsuba.
         For `MORTICIA` purposes, only use OpenEXR.
+        :param saz: Solar azimuth angle in degrees. Once the REM has been rotated such that the zenith is along the
+        Z-axis, it is then rotated to place the solar aureole at the given azimuth. This is a positive rotation about
+        the Z-axis by the solar azimuth (saz). It is assumed that the REM is provided such that the aureole
         :param scale: Scale the REM by this scalar value. Defaults to 1.0.
         :param toWorld: Transformation (only rotation matters) of the environment map. By default, the REM will be
         rotated so that the zenith is along the X-axis, the X-axis is towards the North and the Y-axis is towards the
-        East.
+        East. This involves a 90 degree rotation about the X-axis.
         :param gamma: Override the gamma value of the REM source bitmap. For MORTICIA purposes, the REM should be
         absolute and high dynamic range (OpenEXR) and gamma will default to 1.0.
         :param cache: Set True to force MIP mapping of the REM and False to inhibit. Default is automatic which will
@@ -237,8 +278,11 @@ class Mitsuba(object):
         if toWorld is None:  # Generate the default REM rotation, which is +Z towards the zenith
             toWorld = Transform()  # Get identity transform
             toWorld.rotate((1.0, 0.0, 0.0), 90.0)  # Rotate by 90 degrees about the x-axis
+        if saz != 0.0:
+            toWorld.rotate((0.0, 0.0, 1.0), saz)  # Rotate by solar azimuth about the new z-axis
         envmap_props = mitcor.Properties('envmap')
-        envmap_props['filename'] = filename
+        envmap_props['filename'] = self.fileResolver.resolve(filename)
+        envmap_props['scale'] = scale
         envmap_props['toWorld'] = toWorld.xform
         envmap_props['gamma'] = gamma
         if cache is not None:
