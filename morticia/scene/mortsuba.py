@@ -60,12 +60,32 @@ def probe_mitsuba_SPECTRUM_SAMPLES():
     spectrum_samples = None
     scan_match = re.compile('main \[core\.cpp:\d*\] Spectrum: expected (\d*) arguments')
     try:
-        myspectrum = mitcor.Spectrum([1.0, 1.0])
+        myspectrum = mitcor.Spectrum([1.0, 1.0])  # 2-sample spectrum should be rejected with Mitsuba error message
     except RuntimeError, error:
         spectrum_samples = int(re.match(scan_match, error.message).groups()[0])
     return spectrum_samples
 
+# Set up some defaults
 SPECTRUM_SAMPLES = probe_mitsuba_SPECTRUM_SAMPLES()
+if SPECTRUM_SAMPLES == 3:
+    default_pixelFormat = 'rgb'
+else:
+    default_pixelFormat = 'spectrum'
+
+
+default_banner = False  # Do not, by default put Mitsuba banner on output images
+default_componentFormat = 'float32'  # Use maximum accuracy for output Mitsuba image formats which allow this
+default_attachLog = False  # Do not, by default attach complete rendering log to output hdrfilm images
+default_height = 768  # Default film output height in pixels for Mitsuba renders
+default_width = 576  # Default film output width in pixels for Mitusba renders
+default_hdr_fileFormat = 'openexr'  # Default high dynamic range film output
+default_highQualityEdges = True  # Use high quality edges by default in case image must be inserted into another
+default_ldr_fileFormat = 'png'  # Default low dynamic range file format output
+default_ldr_tonemapMethod = 'gamma'
+default_ldr_gamma = -1
+default_ldr_exposure = 0
+default_ldr_key = 0.18
+default_ldr_burn = 0
 
 class Transform(object):
     """
@@ -148,13 +168,52 @@ class Transform(object):
 class Animation(object):
     """
     This class encapsulates animation transformations for Mitsuba objects (mainly target geometry components and
-    sensor locations). Animations provide a series of at a sequence of times. The time is assumed to be in seconds
-    relative to the epoch (start time) of the scenario. The animation transformation is then a list of Transform
-    objects with associated elapsed time in seconds.
+    sensor locations). Animations provide a series of transforms at a sequence of times. The time is assumed to be in
+    seconds relative to the epoch (start time) of the scenario. The animation transformation is then a list of
+    Transform objects with associated elapsed time in seconds.
 
     Unclear right now if Mitsuba Python bindings include the render Animation transformations.
     """
     pass
+
+class ReconstructionFilter(object):
+    """
+    Encapsulates Mitsuba reconstruction filters applied to images after rendering: From the Mitsuba manual:
+    Image reconstruction filters are responsible for converting a series of radiance samples generated
+    jointly by the sampler and integrator into the final output image that will be written to disk at the
+    end of a rendering process. This section gives a brief overview of the reconstruction filters that are
+    available in Mitsuba.There is no universally superior filter, and the final choice depends on a trade-off
+    between sharpness, ringing, and aliasing, and computational efficiency. Mitsuba currently has 6 reconstruction
+    filters, namely `box`, `tent`, `gaussian`, `mitchell`, `catmullrom` and `lanczos`.
+
+    Note : Reconstruction filters cannot currently be instantiated from Python. Generally it will be necessary to
+    live with the default, which is a gaussian filter.
+    """
+    def __init__(self, type='gaussian', B=1.0/3.0, C=1.0/3.0, lobes=3):
+        self.type = type
+        rfilter_props = mitcor.Properties('rfilter')
+        rfilter_props['type'] = type
+        if type == 'mitchell' or type == 'catmullrom':
+            rfilter_props['B'] = B
+            rfilter_props['C'] = C
+        if type == 'lanczos':
+            rfilter_props['lobes'] = lobes
+        self.rfilter = mitcor.ReconstructionFilter(rfilter_props)
+        self.rfilter.configure()
+        self.radius = self.rfilter.getRadius()
+        self.borderSize = self.rfilter.getBorderSize()
+
+class Film(object):
+    """
+    The Film class encapsulates Mitsuba films. From the Mitsuba manual:
+    A film defines how conducted measurements are stored and converted into the final output file that
+    is written to disk at the end of the rendering process. Mitsuba comes with a few films that can write
+    to high and low dynamic range image formats (OpenEXR, JPEG or PNG), as well more scientifically
+    oriented data formats (e.g. MATLAB or Mathematica).
+    """
+    def __init__(self, width, height, cropOffsetX=None, cropOffsetY=None, cropWidth=None, cropHeight=None,
+                 pixelFormat=default_pixelFormat, rfilter=None):
+        pass
 
 
 class Mitsuba(object):
