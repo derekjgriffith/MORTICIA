@@ -27,6 +27,10 @@ Class for Mitsuba support
 """
 #import lxml
 import numpy as np
+import warnings
+import mitsuba.core as mitcor
+import mitsuba.render as mitren
+import re
 # Read the Mitsuba manual section on Python integration. On windows it is necessary to explicitly specify the location
 # of the Mitsuba installation as follows:
 
@@ -42,11 +46,6 @@ if sys.platform == 'win32':
 else:
     pass  # Assume that user has done the necessary
     # On Linux, ensure that the `source setpath.sh` appears in your .bashrc
-
-import warnings
-import mitsuba.core as mitcor
-import mitsuba.render as mitren
-import re
 
 
 def probe_mitsuba_SPECTRUM_SAMPLES():
@@ -72,7 +71,6 @@ if SPECTRUM_SAMPLES == 3:
 else:
     default_pixelFormat = 'spectrum'
 
-
 default_banner = False  # Do not, by default put Mitsuba banner on output images
 default_componentFormat = 'float32'  # Use maximum accuracy for output Mitsuba image formats which allow this
 default_attachLog = False  # Do not, by default attach complete rendering log to output hdrfilm images
@@ -82,10 +80,13 @@ default_hdr_fileFormat = 'openexr'  # Default high dynamic range film output
 default_highQualityEdges = True  # Use high quality edges by default in case image must be inserted into another
 default_ldr_fileFormat = 'png'  # Default low dynamic range file format output
 default_ldr_tonemapMethod = 'gamma'
-default_ldr_gamma = -1
-default_ldr_exposure = 0
+default_ldr_gamma = -1.0
+default_ldr_exposure = 0.0
 default_ldr_key = 0.18
-default_ldr_burn = 0
+default_ldr_burn = 0.0
+
+# Get a global Mitsuba plugin manager
+plugin_mngr = mitcor.PluginManager.getInstance()
 
 class Transform(object):
     """
@@ -177,44 +178,326 @@ class Animation(object):
     pass
 
 class ReconstructionFilter(object):
-    """
-    Encapsulates Mitsuba reconstruction filters applied to images after rendering: From the Mitsuba manual:
-    Image reconstruction filters are responsible for converting a series of radiance samples generated
-    jointly by the sampler and integrator into the final output image that will be written to disk at the
-    end of a rendering process. This section gives a brief overview of the reconstruction filters that are
-    available in Mitsuba.There is no universally superior filter, and the final choice depends on a trade-off
-    between sharpness, ringing, and aliasing, and computational efficiency. Mitsuba currently has 6 reconstruction
-    filters, namely `box`, `tent`, `gaussian`, `mitchell`, `catmullrom` and `lanczos`.
 
-    Note : Reconstruction filters cannot currently be instantiated from Python. Generally it will be necessary to
-    live with the default, which is a gaussian filter.
-    """
-    def __init__(self, type='gaussian', B=1.0/3.0, C=1.0/3.0, lobes=3):
+    def __init__(self, type='gaussian', stddev=2.0, B=1.0/3.0, C=1.0/3.0, lobes=3):
         self.type = type
-        rfilter_props = mitcor.Properties('rfilter')
-        rfilter_props['type'] = type
+        self.plugin_mngr = mitcor.PluginManager.getInstance()
+        rfilter_props = mitcor.Properties(type)
+           # Don't know what this property is or how to find out
         if type == 'mitchell' or type == 'catmullrom':
             rfilter_props['B'] = B
             rfilter_props['C'] = C
         if type == 'lanczos':
             rfilter_props['lobes'] = lobes
-        self.rfilter = mitcor.ReconstructionFilter(rfilter_props)
+        self.rfilter = self.plugin_mngr.createObject(rfilter_props)
         self.rfilter.configure()
         self.radius = self.rfilter.getRadius()
         self.borderSize = self.rfilter.getBorderSize()
 
-class Film(object):
+# Classes for different Mitsuba reconstruction filters
+"""
+The Filter classes encapsulate Mitsuba reconstruction filters applied to images after rendering. From the Mitsuba
+manual:
+Image reconstruction filters are responsible for converting a series of radiance samples generated
+jointly by the sampler and integrator into the final output image that will be written to disk at the
+end of a rendering process. This section gives a brief overview of the reconstruction filters that are
+available in Mitsuba.There is no universally superior filter, and the final choice depends on a trade-off
+between sharpness, ringing, and aliasing, and computational efficiency. Mitsuba currently has 6 reconstruction
+filters, namely `box`, `tent`, `gaussian`, `mitchell`, `catmullrom` and `lanczos`.
+"""
+class BoxFilter(object):
     """
-    The Film class encapsulates Mitsuba films. From the Mitsuba manual:
-    A film defines how conducted measurements are stored and converted into the final output file that
-    is written to disk at the end of the rendering process. Mitsuba comes with a few films that can write
-    to high and low dynamic range image formats (OpenEXR, JPEG or PNG), as well more scientifically
-    oriented data formats (e.g. MATLAB or Mathematica).
+    The fastest, but also about the worst possible reconstruction filter, since it is extremely
+    prone to aliasing. It is included mainly for completeness, though some rare situations
+    may warrant its use. The filter radius defaults to 0.5 pixels.
+    Note that the radius input to the BoxFilter constructor may not work.
     """
-    def __init__(self, width, height, cropOffsetX=None, cropOffsetY=None, cropWidth=None, cropHeight=None,
-                 pixelFormat=default_pixelFormat, rfilter=None):
-        pass
+    def __init__(self, radius=0.5):
+        self.filtertype = 'box'
+        rfilter_props = mitcor.Properties(self.filtertype)
+        rfilter_props['radius'] = radius
+        self.rfilter = plugin_mngr.createObject(rfilter_props)
+        self.rfilter.configure()
+        self.radius = self.rfilter.getRadius()
+        self.borderSize = self.rfilter.getBorderSize()
 
+
+class TentFilter(object):
+    """
+    Simple tent, or triangle filter.This reconstruction filter never suffers from ringing
+    and usually causes less aliasing than a naive box filter.When rendering scenes with sharp brightness
+    discontinuities, this may be useful; otherwise, negative-lobed filters will be preferable (e.g.
+    Mitchell-Netravali or Lanczos Sinc). The filter radius defaults to 1.0 pixels.
+    """
+    def __init__(self):
+        self.filtertype = 'tent'
+        rfilter_props = mitcor.Properties(self.filtertype)
+        self.rfilter = plugin_mngr.createObject(rfilter_props)
+        self.rfilter.configure()
+        self.radius = self.rfilter.getRadius()
+        self.borderSize = self.rfilter.getBorderSize()
+
+
+class GaussianFilter(object):
+    """
+    This is a windowed Gaussian filter with configurable standard deviation.
+    It produces pleasing results and never suffers from ringing, but may occasionally introduce too
+    much blurring. When no reconstruction filter is explicitly requested, this is the default choice
+    in Mitsuba. The gaussian standard deviation defaults to 0.5 pixels. Providing another value may not work.
+    """
+    def __init__(self, stddev=0.5):
+        self.filtertype = 'gaussian'
+        rfilter_props = mitcor.Properties(self.filtertype)
+        rfilter_props['stddev'] = stddev
+        self.rfilter = plugin_mngr.createObject(rfilter_props)
+        self.rfilter.configure()
+        self.radius = self.rfilter.getRadius()
+        self.borderSize = self.rfilter.getBorderSize()
+
+
+class MitchellFilter(object):
+    """
+    Separable cubic spline reconstruction filter by Mitchell and
+    Netravali [32]This is often a good compromise between sharpness and ringing.
+    The plugin has two float-valued parameters named B and C that correspond to the two parameters
+    in the original research paper. By default, these are set to the recommended value of
+    1/3, but can be tweaked if desired.
+    """
+    def __init__(self, B=1.0/3.0, C=1.0/3.0):
+        self.filtertype = 'mitchell'
+        rfilter_props = mitcor.Properties(self.filtertype)
+        rfilter_props['B'] = B
+        rfilter_props['C'] = C
+        self.rfilter = plugin_mngr.createObject(rfilter_props)
+        self.rfilter.configure()
+        self.radius = self.rfilter.getRadius()
+        self.borderSize = self.rfilter.getBorderSize()
+
+
+class CatmullRomFilter(object):
+    """
+    This is a special version of the Mitchell-Netravali filter that has
+    the constants B and C adjusted to produce higher sharpness at the cost of increased susceptibility
+    to ringing.
+    """
+    def __init__(self):
+        self.filtertype = 'catmullrom'
+        rfilter_props = mitcor.Properties(self.filtertype)
+        self.rfilter = plugin_mngr.createObject(rfilter_props)
+        self.rfilter.configure()
+        self.radius = self.rfilter.getRadius()
+        self.borderSize = self.rfilter.getBorderSize()
+
+
+class LanczosFilter(object):
+    """
+    This is a windowed version of the theoretically optimal low-pass filter.
+    It is generally one of the best available filters in terms of producing sharp high-quality
+    output. Its main disadvantage is that it produces strong ringing around discontinuities, which
+    can become a serious problem when rendering bright objects with sharp edges (for instance, a
+    directly visible light source will have black fringing artifacts around it).This is also the computationally
+    slowest reconstruction filter.
+    This plugin has an integer-valued parameter named lobes, that sets the desired number of
+    filter side-lobes.The higher, the closer the filter will approximate an optimal low-pass filter, but
+    this also increases the susceptibility to ringing. Values of 2 or 3 are common (3 is the default).
+    """
+    def __init__(self, lobes=3):
+        self.filtertype = 'lanczos'
+        rfilter_props = mitcor.Properties(self.filtertype)
+        rfilter_props['radius'] = radius
+        rfilter_props['lobes'] = lobes
+        self.rfilter = plugin_mngr.createObject(rfilter_props)
+        self.rfilter.configure()
+        self.radius = self.rfilter.getRadius()
+        self.borderSize = self.rfilter.getBorderSize()
+
+# End of Mitsuba reconstruction filter classes
+
+# Classes for various times of Mitsuba sensor "film".
+"""
+The Film classes encapsulates Mitsuba films. From the Mitsuba manual:
+A film defines how conducted measurements are stored and converted into the final output file that
+is written to disk at the end of the rendering process. Mitsuba comes with a few films that can write
+to high and low dynamic range image formats (OpenEXR, JPEG or PNG), as well more scientifically
+oriented data formats (e.g. Numpy, MATLAB or Mathematica).
+"""
+
+class HdrFilm(object):
+    def __init__(self, width=default_width, height=default_height, cropOffsetX=None, cropOffsetY=None,
+                 cropWidth=None, cropHeight=None, fileFormat=default_hdr_fileFormat, pixelFormat=default_pixelFormat,
+                 componentFormat=default_componentFormat, attachLog = default_attachLog,
+                 banner=default_banner, highQualityEdges=default_highQualityEdges, rfilter=None):
+        """
+
+        :param width:
+        :param height:
+        :param cropOffsetX:
+        :param cropOffsetY:
+        :param cropWidth:
+        :param cropHeight:
+        :param fileFormat:
+        :param pixelFormat:
+        :param componentFormat:
+        :param attachLog:
+        :param banner:
+        :param highQualityEdges:
+        :param rfilter:
+        :return:
+        """
+        hdrfilm_props = mitcor.Properties('hdrfilm')
+        hdrfilm_props['width'] = width
+        hdrfilm_props['height'] = height
+        hdrfilm_props['fileFormat'] = fileFormat
+        if cropOffsetX is not None:
+            hdrfilm_props['cropOffsetX'] = cropOffsetX
+            hdrfilm_props['cropOffsetY'] = cropOffsetY
+            hdrfilm_props['cropWidth'] = cropWidth
+            hdrfilm_props['cropHeight'] = cropHeight
+        hdrfilm_props['pixelFormat'] = pixelFormat
+        hdrfilm_props['componentFormat'] = componentFormat
+        hdrfilm_props['attachLog'] = attachLog
+        hdrfilm_props['banner'] = banner
+        hdrfilm_props['highQualityEdges'] = highQualityEdges
+        hdrfilm = plugin_mngr.createObject(hdrfilm_props)
+        if rfilter is not None:
+            hdrfilm.addChild(rfilter)
+        hdrfilm.configure()
+        self.film = hdrfilm
+
+
+class TiledHdrFilm(object):
+    def __init__(self, width=default_width, height=default_height, cropOffsetX=None, cropOffsetY=None,
+                 cropWidth=None, cropHeight=None, pixelFormat=default_pixelFormat,
+                 componentFormat=default_componentFormat, rfilter=None):
+        """
+
+        :param width:
+        :param height:
+        :param cropOffsetX:
+        :param cropOffsetY:
+        :param cropWidth:
+        :param cropHeight:
+        :param pixelFormat:
+        :param componentFormat:
+        :param rfilter:
+        :return:
+        """
+        hdrfilm_props = mitcor.Properties('tiledhdrfilm')
+        hdrfilm_props['width'] = width
+        hdrfilm_props['height'] = height
+        if cropOffsetX is not None:
+            hdrfilm_props['cropOffsetX'] = cropOffsetX
+            hdrfilm_props['cropOffsetY'] = cropOffsetY
+            hdrfilm_props['cropWidth'] = cropWidth
+            hdrfilm_props['cropHeight'] = cropHeight
+        hdrfilm_props['pixelFormat'] = pixelFormat
+        hdrfilm_props['componentFormat'] = componentFormat
+        hdrfilm = plugin_mngr.createObject(hdrfilm_props)
+        if rfilter is not None:
+            hdrfilm.addChild('filter', rfilter)
+        hdrfilm.configure()
+        self.film = hdrfilm
+
+class LdrFilm(object):
+    def __init__(self, width=default_width, height=default_height, cropOffsetX=None, cropOffsetY=None,
+                 cropWidth=None, cropHeight=None, fileFormat=default_ldr_fileFormat,
+                 pixelFormat=default_pixelFormat, tonemapMethod=default_ldr_tonemapMethod,
+                 gamma=default_ldr_gamma, exposure=default_ldr_exposure, key=default_ldr_key,
+                 burn=default_ldr_burn,
+                 banner=default_banner, highQualityEdges=default_highQualityEdges, rfilter=None):
+        """
+
+        :param width: Width of sensor film in pixels
+        :param height: Height of sensor film in pixels
+        :param cropOffsetX: The crop parameters can optionally be provided to select a subrectangle
+        of the output. In this case, Mitsuba will only render
+        :param cropOffsetY:
+        :param cropWidth:
+        :param cropHeight:
+        :param fileFormat: The desired output file format: png or jpeg. (Default: png)
+        :param pixelFormat: Specifies the pixel format of the generated image. The options
+        are luminance, luminanceAlpha, rgb or rgba for
+        PNG output and rgb or luminance for JPEG output
+        :param tonemapMethod:
+        :param gamma:
+        :param exposure:
+        :param key:
+        :param burn:
+        :param banner:
+        :param highQualityEdges:
+        :param rfilter:
+        :return:
+        """
+        ldrfilm_props = mitcor.Properties('ldrfilm')
+        ldrfilm_props['width'] = width
+        ldrfilm_props['height'] = height
+        ldrfilm_props['fileFormat'] = fileFormat
+        if cropOffsetX is not None:
+            ldrfilm_props['cropOffsetX'] = cropOffsetX
+            ldrfilm_props['cropOffsetY'] = cropOffsetY
+            ldrfilm_props['cropWidth'] = cropWidth
+            ldrfilm_props['cropHeight'] = cropHeight
+        ldrfilm_props['pixelFormat'] = pixelFormat
+        ldrfilm_props['tonemapMethod'] = tonemapMethod
+        ldrfilm_props['banner'] = banner
+        ldrfilm_props['gamma'] = gamma
+        ldrfilm_props['exposure'] = exposure
+        ldrfilm_props['key'] = key
+        ldrfilm_props['burn'] = burn
+        ldrfilm_props['highQualityEdges'] = highQualityEdges
+        ldrfilm = plugin_mngr.createObject(ldrfilm_props)
+        if rfilter is not None:
+            ldrfilm.addChild(rfilter)
+        ldrfilm.configure()
+        self.film = ldrfilm
+
+
+class NumpyFilm(object):
+    def __init__(self, width=default_width, height=default_height, cropOffsetX=None, cropOffsetY=None,
+                 cropWidth=None, cropHeight=None, fileFormat='numpy', pixelFormat=default_pixelFormat,
+                 digits=6, variable='data', highQualityEdges=default_highQualityEdges, rfilter=None):
+        """
+
+        :param width: Width of rendered image in pixels.
+        :param height: Height of rendered image in pixels.
+        :param cropOffsetX: The crop parameters can optionally be provided to select a subrectangle
+        of the output. In this case, Mitsuba will only render
+        the requested regions. (Default: Unused). Integer.
+        :param cropOffsetY: Integer.
+        :param cropWidth: Integer.
+        :param cropHeight: Integer.
+        :param fileFormat: Specifies the desired output format;must be one of matlab,
+        mathematica, or numpy. (Default: numpy). String.
+        :param pixelFormat: Specifies the desired pixel format of the generated image.
+        The options are luminance, luminanceAlpha, rgb, rgba,
+        spectrum, and spectrumAlpha. In the latter two cases,
+        the number of written channels depends on the value assigned
+        to SPECTRUM_SAMPLES during compilation (see Section
+        4 for details) (Default: luminance). String input.
+        :param digits: Number of significant digits to be written. Default 6.
+        :param variable: Name of the variable in the numpy/matlab/mathematica file
+        :param highQualityEdges:
+        :param rfilter: Reconstruction filter. Default is a simple box filter (BoxFilter class)
+        :return:
+        """
+        hdrfilm_props = mitcor.Properties('mfilm')
+        hdrfilm_props['width'] = width
+        hdrfilm_props['height'] = height
+        hdrfilm_props['fileFormat'] = fileFormat
+        if cropOffsetX is not None:
+            hdrfilm_props['cropOffsetX'] = cropOffsetX
+            hdrfilm_props['cropOffsetY'] = cropOffsetY
+            hdrfilm_props['cropWidth'] = cropWidth
+            hdrfilm_props['cropHeight'] = cropHeight
+        hdrfilm_props['pixelFormat'] = pixelFormat
+        hdrfilm_props['digits'] = digits
+        hdrfilm_props['variable'] = variable
+        hdrfilm_props['highQualityEdges'] = highQualityEdges
+        hdrfilm = plugin_mngr.createObject(hdrfilm_props)
+        if rfilter is not None:
+            hdrfilm.addChild(rfilter)
+        hdrfilm.configure()
+        self.film = hdrfilm
 
 class Mitsuba(object):
     """ The Mitsuba class encapsulates the information that can be contained in a Mitsuba scene file.
