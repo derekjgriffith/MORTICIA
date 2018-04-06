@@ -166,16 +166,22 @@ class Transform(object):
     def __rmul__(self, other):
         self.xform = other * self
 
-class Animation(object):
+class AnimatedTransform(object):
     """
     This class encapsulates animation transformations for Mitsuba objects (mainly target geometry components and
     sensor locations). Animations provide a series of transforms at a sequence of times. The time is assumed to be in
-    seconds relative to the epoch (start time) of the scenario. The animation transformation is then a list of
-    Transform objects with associated elapsed time in seconds.
-
-    Unclear right now if Mitsuba Python bindings include the render Animation transformations.
+    seconds relative to the epoch (start time) of the scenario. The animation transformation is then effectively a
+    list of Transform objects with associated elapsed time in seconds. Mitsuba does not define the time (or any other)
+    physical units. These are left to the user. However, the canonical MORTICIA units for time in Mitsuba animations
+    are seconds.
     """
-    pass
+    def __init__(self, time=0.0, xform=None):
+        self.xform = mitcor.AnimatedTransform()
+        if xform is not None:
+            self.xform.appendTransform(time, xform.xform)
+
+    def appendTransform(self, time, xform):
+        self.xform.appendTransform(time, xform.xform)
 
 # Classes for Mitsuba scene geometry shapes
 
@@ -208,8 +214,8 @@ class Shape(object):
 
 class ShapeCube(Shape):
     def __init__(self, toWorld=None, flipNormals=False, bsdf=None, emit=None, id=None):
-        self.shape_type = 'cube'
-        shape_props = mitcor.Properties(self.shape_type)
+        self.type = 'cube'
+        shape_props = mitcor.Properties(self.type)
         shape_props['flipNormals'] = flipNormals
         super(ShapeCube, self).__init__(shape_props, toWorld, bsdf, emit, id)
 
@@ -217,8 +223,8 @@ class ShapeCube(Shape):
 class ShapeSphere(Shape):
     def __init__(self, center=(0.0, 0.0, 0.0), radius=1.0, toWorld=None, flipNormals=False, bsdf=None, emit=None,
                  id=None):
-        self.shape_type = 'sphere'
-        shape_props = mitcor.Properties(self.shape_type)
+        self.type = 'sphere'
+        shape_props = mitcor.Properties(self.type)
         shape_props['center'] = mitcor.Point(center[0], center[1], center[2])
         shape_props['radius'] = radius
         shape_props['flipNormals'] = flipNormals
@@ -228,8 +234,8 @@ class ShapeSphere(Shape):
 class ShapeCylinder(Shape):
     def __init__(self, toWorld=None, p0=(0.0, 0.0, 0.0), p1=(0.0, 0.0, 1.0), radius=1.0, flipNormals=False, bsdf=None,
                  emit=None, id=None):
-        self.shape_type = 'cylinder'
-        shape_props = mitcor.Properties(self.shape_type)
+        self.type = 'cylinder'
+        shape_props = mitcor.Properties(self.type)
         shape_props['p0'] = mitcor.Point(p0[0], p0[1], p0[2])
         shape_props['p1'] = mitcor.Point(p1[0], p1[1], p1[2])
         shape_props['radius'] = radius
@@ -238,18 +244,18 @@ class ShapeCylinder(Shape):
 
 
 class ShapeRectangle(Shape):
-    def __init__(self, toWorld=None, flipNormals=False, bsdf=None, emit=None):
-        self.shape_type = 'rectangle'
-        shape_props = mitcor.Properties(self.shape_type)
+    def __init__(self, toWorld=None, flipNormals=False, bsdf=None, emit=None, id=None):
+        self.type = 'rectangle'
+        shape_props = mitcor.Properties(self.type)
         shape_props['flipNormals'] = flipNormals
         super(ShapeRectangle, self).__init__(shape_props, toWorld, bsdf, emit, id)
 
 
 class ShapeWavefrontOBJ(Shape):
     def __init__(self, filename, toWorld=None, faceNormals=False, maxSmoothAngle=None, flipNormals=False,
-                 flipTexCoords=True, collapse=False, bsdf=None, emit=None):
-        self.shape_type = 'obj'
-        shape_props = mitcor.Properties(self.shape_type)
+                 flipTexCoords=True, collapse=False, bsdf=None, emit=None, id=None):
+        self.type = 'obj'
+        shape_props = mitcor.Properties(self.type)
         shape_props['filename'] = filename
         shape_props['faceNormals'] = faceNormals
         if maxSmoothAngle is not None:
@@ -264,8 +270,8 @@ class ShapeWavefrontOBJ(Shape):
 class ShapeStanfordTriangles(Shape):
     def __init__(self, filename, toWorld=None, faceNormals=False, maxSmoothAngle=None, flipNormals=False,
                  srgb=True, bsdf=None, emit=None, id=None):
-        self.shape_type = 'ply'
-        shape_props = mitcor.Properties(self.shape_type)
+        self.type = 'ply'
+        shape_props = mitcor.Properties(self.type)
         shape_props['filename'] = filename
         shape_props['faceNormals'] = faceNormals
         if maxSmoothAngle is not None:
@@ -279,8 +285,8 @@ class ShapeStanfordTriangles(Shape):
 class ShapeSerialized(Shape):
     def __init__(self, filename, toWorld=None, shapeIndex=0, faceNormals=False, maxSmoothAngle=None,
                  flipNormals=False, bsdf=None, emit=None, id=None):
-        self.shape_type = 'serialized'
-        shape_props = mitcor.Properties(self.shape_type)
+        self.type = 'serialized'
+        shape_props = mitcor.Properties(self.type)
         shape_props['shapeIndex'] = shapeIndex
         shape_props['filename'] = filename
         shape_props['faceNormals'] = faceNormals
@@ -293,9 +299,9 @@ class ShapeSerialized(Shape):
 
 class ShapeGroup(Shape):
     def __init__(self, id, shape_list):
-        self.shape_type = 'shapegroup'
+        self.type = 'shapegroup'
         self.id = id
-        shape_props = mitcor.Properties(self.shape_type)
+        shape_props = mitcor.Properties(self.type)
         shape_props['id'] = id
         shape = plugin_mngr.createObject(shape_props)
         for shape_child in shape_list:
@@ -306,9 +312,9 @@ class ShapeGroup(Shape):
 
 class ShapeInstance(Shape):
     def __init__(self, shapegroup, id='noid', toWorld=None):
-        self.shape_type = 'instance'
+        self.type = 'instance'
         self.id = id
-        shape_props = mitcor.Properties(self.shape_type)
+        shape_props = mitcor.Properties(self.type)
         if toWorld is not None:
             shape_props['toWorld'] = toWorld.xform
         shape = plugin_mngr.createObject(shape_props)
@@ -320,8 +326,8 @@ class ShapeInstance(Shape):
 class ShapeHair(Shape):
     def __init__(self, filename, toWorld=None, radius=0.025, angleThreshold=1, reduction=0.0, bsdf=None, emit=None,
                  id=None):
-        self.shape_type = 'hair'
-        shape_props = mitcor.Properties(self.shape_type)
+        self.type = 'hair'
+        shape_props = mitcor.Properties(self.type)
         shape_props['filename'] = filename
         shape_props['angleThreshold'] = angleThreshold
         shape_props['reduction'] = reduction
@@ -331,8 +337,8 @@ class ShapeHair(Shape):
 class ShapeHeightField(Shape):
     def __init__(self, toWorld=None, shadingNormals=True, flipNormals=False, width=100, height=100, scale=1.0,
                  filename=None, texture=None, bsdf=None, emit=None, id=None):
-        self.shape_type = 'heightfield'
-        shape_props = mitcor.Properties(self.shape_type)
+        self.type = 'heightfield'
+        shape_props = mitcor.Properties(self.type)
         shape_props['shadingNormals'] = shadingNormals
         shape_props['flipNormals'] = flipNormals
         shape_props['scale'] = scale
@@ -349,16 +355,61 @@ class ShapeHeightField(Shape):
 # End of classes for Mitsuba geometrical shapes
 
 # Classes for Mitsuba surface scattering models (BSDF)
+bsdf_counter = 0  # Count bsdfs in order to give unique references as they are created
+class Bsdf(object):
+    """
+    Surface scattering models describe the manner in which light interacts with surfaces in the scene.
+    They conveniently summarize the mesoscopic scattering processes that take place within the material
+    and cause it to look the way it does. This represents one central component of the material system in
+    Mitsuba. Another part of the renderer concerns itself with what happens in between surface interactions.
 
-class BSDF(object):
-    def __init__(self, bsdf_props, texture=None):
+    To achieve realistic results, Mitsuba comes with a library of both general-purpose surface scattering
+    models (smooth or rough glass, metal, plastic, etc.) and specializations to particular materials (woven
+    cloth, masks, etc.).
+
+    Some model plugins fit neither category and can best be described as modifiers
+    that are applied on top of one or more scattering models.
+    Throughout the documentation and within the scene description language, the word BSDF is used
+    synonymously with the term "surface scattering model".
+    """
+    bsdf_counter = 0
+    def __init__(self, bsdf_props, texture=None, iden=None):
+        if id is None:
+            self.iden = 'bsdf_' + str(Bsdf.bsdf_counter)
+            Bsdf.bsdf_counter += 1
+        else:
+            self.iden = id
         bsdf = plugin_mngr.createObject(bsdf_props)
+        self.iden = iden
         if texture is not None:
-            bsdf.addChild(texture.type + '_' + texture.id, texture.texture)
+            bsdf.addChild(texture.type + '_' + texture.iden, texture.texture)
+        bsdf.setID(iden)
         bsdf.configure()
         self.bsdf = bsdf
 
+    def __str__(self):
+        return str(self.bsdf)
 
+
+class BsdfDiffuse(Bsdf):
+    def __init__(self, reflectance=None, texture=None, iden=None):
+        self.type = 'diffuse'
+        bsdf_props = mitcor.Properties(self.type)
+        if reflectance is not None:
+            bsdf_props['reflectance'] = reflectance
+        super(BsdfDiffuse, self).__init__(bsdf_props, iden)
+
+
+class BsdfRoughDiffuse(Bsdf):
+    def __init__(self, reflectance=None, alpha=None, useFastApprox=False, texture=None, iden=None):
+        self.type = 'roughdiffuse'
+        props = mitcor.Properties(self.type)
+        if reflectance is not None:
+            props['reflectance'] = reflectance
+        if alpha is not None:
+            props['alpha'] = alpha
+        props['useFastApprox'] = useFastApprox
+        super(BsdfRoughDiffuse, self).__init__(props, texture, iden)
 
 # Classes for different Mitsuba reconstruction filters
 
