@@ -178,6 +178,8 @@ class Animation(object):
     pass
 
 # Classes for Mitsuba scene geometry shapes
+
+
 class Shape(object):
     """
     In Mitsuba, shapes define surfaces that mark transitions between different types of materials. For
@@ -185,13 +187,19 @@ class Shape(object):
     Alternatively, a shape can mark the beginning of a space that contains a participating medium such as smoke or
     steam. Finally, a shape can be used to create an object that emits light on its own, such as a black body emitter.
     """
-    def __init__(self, shape_props, toWorld=None,  bsdf=None):
+    def __init__(self, shape_props, toWorld=None,  bsdf=None, emit=None, id=None):
         self.shape = plugin_mngr.createObject(shape_props)
+        if id is not None:
+            self.id = id
+        else:
+            self.id = 'noid'
         if toWorld is not None:
             shape_props['toWorld'] = toWorld.xform
         if bsdf is not None:
             # Should check here if bsdf is a reference to declared BSDF
             self.shape.addChild(bsdf.bsdf_type, bsdf.bsdf)
+        if emit is not None:
+            self.shape.addChild(emit.emit_type, emit.emitter)
         self.shape.configure()
 
     def __str__(self):
@@ -199,30 +207,156 @@ class Shape(object):
 
 
 class ShapeCube(Shape):
-    def __init__(self, toWorld=None, flipNormals=False, bsdf=None):
-        shape_props = mitcor.Properties('cube')
+    def __init__(self, toWorld=None, flipNormals=False, bsdf=None, emit=None, id=None):
+        self.shape_type = 'cube'
+        shape_props = mitcor.Properties(self.shape_type)
         shape_props['flipNormals'] = flipNormals
-        super(ShapeCube, self).__init__(shape_props, toWorld, bsdf)
+        super(ShapeCube, self).__init__(shape_props, toWorld, bsdf, emit, id)
 
 
 class ShapeSphere(Shape):
-    def __init__(self, center=(0.0, 0.0, 0.0), radius=1.0, toWorld=None, flipNormals=False, bsdf=None):
-        shape_props = mitcor.Properties('sphere')
+    def __init__(self, center=(0.0, 0.0, 0.0), radius=1.0, toWorld=None, flipNormals=False, bsdf=None, emit=None,
+                 id=None):
+        self.shape_type = 'sphere'
+        shape_props = mitcor.Properties(self.shape_type)
         shape_props['center'] = mitcor.Point(center[0], center[1], center[2])
         shape_props['radius'] = radius
         shape_props['flipNormals'] = flipNormals
-        super(ShapeSphere, self).__init__(shape_props, toWorld, bsdf)
+        super(ShapeSphere, self).__init__(shape_props, toWorld, bsdf, emit, id)
 
 
 class ShapeCylinder(Shape):
-    def __init__(self, toWorld=None, p0=(0.0, 0.0, 0.0), p1=(0.0, 0.0, 1.0), radius=1.0, flipNormals=False, bsdf=None):
-        shape_props = mitcor.Properties('cylinder')
+    def __init__(self, toWorld=None, p0=(0.0, 0.0, 0.0), p1=(0.0, 0.0, 1.0), radius=1.0, flipNormals=False, bsdf=None,
+                 emit=None, id=None):
+        self.shape_type = 'cylinder'
+        shape_props = mitcor.Properties(self.shape_type)
         shape_props['p0'] = mitcor.Point(p0[0], p0[1], p0[2])
         shape_props['p1'] = mitcor.Point(p1[0], p1[1], p1[2])
         shape_props['radius'] = radius
         shape_props['flipNormals'] = flipNormals
-        super(ShapeSphere, self).__init__(shape_props, toWorld, bsdf)
+        super(ShapeCylinder, self).__init__(shape_props, toWorld, bsdf, emit, id)
 
+
+class ShapeRectangle(Shape):
+    def __init__(self, toWorld=None, flipNormals=False, bsdf=None, emit=None):
+        self.shape_type = 'rectangle'
+        shape_props = mitcor.Properties(self.shape_type)
+        shape_props['flipNormals'] = flipNormals
+        super(ShapeRectangle, self).__init__(shape_props, toWorld, bsdf, emit, id)
+
+
+class ShapeWavefrontOBJ(Shape):
+    def __init__(self, filename, toWorld=None, faceNormals=False, maxSmoothAngle=None, flipNormals=False,
+                 flipTexCoords=True, collapse=False, bsdf=None, emit=None):
+        self.shape_type = 'obj'
+        shape_props = mitcor.Properties(self.shape_type)
+        shape_props['filename'] = filename
+        shape_props['faceNormals'] = faceNormals
+        if maxSmoothAngle is not None:
+            shape_props['maxSmoothAngle'] = maxSmoothAngle
+        shape_props['flipNormals'] = flipNormals
+        shape_props['maxSmoothAngle'] = maxSmoothAngle
+        shape_props['flipTexCoords'] = flipTexCoords
+        shape_props['collapse'] = collapse
+        super(ShapeWavefrontOBJ, self).__init__(shape_props, toWorld, bsdf, emit, id)
+
+
+class ShapeStanfordTriangles(Shape):
+    def __init__(self, filename, toWorld=None, faceNormals=False, maxSmoothAngle=None, flipNormals=False,
+                 srgb=True, bsdf=None, emit=None, id=None):
+        self.shape_type = 'ply'
+        shape_props = mitcor.Properties(self.shape_type)
+        shape_props['filename'] = filename
+        shape_props['faceNormals'] = faceNormals
+        if maxSmoothAngle is not None:
+            shape_props['maxSmoothAngle'] = maxSmoothAngle
+        shape_props['flipNormals'] = flipNormals
+        shape_props['maxSmoothAngle'] = maxSmoothAngle
+        shape_props['srgb'] = srgb
+        super(ShapeStanfordTriangles, self).__init__(shape_props, toWorld, bsdf, emit, id)
+
+
+class ShapeSerialized(Shape):
+    def __init__(self, filename, toWorld=None, shapeIndex=0, faceNormals=False, maxSmoothAngle=None,
+                 flipNormals=False, bsdf=None, emit=None, id=None):
+        self.shape_type = 'serialized'
+        shape_props = mitcor.Properties(self.shape_type)
+        shape_props['shapeIndex'] = shapeIndex
+        shape_props['filename'] = filename
+        shape_props['faceNormals'] = faceNormals
+        if maxSmoothAngle is not None:
+            shape_props['maxSmoothAngle'] = maxSmoothAngle
+        shape_props['flipNormals'] = flipNormals
+        shape_props['maxSmoothAngle'] = maxSmoothAngle
+        super(ShapeSerialized, self).__init__(shape_props, toWorld, bsdf, emit, id)
+
+
+class ShapeGroup(Shape):
+    def __init__(self, id, shape_list):
+        self.shape_type = 'shapegroup'
+        self.id = id
+        shape_props = mitcor.Properties(self.shape_type)
+        shape_props['id'] = id
+        shape = plugin_mngr.createObject(shape_props)
+        for shape_child in shape_list:
+            shape.addChild(shape_child.shape_type + '_' + shape_child.id, shape_child.shape)
+        shape.configure()
+        self.shape = shape
+
+
+class ShapeInstance(Shape):
+    def __init__(self, shapegroup, id='noid', toWorld=None):
+        self.shape_type = 'instance'
+        self.id = id
+        shape_props = mitcor.Properties(self.shape_type)
+        if toWorld is not None:
+            shape_props['toWorld'] = toWorld.xform
+        shape = plugin_mngr.createObject(shape_props)
+        shape.addChild(shapegroup)
+        shape.configure()
+        self.shape = shape
+
+
+class ShapeHair(Shape):
+    def __init__(self, filename, toWorld=None, radius=0.025, angleThreshold=1, reduction=0.0, bsdf=None, emit=None,
+                 id=None):
+        self.shape_type = 'hair'
+        shape_props = mitcor.Properties(self.shape_type)
+        shape_props['filename'] = filename
+        shape_props['angleThreshold'] = angleThreshold
+        shape_props['reduction'] = reduction
+        super(ShapeHair, self).__init__(shape_props, toWorld, bsdf, emit, id)
+
+
+class ShapeHeightField(Shape):
+    def __init__(self, toWorld=None, shadingNormals=True, flipNormals=False, width=100, height=100, scale=1.0,
+                 filename=None, texture=None, bsdf=None, emit=None, id=None):
+        self.shape_type = 'heightfield'
+        shape_props = mitcor.Properties(self.shape_type)
+        shape_props['shadingNormals'] = shadingNormals
+        shape_props['flipNormals'] = flipNormals
+        shape_props['scale'] = scale
+        if texture is not None and filename is None:
+            shape_props['width'] = width
+            shape_props['height'] = height
+            shape_props['texture'] = texture
+        elif filename is not None and texture is None:
+            shape_props['filename'] = filename
+        else:
+            warnings.warn('heightfield must be either procedural or read from a file')
+        super(ShapeHeightField, self).__init__(shape_props, toWorld, bsdf, emit, id)
+
+# End of classes for Mitsuba geometrical shapes
+
+# Classes for Mitsuba surface scattering models (BSDF)
+
+class BSDF(object):
+    def __init__(self, bsdf_props, texture=None):
+        bsdf = plugin_mngr.createObject(bsdf_props)
+        if texture is not None:
+            bsdf.addChild(texture.type + '_' + texture.id, texture.texture)
+        bsdf.configure()
+        self.bsdf = bsdf
 
 
 
