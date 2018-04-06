@@ -193,12 +193,15 @@ class Shape(object):
     Alternatively, a shape can mark the beginning of a space that contains a participating medium such as smoke or
     steam. Finally, a shape can be used to create an object that emits light on its own, such as a black body emitter.
     """
-    def __init__(self, shape_props, toWorld=None,  bsdf=None, emit=None, id=None):
+    shape_counter = 0
+
+    def __init__(self, shape_props, toWorld=None,  bsdf=None, emit=None, iden=None):
         self.shape = plugin_mngr.createObject(shape_props)
-        if id is not None:
-            self.id = id
+        if iden is not None:
+            self.iden = iden
         else:
-            self.id = 'noid'
+            self.iden = 'shape_' + self.type + '_' + str(Shape.shape_counter)
+            Shape.shape_counter += 1
         if toWorld is not None:
             shape_props['toWorld'] = toWorld.xform
         if bsdf is not None:
@@ -206,6 +209,7 @@ class Shape(object):
             self.shape.addChild(bsdf.bsdf_type, bsdf.bsdf)
         if emit is not None:
             self.shape.addChild(emit.emit_type, emit.emitter)
+        self.shape.setID(self.iden)
         self.shape.configure()
 
     def __str__(self):
@@ -213,47 +217,47 @@ class Shape(object):
 
 
 class ShapeCube(Shape):
-    def __init__(self, toWorld=None, flipNormals=False, bsdf=None, emit=None, id=None):
+    def __init__(self, toWorld=None, flipNormals=False, bsdf=None, emit=None, iden=None):
         self.type = 'cube'
         shape_props = mitcor.Properties(self.type)
         shape_props['flipNormals'] = flipNormals
-        super(ShapeCube, self).__init__(shape_props, toWorld, bsdf, emit, id)
+        super(ShapeCube, self).__init__(shape_props, toWorld, bsdf, emit, iden)
 
 
 class ShapeSphere(Shape):
     def __init__(self, center=(0.0, 0.0, 0.0), radius=1.0, toWorld=None, flipNormals=False, bsdf=None, emit=None,
-                 id=None):
+                 iden=None):
         self.type = 'sphere'
         shape_props = mitcor.Properties(self.type)
         shape_props['center'] = mitcor.Point(center[0], center[1], center[2])
         shape_props['radius'] = radius
         shape_props['flipNormals'] = flipNormals
-        super(ShapeSphere, self).__init__(shape_props, toWorld, bsdf, emit, id)
+        super(ShapeSphere, self).__init__(shape_props, toWorld, bsdf, emit, iden)
 
 
 class ShapeCylinder(Shape):
     def __init__(self, toWorld=None, p0=(0.0, 0.0, 0.0), p1=(0.0, 0.0, 1.0), radius=1.0, flipNormals=False, bsdf=None,
-                 emit=None, id=None):
+                 emit=None, iden=None):
         self.type = 'cylinder'
         shape_props = mitcor.Properties(self.type)
         shape_props['p0'] = mitcor.Point(p0[0], p0[1], p0[2])
         shape_props['p1'] = mitcor.Point(p1[0], p1[1], p1[2])
         shape_props['radius'] = radius
         shape_props['flipNormals'] = flipNormals
-        super(ShapeCylinder, self).__init__(shape_props, toWorld, bsdf, emit, id)
+        super(ShapeCylinder, self).__init__(shape_props, toWorld, bsdf, emit, iden)
 
 
 class ShapeRectangle(Shape):
-    def __init__(self, toWorld=None, flipNormals=False, bsdf=None, emit=None, id=None):
+    def __init__(self, toWorld=None, flipNormals=False, bsdf=None, emit=None, iden=None):
         self.type = 'rectangle'
         shape_props = mitcor.Properties(self.type)
         shape_props['flipNormals'] = flipNormals
-        super(ShapeRectangle, self).__init__(shape_props, toWorld, bsdf, emit, id)
+        super(ShapeRectangle, self).__init__(shape_props, toWorld, bsdf, emit, iden)
 
 
 class ShapeWavefrontOBJ(Shape):
     def __init__(self, filename, toWorld=None, faceNormals=False, maxSmoothAngle=None, flipNormals=False,
-                 flipTexCoords=True, collapse=False, bsdf=None, emit=None, id=None):
+                 flipTexCoords=True, collapse=False, bsdf=None, emit=None, iden=None):
         self.type = 'obj'
         shape_props = mitcor.Properties(self.type)
         shape_props['filename'] = filename
@@ -264,12 +268,12 @@ class ShapeWavefrontOBJ(Shape):
         shape_props['maxSmoothAngle'] = maxSmoothAngle
         shape_props['flipTexCoords'] = flipTexCoords
         shape_props['collapse'] = collapse
-        super(ShapeWavefrontOBJ, self).__init__(shape_props, toWorld, bsdf, emit, id)
+        super(ShapeWavefrontOBJ, self).__init__(shape_props, toWorld, bsdf, emit, iden)
 
 
 class ShapeStanfordTriangles(Shape):
     def __init__(self, filename, toWorld=None, faceNormals=False, maxSmoothAngle=None, flipNormals=False,
-                 srgb=True, bsdf=None, emit=None, id=None):
+                 srgb=True, bsdf=None, emit=None, iden=None):
         self.type = 'ply'
         shape_props = mitcor.Properties(self.type)
         shape_props['filename'] = filename
@@ -279,12 +283,12 @@ class ShapeStanfordTriangles(Shape):
         shape_props['flipNormals'] = flipNormals
         shape_props['maxSmoothAngle'] = maxSmoothAngle
         shape_props['srgb'] = srgb
-        super(ShapeStanfordTriangles, self).__init__(shape_props, toWorld, bsdf, emit, id)
+        super(ShapeStanfordTriangles, self).__init__(shape_props, toWorld, bsdf, emit, iden)
 
 
 class ShapeSerialized(Shape):
     def __init__(self, filename, toWorld=None, shapeIndex=0, faceNormals=False, maxSmoothAngle=None,
-                 flipNormals=False, bsdf=None, emit=None, id=None):
+                 flipNormals=False, bsdf=None, emit=None, iden=None):
         self.type = 'serialized'
         shape_props = mitcor.Properties(self.type)
         shape_props['shapeIndex'] = shapeIndex
@@ -294,7 +298,7 @@ class ShapeSerialized(Shape):
             shape_props['maxSmoothAngle'] = maxSmoothAngle
         shape_props['flipNormals'] = flipNormals
         shape_props['maxSmoothAngle'] = maxSmoothAngle
-        super(ShapeSerialized, self).__init__(shape_props, toWorld, bsdf, emit, id)
+        super(ShapeSerialized, self).__init__(shape_props, toWorld, bsdf, emit, iden)
 
 
 class ShapeGroup(Shape):
@@ -325,18 +329,18 @@ class ShapeInstance(Shape):
 
 class ShapeHair(Shape):
     def __init__(self, filename, toWorld=None, radius=0.025, angleThreshold=1, reduction=0.0, bsdf=None, emit=None,
-                 id=None):
+                 iden=None):
         self.type = 'hair'
         shape_props = mitcor.Properties(self.type)
         shape_props['filename'] = filename
         shape_props['angleThreshold'] = angleThreshold
         shape_props['reduction'] = reduction
-        super(ShapeHair, self).__init__(shape_props, toWorld, bsdf, emit, id)
+        super(ShapeHair, self).__init__(shape_props, toWorld, bsdf, emit, iden)
 
 
 class ShapeHeightField(Shape):
     def __init__(self, toWorld=None, shadingNormals=True, flipNormals=False, width=100, height=100, scale=1.0,
-                 filename=None, texture=None, bsdf=None, emit=None, id=None):
+                 filename=None, texture=None, bsdf=None, emit=None, iden=None):
         self.type = 'heightfield'
         shape_props = mitcor.Properties(self.type)
         shape_props['shadingNormals'] = shadingNormals
@@ -350,12 +354,42 @@ class ShapeHeightField(Shape):
             shape_props['filename'] = filename
         else:
             warnings.warn('heightfield must be either procedural or read from a file')
-        super(ShapeHeightField, self).__init__(shape_props, toWorld, bsdf, emit, id)
+        super(ShapeHeightField, self).__init__(shape_props, toWorld, bsdf, emit, iden)
 
 # End of classes for Mitsuba geometrical shapes
 
+# Class for Mitsuba spectra (reflectance, radiance etc.)
+# Much more work needed here to tie up with MORTICIA Basis functions and color spaces
+
+class Spectrum(object):
+    """
+    Encapsulates spectral vector type of data, which may provide reflectance, radiance, irradiance or perhaps other
+    functions of light wavelength.
+    """
+    def __init__(self, spectraldata, intent='reflectance', units=None, basis=None):
+        self.intent = intent
+        # The spectrum must provide a two-column numpy array, where the first column is the wavelength in canonical
+        # units of nm and the second column is the spectral data (reflectance, radiance, etc.)
+        if isinstance(spectraldata, np.ndarray):
+            self.wvl = spectraldata[:,0]
+            self.data = spectraldata[:,1]
+            self.spectrum = mitcor.Spectrum(self.data.tolist())
+        elif isinstance(spectraldata, float):
+            self.spectrum = mitcor.Spectrum(spectraldata)
+            self.wvl = np.nan
+            self.data = spectraldata
+        elif isinstance(spectraldata, list):
+            if len(spectraldata) != SPECTRUM_SAMPLES:
+                warnings.warn('Provided spectrum length does not match Mitsuba SPECTRUM_SAMPLES length.')
+            self.wvl = np.nan
+            self.spectrum = mitcor.Spectrum(spectraldata)
+            self.data = np.array(spectraldata)
+        self.units = units
+        self.basis = basis
+
+
 # Classes for Mitsuba surface scattering models (BSDF)
-bsdf_counter = 0  # Count bsdfs in order to give unique references as they are created
+
 class Bsdf(object):
     """
     Surface scattering models describe the manner in which light interacts with surfaces in the scene.
@@ -372,18 +406,17 @@ class Bsdf(object):
     Throughout the documentation and within the scene description language, the word BSDF is used
     synonymously with the term "surface scattering model".
     """
-    bsdf_counter = 0
+    bsdf_counter = 0  # Global counters to assign names (id for reference purposes) to BSDFs as they are created.
     def __init__(self, bsdf_props, texture=None, iden=None):
-        if id is None:
-            self.iden = 'bsdf_' + str(Bsdf.bsdf_counter)
+        if iden is None:
+            self.iden = 'bsdf_' + self.type + '_' + str(Bsdf.bsdf_counter)
             Bsdf.bsdf_counter += 1
         else:
-            self.iden = id
+            self.iden = iden
         bsdf = plugin_mngr.createObject(bsdf_props)
-        self.iden = iden
         if texture is not None:
             bsdf.addChild(texture.type + '_' + texture.iden, texture.texture)
-        bsdf.setID(iden)
+        bsdf.setID(self.iden)
         bsdf.configure()
         self.bsdf = bsdf
 
@@ -397,7 +430,7 @@ class BsdfDiffuse(Bsdf):
         bsdf_props = mitcor.Properties(self.type)
         if reflectance is not None:
             bsdf_props['reflectance'] = reflectance
-        super(BsdfDiffuse, self).__init__(bsdf_props, iden)
+        super(BsdfDiffuse, self).__init__(bsdf_props, texture, iden)
 
 
 class BsdfRoughDiffuse(Bsdf):
@@ -410,6 +443,45 @@ class BsdfRoughDiffuse(Bsdf):
             props['alpha'] = alpha
         props['useFastApprox'] = useFastApprox
         super(BsdfRoughDiffuse, self).__init__(props, texture, iden)
+
+# End of BSDF classes
+
+# Classes for Mitsuba textures
+
+
+class Texture(object):
+    """
+    In Mitsuba, textures are objects
+    that can be attached to certain surface scattering model parameters to introduce spatial variation.
+    In the documentation, these are listed as supporting the "texture" type.
+    """
+    texture_counter = 0
+    def __init__(self, texture_props, iden=None):
+        if iden is None:
+            self.iden = 'texture_' + self.type + '_' + str(Texture.texture_counter)
+            Texture.texture_counter += 1
+        else:
+            self.iden = iden
+        texture = plugin_mngr.createObject(texture_props)
+        texture.setID(self.iden)
+        texture.configure()
+        self.texture = texture
+
+    def __str__(self):
+        return str(self.texture)
+
+class TextureCheckerboard(Texture):
+    def __init__(self, color0=Spectrum(0.4), color1=Spectrum(0.2), uoffset=0.0, voffset=0.0,
+                 uscale=1.0, vscale=1.0, iden=None):
+        self.type = 'checkerboard'
+        props = mitcor.Properties(self.type)
+        props['color0'] = color0.spectrum
+        props['color1'] = color1.spectrum
+        props['uoffset'] = uoffset
+        props['voffset'] = voffset
+        props['uscale'] = uscale
+        props['vscale'] = vscale
+        super(TextureCheckerboard, self).__init__(props, iden)
 
 # Classes for different Mitsuba reconstruction filters
 
