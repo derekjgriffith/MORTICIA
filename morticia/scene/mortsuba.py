@@ -177,35 +177,78 @@ class Animation(object):
     """
     pass
 
-class ReconstructionFilter(object):
+# Classes for Mitsuba scene geometry shapes
+class Shape(object):
+    """
+    In Mitsuba, shapes define surfaces that mark transitions between different types of materials. For
+    instance, a shape could describe a boundary between air and a solid object, such as a piece of rock.
+    Alternatively, a shape can mark the beginning of a space that contains a participating medium such as smoke or
+    steam. Finally, a shape can be used to create an object that emits light on its own, such as a black body emitter.
+    """
+    def __init__(self, shape_props, toWorld=None,  bsdf=None):
+        self.shape = plugin_mngr.createObject(shape_props)
+        if toWorld is not None:
+            shape_props['toWorld'] = toWorld.xform
+        if bsdf is not None:
+            # Should check here if bsdf is a reference to declared BSDF
+            self.shape.addChild(bsdf.bsdf_type, bsdf.bsdf)
+        self.shape.configure()
 
-    def __init__(self, type='gaussian', stddev=2.0, B=1.0/3.0, C=1.0/3.0, lobes=3):
-        self.type = type
-        self.plugin_mngr = mitcor.PluginManager.getInstance()
-        rfilter_props = mitcor.Properties(type)
-           # Don't know what this property is or how to find out
-        if type == 'mitchell' or type == 'catmullrom':
-            rfilter_props['B'] = B
-            rfilter_props['C'] = C
-        if type == 'lanczos':
-            rfilter_props['lobes'] = lobes
-        self.rfilter = self.plugin_mngr.createObject(rfilter_props)
+    def __str__(self):
+        return str(self.shape)
+
+
+class ShapeCube(Shape):
+    def __init__(self, toWorld=None, flipNormals=False, bsdf=None):
+        shape_props = mitcor.Properties('cube')
+        shape_props['flipNormals'] = flipNormals
+        super(ShapeCube, self).__init__(shape_props, toWorld, bsdf)
+
+
+class ShapeSphere(Shape):
+    def __init__(self, center=(0.0, 0.0, 0.0), radius=1.0, toWorld=None, flipNormals=False, bsdf=None):
+        shape_props = mitcor.Properties('sphere')
+        shape_props['center'] = mitcor.Point(center[0], center[1], center[2])
+        shape_props['radius'] = radius
+        shape_props['flipNormals'] = flipNormals
+        super(ShapeSphere, self).__init__(shape_props, toWorld, bsdf)
+
+
+class ShapeCylinder(Shape):
+    def __init__(self, toWorld=None, p0=(0.0, 0.0, 0.0), p1=(0.0, 0.0, 1.0), radius=1.0, flipNormals=False, bsdf=None):
+        shape_props = mitcor.Properties('cylinder')
+        shape_props['p0'] = mitcor.Point(p0[0], p0[1], p0[2])
+        shape_props['p1'] = mitcor.Point(p1[0], p1[1], p1[2])
+        shape_props['radius'] = radius
+        shape_props['flipNormals'] = flipNormals
+        super(ShapeSphere, self).__init__(shape_props, toWorld, bsdf)
+
+
+
+
+# Classes for different Mitsuba reconstruction filters
+
+class Filter(object):
+    """
+    The Filter classes encapsulate Mitsuba reconstruction filters applied to images after rendering. From the Mitsuba
+    manual:
+    Image reconstruction filters are responsible for converting a series of radiance samples generated
+    jointly by the sampler and integrator into the final output image that will be written to disk at the
+    end of a rendering process. This section gives a brief overview of the reconstruction filters that are
+    available in Mitsuba.There is no universally superior filter, and the final choice depends on a trade-off
+    between sharpness, ringing, and aliasing, and computational efficiency. Mitsuba currently has 6 reconstruction
+    filters, namely `box`, `tent`, `gaussian`, `mitchell`, `catmullrom` and `lanczos`.
+    """
+    def __init__(self, rfilter_props):
+        self.rfilter = plugin_mngr.createObject(rfilter_props)
         self.rfilter.configure()
         self.radius = self.rfilter.getRadius()
         self.borderSize = self.rfilter.getBorderSize()
 
-# Classes for different Mitsuba reconstruction filters
-"""
-The Filter classes encapsulate Mitsuba reconstruction filters applied to images after rendering. From the Mitsuba
-manual:
-Image reconstruction filters are responsible for converting a series of radiance samples generated
-jointly by the sampler and integrator into the final output image that will be written to disk at the
-end of a rendering process. This section gives a brief overview of the reconstruction filters that are
-available in Mitsuba.There is no universally superior filter, and the final choice depends on a trade-off
-between sharpness, ringing, and aliasing, and computational efficiency. Mitsuba currently has 6 reconstruction
-filters, namely `box`, `tent`, `gaussian`, `mitchell`, `catmullrom` and `lanczos`.
-"""
-class BoxFilter(object):
+    def __str__(self):
+        return str(self.rfilter)
+
+class FilterBox(Filter):
     """
     The fastest, but also about the worst possible reconstruction filter, since it is extremely
     prone to aliasing. It is included mainly for completeness, though some rare situations
@@ -216,13 +259,10 @@ class BoxFilter(object):
         self.filtertype = 'box'
         rfilter_props = mitcor.Properties(self.filtertype)
         rfilter_props['radius'] = radius
-        self.rfilter = plugin_mngr.createObject(rfilter_props)
-        self.rfilter.configure()
-        self.radius = self.rfilter.getRadius()
-        self.borderSize = self.rfilter.getBorderSize()
+        super(FilterBox, self).__init__(rfilter_props)
 
 
-class TentFilter(object):
+class FilterTent(Filter):
     """
     Simple tent, or triangle filter.This reconstruction filter never suffers from ringing
     and usually causes less aliasing than a naive box filter.When rendering scenes with sharp brightness
@@ -232,13 +272,10 @@ class TentFilter(object):
     def __init__(self):
         self.filtertype = 'tent'
         rfilter_props = mitcor.Properties(self.filtertype)
-        self.rfilter = plugin_mngr.createObject(rfilter_props)
-        self.rfilter.configure()
-        self.radius = self.rfilter.getRadius()
-        self.borderSize = self.rfilter.getBorderSize()
+        super(FilterTent, self).__init__(rfilter_props)
 
 
-class GaussianFilter(object):
+class FilterGaussian(Filter):
     """
     This is a windowed Gaussian filter with configurable standard deviation.
     It produces pleasing results and never suffers from ringing, but may occasionally introduce too
@@ -249,13 +286,10 @@ class GaussianFilter(object):
         self.filtertype = 'gaussian'
         rfilter_props = mitcor.Properties(self.filtertype)
         rfilter_props['stddev'] = stddev
-        self.rfilter = plugin_mngr.createObject(rfilter_props)
-        self.rfilter.configure()
-        self.radius = self.rfilter.getRadius()
-        self.borderSize = self.rfilter.getBorderSize()
+        super(FilterGaussian, self).__init__(rfilter_props)
 
 
-class MitchellFilter(object):
+class FilterMitchell(Filter):
     """
     Separable cubic spline reconstruction filter by Mitchell and
     Netravali [32]This is often a good compromise between sharpness and ringing.
@@ -268,13 +302,10 @@ class MitchellFilter(object):
         rfilter_props = mitcor.Properties(self.filtertype)
         rfilter_props['B'] = B
         rfilter_props['C'] = C
-        self.rfilter = plugin_mngr.createObject(rfilter_props)
-        self.rfilter.configure()
-        self.radius = self.rfilter.getRadius()
-        self.borderSize = self.rfilter.getBorderSize()
+        super(FilterMitchell, self).__init__(rfilter_props)
 
 
-class CatmullRomFilter(object):
+class FilterCatmullRom(Filter):
     """
     This is a special version of the Mitchell-Netravali filter that has
     the constants B and C adjusted to produce higher sharpness at the cost of increased susceptibility
@@ -283,13 +314,10 @@ class CatmullRomFilter(object):
     def __init__(self):
         self.filtertype = 'catmullrom'
         rfilter_props = mitcor.Properties(self.filtertype)
-        self.rfilter = plugin_mngr.createObject(rfilter_props)
-        self.rfilter.configure()
-        self.radius = self.rfilter.getRadius()
-        self.borderSize = self.rfilter.getBorderSize()
+        super(FilterCatmullRom, self).__init__(rfilter_props)
 
 
-class LanczosFilter(object):
+class FilterLanczos(Filter):
     """
     This is a windowed version of the theoretically optimal low-pass filter.
     It is generally one of the best available filters in terms of producing sharp high-quality
@@ -306,23 +334,32 @@ class LanczosFilter(object):
         rfilter_props = mitcor.Properties(self.filtertype)
         rfilter_props['radius'] = radius
         rfilter_props['lobes'] = lobes
-        self.rfilter = plugin_mngr.createObject(rfilter_props)
-        self.rfilter.configure()
-        self.radius = self.rfilter.getRadius()
-        self.borderSize = self.rfilter.getBorderSize()
+        super(FilterLanczos, self).__init__(rfilter_props)
 
 # End of Mitsuba reconstruction filter classes
 
 # Classes for various times of Mitsuba sensor "film".
-"""
-The Film classes encapsulates Mitsuba films. From the Mitsuba manual:
-A film defines how conducted measurements are stored and converted into the final output file that
-is written to disk at the end of the rendering process. Mitsuba comes with a few films that can write
-to high and low dynamic range image formats (OpenEXR, JPEG or PNG), as well more scientifically
-oriented data formats (e.g. Numpy, MATLAB or Mathematica).
-"""
 
-class HdrFilm(object):
+class Film(object):
+    """
+    The Film classes encapsulates Mitsuba films. From the Mitsuba manual:
+    A film defines how conducted measurements are stored and converted into the final output file that
+    is written to disk at the end of the rendering process. Mitsuba comes with a few films that can write
+    to high and low dynamic range image formats (OpenEXR, JPEG or PNG), as well more scientifically
+    oriented data formats (e.g. Numpy, MATLAB or Mathematica).
+    """
+    def __init__(self, film_props, rfilter=None):
+        film = plugin_mngr.createObject(film_props)
+        if rfilter is not None:
+            film.addChild(rfilter)
+        film.configure()
+        self.film = film
+
+    def __str__(self):
+        return str(self.film)
+
+
+class FilmHdr(Film):
     def __init__(self, width=default_width, height=default_height, cropOffsetX=None, cropOffsetY=None,
                  cropWidth=None, cropHeight=None, fileFormat=default_hdr_fileFormat, pixelFormat=default_pixelFormat,
                  componentFormat=default_componentFormat, attachLog = default_attachLog,
@@ -358,14 +395,9 @@ class HdrFilm(object):
         hdrfilm_props['attachLog'] = attachLog
         hdrfilm_props['banner'] = banner
         hdrfilm_props['highQualityEdges'] = highQualityEdges
-        hdrfilm = plugin_mngr.createObject(hdrfilm_props)
-        if rfilter is not None:
-            hdrfilm.addChild(rfilter)
-        hdrfilm.configure()
-        self.film = hdrfilm
+        super(FilmHdr, self).__init__(hdrfilm_props, rfilter)
 
-
-class TiledHdrFilm(object):
+class FilmTiledHdr(Film):
     def __init__(self, width=default_width, height=default_height, cropOffsetX=None, cropOffsetY=None,
                  cropWidth=None, cropHeight=None, pixelFormat=default_pixelFormat,
                  componentFormat=default_componentFormat, rfilter=None):
@@ -392,13 +424,9 @@ class TiledHdrFilm(object):
             hdrfilm_props['cropHeight'] = cropHeight
         hdrfilm_props['pixelFormat'] = pixelFormat
         hdrfilm_props['componentFormat'] = componentFormat
-        hdrfilm = plugin_mngr.createObject(hdrfilm_props)
-        if rfilter is not None:
-            hdrfilm.addChild('filter', rfilter)
-        hdrfilm.configure()
-        self.film = hdrfilm
+        super(FilmTiledHdr, self).__init__(hdrfilm_props, rfilter)
 
-class LdrFilm(object):
+class FilmLdr(Film):
     def __init__(self, width=default_width, height=default_height, cropOffsetX=None, cropOffsetY=None,
                  cropWidth=None, cropHeight=None, fileFormat=default_ldr_fileFormat,
                  pixelFormat=default_pixelFormat, tonemapMethod=default_ldr_tonemapMethod,
@@ -445,14 +473,10 @@ class LdrFilm(object):
         ldrfilm_props['key'] = key
         ldrfilm_props['burn'] = burn
         ldrfilm_props['highQualityEdges'] = highQualityEdges
-        ldrfilm = plugin_mngr.createObject(ldrfilm_props)
-        if rfilter is not None:
-            ldrfilm.addChild(rfilter)
-        ldrfilm.configure()
-        self.film = ldrfilm
+        super(FilmLdr, self).__init__(ldrfilm_props, rfilter)
 
 
-class NumpyFilm(object):
+class FilmNumpy(Film):
     def __init__(self, width=default_width, height=default_height, cropOffsetX=None, cropOffsetY=None,
                  cropWidth=None, cropHeight=None, fileFormat='numpy', pixelFormat=default_pixelFormat,
                  digits=6, variable='data', highQualityEdges=default_highQualityEdges, rfilter=None):
@@ -493,14 +517,278 @@ class NumpyFilm(object):
         hdrfilm_props['digits'] = digits
         hdrfilm_props['variable'] = variable
         hdrfilm_props['highQualityEdges'] = highQualityEdges
-        hdrfilm = plugin_mngr.createObject(hdrfilm_props)
-        if rfilter is not None:
-            hdrfilm.addChild(rfilter)
-        hdrfilm.configure()
-        self.film = hdrfilm
+        super(FilmNumpy, self).__init__(hdrfilm_props, rfilter)
 
-class Mitsuba(object):
-    """ The Mitsuba class encapsulates the information that can be contained in a Mitsuba scene file.
+# Classes for Mitsuba samplers, including 3 quasi-Monte Carlo (QMC) samplers
+# The Halton sampler is preferred for MORTICIA work and is the default
+
+
+class Sampler(object):
+    """
+    When rendering an image, Mitsuba has to solve a high-dimensional integration problem that involves
+    the geometry, materials, lights, and sensors that make up the scene. Because of the mathematical
+    complexity of these integrals, it is generally impossible to solve them analytically. Instead, they
+    solved numerically by evaluating the function to be integrated at a large number of different positions
+    referred to as samples. Sample generators are an essential ingredient to this process: they produce
+    points in a (hypothetical) infinite dimensional hypercube that constitute the canonical representation
+    of these samples. See the Mitsuba manual for further details.
+    """
+    def __init__(self, sampler_props):
+        sampler = plugin_mngr.createObject(sampler_props)
+        sampler.configure()
+        self.sampler = sampler
+
+    def __str__(self):
+        return str(self.sampler)
+
+
+class SamplerIndependent(Sampler):
+    def __init__(self, sampleCount=4):
+        sampler_props = mitcor.Properties('independent')
+        sampler_props['sampleCount'] = sampleCount
+        super(SamplerIndependent, self).__init__(sampler_props)
+
+
+class SamplerStratified(Sampler):
+    def __init__(self, sampleCount=4, dimension=4):
+        sampler_props = mitcor.Properties('stratified')
+        sampler_props['sampleCount'] = sampleCount
+        sampler_props['dimension'] = dimension
+        super(SamplerStratified, self).__init__(sampler_props)
+
+
+class SamplerLowDiscrepancy(Sampler):
+    def __init__(self, sampleCount=4, dimension=4):
+        sampler_props = mitcor.Properties('ldsampler')
+        sampler_props['sampleCount'] = sampleCount
+        sampler_props['dimension'] = dimension
+        super(SamplerLowDiscrepancy, self).__init__(sampler_props)
+
+
+class SamplerHalton(Sampler):
+    def __init__(self, sampleCount=4, scramble=-1):
+        sampler_props = mitcor.Properties('halton')
+        sampler_props['sampleCount'] = sampleCount
+        sampler_props['scramble'] = scramble
+        super(SamplerHalton, self).__init__(sampler_props)
+
+
+class SamplerHammersley(Sampler):
+    def __init__(self, sampleCount=4, scramble=-1):
+        sampler_props = mitcor.Properties('halton')
+        sampler_props['sampleCount'] = sampleCount
+        sampler_props['scramble'] = scramble
+        super(SamplerHammersley, self).__init__(sampler_props)
+
+
+class SamplerSobol(Sampler):
+    def __init__(self, sampleCount=4, scramble=-1):
+        sampler_props = mitcor.Properties('halton')
+        sampler_props['sampleCount'] = sampleCount
+        sampler_props['scramble'] = scramble
+        super(SamplerSobol, self).__init__(sampler_props)
+
+# End of classes for Mitsuba samplers
+
+# Classes for Mitsuba integrators
+
+
+
+class Integrator(object):
+    """
+    In Mitsuba, the different rendering techniques are collectively referred to as integrators, since they
+    perform integration over a high-dimensional space. Each integrator represents a specific approach
+    for solving the light transport equation - usually favored in certain scenarios, but at the same time affected
+    by its own set of intrinsic limitations. Therefore, it is important to carefully select an integrator
+    based on user-specified accuracy requirements and properties of the scene to be rendered. See the Mitsuba manual
+    for further details. In general the basic path tracer(`path`) is used for MORTICIA work unless there are specific
+    reasons to use something else (e.g. scene contains participating media such as smoke).
+
+    For faster rendering, when direct illumination is all that is required, the `direct` integrator can be used.
+
+    The most important integrators for MORTICIA purposes are PathTracer, DirectIllumination,
+    Multichannel and FieldExtraction. Other integrators will be accommodated as required.
+
+    The AmbientOcclusion integrator can be useful for simple examination of scenes and is therefore also accommodated.
+    """
+    def __init__(self, integrator_props):
+        integrator = plugin_mngr.createObject(integrator_props)
+        integrator.configure()
+        self.integrator = integrator
+
+    def __str__(self):
+        return str(self.integrator)
+
+
+class IntegratorAmbientOcclusion(Integrator):
+    def __init__(self, shadingSamples=1, rayLength=-1):
+        self.integrator_type = 'ao'
+        integrator_props = mitcor.Properties(self.integrator_type)
+        integrator_props['shadingSamples'] = shadingSamples
+        integrator_props['rayLength'] = rayLength
+        super(IntegratorAmbientOcclusion, self).__init__(integrator_props)
+
+
+class IntegratorDirectIllumination(Integrator):
+    def __init__(self, shadingSamples=1, emitterSamples=1, bsdfSamples=1, strictNormals=False, hideEmitters=False):
+        self.integrator_type = 'direct'
+        integrator_props = mitcor.Properties(self.integrator_type)
+        integrator_props['shadingSamples'] = shadingSamples
+        integrator_props['emitterSamples'] = emitterSamples
+        integrator_props['bsdfSamples'] = bsdfSamples
+        integrator_props['strictNormals'] = strictNormals
+        integrator_props['hideEmitters'] = hideEmitters
+        super(IntegratorDirectIllumination, self).__init__(integrator_props)
+
+
+class IntegratorPathTracer(Integrator):
+    def __init__(self, maxDepth=-1, rrDepth=5, strictNormals=False, hideEmitters=False):
+        self.integrator_type = 'path'
+        integrator_props = mitcor.Properties(self.integrator_type)
+        integrator_props['maxDepth'] = maxDepth
+        integrator_props['rrDepth'] = rrDepth
+        integrator_props['strictNormals'] = strictNormals
+        integrator_props['hideEmitters'] = hideEmitters
+        super(IntegratorPathTracer, self).__init__(integrator_props)
+
+
+class IntegratorSimpleVolumetric(Integrator):
+    def __init__(self, maxDepth=-1, rrDepth=5, strictNormals=False, hideEmitters=False):
+        self.integrator_type = 'volpath_simple'
+        integrator_props = mitcor.Properties(self.integrator_type)
+        integrator_props['maxDepth'] = maxDepth
+        integrator_props['rrDepth'] = rrDepth
+        integrator_props['strictNormals'] = strictNormals
+        integrator_props['hideEmitters'] = hideEmitters
+        super(IntegratorSimpleVolumetric, self).__init__(integrator_props)
+
+
+class IntegratorExtendedVolumetricPathTracer(Integrator):
+    def __init__(self, maxDepth=-1, rrDepth=5, strictNormals=False, hideEmitters=False):
+        self.integrator_type = 'volpath'
+        integrator_props = mitcor.Properties(self.integrator_type)
+        integrator_props['maxDepth'] = maxDepth
+        integrator_props['rrDepth'] = rrDepth
+        integrator_props['strictNormals'] = strictNormals
+        integrator_props['hideEmitters'] = hideEmitters
+        super(IntegratorExtendedVolumetricPathTracer, self).__init__(integrator_props)
+
+
+class IntegratorBidirectionalPathTracer(Integrator):
+    def __init__(self, maxDepth=-1, rrDepth=5, lightImage=True, sampleDirect=True):
+        self.integrator_type = 'bdpt'
+        integrator_props = mitcor.Properties(self.integrator_type)
+        integrator_props['maxDepth'] = maxDepth
+        integrator_props['rrDepth'] = rrDepth
+        integrator_props['lightImage'] = lightImage
+        integrator_props['sampleDirect'] = sampleDirect
+        super(IntegratorBidirectionalPathTracer, self).__init__(integrator_props)
+
+
+class IntegratorPhotonMap(Integrator):
+    def __init__(self):
+        warnings.warn('Not implemented yet in mortsuba.py')
+
+
+class IntegratorProgressivePhotonMap(Integrator):
+    def __init__(self):
+        warnings.warn('Not implemented yet in mortsuba.py')
+
+
+class IntegratorStochasticProgressivePhotonMap(Integrator):
+    def __init__(self):
+        warnings.warn('Not implemented yet in mortsuba.py')
+
+
+class IntegratorPrimarySampleSpaceMetropolis(Integrator):
+    def __init__(self):
+        warnings.warn('Not implemented yet in mortsuba.py')
+
+
+class IntegratorPathSpaceMetropolis(Integrator):
+    def __init__(self):
+        warnings.warn('Not implemented yet in mortsuba.py')
+
+
+class IntegratorEnergyRedistributionPathTracer(Integrator):
+    def __init__(self):
+        warnings.warn('Not implemented yet in mortsuba.py')
+
+class IntegratorAdjointParticleTracer(Integrator):
+    def __init__(self):
+        warnings.warn('Not implemented yet in mortsuba.py')
+
+
+class IntegratorAdaptive(Integrator):
+    def __init__(self):
+        warnings.warn('Not implemented yet in mortsuba.py')
+
+
+class IntegratorVirtualPointLight(Integrator):
+    def __init__(self):
+        warnings.warn('Not implemented yet in mortsuba.py')
+
+
+class IntegratorIrradianceCaching(Integrator):
+    def __init__(self):
+        warnings.warn('Not implemented yet in mortsuba.py')
+
+
+class IntegratorMultichannel(Integrator):
+    def __init__(self, integrator_list):
+        """
+        The Multichannel Integrator is a container for multiple integrators. First instantiate the sub-integrators and
+        then pass them as a list to Multichannel Integrator. See the Mitsuba manual for details and examples.
+        :param integrator_list: List of integrators to combine into a multichannel integrator
+        Multichannel Integrators can likely not be nested i.e. do not pass a multichannel integrator as an element of
+        the integrator_list.
+        :return:
+        """
+        # Instantiate the plugin
+        self.integrator_type = 'multichannel'
+        integrator = plugin_mngr.create({'type': self.integrator_type})
+        # Add the list of sub-integrators as children
+        for integrator_child in integrator_list:
+            if integrator_child.integrator_type == 'multichannel':
+                warnings.warn('multichannel integrators can likely not be nested.')
+            integrator.addChild(integrator_child.integrator_type, integrator_child.integrator)
+        integrator.configure()
+        self.integrator = integrator
+
+
+class IntegratorFieldExtraction(Integrator):
+    def __init__(self, field, undefined=None):
+        """
+        This integrator extracts a requested field from the ray intersection records of shading points and converts
+        the resulting data into color values. It is meant to be used in conjunction with MultichannelIntegrator
+        to dump auxiliary information (such as depth or surface normals of surfaces seen by the camera)
+        into extra channels of a rendered image, for instance to create benchmark data for computer vision
+        applications. Refer to the documentation of the MultichannelIntegrator for examples.
+        :param field: Denotes the data that should be extracted for writing to the image data instead of radiometric
+        data. The following choices are available:
+            position: 3D position in world space
+            relPosition: 3D position in camera space
+            distance: Ray distance to the shading point
+            geoNormal: Geometric surface normal
+            shNormal: Shading surface normal
+            uv: UV coordinate value
+            albedo: Albedo value of the BSDF
+            shapeIndex: Integer index of the high-level shape
+            primIndex: Integer shape primitive index
+        :param undefined: Value returned when there is no geometry intersection. Default is zero.
+        :return:
+        """
+        self.integrator_type = 'field'
+        integrator_props = mitcor.Properties(self.integrator_type)
+        integrator_props['field'] = field
+        if undefined is not None:
+            integrator_props['undefined'] = undefined
+        super(IntegratorFieldExtraction, self).__init__(integrator_props)
+
+# End of classes for Mitsuba integrators
+
+class Scene(object):
+    """ The Scene class encapsulates the information that can be contained in a Mitsuba scene file.
     This class contains the information in the scene file in an accessible format for the purpose
     of manipulating Mitsuba scenes, writing the updated scene file and performing rendering
     in a multiprocessing environment.
@@ -542,8 +830,12 @@ class Mitsuba(object):
                            self.fileResolver.resolve(scenefile), theparamMap)
         else: # Create a new scene
             self.scene = mitren.Scene()
-        # Add a plugin manager
-        self.plugin_mngr = mitcor.PluginManager.getInstance()
+
+    def __str__(self):
+        return str(self.scene)
+
+    def hasEnvironmentEmitter(self):
+        return self.scene.hasEnvironmentEmitter()
 
     def add_directional_light(self, direction=(0.0, 0.0, -1.0), irradiance=1.0, samplingWeight=1.0):
         """
@@ -565,7 +857,7 @@ class Mitsuba(object):
         dir_light_props['direction'] = direction
         dir_light_props['irradiance'] = irradiance
         dir_light_props['samplingWeight'] = samplingWeight
-        dir_light = self.plugin_mngr.createObject(dir_light_props)
+        dir_light = plugin_mngr.createObject(dir_light_props)
         dir_light.configure()
         self.scene.addChild('directional', dir_light)
 
@@ -615,7 +907,7 @@ class Mitsuba(object):
         use the default.
         :return:
         """
-        if self.scene.hasEnvironmentEmitter():
+        if self.hasEnvironmentEmitter():
             warnings.warn('Mitsuba scene already has a radiant environment emitter. Only one is permitted.')
         if toWorld is None:  # Generate the default REM rotation, which is +Z towards the zenith
             toWorld = Transform()  # Get identity transform
@@ -630,7 +922,7 @@ class Mitsuba(object):
         if cache is not None:
             envmap_props['cache'] = cache
         envmap_props['samplingWeight'] = samplingWeight
-        envmap = self.plugin_mngr.createObject(envmap_props)
+        envmap = plugin_mngr.createObject(envmap_props)
         envmap.configure()
         self.scene.addChild('environment', envmap)
 
