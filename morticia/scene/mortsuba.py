@@ -662,6 +662,10 @@ class Emitter(object):
         return str(self.emitter)
 
 class EmitterPoint(Emitter):
+    """
+    This emitter plugin implements a simple point light source, which uniformly radiates illumination
+    into all directions.
+    """
     def __init__(self, toWorld=None, position=(0.0, 0.0, 0.0), intensity=Spectrum(1.0), samplingWeight=1.0, iden=None):
         self.type = 'point'
         props = mitcor.Properties(self.type)
@@ -672,45 +676,223 @@ class EmitterPoint(Emitter):
 
 
 class EmitterArea(Emitter):
+    """
+    This plugin implements an area light, i.e. a light source that emits diffuse illumination from the
+    exterior of an arbitrary shape. Since the emission profile of an area light is completely diffuse, it has
+    the same apparent brightness regardless of the observer's viewing direction. Furthermore, since it
+    occupies a nonzero amount of space, an area light generally causes scene objects to cast soft shadows.
+
+    This is currently the only emitter type that can be used to produce thermal emissions from any object in the scene
+    for modelling in the thermal spectrum.
+    """
+
     def __init__(self, radiance=Spectrum(1.0), samplingWeight=1.0, iden=None):
         self.type = 'area'
         props = mitcor.Properties(self.type)
         props['radiance'] = radiance.spectrum
         props['samplingWeight'] = samplingWeight
-        super(EmitterArea, self).__init_(props, None, iden)
+        super(EmitterArea, self).__init__(props, None, iden)
 
 
 class EmitterSpotlight(Emitter):
-    pass
+    """
+    This plugin provides a spot light with a linear falloff. In its local coordinate system, the spot light is
+    positioned at the origin and points along the positive Z direction. It can be conveniently reoriented
+    using the lookat type of transformation.
+    """
+    def __init__(self, toWorld=None, intensity=Spectrum(1.0), cutoffAngle=20.0, beamWidth=None, texture=None,
+                  samplingWeight=1.0, iden=None):
+        self.type = 'spot'
+        props = mitcor.Properties(self.type)
+        props['intensity'] = intensity.spectrum
+        props['cutoffAngle'] = cutoffAngle
+        if beamWidth is not None:
+            props['beamWidth'] = beamWidth
+        props['samplingWeight'] = samplingWeight
+        super(EmitterSpotlight, self).__init__(props, toWorld, iden)
+        if texture is not None:
+            self.emitter.addChild('texture', texture.texture)
+        self.emitter.configure()
 
 
 class EmitterDirectional(Emitter):
-    pass
+    """
+    This emitter plugin implements a distant directional source, which radiates a specified power per
+    unit area along a fixed direction. By default, the emitter radiates in the direction of the negative Z axis,
+    which in the MORTICIA frame is toward nadir (sun in the zenith).
+    This is emitter type used by MORTICIA for direct sunlight (or moonlight)
+    """
+    def __init__(self, toWorld=None, direction=(0.0, 0.0, -1.0), irradiance=Spectrum(1.0), samplingWeight=1.0,
+                 iden=None):
+        self.type = 'directional'
+        props = mitcor.Properties(self.type)
+        if direction is not None and toWorld is None:
+            props['direction'] = mitcor.Vector(direction[0], direction[1], direction[2])
+        elif toWorld is not None and direction is not None:
+            warnings.warn('toWorld and direction inputs to directional emitter both provided. direction ignored.')
+        props['samplingWeight'] = samplingWeight
+        super(EmitterDirectional, self).__init__(props, toWorld, iden)
+
 
 
 class EmitterCollimated(Emitter):
-    pass
+    """
+    This emitter plugin implements a collimated beam source, which radiates a specified amount of
+    power along a fixed ray. It can be thought of as the limit of a spot light as its field of view tends to
+    zero.
+    Such a emitter is useful for conducting virtual experiments and testing the renderer for correctness.
+    By default, the emitter is located at the origin and radiates into the positive Z direction (0, 0, 1).
+    This can be changed by providing a custom toWorld transformation.
+    """
+    def __init__(self, toWorld=None, power=Spectrum(1.0), samplingWeight=1.0, iden=None):
+        self.type = 'collimated'
+        props = mitcor.Properties(self.type)
+        props['power'] = power.spectrum
+        props['samplingWeight'] = samplingWeight
+        super(EmitterCollimated, self).__init__(props, toWorld, iden)
 
 
-class EmitterSkylight(Emitter):
-    pass
-
+class EmitterSky(Emitter):
+    """
+    This plugin provides the physically-based skylight model by Hosek and Wilkie. It can be used
+    to create predictive daylight renderings of scenes under clear skies, which is useful for architectural
+    and computer vision applications. The implementation in Mitsuba is based on code that was generously
+    provided by the authors.
+    The model has two main parameters: the turbidity of the atmosphere and the position of the sun.
+    The position of the sun in turn depends on a number of secondary parameters, including the
+    latitude, longitude, and timezone at the location of the observer, as well as the current year,
+    month, day, hour, minute, and second.
+    This model is used in MORTICIA only for fast visualisations of scenes under natural illumination and not for
+    quantitative purposes. Rather, libRadtran REMs are used in conjunction with the directional and envmap emitters.
+    """
+    def __init__(self, toWorld=None, turbidity=3.0, albedo=Spectrum(0.15), year=2010, month=7, day=10, hour=15,
+                 minute=0, second=0, latitude=35.6894, longitude=139.6917, timezone=9, sunDirection=None,
+                 stretch=1.0, resolution=512, scale=1.0, samplingWeight=1.0, iden=None):
+        self.type = 'sky'
+        props = mitcor.Properties(self.type)
+        props['turbidity'] = turbidity
+        props['albedo'] = albedo
+        props['year'] = year
+        props['month'] = month
+        props['year'] = year
+        props['day'] = day
+        props['hour'] = hour
+        props['minute'] = minute
+        props['second'] = second
+        props['latitude'] = latitude
+        props['longitude'] = longitude
+        props['timezone'] = timezone
+        if sunDirection is not None:
+            props['sunDirection'] = mitcor.Vector(sunDirection[0], sunDirection[1], sunDirection[2])
+        props['stretch'] = stretch
+        props['resolution'] = resolution
+        props['scale'] = scale
+        props['samplingWeight'] = samplingWeight
+        super(EmitterSky, self).__init__(props, toWorld, iden)
 
 class EmitterSun(Emitter):
-    pass
+    """
+    This plugin implements the physically-based sun model proposed by Preetham et al. [38]. Using
+    the provided position and time information (see sky for details), it can determine the position of the
+    sun as seen from the position of the observer.The radiance arriving at the earth surface is then found
+    based on the spectral emission profile of the sun and the extinction cross-section of the atmosphere
+    (which depends on the turbidity and the zenith angle of the sun).
+    """
+    def __init__(self, turbidity=3.0, year=2010, month=7, day=10, hour=15,
+                 minute=0, second=0, latitude=35.6894, longitude=139.6917, timezone=9, sunDirection=None,
+                 resolution=512, scale=1.0, sunRadiusScale=None, samplingWeight=1.0, iden=None):
+        self.type = 'sun'
+        props = mitcor.Properties(self.type)
+        props['turbidity'] = turbidity
+        props['year'] = year
+        props['month'] = month
+        props['year'] = year
+        props['day'] = day
+        props['hour'] = hour
+        props['minute'] = minute
+        props['second'] = second
+        props['latitude'] = latitude
+        props['longitude'] = longitude
+        props['timezone'] = timezone
+        if sunDirection is not None:
+            props['sunDirection'] = mitcor.Vector(sunDirection[0], sunDirection[1], sunDirection[2])
+        props['resolution'] = resolution
+        props['scale'] = scale
+        if sunRadiusScale is not None:
+            props['sunRadiusScale'] = sunRadiusScale
+        props['samplingWeight'] = samplingWeight
+        super(EmitterSun, self).__init__(props, None, iden)
 
 
 class EmitterSunSky(Emitter):
-    pass
+    """
+    This convenience plugin has the sole purpose of instantiating `sun` and `sky` and merging them into
+    a joint environment map. Please refer to these plugins individually for more details. This is not really
+    useful in MORTICIA, since it is not possible to rotate the sky component into the correct orientation. Rather
+    use `sun` and `sky` individually.
+    """
+    def __init__(self, turbidity=3.0, albedo=Spectrum(0.15), year=2010, month=7, day=10, hour=15,
+                 minute=0, second=0, latitude=35.6894, longitude=139.6917, timezone=9, sunDirection=None,
+                 stretch=1.0, resolution=512, sunScale=1.0, skyScale=1.0, sunRadiusScale=None, samplingWeight=1.0, \
+                                                                                                         iden=None):
+        self.type = 'sky'
+        props = mitcor.Properties(self.type)
+        props['turbidity'] = turbidity
+        props['albedo'] = albedo
+        props['year'] = year
+        props['month'] = month
+        props['year'] = year
+        props['day'] = day
+        props['hour'] = hour
+        props['minute'] = minute
+        props['second'] = second
+        props['latitude'] = latitude
+        props['longitude'] = longitude
+        props['timezone'] = timezone
+        if sunDirection is not None:
+            props['sunDirection'] = mitcor.Vector(sunDirection[0], sunDirection[1], sunDirection[2])
+        props['stretch'] = stretch
+        props['resolution'] = resolution
+        props['sunScale'] = sunScale
+        props['skyScale'] = skyScale
+        if sunRadiusScale is not None:
+            props['sunRadiusScale'] = sunRadiusScale
+        props['samplingWeight'] = samplingWeight
+        super(EmitterSunSky, self).__init__(props, None, iden)
 
 
 class EmitterEnvironmentMap(Emitter):
-    pass
+    """
+    This plugin provides a HDRI (high dynamic range imaging) environment map, which is a type of
+    light source that is well-suited for representing natural illumination. Together with the `directional` emitter
+    this is the most important emitter class for MORTICIA purposes and the the REMs generated using libRadtran are used
+    as the OpenEXR input.
+    """
+    def __init__(self, filename, toWorld=None, scale=1.0, gamma=1.0, cache=None, samplingWeight=1.0, iden=None):
+        self.type = 'envmap'
+        props = mitcor.Properties(self.type)
+        props['filename'] = filename
+        props['scale'] = scale
+        props['gamma'] = gamma
+        if cache is not None:
+            props['cache'] = cache
+        props['samplingWeight'] = samplingWeight
+        super(EmitterEnvironmentMap, self).__init__(props, toWorld, iden)
+
 
 
 class EmitterConstantEnvironment(Emitter):
-    pass
-
+    """
+    This plugin implements a constant environment emitter, which surrounds the scene and radiates
+    diffuse illumination towards it. This is often a good default light source when the goal is to visualize
+    some loaded geometry that uses basic (e.g. diffuse) materials.
+    """
+    def __init__(self, radiance=Spectrum(1.0), samplingWeight=1.0, iden=None):
+        self.type = 'constant'
+        props = mitcor.Properties(self.type)
+        props['radiance'] = radiance.spectrum
+        props['samplingWeight'] = samplingWeight
+        super(EmitterConstantEnvironment, self).__init__(props, None, iden)
 
 # End of classes for Mitsuba emitters
 
