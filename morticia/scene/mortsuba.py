@@ -896,6 +896,165 @@ class EmitterConstantEnvironment(Emitter):
 
 # End of classes for Mitsuba emitters
 
+# Classes for Mitsuba Sensors
+
+class Sensor(object):
+    """
+    In Mitsuba, sensors, along with a film, are responsible for recording radiance measurements in some
+    usable format. This includes default choices such as perspective or orthographic cameras, as well as
+    more specialized sensors that measure the radiance into a given direction or the irradiance received
+    by a certain surface.
+    """
+    sensor_counter = 0
+
+    def __init__(self, sensor_props, toWorld=None, iden=None):
+        if iden is None:
+            self.iden = 'sensor_' + self.type + '_' + str(Sensor.sensor_counter)
+            Sensor.sensor_counter += 1
+        else:
+            self.iden = iden
+        if toWorld is not None:
+            sensor_props['toWorld'] = toWorld
+        sensor = plugin_mngr.createObject(sensor_props)
+        sensor.setID(self.iden)
+        sensor.configure()
+        self.sensor = sensor
+
+    def __str__(self):
+        return str(self.sensor)
+
+
+class SensorPerspective(Sensor):
+    """
+    This plugin implements a simple idealized perspective camera model, which has an infinitely small
+    aperture. This creates an infinite depth of field, i.e. no optical blurring occurs. The camera can be
+    animated to move during an exposure, hence temporal blur is still possible.
+    By default, the camera's field of view is specified using a 35 mm film equivalent focal length, which is
+    first converted into a diagonal field of view and subsequently applied to the camera. This assumes that
+    the film's aspect ratio matches that of 35mm film (1.5:1), though the parameter still behaves intuitively
+    when this is not the case. Alternatively, it is also possible to specify a field of view in degrees along a
+    given axis (see the fov and fovAxis parameters).
+    The exact camera position and orientation is most easily expressed using the lookAt form of transformation.
+    In MORTICIA, the field of view of the camera is specified using the `fov` (in degrees) and `fovAxis` parameters.
+    The default `farClip` plane is 100 000 Mitsuba length units, which in the MORTICIA context is 100 000 m. The near
+    clip is 0.01 units, which is 1 cm in canonical MORTICIA units of metres.
+    """
+    def __init__(self, toWorld=None, focalLength='50mm', fov=None, fovAxis='x', shutterOpen=None, shutterClose=None,
+                 nearClip=0.01, farClip=100000.0, iden=None):
+        self.type = 'perspective'
+        props = mitcor.Properties(self.type)
+        if fov is not None:
+            props['fov'] = fov
+            props['fovAxis'] = fovAxis
+        else:
+            props['focalLength'] = focalLength
+        if shutterOpen is not None:
+            props['shutterOpen'] = shutterOpen
+        if shutterClose is not None:
+            props['shutterClose'] = shutterClose
+        props['nearClip'] = nearClip
+        props['farClip'] = farClip
+        super(SensorPerspective, self).__init__(props, toWorld, iden)
+
+
+class SensorPerspectiveThinLens(Sensor):
+    """
+    This plugin implements a simple perspective camera model with a thin lens at its circular aperture.
+    It is very similar to the perspective plugin except that the extra lens element permits rendering
+    with a specifiable (i.e. non-infinite) depth of field. To configure this, it has two extra parameters
+    named `apertureRadius` and `focusDistance`, which are mandatory inputs.
+    """
+
+    def __init__(self, apertureRadius, focusDistance, toWorld=None,
+                 focalLength='50mm', fov=None, fovAxis='x', shutterOpen=None, shutterClose=None,
+                 nearClip=0.01, farClip=100000.0, iden=None):
+        self.type = 'thinlens'
+        props = mitcor.Properties(self.type)
+        props['apertureRadius'] = apertureRadius
+        props['focusDistance'] = focusDistance
+        if fov is not None:
+            props['fov'] = fov
+            props['fovAxis'] = fovAxis
+        else:
+            props['focalLength'] = focalLength
+        if shutterOpen is not None:
+            props['shutterOpen'] = shutterOpen
+        if shutterClose is not None:
+            props['shutterClose'] = shutterClose
+        props['nearClip'] = nearClip
+        props['farClip'] = farClip
+        super(SensorPerspectiveThinLens, self).__init__(props, toWorld, iden)
+
+
+class SensorOrthographic(Sensor):
+    """
+    This plugin implements a simple orthographic camera, i.e. a sensor based on an orthographic
+    projection without any form of perspective. It can be thought of as a planar sensor that measures the
+    radiance along its normal direction. By default this plane is a 2 by 2 length unit (metres in MORTICIA) region in the
+    XY plane (horizontal plane in MORTICIA) viewing along the +Z direction (vertically upward in MORTICIA). A
+    transform can be used to scale and rotate the orthographic plane.
+    """
+    def __init__(self, toWorld=None, shutterOpen=None, shutterClose=None,
+                 nearClip=0.01, farClip=100000.0, iden=None):
+        self.type = 'orthographic'
+        props = mitcor.Properties(self.type)
+        if shutterOpen is not None:
+            props['shutterOpen'] = shutterOpen
+        if shutterClose is not None:
+            props['shutterClose'] = shutterClose
+        props['nearClip'] = nearClip
+        props['farClip'] = farClip
+        super(SensorOrthographic, self).__init__(props, toWorld, iden)
+
+
+class SensorTelecentric(Sensor):
+    """
+    This plugin implements a simple model of a camera with a telecentric lens. This is a type of lens
+    that produces an in-focus orthographic view on a plane at some distance from the sensor. Points
+    away from this plane are out of focus and project onto a circle of confusion. In comparison to idealized
+    orthographic cameras, telecentric lens cameras exist in the real world and find use in some
+    computer vision applications where perspective effects cause problems. This sensor relates to the
+    `orthographic` plugin in the same way that `thinlens` does to `perspective`.
+    The configuration is identical to the orthographic plugin, except that the additional parameters
+    `apertureRadius` and `focusDistance` must be provided (floats).
+    """
+    def __init__(self, apertureRadius, focusDistance, toWorld=None,
+                 shutterOpen=None, shutterClose=None,
+                 nearClip=0.01, farClip=100000.0, iden=None):
+        self.type = 'telecentric'
+        props = mitcor.Properties(self.type)
+        props['apertureRadius'] = apertureRadius
+        props['focusDistance'] = focusDistance
+        if shutterOpen is not None:
+            props['shutterOpen'] = shutterOpen
+        if shutterClose is not None:
+            props['shutterClose'] = shutterClose
+        props['nearClip'] = nearClip
+        props['farClip'] = farClip
+        super(SensorTelecentric, self).__init__(props, toWorld, iden)
+
+
+class SensorSpherical(Sensor):
+    """
+    The spherical camera captures the illumination arriving from all directions and turns it into a
+    latitude-longitude environment map. It is best used with a high dynamic range film that has 2:1 aspect
+    ratio, and the resulting output can then be turned into a distant light source using the envmap plugin.
+    By default, the camera is located at the origin, which can be changed by providing a custom toWorld
+    transformation.
+    """
+    def __init__(self, toWorld=None, shutterOpen=None, shutterClose=None, iden=None):
+        self.type = 'spherical'
+        props = mitcor.Properties(self.type)
+        if shutterOpen is not None:
+            props['shutterOpen'] = shutterOpen
+        if shutterClose is not None:
+            props['shutterClose'] = shutterClose
+        super(SensorTelecentric, self).__init__(props, toWorld, iden)
+
+
+# End of classes for Mitsuba Sensors
+
+
 # Classes for different Mitsuba reconstruction filters
 
 class Filter(object):
