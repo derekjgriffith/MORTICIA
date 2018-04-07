@@ -444,6 +444,76 @@ class BsdfRoughDiffuse(Bsdf):
         props['useFastApprox'] = useFastApprox
         super(BsdfRoughDiffuse, self).__init__(props, texture, iden)
 
+
+class BsdfSmoothDielectric(Bsdf):
+    pass
+
+
+class BsdfThinDielectric(Bsdf):
+    pass
+
+
+class BsdfRoughDielectric(Bsdf):
+    pass
+
+
+class BsdfSmoothConductor(Bsdf):
+    pass
+
+
+class BsdfRoughCOnductor(Bsdf):
+    pass
+
+
+class BsdfSmoothPlastic(Bsdf):
+    pass
+
+
+class BsdfRoughPlastic(Bsdf):
+    pass
+
+
+class BsdfSmoothDielectricCoating(Bsdf):
+    pass
+
+
+class BsdfRoughDielectricCoating(Bsdf):
+    pass
+
+
+class BsdfBumpMap(Bsdf):
+    pass
+
+
+class BsdfAnisotropicWard(Bsdf):
+    pass
+
+
+class BsdfMixture(Bsdf):
+    pass
+
+
+class BsdfBlended(Bsdf):
+    pass
+
+
+class BsdfTwoSided(Bsdf):
+    pass
+
+
+class BsdfDiffuseTransmitter(Bsdf):
+    pass
+
+
+class BsdfHanrahanKruege(Bsdf):
+    pass
+
+
+class BsdfIrawanMarschner(Bsdf):
+    pass
+
+
+
 # End of BSDF classes
 
 # Classes for Mitsuba textures
@@ -470,6 +540,34 @@ class Texture(object):
     def __str__(self):
         return str(self.texture)
 
+
+class TextureBitmap(Texture):
+    def __init__(self, filename, wrapMode='repeat', wrapModeU=None, wrapModeV=None, gamma=None, filterType='ewa',
+                 maxAnisotropy=20.0, cache=None, uoffset=0.0, voffset=0.0, uscale=1.0, vscale=1.0, channel=None,
+                 iden=None):
+        self.type='bitmap'
+        props = mitcor.Properties('bitmap')
+        props['filename'] = filename
+        props['wrapMode'] = wrapMode
+        if wrapModeU is not None:
+            props['wrapModeU'] = wrapModeU
+        if wrapModeV is not None:
+            props['wrapModeV'] = wrapModeV
+        if gamma is not None:
+            props['gamma'] = gamma
+        props['maxAnisotropy'] = maxAnisotropy
+        props['filterType'] = filterType
+        if cache is not None:
+            props['cache'] = cache
+        props['uoffset'] = uoffset
+        props['voffset'] = voffset
+        props['uscale'] = uscale
+        props['vscale'] = vscale
+        if channel is not None:
+            props['channel'] = channel
+        super(TextureBitmap, self).__init__(props, iden)
+
+
 class TextureCheckerboard(Texture):
     def __init__(self, color0=Spectrum(0.4), color1=Spectrum(0.2), uoffset=0.0, voffset=0.0,
                  uscale=1.0, vscale=1.0, iden=None):
@@ -482,6 +580,139 @@ class TextureCheckerboard(Texture):
         props['uscale'] = uscale
         props['vscale'] = vscale
         super(TextureCheckerboard, self).__init__(props, iden)
+
+
+class TextureGrid(Texture):
+    def __init__(self, color0=Spectrum(0.2), color1=Spectrum(0.4), lineWidth=0.01, uscale=1.0, vscale=1.0,
+                 uoffset=0.0, voffset=0.0, iden=None):
+        self.type = 'gridtexture'
+        props = mitcor.Properties(self.type)
+        props['color0'] = color0.spectrum
+        props['color1'] = color1.spectrum
+        props['lineWidth'] = lineWidth
+        props['uoffset'] = uoffset
+        props['voffset'] = voffset
+        props['uscale'] = uscale
+        props['vscale'] = vscale
+        super(TextureGrid, self).__init__(props, iden)
+
+
+class TextureScale(Texture):
+    def __init__(self, texture_in, scale):
+        self.type='scale'
+        props = mitcor.Properties(self.type)
+        props['scale'] = scale
+        texture = plugin_mngr.createObject(props)
+        texture.addChild(texture_in.texture)
+        texture.configure()
+        self.texture = texture
+
+
+class TextureVertexColors(Texture):
+    pass  # To be implemented
+
+
+class TextureWireframe(Texture):
+    def __init__(self, interiorColor=Spectrum(0.5), edgeColor=Spectrum(0.5), lineWidth=None, stepWidth=0.5, iden=None):
+        self.type = 'wireframe'
+        props = mitcor.Properties(self.type)
+        props['interiorColor'] = interiorColor
+        props['edgeColor'] = edgeColor
+        if lineWidth is not None:
+            props['lineWidth'] = lineWidth
+        props[stepWidth] = stepWidth
+        super(TextureWireframe, self).__init__(props, iden)
+
+
+class TextureCurvature(Texture):
+    def __init__(self, curvature='mean', scale=1.0, iden=None):
+        self.type = 'curvature'
+        props = mitcor.Properties(self.type)
+        props['curvature'] = curvature
+        props['scale'] = scale
+        super(TextureCurvature, self).__init__(props, iden)
+
+# End of Texture classes for Mitsuba
+
+# Emitter classes for Mitsuba
+
+
+class Emitter(object):
+    """
+    Mitsuba supports a wide range of emitters/light sources, which can be classified into two main categories:
+    emitters which are located somewhere within the scene, and emitters that surround the scene
+    to simulate a distant environment.
+    """
+    emitter_counter = 0
+
+    def __init__(self, emitter_props, toWorld=None, iden=None):
+        if iden is None:
+            self.iden = 'emitter_' + self.type + '_' + str(Emitter.emitter_counter)
+            Emitter.emitter_counter += 1
+        else:
+            self.iden = iden
+        if toWorld is not None:
+            emitter_props['toWorld'] = toWorld
+        emitter = plugin_mngr.createObject(emitter_props)
+        emitter.setID(self.iden)
+        emitter.configure()
+        self.emitter = emitter
+
+    def __str__(self):
+        return str(self.emitter)
+
+class EmitterPoint(Emitter):
+    def __init__(self, toWorld=None, position=(0.0, 0.0, 0.0), intensity=Spectrum(1.0), samplingWeight=1.0, iden=None):
+        self.type = 'point'
+        props = mitcor.Properties(self.type)
+        props['position'] = mitcor.Point(position[0], position[1], position[2])
+        props['intensity'] = intensity.spectrum
+        props['samplingWeight'] = samplingWeight
+        super(EmitterPoint, self).__init__(props, toWorld, iden)
+
+
+class EmitterArea(Emitter):
+    def __init__(self, radiance=Spectrum(1.0), samplingWeight=1.0, iden=None):
+        self.type = 'area'
+        props = mitcor.Properties(self.type)
+        props['radiance'] = radiance.spectrum
+        props['samplingWeight'] = samplingWeight
+        super(EmitterArea, self).__init_(props, None, iden)
+
+
+class EmitterSpotlight(Emitter):
+    pass
+
+
+class EmitterDirectional(Emitter):
+    pass
+
+
+class EmitterCollimated(Emitter):
+    pass
+
+
+class EmitterSkylight(Emitter):
+    pass
+
+
+class EmitterSun(Emitter):
+    pass
+
+
+class EmitterSunSky(Emitter):
+    pass
+
+
+class EmitterEnvironmentMap(Emitter):
+    pass
+
+
+class EmitterConstantEnvironment(Emitter):
+    pass
+
+
+# End of classes for Mitsuba emitters
 
 # Classes for different Mitsuba reconstruction filters
 
