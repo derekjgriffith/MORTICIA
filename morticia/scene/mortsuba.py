@@ -475,9 +475,11 @@ class BsdfSmoothDielectric(Bsdf):
     (for instance, water and air). Exterior and interior IOR values can be specified independently,
     where "exterior" refers to the side that contains the surface normal. When no parameters are given,
     the plugin activates the defaults, which describe a borosilicate glass BK7/air interface.
+    For physical correctness the specularReflectance and specularTransmittance inputs should not be provided, unless
+    a special effect or texture is desired.
     """
-    def __init__(self, intIOR='bk7', extIOR='air', specularReflectance=Spectrum(1.0),
-                 specularTransmittance=Spectrum(1.0), texture=None, iden=None):
+    def __init__(self, intIOR='bk7', extIOR='air', specularReflectance=None,
+                 specularTransmittance=None, texture=None, iden=None):
         self.type = 'dielectric'
         props = mitcor.Properties(self.type)
         props['intIOR'] = intIOR
@@ -496,7 +498,34 @@ class BsdfSmoothDielectric(Bsdf):
 
 
 class BsdfThinDielectric(Bsdf):
-    pass
+    """
+    This plugin models a thin dielectric material that is embedded inside another dielectric. For instance,
+    glass surrounded by air. The interior of the material is assumed to be so thin that its effect on
+    transmitted rays is negligible, Hence, light exits such a material without any form of angular deflection
+    (though there is still specular reflection).
+    This model should be used for things like glass windows that were modeled using only a single
+    sheet of triangles or quads. On the other hand, when the window consists of proper closed geometry,
+    dielectric is the right choice.
+    For physical correctness the specularReflectance and specularTransmittance inputs should not be provided, unless
+    a special effect or texture is desired.
+    """
+    def __init__(self, intIOR='bk7', extIOR='air', specularReflectance=None,
+                 specularTransmittance=None, texture=None, iden=None):
+        self.type = 'thindielectric'
+        props = mitcor.Properties(self.type)
+        props['intIOR'] = intIOR
+        props['extIOR'] = extIOR
+        if specularReflectance is not None:
+            if hasattr(specularReflectance, 'spectrum'):
+                props[specularReflectance] = specularReflectance.spectrum
+            elif hasattr(specularReflectance, 'texture'):
+                props[specularReflectance] = specularReflectance.texture
+        if specularTransmittance is not None:
+            if hasattr(specularTransmittance, 'spectrum'):
+                props[specularTransmittance] = specularTransmittance.spectrum
+            elif hasattr(specularTransmittance, 'texture'):
+                props[specularTransmittance] = specularTransmittance.texture
+        super(BsdfThinDielectric, self).__init__(props, texture, iden)
 
 
 class BsdfRoughDielectric(Bsdf):
