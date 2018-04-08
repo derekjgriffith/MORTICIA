@@ -217,6 +217,12 @@ class Shape(object):
 
 
 class ShapeCube(Shape):
+    """
+    This shape plugin describes a simple cube/cuboid intersection primitive. By default, it creates a
+    cube between the world-space positions (-1,-1,-1) and (1,1,1) . However, an arbitrary linear transformation
+    may be specified to translate, rotate, scale or skew it as desired. The parameterization of
+    this shape maps every face onto the rectangle [0, 1] in uv space
+    """
     def __init__(self, toWorld=None, flipNormals=False, bsdf=None, emit=None, iden=None):
         self.type = 'cube'
         shape_props = mitcor.Properties(self.type)
@@ -225,6 +231,10 @@ class ShapeCube(Shape):
 
 
 class ShapeSphere(Shape):
+    """
+    This shape plugin describes a simple sphere intersection primitive. It should always be preferred
+    over sphere approximations modeled using triangles.
+    """
     def __init__(self, center=(0.0, 0.0, 0.0), radius=1.0, toWorld=None, flipNormals=False, bsdf=None, emit=None,
                  iden=None):
         self.type = 'sphere'
@@ -236,6 +246,12 @@ class ShapeSphere(Shape):
 
 
 class ShapeCylinder(Shape):
+    """
+    This shape plugin describes a simple cylinder intersection primitive. It should always be preferred
+    over approximations modeled using triangles. Note that the cylinder does not have endcaps - also,
+    it's interior has inward-facing normals, which most scattering models in Mitsuba will treat as fully
+    absorbing. If this is not desirable, consider using the `twosided` plugin.
+    """
     def __init__(self, toWorld=None, p0=(0.0, 0.0, 0.0), p1=(0.0, 0.0, 1.0), radius=1.0, flipNormals=False, bsdf=None,
                  emit=None, iden=None):
         self.type = 'cylinder'
@@ -248,11 +264,33 @@ class ShapeCylinder(Shape):
 
 
 class ShapeRectangle(Shape):
+    """
+    This shape plugin describes a simple rectangular intersection primitive. It is mainly provided as a
+    convenience for those cases when creating and loading an external mesh with two triangles is simply
+    too tedious, e.g. when an area light source or a simple ground plane are needed.
+    By default, the rectangle covers the XY-range [-1, 1] x [-1, 1] and has a surface normal that points
+    into the positive Z direction (towards the zenith in MORTICIA). To change the rectangle scale, rotation,
+    or translation, use the toWorld  parameter.
+    """
     def __init__(self, toWorld=None, flipNormals=False, bsdf=None, emit=None, iden=None):
         self.type = 'rectangle'
         shape_props = mitcor.Properties(self.type)
         shape_props['flipNormals'] = flipNormals
         super(ShapeRectangle, self).__init__(shape_props, toWorld, bsdf, emit, iden)
+
+
+class ShapeDisk(Shape):
+    """
+    This shape plugin describes a simple disk intersection primitive. It is usually preferable over discrete
+    approximations made from triangles.
+    By default, the disk has unit radius and is located at the origin. Its surface normal points into the
+    positive Z direction. To change the disk scale, rotation, or translation, use the toWorld parameter.
+    """
+    def __init__(self, toWorld=None, flipNormals=False, bsdf=None, emit=None, iden=None):
+        self.type = 'disk'
+        shape_props = mitcor.Properties(self.type)
+        shape_props['flipNormals'] = flipNormals
+        super(ShapeDisk, self).__init__(shape_props, toWorld, bsdf, emit, iden)
 
 
 class ShapeWavefrontOBJ(Shape):
