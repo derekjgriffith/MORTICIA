@@ -294,6 +294,10 @@ class ShapeDisk(Shape):
 
 
 class ShapeWavefrontOBJ(Shape):
+    """
+    This plugin implements a simple loader for Wavefront OBJ files. It handles meshes containing
+    triangles and quadrilaterals, and it also imports vertex normals and texture coordinates.
+    """
     def __init__(self, filename, toWorld=None, faceNormals=False, maxSmoothAngle=None, flipNormals=False,
                  flipTexCoords=True, collapse=False, bsdf=None, emit=None, iden=None):
         self.type = 'obj'
@@ -310,6 +314,14 @@ class ShapeWavefrontOBJ(Shape):
 
 
 class ShapeStanfordTriangles(Shape):
+    """
+    This plugin implements a fast loader for the Stanford PLY format (both the ASCII and binary format).
+    It is based on the libply library by Ares Lagae (http://people.cs.kuleuven.be/~ares.
+    lagae/libply). The current plugin implementation supports triangle meshes with optional UV
+    coordinates, vertex normals, and vertex colors.
+    When loading meshes that contain vertex colors, note that they need to be explicitly referenced in
+    a BSDF using a special texture named vertexcolors.
+    """
     def __init__(self, filename, toWorld=None, faceNormals=False, maxSmoothAngle=None, flipNormals=False,
                  srgb=True, bsdf=None, emit=None, iden=None):
         self.type = 'ply'
@@ -325,6 +337,12 @@ class ShapeStanfordTriangles(Shape):
 
 
 class ShapeSerialized(Shape):
+    """
+    The serialized mesh format represents the most space and time-efficient way of getting geometry
+    information into Mitsuba. It stores indexed triangle meshes in a lossless gzip-based encoding that
+    (after decompression) nicely matches up with the internally used data structures. Loading such files
+    is considerably faster than the ply plugin and orders of magnitude faster than the obj plugin.
+    """
     def __init__(self, filename, toWorld=None, shapeIndex=0, faceNormals=False, maxSmoothAngle=None,
                  flipNormals=False, bsdf=None, emit=None, iden=None):
         self.type = 'serialized'
@@ -340,6 +358,13 @@ class ShapeSerialized(Shape):
 
 
 class ShapeGroup(Shape):
+    """
+    This plugin implements a container for shapes that should be made available for geometry instancing.
+    Any shapes placed in a shapegroup will not be visible on their own - instead, the renderer will
+    precompute ray intersection acceleration data structures so that they can efficiently be referenced
+    many times using the instance plugin.This is useful for rendering things like forests, where only a
+    few distinct types of trees have to be kept in memory.
+    """
     def __init__(self, id, shape_list):
         self.type = 'shapegroup'
         self.id = id
@@ -353,6 +378,10 @@ class ShapeGroup(Shape):
 
 
 class ShapeInstance(Shape):
+    """
+    This plugin implements a geometry instance used to efficiently replicate geometry many times. For
+    details on how to create instances, refer to the shapegroup plugin.
+    """
     def __init__(self, shapegroup, id='noid', toWorld=None):
         self.type = 'instance'
         self.id = id
@@ -366,6 +395,15 @@ class ShapeInstance(Shape):
 
 
 class ShapeHair(Shape):
+    """
+    The plugin implements a space-efficient acceleration structure for hairs made from many straight
+    cylindrical hair segments with miter joints. The underlying idea is that intersections with straight
+    cylindrical hairs can be found quite efficiently, and curved hairs are easily approximated using a series
+    of such segments.
+    The plugin supports two different input formats: a simple (but not particularly efficient) ASCII
+    format containing the coordinates of a hair vertex on every line. An empty line marks the beginning
+    of a new hair.
+    """
     def __init__(self, filename, toWorld=None, radius=0.025, angleThreshold=1, reduction=0.0, bsdf=None, emit=None,
                  iden=None):
         self.type = 'hair'
@@ -377,6 +415,13 @@ class ShapeHair(Shape):
 
 
 class ShapeHeightField(Shape):
+    """
+    This plugin implements an efficient height field intersection shape, i.e. a two-dimensional plane
+    that is vertically displaced using height values loaded from a texture. Internally, the height field is
+    represented as a min-max mipmap, allowing cheap storage and efficient ray intersection queries.
+    It is generally preferable to represent height fields using this specialized plugin rather than converting
+    them into triangle meshes.
+    """
     def __init__(self, toWorld=None, shadingNormals=True, flipNormals=False, width=100, height=100, scale=1.0,
                  filename=None, texture=None, bsdf=None, emit=None, iden=None):
         self.type = 'heightfield'
