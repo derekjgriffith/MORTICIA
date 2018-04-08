@@ -1316,6 +1316,16 @@ class FilmHdr(Film):
         super(FilmHdr, self).__init__(hdrfilm_props, rfilter)
 
 class FilmTiledHdr(Film):
+    """
+    This plugin implements a camera film that stores the captured image as a tiled high dynamic-range
+    OpenEXR file. It is very similar to hdrfilm, the main difference being that it does not keep the
+    rendered image in memory. Instead, image tiles are directly written to disk as they are being rendered,
+    which enables renderings of extremely large output images that would otherwise not fit into memory
+    (e.g. 100K by 100K).
+    When the image can fit into memory, usage of this plugin is discouraged: due to the extra overhead
+    of tracking image tiles, the rendering process will be slower, and the output files also generally do not
+    compress as well as those produced by hdrfilm.
+    """
     def __init__(self, width=default_width, height=default_height, cropOffsetX=None, cropOffsetY=None,
                  cropWidth=None, cropHeight=None, pixelFormat=default_pixelFormat,
                  componentFormat=default_componentFormat, rfilter=None):
@@ -1345,6 +1355,16 @@ class FilmTiledHdr(Film):
         super(FilmTiledHdr, self).__init__(hdrfilm_props, rfilter)
 
 class FilmLdr(Film):
+    """
+    This plugin implements a low dynamic range film that can write out 8-bit PNG and JPEG images
+    in various configurations. It provides basic tonemapping techniques to map recorded radiance values
+    into a reasonable displayable range. An alpha (opacity) channel can be written if desired. By default,
+    the plugin writes gamma-corrected PNG files using the sRGB color space and no alpha channel.
+    This film is a good choice when lowdynamic range output is desired and the rendering setup can be
+    configured to capture the relevant portion of the dynamic range reliably enough so that the original
+    HDR data can safely be discarded. When this is not the case, it may be easier to use hdrfilm along
+    with the batch tonemapper.
+    """
     def __init__(self, width=default_width, height=default_height, cropOffsetX=None, cropOffsetY=None,
                  cropWidth=None, cropHeight=None, fileFormat=default_ldr_fileFormat,
                  pixelFormat=default_pixelFormat, tonemapMethod=default_ldr_tonemapMethod,
@@ -1395,6 +1415,12 @@ class FilmLdr(Film):
 
 
 class FilmNumpy(Film):
+    """
+    This plugin provides a camera film that exports spectrum, RGB, XYZ, or luminance values as a
+    matrix to aMATLAB orMathematica ASCII file or a NumPy binary file.This is useful when running
+    Mitsuba as simulation step as part of a larger virtual experiment. It can also come in handy when
+    verifying parts of the renderer using an automated test suite.
+    """
     def __init__(self, width=default_width, height=default_height, cropOffsetX=None, cropOffsetY=None,
                  cropWidth=None, cropHeight=None, fileFormat='numpy', pixelFormat=default_pixelFormat,
                  digits=6, variable='data', highQualityEdges=default_highQualityEdges, rfilter=None):
@@ -1461,6 +1487,16 @@ class Sampler(object):
 
 
 class SamplerIndependent(Sampler):
+    """
+    The independent sampler produces a stream of independent and uniformly distributed pseudorandom
+    numbers. Internally, it relies on a fast SIMD version of the Mersenne Twister random number
+    generator.
+    This is the most basic sample generator; because no precautions are taken to avoid sample clumping,
+    images produced using this plugin will usually take longer to converge. In theory, this sampler is
+    initialized using a deterministic procedure, which means that subsequent runs of Mitsuba should
+    create the same image. In practice, when rendering with multiple threads and/or machines, this is
+    not true anymore, since the ordering of samples is influenced by the operating system scheduler.
+    """
     def __init__(self, sampleCount=4):
         sampler_props = mitcor.Properties('independent')
         sampler_props['sampleCount'] = sampleCount
@@ -1468,6 +1504,12 @@ class SamplerIndependent(Sampler):
 
 
 class SamplerStratified(Sampler):
+    """
+    The stratified sample generator divides the domain into a discrete number of strata and produces a
+    sample within each one of them.This generally leads to less sample clumping when compared to the
+    independent sampler, as well as better convergence. Due to internal storage costs, stratified samples
+    are only provided up to a certain dimension, after which independent sampling takes over.
+    """
     def __init__(self, sampleCount=4, dimension=4):
         sampler_props = mitcor.Properties('stratified')
         sampler_props['sampleCount'] = sampleCount
@@ -1476,6 +1518,13 @@ class SamplerStratified(Sampler):
 
 
 class SamplerLowDiscrepancy(Sampler):
+    """
+    This plugin implements a simple hybrid sampler that combines aspects of a Quasi-Monte Carlo sequence
+    with a pseudorandom number generator based on a technique proposed by Kollig and Keller.
+    It is a good and fast general-purpose sample generator and therefore chosen as the default option
+    in Mitsuba. Some of the QMC samplers in the following pages can generate even better distributed
+    samples, but this comes at a higher cost in terms of performance.
+    """
     def __init__(self, sampleCount=4, dimension=4):
         sampler_props = mitcor.Properties('ldsampler')
         sampler_props['sampleCount'] = sampleCount
@@ -1484,6 +1533,13 @@ class SamplerLowDiscrepancy(Sampler):
 
 
 class SamplerHalton(Sampler):
+    """
+    This plugin implements a Quasi-Monte Carlo (QMC) sample generator based on the Halton sequence.
+    QMC number sequences are designed to reduce sample clumping across integration dimensions,
+    which can lead to a higher order of convergence in renderings. Because of the deterministic
+    character of the samples, errors will manifest as grid or moire patterns rather than randomnoise, but
+    these diminish as the number of samples is increased.
+    """
     def __init__(self, sampleCount=4, scramble=-1):
         sampler_props = mitcor.Properties('halton')
         sampler_props['sampleCount'] = sampleCount
@@ -1492,6 +1548,13 @@ class SamplerHalton(Sampler):
 
 
 class SamplerHammersley(Sampler):
+    """
+    This plugin implements a Quasi-Monte Carlo (QMC) sample generator based on the Hammersley
+    sequence. QMC number sequences are designed to reduce sample clumping across integration
+    dimensions, which can lead to a higher order of convergence in renderings. Because of the deterministic
+    character of the samples, errors will manifest as grid or moire patterns rather than randomnoise,
+    but these diminish as the number of samples is increased.
+    """
     def __init__(self, sampleCount=4, scramble=-1):
         sampler_props = mitcor.Properties('halton')
         sampler_props['sampleCount'] = sampleCount
@@ -1500,6 +1563,13 @@ class SamplerHammersley(Sampler):
 
 
 class SamplerSobol(Sampler):
+    """
+    This plugin implements a Quasi-Monte Carlo (QMC) sample generator based on the Sobol sequence.
+    QMC number sequences are designed to reduce sample clumping across integration dimensions,
+    which can lead to a higher order of convergence in renderings. Because of the deterministic
+    character of the samples, errors will manifest as grid or moire patterns rather than random noise, but
+    these diminish as the number of samples is increased.
+    """
     def __init__(self, sampleCount=4, scramble=-1):
         sampler_props = mitcor.Properties('halton')
         sampler_props['sampleCount'] = sampleCount
