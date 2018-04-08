@@ -425,6 +425,17 @@ class Bsdf(object):
 
 
 class BsdfDiffuse(Bsdf):
+    """
+    The smooth diffuse material (also referred to as "Lambertian") represents an ideally diffuse material
+    with a user-specified amount of reflectance. Any received illumination is scattered so that the surface
+    looks the same independently of the direction of observation.
+    Apart from a homogeneous reflectance value, the plugin can also accept a nested or referenced
+    texturemap to be used as the source of reflectance information, which is then mapped onto the shape
+    based on its UV parameterization. When no parameters are specified, the model uses the default of
+    50% reflectance.
+    Note that this material is one-sided i.e., observed from the back side, it will be completely
+    black. If this is undesirable, consider using the twosided BRDF adapter plugin.
+    """
     def __init__(self, reflectance=None, texture=None, iden=None):
         self.type = 'diffuse'
         bsdf_props = mitcor.Properties(self.type)
@@ -434,6 +445,19 @@ class BsdfDiffuse(Bsdf):
 
 
 class BsdfRoughDiffuse(Bsdf):
+    """
+    This reflectance model describes the interaction of light with a rough diffuse material, such as plaster,
+    sand, clay, or concrete, or "powdery" surfaces. The underlying theory was developed by Oren
+    and Nayar, who model the microscopic surface structure as unresolved planar facets arranged
+    in V-shaped grooves, where each facet is an ideal diffuse reflector. The model takes into account
+    shadowing, masking, as well as inter-reflections between the facets.
+    Since the original publication, this approach has been shown to be a good match for many real world
+    materials, particularly compared to Lambertian scattering, which does not take surface roughness
+    into account.
+    The implementation in Mitsuba uses a surface roughness parameter alpha that is slightly different from
+    the slope-area variance in the original 1994 paper.The reason for this change is to make the parameter
+    alpha portable across different models (i.e. roughdielectric, roughplastic, roughconductor).
+    """
     def __init__(self, reflectance=None, alpha=None, useFastApprox=False, texture=None, iden=None):
         self.type = 'roughdiffuse'
         props = mitcor.Properties(self.type)
@@ -446,7 +470,29 @@ class BsdfRoughDiffuse(Bsdf):
 
 
 class BsdfSmoothDielectric(Bsdf):
-    pass
+    """
+    This plugin models an interface between two dielectric materials having mismatched indices of refraction
+    (for instance, water and air). Exterior and interior IOR values can be specified independently,
+    where "exterior" refers to the side that contains the surface normal. When no parameters are given,
+    the plugin activates the defaults, which describe a borosilicate glass BK7/air interface.
+    """
+    def __init__(self, intIOR='bk7', extIOR='air', specularReflectance=Spectrum(1.0),
+                 specularTransmittance=Spectrum(1.0), texture=None, iden=None):
+        self.type = 'dielectric'
+        props = mitcor.Properties(self.type)
+        props['intIOR'] = intIOR
+        props['extIOR'] = extIOR
+        if specularReflectance is not None:
+            if hasattr(specularReflectance, 'spectrum'):
+                props[specularReflectance] = specularReflectance.spectrum
+            elif hasattr(specularReflectance, 'texture'):
+                props[specularReflectance] = specularReflectance.texture
+        if specularTransmittance is not None:
+            if hasattr(specularTransmittance, 'spectrum'):
+                props[specularTransmittance] = specularTransmittance.spectrum
+            elif hasattr(specularTransmittance, 'texture'):
+                props[specularTransmittance] = specularTransmittance.texture
+        super(BsdfSmoothDielectric, self).__init__(props, texture, iden)
 
 
 class BsdfThinDielectric(Bsdf):
