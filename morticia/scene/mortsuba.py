@@ -201,7 +201,6 @@ class Shape(object):
     shape_counter = 0
 
     def __init__(self, shape_props, toWorld=None,  bsdf=None, emit=None, iden=None):
-        self.shape = plugin_mngr.createObject(shape_props)
         if iden is not None:
             self.iden = iden
         else:
@@ -209,6 +208,7 @@ class Shape(object):
             Shape.shape_counter += 1
         if toWorld is not None:
             shape_props['toWorld'] = toWorld.xform
+        self.shape = plugin_mngr.createObject(shape_props)
         if bsdf is not None:
             # Should check here if bsdf is a reference to declared BSDF
             self.shape.addChild(bsdf.type, bsdf.bsdf)
@@ -377,8 +377,8 @@ class ShapeGroup(Shape):
         shape = plugin_mngr.createObject(shape_props)
         for shape_child in shape_list:
             shape.addChild(shape_child.type + '_' + shape_child.iden, shape_child.shape)
-        shape.configure()
         shape.setID(iden)
+        shape.configure()
         self.shape = shape
 
 
@@ -952,13 +952,13 @@ class EmitterSky(Emitter):
     This model is used in MORTICIA only for fast visualisations of scenes under natural illumination and not for
     quantitative purposes. Rather, libRadtran REMs are used in conjunction with the directional and envmap emitters.
     """
-    def __init__(self, toWorld=None, turbidity=3.0, albedo=Spectrum(0.15), year=2010, month=7, day=10, hour=15,
-                 minute=0, second=0, latitude=35.6894, longitude=139.6917, timezone=9, sunDirection=None,
+    def __init__(self, toWorld=None, turbidity=3.0, albedo=Spectrum(0.15), year=2010, month=7, day=10, hour=15.0,
+                 minute=0.0, second=0.0, latitude=35.6894, longitude=139.6917, timezone=9.0, sunDirection=None,
                  stretch=1.0, resolution=512, scale=1.0, samplingWeight=1.0, iden=None):
         self.type = 'sky'
         props = mitcor.Properties(self.type)
         props['turbidity'] = turbidity
-        props['albedo'] = albedo
+        props['albedo'] = albedo.spectrum
         props['year'] = year
         props['month'] = month
         props['year'] = year
@@ -985,8 +985,8 @@ class EmitterSun(Emitter):
     based on the spectral emission profile of the sun and the extinction cross-section of the atmosphere
     (which depends on the turbidity and the zenith angle of the sun).
     """
-    def __init__(self, turbidity=3.0, year=2010, month=7, day=10, hour=15,
-                 minute=0, second=0, latitude=35.6894, longitude=139.6917, timezone=9, sunDirection=None,
+    def __init__(self, turbidity=3.0, year=2010, month=7, day=10, hour=15.0,
+                 minute=0.0, second=0.0, latitude=35.6894, longitude=139.6917, timezone=9.0, sunDirection=None,
                  resolution=512, scale=1.0, sunRadiusScale=None, samplingWeight=1.0, iden=None):
         self.type = 'sun'
         props = mitcor.Properties(self.type)
@@ -1018,14 +1018,14 @@ class EmitterSunSky(Emitter):
     useful in MORTICIA, since it is not possible to rotate the sky component into the correct orientation. Rather
     use `sun` and `sky` individually.
     """
-    def __init__(self, turbidity=3.0, albedo=Spectrum(0.15), year=2010, month=7, day=10, hour=15,
-                 minute=0, second=0, latitude=35.6894, longitude=139.6917, timezone=9, sunDirection=None,
+    def __init__(self, turbidity=3.0, albedo=Spectrum(0.15), year=2010, month=7, day=10, hour=15.0,
+                 minute=0.0, second=0.0, latitude=35.6894, longitude=139.6917, timezone=9.0, sunDirection=None,
                  stretch=1.0, resolution=512, sunScale=1.0, skyScale=1.0, sunRadiusScale=None, samplingWeight=1.0, \
                                                                                                          iden=None):
-        self.type = 'sky'
+        self.type = 'sunsky'
         props = mitcor.Properties(self.type)
         props['turbidity'] = turbidity
-        props['albedo'] = albedo
+        props['albedo'] = albedo.spectrum
         props['year'] = year
         props['month'] = month
         props['year'] = year
@@ -2034,6 +2034,32 @@ class Scene(object):
     def addChild(self, child):
         self.scene.addChild(child)
 
+    def addShape(self, shape):
+        self.scene.addChild(shape.shape)
+
+    def addShapes(self, shape_list):
+        for shape in shape_list:
+            self.scene.addChild(shape.shape)
+
+    def addBsdf(self, bsdf):
+        self.scene.addChild(bsdf,bsdf)
+
+    def addBsdfs(self, bsdf_list):
+        for bsdf in bsdf_list:
+            self.scene.addChild(bsdf.bsdf)
+
+    def addEmitter(self, emitter):
+        self.scene.addChild(emitter.emitter)
+
+    def addSensor(self, sensor):
+        self.scene.addChild(sensor.sensor)
+
+    def addIntegrator(self, integrator):
+        self.scene.addChild(integrator.integrator)
+
+    def configure(self):
+        self.scene.configure()
+
     def hasEnvironmentEmitter(self):
         return self.scene.hasEnvironmentEmitter()
 
@@ -2142,7 +2168,7 @@ class Scene(object):
                 nworkers = multiprocessing.cpu_count()
             for icpu in range(0, nworkers):
                 self.scheduler.registerWorker(mitcor.LocalWorker(icpu, 'wrk%i' % icpu))
-        self.scheduler.start()
+            self.scheduler.start()
         # Set up a render job queue for tracking render jobs
         self.queue = mitren.RenderQueue()
         if destinationfile is not None:
