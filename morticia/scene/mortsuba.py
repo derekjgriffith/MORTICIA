@@ -75,7 +75,7 @@ default_banner = False  # Do not, by default put Mitsuba banner on output images
 default_componentFormat = 'float32'  # Use maximum accuracy for output Mitsuba image formats which allow this
 default_attachLog = False  # Do not, by default attach complete rendering log to output hdrfilm images
 default_height = 768  # Default film output height in pixels for Mitsuba renders
-default_width = 576  # Default film output width in pixels for Mitusba renders
+default_width = 576  # Default film output width in pixels for Mitsuba renders
 default_hdr_fileFormat = 'openexr'  # Default high dynamic range film output
 default_highQualityEdges = True  # Use high quality edges by default in case image must be inserted into another
 default_ldr_fileFormat = 'png'  # Default low dynamic range file format output
@@ -84,6 +84,7 @@ default_ldr_gamma = -1.0
 default_ldr_exposure = 0.0
 default_ldr_key = 0.18
 default_ldr_burn = 0.0
+default_samples = 16  # Default number of samples for Mitsuba renders
 
 # Get a global Mitsuba plugin manager
 plugin_mngr = mitcor.PluginManager.getInstance()
@@ -92,24 +93,21 @@ class Transform(object):
     """
     Encapsulates transformation objects for moving and rotating Mitsuba scene components
     """
-    def __init__(self, x4x4=np.array([[1.0, 0.0, 0.0, 0.0],
-                                      [0.0, 1.0, 0.0, 0.0],
-                                      [0.0, 0.0, 1.0, 0.0],
-                                      [0.0, 0.0, 0.0, 1.0]])):
+    def __init__(self, xform=None):
         """
         Construct a Mitsuba transformation object.
         :param x4x4: Numpy 4x4 array
         Defaults to the identity transformation.
         :return: Class Transform object with property xform, which contains the Mitsuba 4x4 matrix transform.
         """
-        v1 = mitcor.Vector4(x4x4[0, 0], x4x4[0, 1], x4x4[0, 2], x4x4[0, 3])
-        v2 = mitcor.Vector4(x4x4[1, 0], x4x4[1, 1], x4x4[1, 2], x4x4[1, 3])
-        v3 = mitcor.Vector4(x4x4[2, 0], x4x4[2, 1], x4x4[2, 2], x4x4[2, 3])
-        v4 = mitcor.Vector4(x4x4[3, 0], x4x4[3, 1], x4x4[3, 2], x4x4[3, 3])
-        xform = mitcor.Transform(mitcor.Matrix4x4(v1, v2, v3, v4))
+        if xform is None:
+            xform = mitcor.Transform()
         self.xform = xform
 
-    def toWorld_lookAt(self, origin_position=(10.0, 10.0, 10.0),
+    def __str__(self):
+        return str(self.xform)
+
+    def lookAt(self, origin_position=(10.0, 10.0, 10.0),
                          target_position=(0.0, 0.0, 0.0),
                          up_direction=(0.0, 0.0, 1.0)):
         """
@@ -130,41 +128,48 @@ class Transform(object):
         up_direction = mitcor.Vector(up_direction[0],
                                            up_direction[1],
                                            up_direction[2])
-        self.xform = mitcor.Transform.lookAt(origin_position, target_position, up_direction) * self.xform
+        xform = mitcor.Transform.lookAt(origin_position, target_position, up_direction) * self.xform
+        return Transform(xform)
 
     def translate(self, translation):
         """
-
-        :param translation:
+        Mitsuba translation transformation.
+        :param translation: list of 3 components of transmformation.
         :return:
         """
         translation = mitcor.Vector3(translation[0],
-                                           translation[1],
-                                           translation[2])
+                                     translation[1],
+                                     translation[2])
         translation = mitcor.Transform.translate(translation)
         self.xform = translation * self.xform
+        return self
 
     def rotate(self, axis=(0.0, 0.0, 1.0), angle=0.0):
         axis = mitcor.Vector3(axis[0], axis[1], axis[2])
-        self.xform = mitcor.Transform.rotate(axis, angle) * self.xform
+        xform = mitcor.Transform.rotate(axis, angle) * self.xform
+        return Transform(xform)
 
     def scale(self, scale_factors=(1.0, 1.0, 1.0)):
         if len(scale_factors) == 3:
             scale_factors = mitcor.Vector3(scale_factors[0],
-                                                 scale_factors[1],
-                                                 scale_factors[2])
+                                           scale_factors[1],
+                                           scale_factors[2])
         else:
             scale_factors = mitcor.Vector3(scale_factors,
-                                                 scale_factors,
-                                                 scale_factors)
-
-        self.xform = mitcor.Transform.scale(scale_factors) * self.xform
+                                           scale_factors,
+                                           scale_factors)
+        xform = mitcor.Transform.scale(scale_factors) * self.xform
+        return Transform(xform)
 
     def __mul__(self, other):
-        self.xform = self * other
+        """
+        Product of 2 transformations.
+        """
+        xform = self.xform * other.xform
+        return Transform(xform)
 
-    def __rmul__(self, other):
-        self.xform = other * self
+#    def __rmul__(self, other):
+#        self.xform = other.xform * self.xform
 
 class AnimatedTransform(object):
     """
@@ -206,9 +211,9 @@ class Shape(object):
             shape_props['toWorld'] = toWorld.xform
         if bsdf is not None:
             # Should check here if bsdf is a reference to declared BSDF
-            self.shape.addChild(bsdf.bsdf_type, bsdf.bsdf)
+            self.shape.addChild(bsdf.type, bsdf.bsdf)
         if emit is not None:
-            self.shape.addChild(emit.emit_type, emit.emitter)
+            self.shape.addChild(emit.type, emit.emitter)
         self.shape.setID(self.iden)
         self.shape.configure()
 
@@ -365,15 +370,15 @@ class ShapeGroup(Shape):
     many times using the instance plugin.This is useful for rendering things like forests, where only a
     few distinct types of trees have to be kept in memory.
     """
-    def __init__(self, id, shape_list):
+    def __init__(self, shape_list, iden):
         self.type = 'shapegroup'
-        self.id = id
+        self.iden = iden
         shape_props = mitcor.Properties(self.type)
-        shape_props['id'] = id
         shape = plugin_mngr.createObject(shape_props)
         for shape_child in shape_list:
-            shape.addChild(shape_child.shape_type + '_' + shape_child.id, shape_child.shape)
+            shape.addChild(shape_child.type + '_' + shape_child.iden, shape_child.shape)
         shape.configure()
+        shape.setID(iden)
         self.shape = shape
 
 
@@ -382,14 +387,16 @@ class ShapeInstance(Shape):
     This plugin implements a geometry instance used to efficiently replicate geometry many times. For
     details on how to create instances, refer to the shapegroup plugin.
     """
-    def __init__(self, shapegroup, id='noid', toWorld=None):
+    def __init__(self, shapegroup, toWorld=None, iden=None):
         self.type = 'instance'
-        self.id = id
+        self.iden = iden
         shape_props = mitcor.Properties(self.type)
         if toWorld is not None:
             shape_props['toWorld'] = toWorld.xform
         shape = plugin_mngr.createObject(shape_props)
-        shape.addChild(shapegroup)
+        shape.addChild(shapegroup.shape)
+        if iden is not None:
+            shape.setID(iden)
         shape.configure()
         self.shape = shape
 
@@ -411,6 +418,7 @@ class ShapeHair(Shape):
         shape_props['filename'] = filename
         shape_props['angleThreshold'] = angleThreshold
         shape_props['reduction'] = reduction
+        shape_props['radius'] = radius
         super(ShapeHair, self).__init__(shape_props, toWorld, bsdf, emit, iden)
 
 
@@ -439,7 +447,28 @@ class ShapeHeightField(Shape):
             warnings.warn('heightfield must be either procedural or read from a file')
         super(ShapeHeightField, self).__init__(shape_props, toWorld, bsdf, emit, iden)
 
-# End of classes for Mitsuba geometrical shapes
+
+def createCubiShapeGroup(bsdf_list, size=1.0):
+    """
+    Create a shape group of six faces in the form of a cube. Each face is implemented as a `rectangle` shape so that
+    different BSDFs can be applied to each face.
+    :param size: The size of the cube (edge dimension). Default is 1 (canonical units of meters in MORTICIA).
+    :param bsdf_list: List of 6 BSDFs to be applied to the surfaces of the cube in order top, bottom, left, right,
+    front, back.
+    :return: class ShapeGroup object.
+    """
+    toWorld = Transform().scale([size/2.0, size/2.0, size/2.0])
+    top = ShapeRectangle(toWorld.translate([0.0, 0.0, size]), bsdf=bsdf_list[0])
+    bottom = ShapeRectangle(toWorld, bsdf=bsdf_list[1])
+    plusX = ShapeRectangle(toWorld.rotate([0.0, 1.0, 0.0], 90.0).translate([size/2.0, 0.0, 0.0]), bsdf=bsdf_list[2])
+    minusX = ShapeRectangle(toWorld.rotate([0.0, 1.0, 0.0], -90.0).translate([-size/2.0, 0.0, 0.0]), bsdf=bsdf_list[3])
+    plusY = ShapeRectangle(toWorld.rotate([1.0, 0.0, 0.0], 90.0).translate([0.0, size/2.0, 0.0]), bsdf=bsdf_list[4])
+    minusY = ShapeRectangle(toWorld.rotate([1.0, 0.0, 0.0], -90.0).translate([0.0, -size/2, 0.0]), bsdf=bsdf_list[5])
+    cubiShapeGroup = ShapeGroup([top, bottom, plusX, minusX, plusY, minusY], 'cubi_cube')
+    return cubiShapeGroup
+
+
+# End of classes and functions for Mitsuba geometrical shapes
 
 # Class for Mitsuba spectra (reflectance, radiance etc.)
 # Much more work needed here to tie up with MORTICIA Basis functions and color spaces
@@ -523,7 +552,7 @@ class BsdfDiffuse(Bsdf):
         self.type = 'diffuse'
         bsdf_props = mitcor.Properties(self.type)
         if reflectance is not None:
-            bsdf_props['reflectance'] = reflectance
+            bsdf_props['reflectance'] = reflectance.spectrum
         super(BsdfDiffuse, self).__init__(bsdf_props, texture, iden)
 
 
@@ -545,7 +574,7 @@ class BsdfRoughDiffuse(Bsdf):
         self.type = 'roughdiffuse'
         props = mitcor.Properties(self.type)
         if reflectance is not None:
-            props['reflectance'] = reflectance
+            props['reflectance'] = reflectance.spectrum
         if alpha is not None:
             props['alpha'] = alpha
         props['useFastApprox'] = useFastApprox
@@ -1061,20 +1090,26 @@ class Sensor(object):
     In Mitsuba, sensors, along with a film, are responsible for recording radiance measurements in some
     usable format. This includes default choices such as perspective or orthographic cameras, as well as
     more specialized sensors that measure the radiance into a given direction or the irradiance received
-    by a certain surface.
+    by a certain surface. By default, the film provided to the sensor will be the HDR type.
     """
     sensor_counter = 0
 
-    def __init__(self, sensor_props, toWorld=None, iden=None):
+    def __init__(self, sensor_props, toWorld=None, film=None, sampler=None, iden=None):
         if iden is None:
             self.iden = 'sensor_' + self.type + '_' + str(Sensor.sensor_counter)
             Sensor.sensor_counter += 1
         else:
             self.iden = iden
         if toWorld is not None:
-            sensor_props['toWorld'] = toWorld
+            sensor_props['toWorld'] = toWorld.xform
         sensor = plugin_mngr.createObject(sensor_props)
         sensor.setID(self.iden)
+        if film is None:
+            film = FilmHdr()
+        sensor.addChild(film.film)
+        if sampler is None:
+            sampler = SamplerHalton()
+        sensor.addChild(sampler.sampler)
         sensor.configure()
         self.sensor = sensor
 
@@ -1098,7 +1133,7 @@ class SensorPerspective(Sensor):
     clip is 0.01 units, which is 1 cm in canonical MORTICIA units of metres.
     """
     def __init__(self, toWorld=None, focalLength='50mm', fov=None, fovAxis='x', shutterOpen=None, shutterClose=None,
-                 nearClip=0.01, farClip=100000.0, iden=None):
+                 nearClip=0.01, farClip=100000.0, film=None, sampler=None, iden=None):
         self.type = 'perspective'
         props = mitcor.Properties(self.type)
         if fov is not None:
@@ -1112,7 +1147,7 @@ class SensorPerspective(Sensor):
             props['shutterClose'] = shutterClose
         props['nearClip'] = nearClip
         props['farClip'] = farClip
-        super(SensorPerspective, self).__init__(props, toWorld, iden)
+        super(SensorPerspective, self).__init__(props, toWorld, film, sampler, iden)
 
 
 class SensorPerspectiveThinLens(Sensor):
@@ -1125,7 +1160,7 @@ class SensorPerspectiveThinLens(Sensor):
 
     def __init__(self, apertureRadius, focusDistance, toWorld=None,
                  focalLength='50mm', fov=None, fovAxis='x', shutterOpen=None, shutterClose=None,
-                 nearClip=0.01, farClip=100000.0, iden=None):
+                 nearClip=0.01, farClip=100000.0, film=None, sampler=None, iden=None):
         self.type = 'thinlens'
         props = mitcor.Properties(self.type)
         props['apertureRadius'] = apertureRadius
@@ -1141,7 +1176,7 @@ class SensorPerspectiveThinLens(Sensor):
             props['shutterClose'] = shutterClose
         props['nearClip'] = nearClip
         props['farClip'] = farClip
-        super(SensorPerspectiveThinLens, self).__init__(props, toWorld, iden)
+        super(SensorPerspectiveThinLens, self).__init__(props, toWorld, film, sampler, iden)
 
 
 class SensorOrthographic(Sensor):
@@ -1153,7 +1188,7 @@ class SensorOrthographic(Sensor):
     transform can be used to scale and rotate the orthographic plane.
     """
     def __init__(self, toWorld=None, shutterOpen=None, shutterClose=None,
-                 nearClip=0.01, farClip=100000.0, iden=None):
+                 nearClip=0.01, farClip=100000.0, film=None, sampler=None, iden=None):
         self.type = 'orthographic'
         props = mitcor.Properties(self.type)
         if shutterOpen is not None:
@@ -1162,7 +1197,7 @@ class SensorOrthographic(Sensor):
             props['shutterClose'] = shutterClose
         props['nearClip'] = nearClip
         props['farClip'] = farClip
-        super(SensorOrthographic, self).__init__(props, toWorld, iden)
+        super(SensorOrthographic, self).__init__(props, toWorld, film, sampler, iden)
 
 
 class SensorTelecentric(Sensor):
@@ -1178,7 +1213,7 @@ class SensorTelecentric(Sensor):
     """
     def __init__(self, apertureRadius, focusDistance, toWorld=None,
                  shutterOpen=None, shutterClose=None,
-                 nearClip=0.01, farClip=100000.0, iden=None):
+                 nearClip=0.01, farClip=100000.0, film=None, sampler=None, iden=None):
         self.type = 'telecentric'
         props = mitcor.Properties(self.type)
         props['apertureRadius'] = apertureRadius
@@ -1189,7 +1224,7 @@ class SensorTelecentric(Sensor):
             props['shutterClose'] = shutterClose
         props['nearClip'] = nearClip
         props['farClip'] = farClip
-        super(SensorTelecentric, self).__init__(props, toWorld, iden)
+        super(SensorTelecentric, self).__init__(props, toWorld, film, sampler, iden)
 
 
 class SensorSpherical(Sensor):
@@ -1200,14 +1235,14 @@ class SensorSpherical(Sensor):
     By default, the camera is located at the origin, which can be changed by providing a custom toWorld
     transformation.
     """
-    def __init__(self, toWorld=None, shutterOpen=None, shutterClose=None, iden=None):
+    def __init__(self, toWorld=None, shutterOpen=None, shutterClose=None, film=None, sampler=None, iden=None):
         self.type = 'spherical'
         props = mitcor.Properties(self.type)
         if shutterOpen is not None:
             props['shutterOpen'] = shutterOpen
         if shutterClose is not None:
             props['shutterClose'] = shutterClose
-        super(SensorSpherical, self).__init__(props, toWorld, iden)
+        super(SensorSpherical, self).__init__(props, toWorld, film, sampler, iden)
 
 
 class SensorIrradianceMeter(Sensor):
@@ -1221,7 +1256,7 @@ class SensorIrradianceMeter(Sensor):
     as its child. Note that when the sensor's film resolution is larger than 1 by 1, pixel will record the
     average irradiance over a rectangular part of the shape's UV parameterization.
     """
-    def __init__(self, shutterOpen=None, shutterClose=None, iden=None):
+    def __init__(self, shutterOpen=None, shutterClose=None, film=None, sampler=None, iden=None):
         self.type = 'irradiancemeter'
         props = mitcor.Properties(self.type)
         if shutterOpen is not None:
@@ -1229,7 +1264,7 @@ class SensorIrradianceMeter(Sensor):
         if shutterClose is not None:
             props['shutterClose'] = shutterClose
         toWorld = None
-        super(SensorIrradianceMeter, self).__init__(props, toWorld, iden)
+        super(SensorIrradianceMeter, self).__init__(props, toWorld, film, sampler, iden)
 
 
 
@@ -1243,14 +1278,14 @@ class SensorRadianceMeter(Sensor):
     By default, the sensor is located at the origin and performs a measurement in the positive Z direction
     (0, 0, 1).This can be changed by providing a custom toWorld transformation.
     """
-    def __init__(self, toWorld=None, shutterOpen=None, shutterClose=None, iden=None):
+    def __init__(self, toWorld=None, shutterOpen=None, shutterClose=None, film=None, sampler=None, iden=None):
         self.type = 'radiancemeter'
         props = mitcor.Properties(self.type)
         if shutterOpen is not None:
             props['shutterOpen'] = shutterOpen
         if shutterClose is not None:
             props['shutterClose'] = shutterClose
-        super(SensorRadianceMeter, self).__init__(props, toWorld, iden)
+        super(SensorRadianceMeter, self).__init__(props, toWorld, film, sampler, iden)
 
 
 class SensorFluenceMeter(Sensor):
@@ -1259,14 +1294,14 @@ class SensorFluenceMeter(Sensor):
     through a specified position. By default, the sensor is located at the origin.
     Such a sensor is useful for conducting virtual experiments and testing the renderer for correctness.
     """
-    def __init__(self, toWorld=None, shutterOpen=None, shutterClose=None, iden=None):
+    def __init__(self, toWorld=None, shutterOpen=None, shutterClose=None, film=None, sampler=None, iden=None):
         self.type = 'fluencemeter'
         props = mitcor.Properties(self.type)
         if shutterOpen is not None:
             props['shutterOpen'] = shutterOpen
         if shutterClose is not None:
             props['shutterClose'] = shutterClose
-        super(SensorFluenceMeter, self).__init__(props, toWorld, iden)
+        super(SensorFluenceMeter, self).__init__(props, toWorld, film, sampler, iden)
 
 class SensorPerspectivePinholeDistortion(Sensor):
     """
@@ -1282,7 +1317,7 @@ class SensorPerspectivePinholeDistortion(Sensor):
     and the first entries of the kc variable generated by this tool can directly be passed into this plugin.
     """
     def __init__(self, kc, toWorld=None, focalLength='50mm', fov=None, fovAxis='x', shutterOpen=None, shutterClose=None,
-                 nearClip=0.01, farClip=100000.0, iden=None):
+                 nearClip=0.01, farClip=100000.0, film=None, sampler=None, iden=None):
         self.type = 'perspective_rdist'
         props = mitcor.Properties(self.type)
         if fov is not None:
@@ -1296,7 +1331,7 @@ class SensorPerspectivePinholeDistortion(Sensor):
             props['shutterClose'] = shutterClose
         props['nearClip'] = nearClip
         props['farClip'] = farClip
-        super(SensorPerspectivePinholeDistortion, self).__init__(props, toWorld, iden)
+        super(SensorPerspectivePinholeDistortion, self).__init__(props, toWorld, film, sampler, iden)
 
 
 # End of classes for Mitsuba Sensors
@@ -1408,7 +1443,6 @@ class FilterLanczos(Filter):
     def __init__(self, lobes=3):
         self.filtertype = 'lanczos'
         rfilter_props = mitcor.Properties(self.filtertype)
-        rfilter_props['radius'] = radius
         rfilter_props['lobes'] = lobes
         super(FilterLanczos, self).__init__(rfilter_props)
 
@@ -1575,9 +1609,10 @@ class FilmLdr(Film):
 class FilmNumpy(Film):
     """
     This plugin provides a camera film that exports spectrum, RGB, XYZ, or luminance values as a
-    matrix to aMATLAB orMathematica ASCII file or a NumPy binary file.This is useful when running
+    matrix to a MATLAB or Mathematica ASCII file or a NumPy binary file.This is useful when running
     Mitsuba as simulation step as part of a larger virtual experiment. It can also come in handy when
-    verifying parts of the renderer using an automated test suite.
+    verifying parts of the renderer using an automated test suite. The default for MORTICIA is the binary
+    NumPy format.
     """
     def __init__(self, width=default_width, height=default_height, cropOffsetX=None, cropOffsetY=None,
                  cropWidth=None, cropHeight=None, fileFormat='numpy', pixelFormat=default_pixelFormat,
@@ -1622,7 +1657,7 @@ class FilmNumpy(Film):
         super(FilmNumpy, self).__init__(hdrfilm_props, rfilter)
 
 # Classes for Mitsuba samplers, including 3 quasi-Monte Carlo (QMC) samplers
-# The Halton sampler is preferred for MORTICIA work and is the default
+# The Halton sampler is preferred for MORTICIA work and is the preferred default
 
 
 class Sampler(object):
@@ -1655,7 +1690,7 @@ class SamplerIndependent(Sampler):
     create the same image. In practice, when rendering with multiple threads and/or machines, this is
     not true anymore, since the ordering of samples is influenced by the operating system scheduler.
     """
-    def __init__(self, sampleCount=4):
+    def __init__(self, sampleCount=default_samples):
         sampler_props = mitcor.Properties('independent')
         sampler_props['sampleCount'] = sampleCount
         super(SamplerIndependent, self).__init__(sampler_props)
@@ -1668,7 +1703,7 @@ class SamplerStratified(Sampler):
     independent sampler, as well as better convergence. Due to internal storage costs, stratified samples
     are only provided up to a certain dimension, after which independent sampling takes over.
     """
-    def __init__(self, sampleCount=4, dimension=4):
+    def __init__(self, sampleCount=default_samples, dimension=4):
         sampler_props = mitcor.Properties('stratified')
         sampler_props['sampleCount'] = sampleCount
         sampler_props['dimension'] = dimension
@@ -1683,8 +1718,7 @@ class SamplerLowDiscrepancy(Sampler):
     in Mitsuba. Some of the QMC samplers in the following pages can generate even better distributed
     samples, but this comes at a higher cost in terms of performance.
     """
-    def __init__(self, sampleCount=4, dimension=4):
-        sampler_props = mitcor.Properties('ldsampler')
+    def __init__(self, sampleCount=default_samples, dimension=4):
         sampler_props['sampleCount'] = sampleCount
         sampler_props['dimension'] = dimension
         super(SamplerLowDiscrepancy, self).__init__(sampler_props)
@@ -1695,10 +1729,10 @@ class SamplerHalton(Sampler):
     This plugin implements a Quasi-Monte Carlo (QMC) sample generator based on the Halton sequence.
     QMC number sequences are designed to reduce sample clumping across integration dimensions,
     which can lead to a higher order of convergence in renderings. Because of the deterministic
-    character of the samples, errors will manifest as grid or moire patterns rather than randomnoise, but
+    character of the samples, errors will manifest as grid or moire patterns rather than random noise, but
     these diminish as the number of samples is increased.
     """
-    def __init__(self, sampleCount=4, scramble=-1):
+    def __init__(self, sampleCount=default_samples, scramble=-1):
         sampler_props = mitcor.Properties('halton')
         sampler_props['sampleCount'] = sampleCount
         sampler_props['scramble'] = scramble
@@ -1710,10 +1744,10 @@ class SamplerHammersley(Sampler):
     This plugin implements a Quasi-Monte Carlo (QMC) sample generator based on the Hammersley
     sequence. QMC number sequences are designed to reduce sample clumping across integration
     dimensions, which can lead to a higher order of convergence in renderings. Because of the deterministic
-    character of the samples, errors will manifest as grid or moire patterns rather than randomnoise,
+    character of the samples, errors will manifest as grid or moire patterns rather than random noise,
     but these diminish as the number of samples is increased.
     """
-    def __init__(self, sampleCount=4, scramble=-1):
+    def __init__(self, sampleCount=default_samples, scramble=-1):
         sampler_props = mitcor.Properties('halton')
         sampler_props['sampleCount'] = sampleCount
         sampler_props['scramble'] = scramble
@@ -1728,7 +1762,7 @@ class SamplerSobol(Sampler):
     character of the samples, errors will manifest as grid or moire patterns rather than random noise, but
     these diminish as the number of samples is increased.
     """
-    def __init__(self, sampleCount=4, scramble=-1):
+    def __init__(self, sampleCount=default_samples, scramble=-1):
         sampler_props = mitcor.Properties('halton')
         sampler_props['sampleCount'] = sampleCount
         sampler_props['scramble'] = scramble
@@ -1764,7 +1798,6 @@ class Integrator(object):
 
     def __str__(self):
         return str(self.integrator)
-
 
 class IntegratorAmbientOcclusion(Integrator):
     def __init__(self, shadingSamples=1, rayLength=-1):
@@ -1933,14 +1966,23 @@ class IntegratorFieldExtraction(Integrator):
 
 # End of classes for Mitsuba integrators
 
+
+# Classes and creators for Mitsuba scenes
+
+# Obtain a job scheduler for rendering purposes
+# scheduler = mitcor.Scheduler.getInstance()
+# And a queue for tracking render jobs
+# queue = mitren.RenderQueue()
+
 class Scene(object):
     """ The Scene class encapsulates the information that can be contained in a Mitsuba scene file.
     This class contains the information in the scene file in an accessible format for the purpose
-    of manipulating Mitsuba scenes, writing the updated scene file and performing rendering
-    in a multiprocessing environment.
+    of manipulating Mitsuba scenes and performing rendering in a multiprocessing environment.
 
     """
-    def __init__(self, scenefile=None, paramMap=None, scenefolder=None):
+    scene_counter = 0
+
+    def __init__(self, scenefile=None, paramMap=None, scenefolder=None, scenename=None):
         """
 
         :param scenefile: Name of file from which to load a scene (string). Must not include the path, but must have
@@ -1950,7 +1992,11 @@ class Scene(object):
         which to search for the scene can also be provided (string or list of strings).
         :return:
         """
-
+        if scenename is None:
+            self.scenename = 'scene_' + str(Scene.scene_counter)
+        else:
+            self.scenename = scenename + '_' + str(Scene.scene_counter)
+        Scene.scene_counter += 1
         # Set up the file resolver for this Mitsuba object
         # Get a reference to the threads file resolver
         self.fileResolver = mitcor.Thread.getThread().getFileResolver()
@@ -1979,6 +2025,14 @@ class Scene(object):
 
     def __str__(self):
         return str(self.scene)
+
+    def __del__(self):
+        # Stop the render job scheduler is there is one
+        if hasattr(self, 'scheduler'):
+            self.scheduler.stop()
+
+    def addChild(self, child):
+        self.scene.addChild(child)
 
     def hasEnvironmentEmitter(self):
         return self.scene.hasEnvironmentEmitter()
@@ -2073,3 +2127,33 @@ class Scene(object):
         self.scene.addChild('environment', envmap)
 
 
+    def render_local(self, jobname=None, destinationfile=None, nworkers=None):
+        """
+        Render a Mitsuba scene on the local host.
+        :param jobname: Name of the job, defaults to the name of the scene.
+        :param destinationfile: name of destination file for render. Will also default to the name of the scene.
+        :return:
+        """
+        import multiprocessing
+        if ~hasattr(self, 'scheduler'):  # obtain a job scheduler
+            self.scheduler = mitcor.Scheduler.getInstance()
+            # Register one worker per available cpu
+            if nworkers is None:
+                nworkers = multiprocessing.cpu_count()
+            for icpu in range(0, nworkers):
+                self.scheduler.registerWorker(mitcor.LocalWorker(icpu, 'wrk%i' % icpu))
+        self.scheduler.start()
+        # Set up a render job queue for tracking render jobs
+        self.queue = mitren.RenderQueue()
+        if destinationfile is not None:
+            self.scene.setDestinationFile(destinationfile)
+        else:
+            self.scene.setDestinationFile(self.scenename)
+        if jobname is None:
+            jobname = self.scenename
+        job = mitren.RenderJob(jobname, self.scene, self.queue)
+        job.start()
+        # Wait for all jobs to finish and release resources
+        self.queue.waitLeft(0)
+        self.queue.join()
+        self.statistics = mitcor.Statistics.getInstance().getStats()
