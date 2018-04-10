@@ -2216,6 +2216,16 @@ class Scene(object):
 
     def getBitmap(self, componentFormat=mitcor.Bitmap.ERGB, pixelFormat=mitcor.Bitmap.EUInt8,
                   offset=mitcor.Point2i(0, 0), targetOffset=mitcor.Point2i(0, 0), numpy=True):
+        """
+        Return a bitmap from a rendered scene, either in mitsuba.core.Bitmap format or in numpy ndarray format.
+        :param componentFormat: Which components to extract from the rendering. See mitsuba.core.Bitmap for various
+        options. Default is mitcor.Bitmap.ERGB
+        :param pixelFormat: Pixel format to return. e.g. default is mitsuba.core.Bitmap.EUint8.
+        :param offset: Offset in image for returning a region of interest. Default is mitcor.Point2i(0, 0)
+        :param targetOffset: Size of region of interest to return. Default is whole image.
+        :param numpy: Set True to return numpy array, False to return mitcor.Bitmap. Default True (return numpy array).
+        :return:
+        """
         film = self.scene.getFilm()
         film_size = film.getSize()
         bitmap = mitcor.Bitmap(componentFormat, pixelFormat, film_size)
