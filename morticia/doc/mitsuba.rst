@@ -127,7 +127,7 @@ It also allows for multiple instances of the target to be created in the Mitsuba
 
 The default origin of the world topocentric coordinate system is assumed to be a point at sea level and at nadir from
 the location of the sensor. That is, the x-coordinate and y-coordinate are zero and the z-coordinate is equal to the
-height (altitude) of the sensor above mean sea level (AMSL).
+height (altitude) of the sensor above mean sea level (AMSL) (this to be reviewed).
 
 Sensor transformations in the Mitusba scene file should use the *lookAt* form.
 
@@ -142,7 +142,7 @@ renders without indirect illumination components. For the path tracer, the Hamme
 preferred, with as many as 256 samples per pixel or more to reduce monte carlo noise.
 
 If volumetric (participating) media such as smoke or fog are involved, the extended volumetric path tracer
-(``volpath``) should be considered.
+(``volpath``) should be considered. The Mitsuba manual provides further guidance regarding selection of integrator.
 
 Mitsuba and Atmospheric Effects
 -------------------------------
@@ -176,7 +176,7 @@ Terrain can also be accommodated in the first-order IPA approach using a depth m
 Mitsuba can be used to compute this depth map, provided that it has been compiled in the RGB (non-spectral) mode.
 Mitsuba does have a height map geometry shape that can be used for modelling terrain.
 
-When compiling REMs for the solar spectrum it is recommened to compute using at least 3 albedo values (0, 0.5 and 1
+When compiling REMs for the solar spectrum it is recommended to compute using at least 3 albedo values (0, 0.5 and 1
 .0), since path radiances are not exactly linear with surface reflectance. REMs for any surface reflectance in any
 spectral bin is computed using multi-dimensional linear interpolation from this REM dataset.
 
