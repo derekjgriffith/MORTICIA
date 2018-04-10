@@ -74,8 +74,8 @@ else:
 default_banner = False  # Do not, by default put Mitsuba banner on output images
 default_componentFormat = 'float32'  # Use maximum accuracy for output Mitsuba image formats which allow this
 default_attachLog = False  # Do not, by default attach complete rendering log to output hdrfilm images
-default_height = 768  # Default film output height in pixels for Mitsuba renders
-default_width = 576  # Default film output width in pixels for Mitsuba renders
+default_height = 576  # Default film output height in pixels for Mitsuba renders
+default_width = 768  # Default film output width in pixels for Mitsuba renders
 default_hdr_fileFormat = 'openexr'  # Default high dynamic range film output
 default_highQualityEdges = True  # Use high quality edges by default in case image must be inserted into another
 default_ldr_fileFormat = 'png'  # Default low dynamic range file format output
@@ -120,29 +120,29 @@ class Transform(object):
         :return:
         """
         origin_position = mitcor.Point(origin_position[0],
-                                             origin_position[1],
-                                             origin_position[2])
+                                       origin_position[1],
+                                       origin_position[2])
         target_position = mitcor.Point(target_position[0],
-                                             target_position[1],
-                                             target_position[2])
+                                       target_position[1],
+                                       target_position[2])
         up_direction = mitcor.Vector(up_direction[0],
-                                           up_direction[1],
-                                           up_direction[2])
+                                     up_direction[1],
+                                     up_direction[2])
         xform = mitcor.Transform.lookAt(origin_position, target_position, up_direction) * self.xform
         return Transform(xform)
 
     def translate(self, translation):
         """
         Mitsuba translation transformation.
-        :param translation: list of 3 components of transmformation.
+        :param translation: list of 3 components of translation transformation.
         :return:
         """
         translation = mitcor.Vector3(translation[0],
                                      translation[1],
                                      translation[2])
         translation = mitcor.Transform.translate(translation)
-        self.xform = translation * self.xform
-        return self
+        xform = translation * self.xform
+        return Transform(xform)
 
     def rotate(self, axis=(0.0, 0.0, 1.0), angle=0.0):
         axis = mitcor.Vector3(axis[0], axis[1], axis[2])
@@ -155,9 +155,9 @@ class Transform(object):
                                            scale_factors[1],
                                            scale_factors[2])
         else:
-            scale_factors = mitcor.Vector3(scale_factors,
-                                           scale_factors,
-                                           scale_factors)
+            scale_factors = mitcor.Vector3(scale_factors[0],
+                                           scale_factors[0],
+                                           scale_factors[0])
         xform = mitcor.Transform.scale(scale_factors) * self.xform
         return Transform(xform)
 
@@ -448,24 +448,44 @@ class ShapeHeightField(Shape):
         super(ShapeHeightField, self).__init__(shape_props, toWorld, bsdf, emit, iden)
 
 
-def createCubiShapeGroup(bsdf_list, size=1.0):
+def createCubeShapeGroup(bsdf_list, size=1.0):
     """
     Create a shape group of six faces in the form of a cube. Each face is implemented as a `rectangle` shape so that
     different BSDFs can be applied to each face.
     :param size: The size of the cube (edge dimension). Default is 1 (canonical units of meters in MORTICIA).
     :param bsdf_list: List of 6 BSDFs to be applied to the surfaces of the cube in order top, bottom, left, right,
-    front, back.
+    front, back, where top is +z, bottom is -z, left is +x, right is -x, front is +y and back is -y. The cube is
+    positioned such that the origin is located at the centre of the bottom (-z) face.
     :return: class ShapeGroup object.
     """
     toWorld = Transform().scale([size/2.0, size/2.0, size/2.0])
+    # Create top and bottom panels
     top = ShapeRectangle(toWorld.translate([0.0, 0.0, size]), bsdf=bsdf_list[0])
-    bottom = ShapeRectangle(toWorld, bsdf=bsdf_list[1])
-    plusX = ShapeRectangle(toWorld.rotate([0.0, 1.0, 0.0], 90.0).translate([size/2.0, 0.0, 0.0]), bsdf=bsdf_list[2])
-    minusX = ShapeRectangle(toWorld.rotate([0.0, 1.0, 0.0], -90.0).translate([-size/2.0, 0.0, 0.0]), bsdf=bsdf_list[3])
-    plusY = ShapeRectangle(toWorld.rotate([1.0, 0.0, 0.0], 90.0).translate([0.0, size/2.0, 0.0]), bsdf=bsdf_list[4])
-    minusY = ShapeRectangle(toWorld.rotate([1.0, 0.0, 0.0], -90.0).translate([0.0, -size/2, 0.0]), bsdf=bsdf_list[5])
-    cubiShapeGroup = ShapeGroup([top, bottom, plusX, minusX, plusY, minusY], 'cubi_cube')
-    return cubiShapeGroup
+    bottom = ShapeRectangle(toWorld.rotate([1.0, 0.0, 0.0], 180.0), bsdf=bsdf_list[1])
+    plusX = ShapeRectangle(toWorld.rotate([0.0, 1.0, 0.0],  90.0).translate([size/2.0, 0.0, size/2.0]),
+                           bsdf=bsdf_list[2])
+    minusX = ShapeRectangle(toWorld.rotate([0.0, 1.0, 0.0], -90.0).translate([-size/2.0, 0.0, size/2.0]),
+                            bsdf=bsdf_list[3])
+    plusY = ShapeRectangle(toWorld.rotate([1.0, 0.0, 0.0], -90.0).translate([0.0, size/2.0, size/2.0]),
+                           bsdf=bsdf_list[4])
+    minusY = ShapeRectangle(toWorld.rotate([1.0, 0.0, 0.0],  90.0).translate([0.0, -size/2.0, size/2.0]),
+                            bsdf=bsdf_list[5])
+    cubeShapeGroup = ShapeGroup([top, bottom, plusX, minusX, plusY, minusY], 'cubi_cube')
+    return cubeShapeGroup
+
+def createCubi(bsdf_list, size=1.0):
+    """
+    Create a Cubi target, comprising 3 cubes in a step stair formation, where the steps rise towards the +z and -x
+    directions.
+    :param bsdf_list: List of 6 Bsdf instances to place on each face of the cubes
+    :param size:
+    :return:
+    """
+    cube = createCubeShapeGroup(bsdf_list, size)
+    cube0 = ShapeInstance(cube)
+    cube1 = ShapeInstance(cube, toWorld=Transform().translate([0.0, 0.0, size]))
+    cube2 = ShapeInstance(cube, toWorld=Transform().translate([size, 0.0, 0.0]))
+    return [cube0, cube1, cube2]
 
 
 # End of classes and functions for Mitsuba geometrical shapes
@@ -1472,7 +1492,7 @@ class Film(object):
 class FilmHdr(Film):
     def __init__(self, width=default_width, height=default_height, cropOffsetX=None, cropOffsetY=None,
                  cropWidth=None, cropHeight=None, fileFormat=default_hdr_fileFormat, pixelFormat=default_pixelFormat,
-                 componentFormat=default_componentFormat, attachLog = default_attachLog,
+                 componentFormat=default_componentFormat, attachLog=default_attachLog,
                  banner=default_banner, highQualityEdges=default_highQualityEdges, rfilter=None):
         """
 
@@ -1984,7 +2004,7 @@ class Scene(object):
 
     def __init__(self, scenefile=None, paramMap=None, scenefolder=None, scenename=None):
         """
-
+        Create a Mitsuba Scene instance.
         :param scenefile: Name of file from which to load a scene (string). Must not include the path, but must have
         the extension .xml.
         :param paramMap: Dictionary of parameters which will get substituted when the scene is loaded.
@@ -1993,9 +2013,10 @@ class Scene(object):
         :return:
         """
         if scenename is None:
-            self.scenename = 'scene_' + str(Scene.scene_counter)
+            self.scenename = 'scene_%04d_' % Scene.scene_counter
         else:
-            self.scenename = scenename + '_' + str(Scene.scene_counter)
+            self.scenename = '%s_%04d_' % (scenename, Scene.scene_counter)
+        # print self.scenename
         Scene.scene_counter += 1
         # Set up the file resolver for this Mitsuba object
         # Get a reference to the threads file resolver
@@ -2020,8 +2041,9 @@ class Scene(object):
             # Load the scene
             self.scene = mitren.SceneHandler.loadScene(
                            self.fileResolver.resolve(scenefile), theparamMap)
-        else: # Create a new scene
+        else: # Create a new blank scene
             self.scene = mitren.Scene()
+        self.scene.setID(scenename)
 
     def __str__(self):
         return str(self.scene)
@@ -2161,6 +2183,7 @@ class Scene(object):
         :return:
         """
         import multiprocessing
+        self.scene.configure()  # in case the user has forgotten
         if ~hasattr(self, 'scheduler'):  # obtain a job scheduler
             self.scheduler = mitcor.Scheduler.getInstance()
             # Register one worker per available cpu
@@ -2168,18 +2191,36 @@ class Scene(object):
                 nworkers = multiprocessing.cpu_count()
             for icpu in range(0, nworkers):
                 self.scheduler.registerWorker(mitcor.LocalWorker(icpu, 'wrk%i' % icpu))
-            self.scheduler.start()
+        self.scheduler.start()
         # Set up a render job queue for tracking render jobs
         self.queue = mitren.RenderQueue()
+        # print 'Scene Name : %s' % self.scenename
         if destinationfile is not None:
             self.scene.setDestinationFile(destinationfile)
         else:
             self.scene.setDestinationFile(self.scenename)
         if jobname is None:
-            jobname = self.scenename
+            jobname = 'mitjob' + '_' + self.scenename
+        # print 'Rendering Job :', jobname
         job = mitren.RenderJob(jobname, self.scene, self.queue)
         job.start()
         # Wait for all jobs to finish and release resources
         self.queue.waitLeft(0)
         self.queue.join()
         self.statistics = mitcor.Statistics.getInstance().getStats()
+        self.scheduler.stop()
+        del job
+
+    def getFilmSize(self):
+        return self.scene.getFilm().getSize()
+
+    def getBitmap(self, componentFormat=mitcor.Bitmap.ERGB, pixelFormat=mitcor.Bitmap.EUInt8,
+                  offset=mitcor.Point2i(0, 0), targetOffset=mitcor.Point2i(0, 0), numpy=True):
+        film = self.scene.getFilm()
+        film_size = film.getSize()
+        bitmap = mitcor.Bitmap(componentFormat, pixelFormat, film_size)
+        film.develop(offset, film_size, targetOffset, bitmap)
+        if numpy:
+            return np.array(bitmap.getNativeBuffer())
+        else:
+            return bitmap
