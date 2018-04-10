@@ -6,8 +6,7 @@ The Mitsuba Rendering System
  required when  altering the number of spectral bins).
  - Capable of using spectral radiant environment maps with any number of spectral bins in the lat/long format. These
  environment maps can be generated using the `libRadtran`/``MORTICIA`` integration and written to OpenEXR files using
-  the
- `morticia.rad.librad.RadEnv` class.
+  the `morticia.rad.librad.RadEnv` class.
  - Option to output linear and unprocessed radiometric quantities. That is, if the input quantities are absolute
  radiometric quantities, then the output radiances are physically correctly scaled.
  - Capable of making any object an emitter with a specific spectral radiance. This is required when creating
@@ -23,7 +22,8 @@ XML tools.
  - Python interface for scene generation and full control of the rendering process.
  - Mitsuba has fully-integrated and scalable parallel computing capability that can harness compute cores across a
  private network.
- - Mitsuba has a GUI (``mtsgui``) which is very useful for a number of visualisation purposes.
+ - Mitsuba has a GUI (``mtsgui``) which is very useful for a number of visualisation purposes. ``mstgui`` can also be
+  used to convert scene geometry elements to the `.serialized` geometry file format used by Mistuba.
 
 
 Spectral Rendering
@@ -43,7 +43,7 @@ The Mitsuba black body models are avoided in MORTICIA and spectra are given with
 descriptions. ``MORTICIA`` keeps track of the actual wavelengths represented by the Mitusba spectral bins. Output of
 tonemapped data in a tristimulus color space such as RGB or XYZ can still be useful for visualisation
 purposes. These are essentially "false color" images when the MORTICIA scene violates the visible spectrum
-assumption. The high dynamic range film (``hdrfilm``) with XYZ tristimulus outputs is the recommened method of creating
+assumption. The high dynamic range film (``hdrfilm``) with XYZ tristimulus outputs is the recommended method of creating
 false
 color images from Mitsuba. Since this will generate color information that could be "out-of-gamut" for typical display
 systems, intelligent conversion to sRGB or RGB would still be required. Alternatively, simply write directly to an
@@ -93,20 +93,18 @@ presentation images. These emitter types must be avoided for quantitative work. 
 
  In the thermal spectrum, the `directional` emitter falls away and only the `source thermal` environment map is used.
 
-Coordinate System in Mitsuba
-----------------------------
-The environment maps (``envmap`` emitter) in Mitsuba is the only place in the documentation where the coordinate
-system is mentioned in absolute terms. This coordinate system has +Y towards the zenith and -Y to nadir. The +X
-direction is towards the left when viewing with +Y upwards. The natural (topocentric) coordinate system for ``MORTICIA``
-is with +Z towards the zenith and -Z at nadir. +X is towards the north and +Y towards the east, giving a
-left-handed coordinate system. In the broader context, the earth-centered, earth-fixed (ECEF) system also known as
+Coordinate System in Mitsuba and MORTICIA
+-----------------------------------------
+The canonical (topocentric) coordinate system for ``MORTICIA``
+is with +Z towards the zenith and -Z at nadir. +X is towards the east and +Y towards the north, giving a
+right-handed coordinate system. In the broader context, the earth-centered, earth-fixed (ECEF) system also known as
 the earth-centered rotational (ECR) coordinate system is right-handed with +Z towards the north pole, +X
 through the prime meridian (Greenwich) and +Y through 90 degrees longitude measured positive east from the prime
 merdian.
 
-The Mitsuba world coordinate system is left-handed (as for PBRT) +Y typically towards the zenith, while the ``MORTICIA``
-coordinate system is left-handed with +Z towards the zenith.
-A coordinate transform is therefore required whe moving from ``MORTICIA`` coordinates to Mitsuba world
+The Mitsuba world coordinate system is right-handed (PBRT uses a left-handed system) +Y typically towards the
+zenith, while the ``MORTICIA`` coordinate system is right-handed with +Z towards the zenith.
+A coordinate transform is therefore often required when moving from ``MORTICIA`` coordinates to Mitsuba world
 coordinates. The recommended method is to transform the REM coordinates in Mitsuba so that the +Z axis is upward by
 rotating +90 degrees about the x-axis.
 This is typically as follows::
@@ -118,8 +116,12 @@ This is typically as follows::
  </transform>
 </emitter>
 
+The ``envmap`` coordinate system has +Y to the  zenith, -Z towards the north and +X towards the east, which is
+right-handed. A 90 degree rotation about the +X axis therefore rotates the +Z axis towards the zenith and +Y towards
+the north.
+
 Target models (vehicles, personnel etc.) should be edited so that they are orientated with +z upwards and such that the
-normal direction of travel is +x (north in MORTICIA space). The model should be implemented as a shapegroup in the
+normal direction of travel is +x (east in MORTICIA space). The model should be implemented as a shapegroup in the
 Mitsuba scene file. This allows for orientation and placement of the entire target model in Mitsuba world coordinates.
 It also allows for multiple instances of the target to be created in the Mitsuba scene file at lower computational cost.
 
@@ -127,7 +129,7 @@ The default origin of the world topocentric coordinate system is assumed to be a
 the location of the sensor. That is, the x-coordinate and y-coordinate are zero and the z-coordinate is equal to the
 height (altitude) of the sensor above mean sea level (AMSL).
 
-Sensor transformations in the Mitusba scene file should use the *lookat* form.
+Sensor transformations in the Mitusba scene file should use the *lookAt* form.
 
 
 Mitsuba Integrators
@@ -207,9 +209,14 @@ format. The Blender application can also be used to both create and convert geom
 formats, which can then be converted to Mitsuba format using the `mtsgui` tool provided with Mitsuba.
 
 The very simple `.stl` format can be used for plain geometry creation and import into Blender. Many CAD applications
-such as DesignSpark Mechanical can export `.stl` format files. `FreeCad <https://www.freecadweb.org/>`_ is another free
-and open source tool that can be used to create geometry or convert geometry to or from `.step`, `.dae`, `.obj`, `.stl`
-or other file formats.
+such as `DesignSpark Mechanical <https://www.rs-online.com/designspark/mechanical-software>`_ can export `.stl`
+format files. `FreeCad <https://www.freecadweb.org/>`_ is another free and open source tool that can be used to
+create geometry or convert geometry to or from `.step`, `.dae`, `.obj`, `.stl` or other file formats.
+
+The way in which the geometry is organised depends on several factors. For rendering purposes, scene elements are
+ideally grouped by surface optical properties to be applied (BSDF). If the temperature and emissivity of a specific
+component is to be manipulated, then the scene geometry must accommodate that. Likewise for any components of the
+scene that will be animated.
 
 Once a collection of indexed shapes are available in a `.serialized` file, the contents of the `.xml` scene file will
 reference the shapes by index and apply BSDFs, textures, radiance and other properties to the shapes. Some properties
@@ -252,6 +259,8 @@ Mitsuba provides a powerful Python API which exposes most of the functionality o
 found at the `Mitsuba Python bindings <http://www.mitsuba-renderer.org/api/group__libpython.html>`_ web page.
 This is the primary way in which MORTICIA interacts with Mitsuba. An alternative method is to interact via Mitsuba
 `.xml` scene files using the `lxml` package. The Jupyter notebook examples will show interaction via the Python API.
+The mitsuba.core library can be used for vector manipulation and transformation as illustrated in the Mitsuba manual
+in the section on Python integration, which is part of the Mitsuba development guide.
 
 Transforming Mitsuba Scene Files
 --------------------------------
