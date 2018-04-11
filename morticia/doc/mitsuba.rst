@@ -93,19 +93,26 @@ presentation images. These emitter types must be avoided for quantitative work. 
 
  In the thermal spectrum, the `directional` emitter falls away and only the `source thermal` environment map is used.
 
-Coordinate System in Mitsuba and MORTICIA
+Coordinate Systems in Mitsuba and MORTICIA
 -----------------------------------------
-The canonical (topocentric) coordinate system for ``MORTICIA``
+The canonical local coordinate system for ``MORTICIA``
 is with +Z towards the zenith and -Z at nadir. +X is towards the east and +Y towards the north, giving a
 right-handed coordinate system. In the broader context, the earth-centered, earth-fixed (ECEF) system also known as
 the earth-centered rotational (ECR) coordinate system is right-handed with +Z towards the north pole, +X
 through the prime meridian (Greenwich) and +Y through 90 degrees longitude measured positive east from the prime
-merdian.
+merdian. The package `astropy` is used to convert from geocentric ECEF to geodetic (latitude, longitude, height above
+ reference ellipsoid). See `atropy.coordinates.EarthLocation` class. The reference ellipsoid used in `MORTICIA` is
+ the WGS84 ellipsoid, which is the default in `astropy`.
+
+The terms azimuth and elevation refer to observation or light propagation directions in the local space, where
+elevation is the angle (typically in degrees) measured from the local horizon and azimuth is the bearing angle
+measured from north through east.
 
 The Mitsuba world coordinate system is right-handed (PBRT uses a left-handed system) +Y typically towards the
 zenith, while the ``MORTICIA`` coordinate system is right-handed with +Z towards the zenith.
 A coordinate transform is therefore often required when moving from ``MORTICIA`` coordinates to Mitsuba world
-coordinates. The recommended method is to transform the REM coordinates in Mitsuba so that the +Z axis is upward by
+coordinates. The recommended method is to transform the radiant environement coordinates in Mitsuba so that the +Z axis
+ is upward by
 rotating +90 degrees about the x-axis.
 This is typically as follows::
 
@@ -120,12 +127,15 @@ The ``envmap`` coordinate system has +Y to the  zenith, -Z towards the north and
 right-handed. A 90 degree rotation about the +X axis therefore rotates the +Z axis towards the zenith and +Y towards
 the north.
 
-Target models (vehicles, personnel etc.) should be edited so that they are orientated with +z upwards and such that the
+Target models (vehicles, personnel etc.) should be edited so that they are orientated with +z upwards and facing such
+that the
 normal direction of travel is +x (east in MORTICIA space). The model should be implemented as a shapegroup in the
 Mitsuba scene file. This allows for orientation and placement of the entire target model in Mitsuba world coordinates.
 It also allows for multiple instances of the target to be created in the Mitsuba scene file at lower computational cost.
 
-The default origin of the world topocentric coordinate system is assumed to be a point at sea level and at nadir from
+The default origin of the scene geodetic coordinate system is assumed to be a point on the reference ellipsoid
+(which approximates mean sea level) and
+ at nadir from
 the location of the sensor. That is, the x-coordinate and y-coordinate are zero and the z-coordinate is equal to the
 height (altitude) of the sensor above mean sea level (AMSL) (this to be reviewed).
 
