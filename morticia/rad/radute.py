@@ -16,11 +16,10 @@ import easygui  # for simple file/open dialogs and such
 import re
 from morticia.tools.xd import *
 
-""" This module provides much of functionality related radiometry required by MORTICIA.
+""" This module provides functionality related to radiometry required by MORTICIA.
 Included here is functionality for :
-1) Interfacing to radiative transfer codes.
-2) Dealing with spectral filtering and convolution
-3) Creation, reading and writing of MODTRAN-style flt filter/SRF definitions
+1) Dealing with spectral filtering and convolution through classes SpectralBasis, SpectralFunction and SpectralVector
+2) Creation, reading and writing of MODTRAN-style flt filter/SRF definitions
 
 TO DO : Check that MODTRAN can read the .flt files created using the Flt class here
 """
@@ -93,7 +92,7 @@ def srfgen(center, fwhm, n=101, shape='gauss', yedge=0.001, wvmin=None, wvmax=No
         y[-1] = np.nextafter(0.0, 1)
         nfwhm = np.trapz(y)
     else:
-        raise ValueError('Unknown SRF/filter shape input to rad.srfgen')
+        raise ValueError('Unknown SRF/filter shape input to radute.srfgen')
     delta = fwhm / nfwhm  # Determine sample delta (scalar)
     y[y<yedge] = oob  # suppress values dropping below the edge threshold
     wvl = (np.ones(x.shape, dtype=np.float) * center) + (delta * x)
@@ -547,8 +546,9 @@ avhrr_kratz_channels = np.array([
     [ 11.9318,  11.363636, 12.500000]])   # avhrr51.f
 avhrr_kratz_units = 'um'
 
-class SpectralDistribution(object):
-    """ The SpectralDistribution class defines any band-limited spectral distribution function. This could be
+
+class SpectralFunction(object):
+    """ The SpectralFunction class defines any band-limited spectral distribution function. This could be
     the spectral response functions of a sensor, or the spectral transmittance of an optical filter, the spectral
     radiance, irradiance or any other band-limited spectral quantity.
 
@@ -562,7 +562,7 @@ class SpectralDistribution(object):
     def __init__(self, extreme_limits, in_band_limits=None, in_band_threshold=0.01):
         """ Create a basic, spectral distribution function with certain spectral band limits
 
-        By default, wavelenths are specified in nm for SpectralDistribution and SpectralSpace objects.
+        By default, wavelenths are specified in nm for SpectralDistribution and SpectralBasis objects.
 
         :return: A SpectralDistribution object
         """
@@ -573,7 +573,7 @@ class SpectralDistribution(object):
     @classmethod
     def kato(cls, i_channel, resolution=0.001):
         """ Return a Kato correlated-k channel definition as a SpectralDistribution. Only a single channel can
-        be represented. Use a SpectralSpace to get multiple Kato channels
+        be represented. Use a SpectralBasis to get multiple Kato channels.
 
         :param i_channel: the single kato channel to be obtained. Integer 1 to 32
         :param resolution: this is the spectral resolution in nm of the band edges. Default 0.001 nm
@@ -625,11 +625,11 @@ class SpectralDistribution(object):
 
     @classmethod
     def sensor_channel(cls, platform_series, platform_name, sensor_name, channel_name):
-        """ Load a spectral response file from the libRadtran-compatible library as a SpectralDistribution
+        """ Load a spectral response file from the libRadtran-compatible library as a SpectralFunction
 
         The available response function filter files can be viewed in the sub-directory rad/radata/filter.
         Note that only a single channel can be loaded using this method. To load multiple channels, use
-        SpectralSpace.sensor_channels().
+        SpectralBasis.sensor_channels().
 
         :param platform_series: Name of the series of platforms on which the sensor is carried e.g. 'landsat'
         :param platform_name: Name of the specific satellite/platform on which the sensor is carried
@@ -651,29 +651,29 @@ class SpectralDistribution(object):
         """
 
 
-class SpectralSpace(object):
-    """ A SpectralSpace is a set (represented as a list) of SpectralDistribution objects.
+class SpectralBasis(object):
+    """ A SpectralBasis is a set (represented as a list) of SpectralFunction objects.
 
-    For example, the full Kato correlated-k list of spectral slices constitutes a SpectralSpace.
+    For example, the full Kato correlated-k list of spectral slices constitutes a SpectralBasis.
     A sub-range of of Kato or other correlated-k channels (Fu or avhrr_kratz) also qualify.
-    The spectral response functions of a sensor can also be represented using a SpectralSpace.
+    The spectral response functions of a sensor can also be represented using a SpectralBasis.
 
-    An important use of SpectralSpaces is to compute "projections" which could also be thought of as
-    "dot products". The projection of one SpectralSpace into another comprises multplying the
+    An important use of SpectralBasis is to compute "projections" which could also be thought of as
+    "dot products". The projection of one SpectralBasis into another comprises multplying the
     distribution functions and integrating over wavelength to obtain a set of weights. The integral is
-    typically also normalised to retain equivalent units.
+    typically also normalised to retain equivalent units. The result is a SpectralVector
 
     Here are some examples:
-    A set of spectral end-member functions can be represented as a SpectralSpace. These end-members might
+    A set of spectral end-member functions can be represented as a SpectralBasis. These end-members might
     be propagated to calculate an end-member response at a camera focal plane. The end-members are projected
     onto the spectral response functions of the sensor to get the sensor responses to each of the end-members.
 
-    Notes: A SpectralSpace is not generally orthogonal unless specifically designed so by the user.
+    Notes: A SpectralBasis is not generally orthogonal unless specifically designed so by the user.
     """
 
     @classmethod
     def from_flt_file(cls, filename, re_select=None):
-        """ Create a SpectralSpace list of SpectralDistribution objects by reading a MODTRAN-compatible
+        """ Create a SpectralBasis list of SpectralDistribution objects by reading a MODTRAN-compatible
         "filter function" .flt file.
 
         :param filename: The MODTRAN-compatible .flt file from which to read the filter functions.
@@ -682,6 +682,28 @@ class SpectralSpace(object):
             all channels in the file.
         :return:
         """
+
+    @classmethod
+    def kato_VIS(cls):
+        """
+        Create a SpectralBasis comprising the kato channels that cover the visible spectrum. These are channels 5 to
+        19 inclusive (first channel is channel 1, as per libRadtran Kato channel numbering scheme). This is 15 channels.
+        :return:
+        """
+        pass
+
+    @classmethod
+    def kato_VNIR(cls):
+        """
+        Create a SpectralBasis comprising the kato channels that cover the visible and near-infrared spectrum. These
+        are channels 5 to 22 inclusive (first channel is channel 1, as per libRadtran Kato channel numbering scheme).
+        This is 15 channels.
+        :return:
+        """
+
+
+class SpectralVector(object):  # Should inherit from
+    pass
 
 
 
