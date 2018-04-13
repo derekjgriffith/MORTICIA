@@ -10,7 +10,7 @@ __author__ = 'DGriffith'
 import numpy as np
 import xarray as xray
 from morticia import ureg, Q_, U_
-from scipy.interpolate import RegularGridInterpolator, interp1d
+import scipy.interpolate as interp
 import warnings
 from operator import mul, add
 from morticia.moglo import *  # Import morticia global vocab, exceptions etc.
@@ -58,7 +58,7 @@ def xd_harmonise_interp(xd_list):
         on a common set of coordinate axis points by linearly interpolating all DataArray objects onto the same
         set of points, obtained by merging and sorting the points from all input DataArray objects.
 
-    The DataArray objects provided.    The scipy linear grid interpolator is used for this purpose. See:
+    The DataArray objects provided. The scipy linear grid interpolator is used for this purpose. See:
     scipy.interpolate.RegularGridInterpolator
     This scipy interpolator may have poor performance for datasets with more than 2 axes.
     :param xd_list:
@@ -94,7 +94,7 @@ def xd_harmonise_interp(xd_list):
     xd_return_list = []
     for xd_arr in xd_list:
         # Create the linear interpolator
-        interpolator = RegularGridInterpolator([xd_arr[axis].values for axis in xd_arr.dims],
+        interpolator = interp.RegularGridInterpolator([xd_arr[axis].values for axis in xd_arr.dims],
                                                xd_arr.values,
                                                method='linear', bounds_error=False, fill_value=0.0)
         merged_coordinates = np.meshgrid(*[index_vals[axis] for axis in xd_arr.dims],
@@ -128,7 +128,7 @@ def xd_interp_axis_to(from_xd, to_xd, axis, interp_method='linear', bounds_error
     """
     from_dims = from_xd.dims
     from_axes = [copy.deepcopy(from_xd[this_axis]) for this_axis in from_dims]
-    interp_func = interp1d(from_xd[axis].data, from_xd.data, kind=interp_method, axis=from_xd.get_axis_num(axis),
+    interp_func = interp.interp1d(from_xd[axis].data, from_xd.data, kind=interp_method, axis=from_xd.get_axis_num(axis),
                             copy=False, bounds_error=bounds_error, fill_value=fill_value, assume_sorted=assume_sorted)
     new_data = interp_func(to_xd[axis].data)  # Interpolate along the named axis
     # Now reconstruct the xd_from DataArray
@@ -160,24 +160,25 @@ def xd_harmonised_product(xd_list):
                 axis_attrs[axis].update(xd_arr[axis].attrs)  # Accumulate the attributes for each axis
             else:
                 axis_attrs[axis] = xd_arr[axis].attrs
-            if not axis in unit_dict:
-                print xd_arr[axis].attrs
-                print 'units' in xd_arr[axis].attrs, ' units found for ', xd_arr.name, ' on axis ', axis
-                if 'units' in xd_arr[axis].attrs:
+            if not axis in unit_dict:  # Want to check consistency of units for axes having the same names
+                # There is no entry yet for an axis with with name
+                if 'units' in xd_arr[axis].attrs:  # Make an entry in the unit_dict for this axis name
                     unit_dict[axis] = xd_arr[axis].attrs['units']
-                else:
+                else:  # the axis does not have unit information = trouble
                     raise MissingUnits('Units not found for ' + xd_arr.name + ' on axis ' + axis)
-            elif ('units' in xd_arr[axis].attrs['units']) and (unit_dict[axis] != xd_arr[axis].attrs['units']):
+            # else if the axis already has an entry in the unit_dict, check that is is the same as existing
+            elif ('units' in xd_arr[axis].attrs) and (unit_dict[axis] != xd_arr[axis].attrs['units']):
                 # TODO : Consider throwing a unit mismatch error, or converting to desired units with pint
                 warnings.warn('Unit mismatch found when taking xray.DataArray harmonised product.')
                 raise UnitMismatch('Unit mismatch encountered for ' + xd_arr.name + ' on axis ' + axis)
-            else:
+            elif not 'units' in xd_arr[axis].attrs:  # Units are missing for this axis
                 raise MissingUnits('Units not found for ' + xd_arr.name + ' on axis ' + axis)
     xd_factors = xd_harmonise_interp(xd_list)
     xd_product = reduce(mul, xd_factors)  # take the product by reducing the list using the mul operator
     #xd_product.attrs = main_attrs
-    for axis in xd_product:  # Put the merged attributes into each of the axes
+    for axis in xd_product.dims:  # Put the merged attributes into each of the axes
         xd_product[axis].attrs = axis_attrs[axis]
+        #print axis_attrs[axis]
     return xd_product
 
 
@@ -235,6 +236,19 @@ def xd_attrs_update(xd_list):
             xd_arr[axis].attrs['units'] = default_units[axis]  # Likewise if units not found for this axis name
 
 
+# Want univariate, bivariate and multivariate basis functions and functional bases.
+# For multivariate basis functions, the only interpolator currently is scipy.interpolate.RegularGridInterpolator
+# For bivariate basis functions, there are only 2 interpolators currently available, being
+#  scipy.interpolate.RectBivariateSpline amd scipy.interpolate.interp2d ('linear', 'cubic' or 'quintic')
+# For univariate basis functions, a number of interpolators are available, including
+#  scipy.interpolate.interp1d, scipy.interpolate.BarycentricInterpolator,
+#  scipy.interpolate.KrochInterpolator, scipy.interpolate.PchipInterpolator,
+#
+# In all cases, the default is linear interpolation, the most conservative choice, and with extrapolation values
+# set to zero. This default extrapolation policy has been chosen on the basis of what is typically encountered
+# in MORTICIA scenarios, where the functions in question are typically band-limited, with values that are zero outside
+# of the defined domain. The function may be non-zero but unknown, in which case the extrapolation value should
+# probably be set to Nan. However, this has the effect of poisoning integrals and sums outside the known domain.
 
 class BasisFunction(object):
     """
@@ -243,36 +257,110 @@ class BasisFunction(object):
     domain together with an interpolation scheme. In general, multivariate interpolation is performed using
       the `scipy.interpolate` module. In principle it should be possible to use other interpolation methods and
       packages.
+
     """
-    def __init__(self, samples, evaluator, evalBuildParms, evalCallParms=None):
+    def __init__(self, samples, evaluator=None, evalBuildParms=None, evalCallParms=None):
         """ Constructor for BasisFunction objects. The samples of the function are an xarray object with any number
         of dimensions, together with the range values of the samples at all defined points in the domain.
 
         :param samples: An xarray.DataArray containing the hyper-rectangular domain data points as well as the value
         of the basis function at all the points defined in the domain axes.
         :param evaluator: The function to call to evaluate the basis function. The evaluation function will be built
-        by calling the evaluator function
+        by calling the evaluator function unless the evalBuildParms input is set to None, in which case the evaluator
+        function will be called
         :param evalBuildParms: Dictionary of parameters to provide
         :param evalCallParms: Dictionary of additional parameters to provide to the available function for evaluation of
         the BasisFunction.
         :return:
         """
         self.samples = samples
-        if evalBuildParms is not None:
-            self.evaluator = evaluator(samples.data, **evalBuildParms)
-        else:
-            self.evaluator = evaluator
         self.evalCallParms = evalCallParms
+        if samples.ndim == 1:    # Univariate
+            x = samples[samples.dims[0]].data
+            y = samples.data
+            if evaluator is None:
+                evaluator = interp.interp1d
+                if evalBuildParms is None:
+                    evalBuildParms = {'kind': 'linear', 'axis': -1, 'copy': True, 'bounds_error': False,
+                                      'fill_value': 0.0}
+                self.evaluator = evaluator(x, y, **evalBuildParms)
+        elif samples.ndim == 2:    # Bivariate
+            pass
+        else:   # Multivariate
+            domainsamples = []
+            for axis in samples.dims:
+                domainsamples.append(samples[axis].data)  # Build a list of domain axis samples
+            if evalBuildParms is not None:  # The evaluator function must be built by calling evaluator
+                self.evaluator = evaluator(domainsamples, samples.data, **evalBuildParms)
+            else:
+                self.evaluator = evaluator  # Will be called later
+        self.evalCallParms = evalCallParms
+        self.dims = self.samples.dims
+        self.dimset = set(self.dims)  # BasisFunctions assembled into a FunctionalBasis must have the same set of dims
 
-class BasisVector(object):
-    pass
+
+    def __str__(self):
+        return str(self.samples)
 
 
 class FunctionalBasis(object):
     """
     A FunctionalBasis is an ordered list of BasisFunctions defined on the same or overlapping domain. All functions
-    in the basis must have the same domain axes.
+    in the basis must have the same domain axes. The functions are harmonised such that they have the same domain
+    sample points. For multivariate BasisFunctions, the domain sample points are harmonised using the scipy
+    RegularGridInterpolator by default.
+    """
+    def __init__(self, basisfunction_list):
+        if len(basisfunction_list) < 2:
+            raise ValueError('More than 1 basis function require to form basis')
+        dimset = basisfunction_list[0].dimset
+        for basisfunction in basisfunction_list:
+            if dimset != basisfunction.dimset:
+                raise ValueError('All basis functions for a functional basis must have the same domain coordinate '
+                                 'axes.')
+        self.basisfunction_list = xd_harmonise_interp(basisfunction_list)
+
+
+
+class BasisVector(object):
+    """
+    A basis vector arises from the inner product of a BasisFunction with a FunctionalBasis. Two BasisVectors can only
+    be added if they arose from the identical FunctionalBasis
     """
     pass
 
 
+class MultivarBasisFunction(BasisFunction):
+    pass
+
+
+class MultivarFunctionalBasis(FunctionalBasis):
+    pass
+
+
+class MultivarBasisVector(BasisVector):
+    pass
+
+
+class BivarBasisFunction(BasisFunction):
+    pass
+
+
+class BivarFunctionalBasis(FunctionalBasis):
+    pass
+
+
+class BivarBasisVector(BasisVector):
+    pass
+
+
+class UnivarBasisFunction(BasisFunction):
+    pass
+
+
+class UnivarFunctionalBasis(FunctionalBasis):
+    pass
+
+
+class UnivarBasisVector(BasisVector):
+    pass
