@@ -52,15 +52,17 @@ def xd_identity(np_vector, axis_name, units=None, attrs=None):
 
 
 def xd_harmonise_interp(xd_list):
-    """ Perform linear interpolation on merged set of axis points for two or more xray DataArray objects.
-        This function can be used to prepare (harmonise) multiple xray.DataArray objects for multiplication or addition
+    """ Perform linear interpolation on merged set of axis points for two or more xarray DataArray objects.
+        This function can be used to prepare (harmonise) multiple xarray.DataArray objects for multiplication or
+        addition
         on a common set of coordinate axis points by linearly interpolating all DataArray objects onto the same
         set of points, obtained by merging and sorting the points from all input DataArray objects.
 
-    The DataArry objects provided.    The scipy linear grid interpolator is used for this purpose. See:
+    The DataArray objects provided.    The scipy linear grid interpolator is used for this purpose. See:
     scipy.interpolate.RegularGridInterpolator
+    This scipy interpolator may have poor performance for datasets with more than 2 axes.
     :param xd_list:
-    :return: Tuple of xray.DataArray objects with merged and linearly interpolated values in all axes.
+    :return: Tuple of xarray.DataArray objects with merged and linearly interpolated values in all axes.
     Only unique values in the interpolation axis are used.
 
     """
@@ -138,7 +140,7 @@ def xd_interp_axis_to(from_xd, to_xd, axis, interp_method='linear', bounds_error
 def xd_harmonised_product(xd_list):
     """ Compute the harmonised product of a number of N-dimensional data arrays.
         The DataArrays are interpolated onto a common set of coordinates and then the product of the DataArrays
-        is computer, returning a single DataArray with merged attributes. Unit mismatches are flagged with warnings.
+        is computed, returning a single DataArray with merged attributes. Unit mismatches are flagged with warnings.
 
     :param xd_list: List/tuple of xray.DataArray objects to be multiplied
     :return: Product of xray.DataArray objects with merged attributes
@@ -151,14 +153,16 @@ def xd_harmonised_product(xd_list):
     axis_attrs = {}  # Dictionary of axis attribute dictionaries
     # Check units and merge metadata
     # have to merge attributes for main data and all axes individually
-    for xd_arr in xd_list:
+    for xd_arr in xd_list:  # Run through the list of xarrays
         #main_attrs.update(xd_arr.attrs)
-        for axis in xd_arr.dims:
+        for axis in xd_arr.dims:  # Run through each axis in the xarray
             if axis in axis_attrs:
                 axis_attrs[axis].update(xd_arr[axis].attrs)  # Accumulate the attributes for each axis
             else:
                 axis_attrs[axis] = xd_arr[axis].attrs
             if not axis in unit_dict:
+                print xd_arr[axis].attrs
+                print 'units' in xd_arr[axis].attrs, ' units found for ', xd_arr.name, ' on axis ', axis
                 if 'units' in xd_arr[axis].attrs:
                     unit_dict[axis] = xd_arr[axis].attrs['units']
                 else:
@@ -224,11 +228,51 @@ def xd_attrs_update(xd_list):
     :param xd: Input xray.DataArray
     :return:
     """
-
     for xd_arr in xd_list:
         xd_arr.attrs['long_name'] = long_name[xd_arr.name]
         for axis in xd_arr.dims:
             xd_arr[axis].attrs['long_name'] = long_name[axis]  # Will blow up if axis mnemonic name not found
-            xd_arr[axis].attrs['units'] = default_units[axis]  # Likewaise if units not found for this axis name
+            xd_arr[axis].attrs['units'] = default_units[axis]  # Likewise if units not found for this axis name
+
+
+
+class BasisFunction(object):
+    """
+    The BasisFunction class encapsulates multivariate functions defined over a hyper-rectangular domain. The domain
+    is defined using `xarray` axes and the range is either defined using a function call or a set of samples on the
+    domain together with an interpolation scheme. In general, multivariate interpolation is performed using
+      the `scipy.interpolate` module. In principle it should be possible to use other interpolation methods and
+      packages.
+    """
+    def __init__(self, samples, evaluator, evalBuildParms, evalCallParms=None):
+        """ Constructor for BasisFunction objects. The samples of the function are an xarray object with any number
+        of dimensions, together with the range values of the samples at all defined points in the domain.
+
+        :param samples: An xarray.DataArray containing the hyper-rectangular domain data points as well as the value
+        of the basis function at all the points defined in the domain axes.
+        :param evaluator: The function to call to evaluate the basis function. The evaluation function will be built
+        by calling the evaluator function
+        :param evalBuildParms: Dictionary of parameters to provide
+        :param evalCallParms: Dictionary of additional parameters to provide to the available function for evaluation of
+        the BasisFunction.
+        :return:
+        """
+        self.samples = samples
+        if evalBuildParms is not None:
+            self.evaluator = evaluator(samples.data, **evalBuildParms)
+        else:
+            self.evaluator = evaluator
+        self.evalCallParms = evalCallParms
+
+class BasisVector(object):
+    pass
+
+
+class FunctionalBasis(object):
+    """
+    A FunctionalBasis is an ordered list of BasisFunctions defined on the same or overlapping domain. All functions
+    in the basis must have the same domain axes.
+    """
+    pass
 
 
