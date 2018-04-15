@@ -275,25 +275,42 @@ class BasisFunction(object):
         """
         self.samples = samples
         self.evalCallParms = evalCallParms
-        if samples.ndim == 1:    # Univariate
-            x = samples[samples.dims[0]].data
-            y = samples.data
-            if evaluator is None:
-                evaluator = interp.interp1d
-                if evalBuildParms is None:
-                    evalBuildParms = {'kind': 'linear', 'axis': -1, 'copy': True, 'bounds_error': False,
-                                      'fill_value': 0.0}
+        # If all samples are nan, then assume function is not interpolated. Call evaluator directly.
+        if np.all(np.isnan(samples.data)):   # Function is defined directly by evaluator
+            self.evaluator = evaluator
+        else:
+            if samples.ndim == 1:    # Univariate
+                x = samples[samples.dims[0]].data
+                y = samples.data
+                if evaluator is None:
+                    evaluator = interp.interp1d
+                    if evalBuildParms is None:
+                        evalBuildParms = {'kind': 'linear', 'axis': -1, 'copy': True, 'bounds_error': False,
+                                          'fill_value': 0.0}
                 self.evaluator = evaluator(x, y, **evalBuildParms)
-        elif samples.ndim == 2:    # Bivariate
-            pass
-        else:   # Multivariate
-            domainsamples = []
-            for axis in samples.dims:
-                domainsamples.append(samples[axis].data)  # Build a list of domain axis samples
-            if evalBuildParms is not None:  # The evaluator function must be built by calling evaluator
+            elif samples.ndim == 2:    # Bivariate
+                x = samples[samples.dims[0]].data
+                y = samples[samples.dims[1]].data
+                z = samples.data
+                if evaluator is None:
+                    evaluator = interp.interp2d
+                    if evalBuildParms is None:
+                        evalBuildParms = {'kind': 'linear', 'copy': True, 'bounds_error': False,
+                                          'fill_value': 0.0}
+                self.evaluator = evaluator(x, y, z, **evalBuildParms)
+            elif samples.ndim > 2:   # Multivariate
+                domainsamples = []
+                for axis in samples.dims:
+                    domainsamples.append(samples[axis].data)  # Build a list of domain axis samples
+                if evaluator is None:
+                    evaluator = interp.RegularGridInterpolator
+                    if evalBuildParms is None:
+                        evalBuildParms = {'method': 'linear', 'bounds_error': False,
+                                          'fill_value': 0.0}
                 self.evaluator = evaluator(domainsamples, samples.data, **evalBuildParms)
             else:
-                self.evaluator = evaluator  # Will be called later
+                raise ValueError('Input samples to BasisFunction constructor must have at lease one axis domain '
+                                 'coordinate.')
         self.evalCallParms = evalCallParms
         self.dims = self.samples.dims
         self.dimset = set(self.dims)  # BasisFunctions assembled into a FunctionalBasis must have the same set of dims
