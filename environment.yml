@@ -1,0 +1,26 @@
+name: mordevpy27
+dependencies:
+  - python=2.7
+  - numpy
+  - pandas
+  - xarray
+  - pymongo
+  - jupyter
+  - dask
+  - ipyparallel
+  - ephem
+  - astropy
+  - dill
+  - cython
+  - lxml
+  - Sphinx
+  - basemap
+  - dnspython
+  - strict-rfc3339
+  - pip:
+    - pint
+    - PyHamcrest
+    - spacetrack
+    - orbit-predictor
+    - easygui
+    - openexr
