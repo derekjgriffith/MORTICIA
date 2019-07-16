@@ -7,7 +7,10 @@ dependencies:
   - xarray
   - pymongo
   - jupyter
+  - ipykernel
+  - nb_conda_kernels
   - dask
+  - distributed
   - ipyparallel
   - ephem
   - astropy
@@ -23,5 +26,5 @@ dependencies:
     - spacetrack
     - orbit-predictor
     - easygui
-    - openexr
     - strict-rfc3339
+    - openexr
