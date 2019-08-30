@@ -1,0 +1,280 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>morticia.rad.GUI_definition &mdash; MORTICIA 1.0 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Roboto+Slab:400,700|Inconsolata:400,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="MORTICIA 1.0 documentation" href="../../../index.html"/>
+        <link rel="up" title="morticia" href="../../morticia.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+          <a href="../../../index.html" class="fa fa-home"> MORTICIA</a>
+        
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../how_to_use.html">How to use MORTICIA</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../how_to_use.html#morticia-dependencies">MORTICIA Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../how_to_use.html#installation-and-requirements">Installation and Requirements</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../styleguide.html">The MORTICIA Style Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#to-pep-8-or-not-to-pep-8">To PEP-8 or not to PEP-8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#code-layout">Code Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#import-statements">Import Statements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#whitespace">Whitespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#comments">Comments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#documentation-strings-docstrings">Documentation Strings (docstrings)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#naming-conventions">Naming Conventions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#pep-257">PEP-257</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#from-conventions-section"><em>From</em> Conventions Section</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#general-terminology-and-conventions">General Terminology and Conventions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../for_developers.html">For the Developers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../for_developers.html#structure">Structure</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../packages.html">Packages</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../packages.html#sensor-package">Sensor Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../packages.html#radiometry-package">Radiometry Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../packages.html#scene-package">Scene Package</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ChapLibRadtranODandPathRadiance.html">Transmittance and Path Radiance in libRadtran</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../01a-SpectralChannelsAndFilters.html">IPython Notebook and Sphinx</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../01a-SpectralChannelsAndFilters.html#a-spectralchannelsandfilters-ipython-notebook">01a-SpectralChannelsAndFilters IPython Notebook</a></li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../../index.html">MORTICIA</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      
+          <li><a href="../../morticia.html">morticia</a> &raquo;</li>
+      
+    <li>morticia.rad.GUI_definition</li>
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <h1>Source code for morticia.rad.GUI_definition</h1><div class="highlight"><pre>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;FileInput&quot;</span><span class="p">,</span> <span class="s">&quot;FloatInput&quot;</span><span class="p">,</span> <span class="s">&quot;TextInput&quot;</span><span class="p">,</span> <span class="s">&quot;IntegerInput&quot;</span><span class="p">,</span> <span class="s">&quot;ListInput&quot;</span><span class="p">,</span> <span class="s">&quot;IntegerListInput&quot;</span><span class="p">,</span> <span class="s">&quot;BooleanInput&quot;</span><span class="p">,</span> <span class="s">&quot;VariableNumberOfLinesInput&quot;</span><span class="p">]</span>
+
+
+<span class="k">class</span> <span class="nc">Input</span><span class="p">():</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        name = displayed above input in GUI for options with multiple inputs</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="ow">not</span> <span class="n">name</span> <span class="ow">is</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">optional</span> <span class="o">=</span> <span class="n">optional</span>
+
+<span class="k">class</span> <span class="nc">NumberInput</span><span class="p">(</span><span class="n">Input</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">valid_range</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">1e99</span><span class="p">,</span> <span class="mf">1e99</span><span class="p">),</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">Input</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c"># This should be removed when/if the option files are cleaned up</span>
+        <span class="k">if</span> <span class="n">default</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&quot;NOT_DEFINED_INTEGER&quot;</span><span class="p">,</span> <span class="s">&quot;NOT_DEFINED_FLOAT&quot;</span><span class="p">):</span>
+            <span class="n">default</span> <span class="o">=</span> <span class="bp">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">default</span> <span class="o">=</span> <span class="n">default</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">valid_range</span> <span class="o">=</span> <span class="n">valid_range</span>
+
+<div class="viewcode-block" id="FileInput"><a class="viewcode-back" href="../../../mortapi/morticia.rad.html#morticia.rad.GUI_definition.FileInput">[docs]</a><span class="k">class</span> <span class="nc">FileInput</span><span class="p">(</span><span class="n">Input</span><span class="p">):</span>
+<div class="viewcode-block" id="FileInput.__init__"><a class="viewcode-back" href="../../../mortapi/morticia.rad.html#morticia.rad.GUI_definition.FileInput.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">Input</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</div></div>
+<div class="viewcode-block" id="FloatInput"><a class="viewcode-back" href="../../../mortapi/morticia.rad.html#morticia.rad.GUI_definition.FloatInput">[docs]</a><span class="k">class</span> <span class="nc">FloatInput</span><span class="p">(</span><span class="n">NumberInput</span><span class="p">):</span>
+    <span class="k">pass</span>
+</div>
+<div class="viewcode-block" id="TextInput"><a class="viewcode-back" href="../../../mortapi/morticia.rad.html#morticia.rad.GUI_definition.TextInput">[docs]</a><span class="k">class</span> <span class="nc">TextInput</span><span class="p">(</span><span class="n">Input</span><span class="p">):</span>
+<div class="viewcode-block" id="TextInput.__init__"><a class="viewcode-back" href="../../../mortapi/morticia.rad.html#morticia.rad.GUI_definition.TextInput.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">Input</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">default</span> <span class="o">=</span> <span class="n">default</span>
+</div></div>
+<div class="viewcode-block" id="IntegerInput"><a class="viewcode-back" href="../../../mortapi/morticia.rad.html#morticia.rad.GUI_definition.IntegerInput">[docs]</a><span class="k">class</span> <span class="nc">IntegerInput</span><span class="p">(</span><span class="n">NumberInput</span><span class="p">):</span>
+<div class="viewcode-block" id="IntegerInput.__init__"><a class="viewcode-back" href="../../../mortapi/morticia.rad.html#morticia.rad.GUI_definition.IntegerInput.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="c"># This should be removed when/if the option files are cleaned up</span>
+        <span class="k">if</span> <span class="n">default</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&quot;NOT_DEFINED_INTEGER&quot;</span><span class="p">,</span> <span class="s">&quot;NOT_DEFINED_FLOAT&quot;</span><span class="p">):</span>
+            <span class="n">default</span> <span class="o">=</span> <span class="bp">None</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">default</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="nb">type</span><span class="p">(</span><span class="n">default</span><span class="p">)</span> <span class="o">==</span> <span class="nb">int</span><span class="p">,</span> \
+                <span class="s">&quot;Default of integer input must be an integer!&quot;</span>
+        <span class="n">NumberInput</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">default</span><span class="p">,</span>  <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</div></div>
+<div class="viewcode-block" id="ListInput"><a class="viewcode-back" href="../../../mortapi/morticia.rad.html#morticia.rad.GUI_definition.ListInput">[docs]</a><span class="k">class</span> <span class="nc">ListInput</span><span class="p">(</span><span class="n">Input</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Valid inputs are one among a list of strings &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="ListInput.__init__"><a class="viewcode-back" href="../../../mortapi/morticia.rad.html#morticia.rad.GUI_definition.ListInput.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">valid_range</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">logical_file</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                 <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">Input</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="n">optional</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        
+        <span class="k">assert</span> <span class="ow">not</span> <span class="n">valid_range</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">,</span> <span class="s">&quot;You must provide a range of choices!&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">valid_range</span> <span class="o">=</span> <span class="p">[]</span>
+	<span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">valid_range</span><span class="p">:</span>
+		<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span><span class="nb">str</span><span class="p">):</span>	<span class="bp">self</span><span class="o">.</span><span class="n">valid_range</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">val</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="p">)</span>
+		<span class="k">else</span><span class="p">:</span>			<span class="bp">self</span><span class="o">.</span><span class="n">valid_range</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">val</span> <span class="p">)</span>
+
+	<span class="k">if</span> <span class="n">optional</span><span class="p">:</span>
+		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">valid_range</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">):</span>	<span class="bp">self</span><span class="o">.</span><span class="n">valid_range</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">valid_range</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="s">&quot;&quot;</span><span class="p">)</span>
+
+	<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">default</span><span class="p">,</span><span class="nb">str</span><span class="p">):</span>	<span class="n">default</span><span class="o">=</span><span class="n">default</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">default</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>		<span class="n">default</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">valid_range</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">assert</span> <span class="n">default</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">valid_range</span><span class="p">,</span> <span class="s">&quot;Default not among valid options!&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">default</span> <span class="o">=</span> <span class="n">default</span>
+	<span class="bp">self</span><span class="o">.</span><span class="n">logical_file</span><span class="o">=</span><span class="n">logical_file</span>
+</div></div>
+<div class="viewcode-block" id="IntegerListInput"><a class="viewcode-back" href="../../../mortapi/morticia.rad.html#morticia.rad.GUI_definition.IntegerListInput">[docs]</a><span class="k">class</span> <span class="nc">IntegerListInput</span><span class="p">(</span><span class="n">ListInput</span><span class="p">):</span>
+<div class="viewcode-block" id="IntegerListInput.__init__"><a class="viewcode-back" href="../../../mortapi/morticia.rad.html#morticia.rad.GUI_definition.IntegerListInput.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">ListInput</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">default</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">default</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">valid_range</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">valid_range</span><span class="p">])</span>
+    </div></div>
+<div class="viewcode-block" id="BooleanInput"><a class="viewcode-back" href="../../../mortapi/morticia.rad.html#morticia.rad.GUI_definition.BooleanInput">[docs]</a><span class="k">class</span> <span class="nc">BooleanInput</span><span class="p">(</span><span class="n">Input</span><span class="p">):</span>
+    <span class="k">pass</span>
+</div>
+<div class="viewcode-block" id="VariableNumberOfLinesInput"><a class="viewcode-back" href="../../../mortapi/morticia.rad.html#morticia.rad.GUI_definition.VariableNumberOfLinesInput">[docs]</a><span class="k">class</span> <span class="nc">VariableNumberOfLinesInput</span><span class="p">(</span><span class="n">Input</span><span class="p">):</span>
+<div class="viewcode-block" id="VariableNumberOfLinesInput.__init__"><a class="viewcode-back" href="../../../mortapi/morticia.rad.html#morticia.rad.GUI_definition.VariableNumberOfLinesInput.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">valid_range</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">Input</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="ow">not</span> <span class="n">valid_range</span> <span class="ow">is</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">valid_range</span> <span class="o">=</span> <span class="n">valid_range</span></div></div>
+</pre></div>
+
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, D Griffith, A Ramkilowan.
+    </p>
+  </div>
+
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

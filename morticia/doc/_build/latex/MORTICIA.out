@@ -1,0 +1,25 @@
+\BOOKMARK [0][-]{chapter.1}{Introduction}{}% 1
+\BOOKMARK [0][-]{chapter.2}{How to use MORTICIA}{}% 2
+\BOOKMARK [1][-]{section.2.1}{MORTICIA Dependencies}{chapter.2}% 3
+\BOOKMARK [1][-]{section.2.2}{Installation and Requirements}{chapter.2}% 4
+\BOOKMARK [0][-]{chapter.3}{The MORTICIA Style Guide}{}% 5
+\BOOKMARK [1][-]{section.3.1}{To PEP-8 or not to PEP-8}{chapter.3}% 6
+\BOOKMARK [1][-]{section.3.2}{Code Layout}{chapter.3}% 7
+\BOOKMARK [1][-]{section.3.3}{Import Statements}{chapter.3}% 8
+\BOOKMARK [1][-]{section.3.4}{Whitespace}{chapter.3}% 9
+\BOOKMARK [1][-]{section.3.5}{Comments}{chapter.3}% 10
+\BOOKMARK [1][-]{section.3.6}{Documentation Strings \(docstrings\)}{chapter.3}% 11
+\BOOKMARK [1][-]{section.3.7}{Naming Conventions}{chapter.3}% 12
+\BOOKMARK [1][-]{section.3.8}{PEP-257}{chapter.3}% 13
+\BOOKMARK [1][-]{section.3.9}{From Conventions Section}{chapter.3}% 14
+\BOOKMARK [1][-]{section.3.10}{General Terminology and Conventions}{chapter.3}% 15
+\BOOKMARK [0][-]{chapter.4}{For the Developers}{}% 16
+\BOOKMARK [1][-]{section.4.1}{Structure}{chapter.4}% 17
+\BOOKMARK [0][-]{chapter.5}{Packages}{}% 18
+\BOOKMARK [1][-]{section.5.1}{Sensor Package}{chapter.5}% 19
+\BOOKMARK [1][-]{section.5.2}{Radiometry Package}{chapter.5}% 20
+\BOOKMARK [1][-]{section.5.3}{Scene Package}{chapter.5}% 21
+\BOOKMARK [0][-]{chapter.6}{Indices and tables}{}% 22
+\BOOKMARK [0][-]{chapter.7}{Jupyter Notebooks}{}% 23
+\BOOKMARK [0][-]{section*.95}{Python Module Index}{}% 24
+\BOOKMARK [0][-]{section*.96}{Index}{}% 25

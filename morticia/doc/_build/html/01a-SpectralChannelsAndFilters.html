@@ -1,0 +1,502 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>IPython Notebook and Sphinx &mdash; MORTICIA 1.0 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Roboto+Slab:400,700|Inconsolata:400,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="MORTICIA 1.0 documentation" href="index.html"/>
+        <link rel="prev" title="Transmittance and Path Radiance in libRadtran" href="ChapLibRadtranODandPathRadiance.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+          <a href="index.html" class="fa fa-home"> MORTICIA</a>
+        
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="how_to_use.html">How to use MORTICIA</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="how_to_use.html#morticia-dependencies">MORTICIA Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="how_to_use.html#installation-and-requirements">Installation and Requirements</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="styleguide.html">The MORTICIA Style Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="styleguide.html#to-pep-8-or-not-to-pep-8">To PEP-8 or not to PEP-8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="styleguide.html#code-layout">Code Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="styleguide.html#import-statements">Import Statements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="styleguide.html#whitespace">Whitespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="styleguide.html#comments">Comments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="styleguide.html#documentation-strings-docstrings">Documentation Strings (docstrings)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="styleguide.html#naming-conventions">Naming Conventions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="styleguide.html#pep-257">PEP-257</a></li>
+<li class="toctree-l2"><a class="reference internal" href="styleguide.html#from-conventions-section"><em>From</em> Conventions Section</a></li>
+<li class="toctree-l2"><a class="reference internal" href="styleguide.html#general-terminology-and-conventions">General Terminology and Conventions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="for_developers.html">For the Developers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="for_developers.html#structure">Structure</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="packages.html">Packages</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="packages.html#sensor-package">Sensor Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="packages.html#radiometry-package">Radiometry Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="packages.html#scene-package">Scene Package</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ChapLibRadtranODandPathRadiance.html">Transmittance and Path Radiance in libRadtran</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">IPython Notebook and Sphinx</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#a-spectralchannelsandfilters-ipython-notebook">01a-SpectralChannelsAndFilters IPython Notebook</a></li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">MORTICIA</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>IPython Notebook and Sphinx</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          <a href="_sources/01a-SpectralChannelsAndFilters.txt" rel="nofollow"> View page source</a>
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <div class="section" id="ipython-notebook-and-sphinx">
+<h1>IPython Notebook and Sphinx<a class="headerlink" href="#ipython-notebook-and-sphinx" title="Permalink to this headline">¶</a></h1>
+<p>To get IPython notebook, say into sphinx documentation requires converting the ipython notebook into an rst file using the following command from the command line:
+ipython nbconvert hello.ipynb &#8211;to rst</p>
+<p>This option is quite buggy at the moment. The following deficiencies have been identified:</p>
+<ul class="simple">
+<li>The code segments from the ipython notebook are converted to <cite>code</cite> directives. This option does not provide syntax highlighting, instead the
+<cite>code-block</cite> directive needs to be manually inserted.</li>
+<li>In order for notebook rendered figures to be displayed, the path to the images is required to be manually altered. The <cite>nbconvert</cite> command creates a folder
+in which all figures are placed, this folder must be copied to the desired location and referenced explicitly in all <cite>image</cite> directives.</li>
+<li>matplotlib objects are passed in as <cite>parsed-literal</cite> directives. These serve add not value to the documentation and should be deleted</li>
+</ul>
+<p>Below is partially functional integration of a MORTICIA related ipython notebook. IPython notebook integration with this documentation is under development, until integration
+is stable the notebooks should be accessed from the <a class="reference external" href="https://github.com/derekjgriffith/nbMORTICIA">MORTICIA notebook repository</a>  on Github</p>
+<div class="section" id="a-spectralchannelsandfilters-ipython-notebook">
+<h2>01a-SpectralChannelsAndFilters IPython Notebook<a class="headerlink" href="#a-spectralchannelsandfilters-ipython-notebook" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Perform the standard numpy and units imports</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">pint</span> <span class="kn">import</span> <span class="n">UnitRegistry</span>
+<span class="n">ureg</span> <span class="o">=</span> <span class="n">UnitRegistry</span><span class="p">()</span>
+<span class="n">Q_</span> <span class="o">=</span> <span class="n">ureg</span><span class="o">.</span><span class="n">Quantity</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;..&#39;</span><span class="p">)</span>  <span class="c"># Remove this call if the optics module is already installed elsewhere</span>
+<span class="c">#import optics</span>
+<span class="c"># This notebook is used for development/testing of the Optics module, so auto reload the Optics module if it changes</span>
+<span class="o">%</span><span class="n">load_ext</span> <span class="n">autoreload</span>
+<span class="o">%</span><span class="n">aimport</span> <span class="n">rad</span>
+<span class="o">%</span><span class="n">autoreload</span> <span class="mi">1</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Illustrate filter generation using rad.srfgen</span>
+<span class="n">w</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">wn</span><span class="p">,</span><span class="n">wu</span> <span class="o">=</span> <span class="n">rad</span><span class="o">.</span><span class="n">srfgen</span><span class="p">(</span><span class="n">center</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">fwhm</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="s">&#39;gauss&#39;</span><span class="p">)</span> <span class="c"># Center wavelength and full width at half maximum default to nm</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Wavelength [nm]&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="01a-SpectralChannelsAndFilters_files\01a-SpectralChannelsAndFilters_2_1.png" src="01a-SpectralChannelsAndFilters_files\01a-SpectralChannelsAndFilters_2_1.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Gaussian filter on log scale with some out-of-band leackage between 400 and 600 nm</span>
+<span class="n">w</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">wn</span><span class="p">,</span><span class="n">wu</span> <span class="o">=</span> <span class="n">rad</span><span class="o">.</span><span class="n">srfgen</span><span class="p">(</span><span class="n">center</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">fwhm</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="s">&#39;gauss&#39;</span><span class="p">,</span> <span class="n">yedge</span><span class="o">=</span><span class="mf">1e-7</span><span class="p">,</span> <span class="n">oob</span><span class="o">=</span><span class="mf">1e-7</span><span class="p">,</span> <span class="n">wvmin</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">wvmax</span><span class="o">=</span><span class="mi">600</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">semilogy</span><span class="p">(</span><span class="n">wu</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>  <span class="c"># plot against wavelength in microns</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Wavelength [micron]&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0xb8e2518&gt;
+</pre></div>
+</div>
+<img alt="01a-SpectralChannelsAndFilters_files\01a-SpectralChannelsAndFilters_3_1.png" src="01a-SpectralChannelsAndFilters_files\01a-SpectralChannelsAndFilters_3_1.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="n">w</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">wn</span><span class="p">,</span><span class="n">wu</span> <span class="o">=</span> <span class="n">rad</span><span class="o">.</span><span class="n">srfgen</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="s">&#39;bartlett&#39;</span><span class="p">,</span> <span class="n">wvmin</span><span class="o">=</span><span class="mi">480</span><span class="p">,</span> <span class="n">wvmax</span><span class="o">=</span><span class="mi">520</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Wavelength [nm]&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0xbdd5b38&gt;
+</pre></div>
+</div>
+<img alt="01a-SpectralChannelsAndFilters_files\01a-SpectralChannelsAndFilters_4_1.png" src="01a-SpectralChannelsAndFilters_files\01a-SpectralChannelsAndFilters_4_1.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Bartlett (triangular) again with insertion of center flat region of width 10 nm</span>
+<span class="n">w</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">wn</span><span class="p">,</span><span class="n">wu</span> <span class="o">=</span> <span class="n">rad</span><span class="o">.</span><span class="n">srfgen</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="s">&#39;bartlett&#39;</span><span class="p">,</span> <span class="n">centerflat</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">wvmin</span><span class="o">=</span><span class="mi">480</span><span class="p">,</span> <span class="n">wvmax</span><span class="o">=</span><span class="mi">520</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Wavelength [nm]&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0xbdad470&gt;
+</pre></div>
+</div>
+<img alt="01a-SpectralChannelsAndFilters_files\01a-SpectralChannelsAndFilters_5_1.png" src="01a-SpectralChannelsAndFilters_files\01a-SpectralChannelsAndFilters_5_1.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Generate in wavelength space (nm by default) and plot in wavenumber space</span>
+<span class="n">w</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">wn</span><span class="p">,</span><span class="n">wu</span> <span class="o">=</span> <span class="n">rad</span><span class="o">.</span><span class="n">srfgen</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="s">&#39;welch&#39;</span><span class="p">)</span> <span class="c"># center and full width at half max default to nm</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">wn</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>  <span class="c">#  plot against wavenumber per cm, note how the filter is obviously skewed in wavenumber space if</span>
+<span class="c"># sufficienty wide</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Wavenumber [cm^-1]&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0xc2e0a58&gt;
+</pre></div>
+</div>
+<img alt="01a-SpectralChannelsAndFilters_files\01a-SpectralChannelsAndFilters_6_1.png" src="01a-SpectralChannelsAndFilters_files\01a-SpectralChannelsAndFilters_6_1.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Similar, but this time, generate the filter in wavenumber scale and also plot in wavenumber scale</span>
+<span class="n">w</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">wn</span><span class="p">,</span><span class="n">wu</span> <span class="o">=</span> <span class="n">rad</span><span class="o">.</span><span class="n">srfgen</span><span class="p">(</span><span class="mf">20000.0</span><span class="p">,</span> <span class="mf">2000.0</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="s">&#39;welch&#39;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s">&#39;cm^-1&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">wn</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>  <span class="c">#  plot against wavenumber per cm</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Wavenumber [per cm]&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0xc48b2b0&gt;
+</pre></div>
+</div>
+<img alt="01a-SpectralChannelsAndFilters_files%5C01a-SpectralChannelsAndFilters_7_1.png" src="01a-SpectralChannelsAndFilters_files%5C01a-SpectralChannelsAndFilters_7_1.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="n">w</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">wn</span><span class="p">,</span><span class="n">wu</span> <span class="o">=</span> <span class="n">rad</span><span class="o">.</span><span class="n">srfgen</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="s">&#39;cosine&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Wavenumber [nm]&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0xc5bfe10&gt;
+</pre></div>
+</div>
+<img alt="01a-SpectralChannelsAndFilters_files%5C01a-SpectralChannelsAndFilters_8_1.png" src="01a-SpectralChannelsAndFilters_files%5C01a-SpectralChannelsAndFilters_8_1.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="n">w</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">wn</span><span class="p">,</span><span class="n">wu</span> <span class="o">=</span> <span class="n">rad</span><span class="o">.</span><span class="n">srfgen</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="s">&#39;cos^2&#39;</span><span class="p">,</span> <span class="n">wvmin</span><span class="o">=</span><span class="mi">480</span><span class="p">,</span> <span class="n">wvmax</span><span class="o">=</span><span class="mi">520</span><span class="p">,</span> <span class="n">oob</span><span class="o">=</span><span class="mf">0.001</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Wavelength [nm]&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0xaf404a8&gt;
+</pre></div>
+</div>
+<img alt="01a-SpectralChannelsAndFilters_files%5C01a-SpectralChannelsAndFilters_9_1.png" src="01a-SpectralChannelsAndFilters_files%5C01a-SpectralChannelsAndFilters_9_1.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Same, plotted on a log scale</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">semilogy</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Wavelength [nm]&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0xcbc0b70&gt;
+</pre></div>
+</div>
+<img alt="01a-SpectralChannelsAndFilters_files%5C01a-SpectralChannelsAndFilters_10_1.png" src="01a-SpectralChannelsAndFilters_files%5C01a-SpectralChannelsAndFilters_10_1.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Same as previous, but open a central flat region of 10 nm width</span>
+<span class="c"># Note that the full width at half max is now 20 nm (fwhm + centerflat)</span>
+<span class="n">w</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">wn</span><span class="p">,</span><span class="n">wu</span> <span class="o">=</span> <span class="n">rad</span><span class="o">.</span><span class="n">srfgen</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="s">&#39;cos^2&#39;</span><span class="p">,</span> <span class="n">centerflat</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">wvmin</span><span class="o">=</span><span class="mi">480</span><span class="p">,</span> <span class="n">wvmax</span><span class="o">=</span><span class="mi">520</span><span class="p">,</span> <span class="n">oob</span><span class="o">=</span><span class="mf">0.001</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">semilogy</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Wavelength [nm]&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0xd299d30&gt;
+</pre></div>
+</div>
+<img alt="01a-SpectralChannelsAndFilters_files%5C01a-SpectralChannelsAndFilters_11_1.png" src="01a-SpectralChannelsAndFilters_files%5C01a-SpectralChannelsAndFilters_11_1.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="n">w</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">wn</span><span class="p">,</span><span class="n">wu</span> <span class="o">=</span> <span class="n">rad</span><span class="o">.</span><span class="n">srfgen</span><span class="p">(</span><span class="mi">605</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="s">&#39;tophat&#39;</span><span class="p">,</span> <span class="n">wvmin</span><span class="o">=</span><span class="mi">580</span><span class="p">,</span> <span class="n">wvmax</span><span class="o">=</span><span class="mi">640</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Wavelength [nm]&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0xd58ada0&gt;
+</pre></div>
+</div>
+<img alt="01a-SpectralChannelsAndFilters_files%5C01a-SpectralChannelsAndFilters_12_1.png" src="01a-SpectralChannelsAndFilters_files%5C01a-SpectralChannelsAndFilters_12_1.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Opening a centre flat region also works with tophats (box) although you could just increase fwhm</span>
+<span class="n">w</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">wn</span><span class="p">,</span><span class="n">wu</span> <span class="o">=</span> <span class="n">rad</span><span class="o">.</span><span class="n">srfgen</span><span class="p">(</span><span class="mi">605</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="s">&#39;tophat&#39;</span><span class="p">,</span> <span class="n">centerflat</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">wvmin</span><span class="o">=</span><span class="mi">580</span><span class="p">,</span> <span class="n">wvmax</span><span class="o">=</span><span class="mi">640</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Wavelength [nm]&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0xd5eeac8&gt;
+</pre></div>
+</div>
+<img alt="01a-SpectralChannelsAndFilters_files%5C01a-SpectralChannelsAndFilters_13_1.png" src="01a-SpectralChannelsAndFilters_files%5C01a-SpectralChannelsAndFilters_13_1.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Show the tophat function, which defines a tophat using only a few points</span>
+<span class="n">w</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">wn</span><span class="p">,</span><span class="n">wu</span> <span class="o">=</span> <span class="n">rad</span><span class="o">.</span><span class="n">tophat</span><span class="p">(</span><span class="mi">605</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">wvmin</span><span class="o">=</span><span class="mi">350</span><span class="p">,</span> <span class="n">wvmax</span><span class="o">=</span><span class="mi">750</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">w</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Wavelength [nm]&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>&lt;matplotlib.text.Text at 0xd782e10&gt;
+</pre></div>
+</div>
+<img alt="01a-SpectralChannelsAndFilters_files%5C01a-SpectralChannelsAndFilters_14_1.png" src="01a-SpectralChannelsAndFilters_files%5C01a-SpectralChannelsAndFilters_14_1.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Create 3 MODTRAN-style flt filters/SRFs with different postions, widths and shapes</span>
+<span class="n">filt</span> <span class="o">=</span> <span class="n">rad</span><span class="o">.</span><span class="n">Flt</span><span class="p">(</span><span class="s">&#39;My Special Filters&#39;</span><span class="p">,</span> <span class="n">filterheaders</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="s">&#39;c&#39;</span><span class="p">],</span> <span class="n">centers</span> <span class="o">=</span> <span class="p">[</span><span class="mi">500</span><span class="p">,</span> <span class="mi">600</span><span class="p">,</span> <span class="mi">700</span><span class="p">],</span> <span class="n">fwhms</span> <span class="o">=</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">],</span>
+               <span class="n">shapes</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;gauss&#39;</span><span class="p">,</span> <span class="s">&#39;cos^2&#39;</span><span class="p">,</span> <span class="s">&#39;welch&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Write the filters/SRFs in MODTRAN .flt format to a text file</span>
+<span class="n">filt</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;SpecialFilters&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Plot the filters</span>
+<span class="n">filt</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="01a-SpectralChannelsAndFilters_files%5C01a-SpectralChannelsAndFilters_17_0.png" src="01a-SpectralChannelsAndFilters_files%5C01a-SpectralChannelsAndFilters_17_0.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Create some filters with just a few points</span>
+<span class="n">filt2</span> <span class="o">=</span> <span class="n">rad</span><span class="o">.</span><span class="n">Flt</span><span class="p">(</span><span class="s">&#39;Hand Filters&#39;</span><span class="p">,</span> <span class="n">filterheaders</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">],</span> <span class="n">filters</span><span class="o">=</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">300</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">],[</span><span class="mi">400</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]]),</span>
+                                                                   <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">300</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">],[</span><span class="mi">400</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">]])])</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">filt2</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="01a-SpectralChannelsAndFilters_files%5C01a-SpectralChannelsAndFilters_19_0.png" src="01a-SpectralChannelsAndFilters_files%5C01a-SpectralChannelsAndFilters_19_0.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="n">filt2</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>N Hand Filters
+a
+3.000000000000000000e+02 5.000000000000000000e-01 3.333333333333333576e+04
+4.000000000000000000e+02 1.000000000000000000e+00 2.500000000000000000e+04
+b
+3.000000000000000000e+02 2.999999999999999889e-01 3.333333333333333576e+04
+4.000000000000000000e+02 2.000000000000000111e-01 2.500000000000000000e+04
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">CIE</span> <span class="o">=</span> <span class="n">rad</span><span class="o">.</span><span class="n">Flt</span><span class="p">(</span><span class="s">&#39;CIEXYZ2.flt&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">CIE</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="01a-SpectralChannelsAndFilters_files%5C01a-SpectralChannelsAndFilters_22_0.png" src="01a-SpectralChannelsAndFilters_files%5C01a-SpectralChannelsAndFilters_22_0.png" />
+<div class="highlight-python"><div class="highlight"><pre><span class="n">CIE</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>N CIE 1931 Color Observer Functions, 2 deg
+X (2 deg)
+  380.000000   0.001400   26315.789474
+  385.000000   0.002200   25974.025974
+  .
+      .
+      .
+      735.000000   0.000000   13605.442177
+  740.000000   0.000000   13513.513514
+  745.000000   0.000000   13422.818792
+  750.000000   0.000000   13333.333333
+  755.000000   0.000000   13245.033113
+  760.000000   0.000000   13157.894737
+  765.000000   0.000000   13071.895425
+  770.000000   0.000000   12987.012987
+  775.000000   0.000000   12903.225806
+  780.000000   0.000000   12820.512821
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">Aviris</span> <span class="o">=</span> <span class="n">rad</span><span class="o">.</span><span class="n">Flt</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>Nanometer data for AVIRIS sensor (assumes Gaussian with maximum response of 1)
+CENTER:  373.40 NM   FWHM:  9.90 NM
+  357.773500   0.001000   27950.644751
+  2521.181200   0.001530   3966.394799
+  2521.759300   0.001000   3965.485524
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">Aviris</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;NewAvirisData.flt&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">astropy.nddata</span> <span class="kn">import</span> <span class="n">NDData</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.1</span><span class="p">,</span><span class="mf">2.2</span><span class="p">,</span><span class="mf">3.3</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">b</span> <span class="o">=</span> <span class="n">NDData</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">c</span> <span class="o">=</span> <span class="n">NDData</span><span class="p">([</span><span class="mf">5.5</span><span class="p">,</span><span class="mf">6.6</span><span class="p">,</span><span class="mf">7.7</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">c</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">NDData</span><span class="p">([</span> <span class="mf">5.5</span><span class="p">,</span>  <span class="mf">6.6</span><span class="p">,</span>  <span class="mf">7.7</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">b</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">NDData</span><span class="p">([</span> <span class="mf">1.1</span><span class="p">,</span>  <span class="mf">2.2</span><span class="p">,</span>  <span class="mf">3.3</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">b</span><span class="o">+</span><span class="n">c</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+TypeError                                 Traceback (most recent call last)
+
+&lt;ipython-input-16-9533ace22465&gt; in &lt;module&gt;()
+----&gt; 1 b+c
+
+
+TypeError: unsupported operand type(s) for +: &#39;NDData&#39; and &#39;NDData&#39;
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">xray</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>---------------------------------------------------------------------------
+ImportError                               Traceback (most recent call last)
+
+&lt;ipython-input-2-36929e266e81&gt; in &lt;module&gt;()
+      1 import numpy as np
+----&gt; 2 import pandas as pd
+      3 import xray
+
+
+C:\Anaconda\lib\site-packages\pandas\__init__.py in &lt;module&gt;()
+     11                       &quot;pandas from the source directory, you may need to run &quot;
+     12                       &quot;&#39;python setup.py build_ext --inplace&#39; to build the C &quot;
+---&gt; 13                       &quot;extensions first.&quot;.format(module))
+     14
+     15 from datetime import datetime
+
+
+ImportError: C extension: hashtable not built. If you want to import pandas from the source directory, you may need to run &#39;python setup.py build_ext --inplace&#39; to build the C extensions first.
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="ChapLibRadtranODandPathRadiance.html" class="btn btn-neutral" title="Transmittance and Path Radiance in libRadtran"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, D Griffith, A Ramkilowan.
+    </p>
+  </div>
+
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

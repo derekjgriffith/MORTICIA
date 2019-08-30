@@ -1,0 +1,750 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>morticia.rad.special_options &mdash; MORTICIA 1.0 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Roboto+Slab:400,700|Inconsolata:400,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="MORTICIA 1.0 documentation" href="../../../index.html"/>
+        <link rel="up" title="morticia" href="../../morticia.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+          <a href="../../../index.html" class="fa fa-home"> MORTICIA</a>
+        
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../how_to_use.html">How to use MORTICIA</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../how_to_use.html#morticia-dependencies">MORTICIA Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../how_to_use.html#installation-and-requirements">Installation and Requirements</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../styleguide.html">The MORTICIA Style Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#to-pep-8-or-not-to-pep-8">To PEP-8 or not to PEP-8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#code-layout">Code Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#import-statements">Import Statements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#whitespace">Whitespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#comments">Comments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#documentation-strings-docstrings">Documentation Strings (docstrings)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#naming-conventions">Naming Conventions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#pep-257">PEP-257</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#from-conventions-section"><em>From</em> Conventions Section</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#general-terminology-and-conventions">General Terminology and Conventions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../for_developers.html">For the Developers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../for_developers.html#structure">Structure</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../packages.html">Packages</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../packages.html#sensor-package">Sensor Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../packages.html#radiometry-package">Radiometry Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../packages.html#scene-package">Scene Package</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ChapLibRadtranODandPathRadiance.html">Transmittance and Path Radiance in libRadtran</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../01a-SpectralChannelsAndFilters.html">IPython Notebook and Sphinx</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../01a-SpectralChannelsAndFilters.html#a-spectralchannelsandfilters-ipython-notebook">01a-SpectralChannelsAndFilters IPython Notebook</a></li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../../index.html">MORTICIA</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      
+          <li><a href="../../morticia.html">morticia</a> &raquo;</li>
+      
+    <li>morticia.rad.special_options</li>
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <h1>Source code for morticia.rad.special_options</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;--------------------------------------------------------------------</span>
+<span class="sd"> * $Id: special_options.py 3112 2015-05-19 13:17:35Z robert.buras $</span>
+<span class="sd"> * </span>
+<span class="sd"> * This file is part of libRadtran.</span>
+<span class="sd"> * Copyright (c) 1997-2012 by Arve Kylling, Bernhard Mayer,</span>
+<span class="sd"> *                            Claudia Emde, Robert Buras</span>
+<span class="sd"> *</span>
+<span class="sd"> * ######### Contact info: http://www.libradtran.org #########</span>
+<span class="sd"> *</span>
+<span class="sd"> * This program is free software; you can redistribute it and/or </span>
+<span class="sd"> * modify it under the terms of the GNU General Public License   </span>
+<span class="sd"> * as published by the Free Software Foundation; either version 2</span>
+<span class="sd"> * of the License, or (at your option) any later version.        </span>
+<span class="sd"> * </span>
+<span class="sd"> * This program is distributed in the hope that it will be useful, </span>
+<span class="sd"> * but WITHOUT ANY WARRANTY; without even the implied warranty of  </span>
+<span class="sd"> * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the   </span>
+<span class="sd"> * GNU General Public License for more details.                    </span>
+<span class="sd"> * </span>
+<span class="sd"> * You should have received a copy of the GNU General Public License          </span>
+<span class="sd"> * along with this program; if not, write to the Free Software                </span>
+<span class="sd"> * Foundation, Inc., 59 Temple Place - Suite 330, </span>
+<span class="sd"> * Boston, MA 02111-1307, USA.</span>
+<span class="sd"> *--------------------------------------------------------------------&quot;&quot;&quot;</span>
+
+
+<span class="kn">from</span> <span class="nn">option_definition</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="k">class</span> <span class="nc">setup_special_group</span><span class="p">():</span>
+<div class="viewcode-block" id="setup_special_group"><a class="viewcode-back" href="../../../mortapi/morticia.rad.html#morticia.rad.special_options.setup_special_group">[docs]</a>
+	<span class="n">group_name</span> <span class="o">=</span> <span class="s">&#39;Special&#39;</span>
+
+	<span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="setup_special_group.__init__"><a class="viewcode-back" href="../../../mortapi/morticia.rad.html#morticia.rad.special_options.setup_special_group.__init__">[docs]</a>		<span class="n">documentation</span> <span class="o">=</span> <span class="n">get_special_documentation</span><span class="p">()</span>
+
+                <span class="n">brdf_non_parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;albedo&#39;</span><span class="p">,</span><span class="s">&#39;albedo_file&#39;</span><span class="p">,</span><span class="s">&#39;albedo_library&#39;</span><span class="p">,</span>
+                                  <span class="s">&#39;brdf_rossli&#39;</span><span class="p">,</span> <span class="s">&#39;brdf_rossli_file&#39;</span><span class="p">,</span> <span class="s">&#39;brdf_rossli_hotspot&#39;</span><span class="p">,</span>
+                                  <span class="s">&#39;brdf_cam&#39;</span><span class="p">,</span> <span class="s">&#39;brdf_cam_solar_wind&#39;</span><span class="p">,</span> <span class="s">&#39;cox_and_munk_u10_map&#39;</span><span class="p">,</span> 
+                                  <span class="s">&#39;brdf_rpv_file&#39;</span><span class="p">,</span> <span class="s">&#39;brdf_rpv&#39;</span><span class="p">,</span> <span class="s">&#39;brdf_rpv_library&#39;</span><span class="p">,</span><span class="s">&#39;brdf_rpv_type&#39;</span><span class="p">,</span>
+                                  <span class="s">&#39;brdf_hapke&#39;</span><span class="p">,</span> <span class="s">&#39;brdf_hapke_file&#39;</span><span class="p">,</span>
+                                  <span class="s">&#39;mc_albedo_file&#39;</span><span class="p">,</span> <span class="s">&#39;mc_rossli_file&#39;</span><span class="p">,</span> <span class="s">&#39;mc_rpv_type&#39;</span><span class="p">,</span> <span class="s">&#39;mc_rpv_file&#39;</span><span class="p">,</span>
+                                  <span class="s">&#39;bpdf_tsang_u10&#39;</span><span class="p">]</span>
+
+		<span class="n">albedo_library</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;albedo_library&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;special&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Spectral albedos of different surface types.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;albedo_library&#39;</span><span class="p">],</span> 
+			<span class="n">tokens</span><span class="o">=</span><span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.alb.library&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">valid_range</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;IGBP&#39;</span><span class="p">,</span><span class="nb">file</span><span class="p">]),</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+			<span class="n">non_parents</span><span class="o">=</span><span class="n">brdf_non_parents</span><span class="p">,</span>
+			<span class="n">childs</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;brdf_rpv_type&#39;</span><span class="p">],</span>
+			<span class="n">showInGui</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+                        <span class="n">developer</span> <span class="o">=</span> <span class="bp">True</span>
+		<span class="p">)</span>
+	
+		<span class="n">cloud_fraction_map</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;cloud_fraction_map&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;special&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;cloud_fraction_map&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.filename[FN_CLOUD_FRACTION_MAP]&#39;</span><span class="p">,</span><span class="n">datatype</span><span class="o">=</span><span class="nb">file</span><span class="p">),</span>
+			<span class="n">developer</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                <span class="p">)</span>
+
+		<span class="n">albedo_map</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;albedo_map&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;special&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;albedo_map&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="p">[</span><span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.alb.source&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;ALBEDO_FROM_ALBEDO_MAP&#39;</span><span class="p">)</span> <span class="p">,</span>
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.filename[FN_ALBEDO_MAP]&#39;</span><span class="p">,</span><span class="n">datatype</span><span class="o">=</span><span class="nb">file</span><span class="p">),</span>
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.alb.netCDF_alb_name&#39;</span><span class="p">,</span><span class="n">datatype</span><span class="o">=</span><span class="nb">file</span><span class="p">,</span><span class="n">optional</span><span class="o">=</span><span class="bp">True</span><span class="p">),</span>
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.alb.scale_factor&#39;</span><span class="p">,</span><span class="n">datatype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span><span class="n">optional</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> <span class="p">],</span>
+                        <span class="n">developer</span><span class="o">=</span><span class="bp">True</span>
+                <span class="p">)</span>
+
+		<span class="n">altitude_map</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;altitude_map&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;special&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;altitude_map&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="p">[</span><span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.alt.source&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;ALT_FROM_MAP&#39;</span><span class="p">)</span> <span class="p">,</span>
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.filename[FN_ALTITUDE_MAP]&#39;</span><span class="p">,</span><span class="n">datatype</span><span class="o">=</span><span class="nb">file</span><span class="p">),</span>
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.alt.netCDF_alt_name&#39;</span><span class="p">,</span><span class="n">datatype</span><span class="o">=</span><span class="nb">file</span><span class="p">,</span><span class="n">optional</span><span class="o">=</span><span class="bp">True</span><span class="p">),</span>
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.alt.scale_factor&#39;</span><span class="p">,</span><span class="n">datatype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span><span class="n">optional</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> <span class="p">],</span>
+                        <span class="n">developer</span><span class="o">=</span><span class="bp">True</span>
+                <span class="p">)</span>
+
+		<span class="n">cox_and_munk_u10_map</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;cox_and_munk_u10_map&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;special&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Location of netCDF file with wind speed for ocean BRDF.&#39;</span><span class="p">,</span> 
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;cox_and_munk_u10_map&#39;</span><span class="p">],</span> 
+			<span class="n">tokens</span> <span class="o">=</span> <span class="p">[</span> <span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.filename[FN_U10_MAP]&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">file</span><span class="p">),</span> 
+				<span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.disort2_brdf&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;BRDF_CAM&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s">&#39;BRDF_NONE&#39;</span><span class="p">)</span> <span class="p">],</span> 
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+			<span class="n">non_parents</span><span class="o">=</span><span class="n">brdf_non_parents</span><span class="p">,</span>
+                        <span class="n">non_parent_exceptions</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;brdf_cam&#39;</span><span class="p">,</span> <span class="s">&#39;brdf_cam_solar_wind&#39;</span><span class="p">,</span> <span class="s">&#39;cox_and_munk_u10_map&#39;</span><span class="p">,</span> <span class="s">&#39;mc_rossli_file&#39;</span><span class="p">],</span>
+			<span class="n">showInGui</span><span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+                        <span class="n">developer</span><span class="o">=</span><span class="bp">True</span>
+		<span class="p">)</span>
+
+		<span class="n">cox_and_munk_pcl_map</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;cox_and_munk_pcl_map&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;special&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;cox_and_munk_pcl_map&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="p">[</span><span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.disort2_brdf&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;BRDF_CAM&#39;</span><span class="p">)</span> <span class="p">,</span>
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.filename[FN_PIGMENTS_MAP]&#39;</span><span class="p">,</span><span class="n">datatype</span><span class="o">=</span><span class="nb">file</span><span class="p">),</span>
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.cm.pcl_netCDF_name&#39;</span><span class="p">,</span><span class="n">datatype</span><span class="o">=</span><span class="nb">file</span><span class="p">,</span><span class="n">optional</span><span class="o">=</span><span class="bp">True</span><span class="p">),</span>
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.cm.pcl_scale_factor&#39;</span><span class="p">,</span><span class="n">datatype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span><span class="n">optional</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> <span class="p">],</span>
+                        <span class="n">developer</span><span class="o">=</span><span class="bp">True</span>
+		<span class="p">)</span>
+
+		<span class="n">cox_and_munk_sal_map</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;cox_and_munk_sal_map&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;special&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;cox_and_munk_sal_map&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="p">[</span><span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.disort2_brdf&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;BRDF_CAM&#39;</span><span class="p">)</span> <span class="p">,</span>
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.filename[FN_SALINITY_MAP]&#39;</span><span class="p">,</span><span class="n">datatype</span><span class="o">=</span><span class="nb">file</span><span class="p">),</span>
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.cm.sal_netCDF_name&#39;</span><span class="p">,</span><span class="n">datatype</span><span class="o">=</span><span class="nb">file</span><span class="p">,</span><span class="n">optional</span><span class="o">=</span><span class="bp">True</span><span class="p">),</span>
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.cm.sal_scale_factor&#39;</span><span class="p">,</span><span class="n">datatype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span><span class="n">optional</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> <span class="p">],</span>
+                        <span class="n">developer</span><span class="o">=</span><span class="bp">True</span>
+		<span class="p">)</span>
+
+		<span class="n">emissivity_map</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;emissivity_map&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;special&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;emissivity_map&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="p">[</span><span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.alb.source&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;ALBEDO_FROM_EMISSIVITY_MAP&#39;</span><span class="p">)</span> <span class="p">,</span>
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.filename[FN_ALBEDO_MAP]&#39;</span><span class="p">,</span><span class="n">datatype</span><span class="o">=</span><span class="nb">file</span><span class="p">),</span>
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.alb.netCDF_alb_name&#39;</span><span class="p">,</span><span class="n">datatype</span><span class="o">=</span><span class="nb">file</span><span class="p">,</span><span class="n">optional</span><span class="o">=</span><span class="bp">True</span><span class="p">),</span>
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.alb.scale_factor&#39;</span><span class="p">,</span><span class="n">datatype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span><span class="n">optional</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> <span class="p">],</span>
+                        <span class="n">developer</span><span class="o">=</span><span class="bp">True</span>
+		<span class="p">)</span>
+
+		<span class="n">surface_temperature_map</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;surface_temperature_map&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;special&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;surface_temperature_map&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="p">[</span><span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.filename[FN_SURFACE_TEMP_MAP]&#39;</span><span class="p">,</span><span class="n">datatype</span><span class="o">=</span><span class="nb">file</span><span class="p">),</span>
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.netCDF_name_surf_T&#39;</span><span class="p">,</span><span class="n">datatype</span><span class="o">=</span><span class="nb">file</span><span class="p">,</span><span class="n">optional</span><span class="o">=</span><span class="bp">True</span><span class="p">)],</span>
+                        <span class="n">developer</span><span class="o">=</span><span class="bp">True</span>
+		<span class="p">)</span>
+
+		<span class="n">surface_type_map</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;surface_type_map&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;special&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;surface_type_map&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="p">[</span><span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.alb.surf_type_map&#39;</span><span class="p">,</span><span class="n">setting</span><span class="o">=</span><span class="s">&#39;TRUE&#39;</span><span class="p">),</span>
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.filename[FN_SURFACE_TYPE_MAP]&#39;</span><span class="p">,</span><span class="n">datatype</span><span class="o">=</span><span class="nb">file</span><span class="p">),</span>
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.alb.netCDF_surf_name&#39;</span><span class="p">,</span><span class="n">datatype</span><span class="o">=</span><span class="nb">file</span><span class="p">,</span><span class="n">optional</span><span class="o">=</span><span class="bp">True</span><span class="p">)],</span>
+                        <span class="n">developer</span><span class="o">=</span><span class="bp">True</span>
+		<span class="p">)</span>
+
+		<span class="n">ECHAM_sza</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;ECHAM_sza&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;special&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;ECHAM_sza&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="p">[</span><span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.filename[FN_SZA]&#39;</span><span class="p">,</span><span class="n">datatype</span><span class="o">=</span><span class="nb">file</span><span class="p">),</span>
+				<span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.atm.sza&#39;</span><span class="p">,</span><span class="n">setting</span><span class="o">=</span><span class="s">&#39;NOT_DEFINED_FLOAT&#39;</span><span class="p">),</span>
+				<span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.atm.sza_source&#39;</span><span class="p">,</span><span class="n">setting</span><span class="o">=</span><span class="s">&#39;SZA_ECHAM&#39;</span><span class="p">)</span> <span class="p">],</span>
+			<span class="n">developer</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+		<span class="p">)</span>
+
+		<span class="n">ECMWF_ozone_climatology</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;ECMWF_ozone_climatology&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;special&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;ECMWF_ozone_climatology&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.atm.ECMWF_ozone_climatology&#39;</span><span class="p">,</span><span class="n">setting</span><span class="o">=</span><span class="s">&#39;TRUE&#39;</span><span class="p">),</span>
+                        <span class="n">developer</span><span class="o">=</span><span class="bp">True</span>
+		<span class="p">)</span>
+
+		<span class="n">ECMWF_wc_file</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;ECMWF_wc_file&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;special&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;ECMWF_wc_file&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="p">[</span><span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;isp&#39;</span><span class="p">,</span><span class="n">setting</span><span class="o">=</span><span class="n">CaothType</span><span class="p">(</span><span class="s">&#39;wc&#39;</span><span class="p">)),</span>
+				<span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.caoth[isp].source&#39;</span><span class="p">,</span><span class="n">setting</span><span class="o">=</span><span class="s">&#39;CAOTH_FROM_ECMWF&#39;</span><span class="p">),</span>
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.caoth[isp].filename&#39;</span><span class="p">,</span><span class="n">datatype</span><span class="o">=</span><span class="nb">file</span><span class="p">)</span> <span class="p">],</span>
+                        <span class="n">developer</span><span class="o">=</span><span class="bp">True</span>
+		<span class="p">)</span>
+
+		<span class="n">ECMWF_ic_file</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;ECMWF_ic_file&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;special&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;ECMWF_ic_file&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="p">[</span><span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;isp&#39;</span><span class="p">,</span><span class="n">setting</span><span class="o">=</span><span class="n">CaothType</span><span class="p">(</span><span class="s">&#39;ic&#39;</span><span class="p">)),</span>
+				<span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.caoth[isp].source&#39;</span><span class="p">,</span><span class="n">setting</span><span class="o">=</span><span class="s">&#39;CAOTH_FROM_ECMWF&#39;</span><span class="p">),</span>
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.caoth[isp].filename&#39;</span><span class="p">,</span><span class="n">datatype</span><span class="o">=</span><span class="nb">file</span><span class="p">)</span> <span class="p">],</span>
+                        <span class="n">developer</span><span class="o">=</span><span class="bp">True</span>
+		<span class="p">)</span>
+
+		<span class="n">ECMWF_levels_only</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+                        <span class="n">name</span><span class="o">=</span><span class="s">&#39;ECMWF_levels_only&#39;</span><span class="p">,</span>
+                        <span class="n">group</span><span class="o">=</span><span class="s">&#39;special&#39;</span><span class="p">,</span>
+                        <span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;ECMWF_levels_only&#39;</span><span class="p">],</span>
+                        <span class="n">tokens</span><span class="o">=</span><span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.atm.rs_add_upper_levels&#39;</span><span class="p">,</span><span class="n">setting</span><span class="o">=</span><span class="s">&#39;FALSE&#39;</span><span class="p">),</span>
+                        <span class="n">developer</span><span class="o">=</span><span class="bp">True</span>
+                <span class="p">)</span>
+
+		<span class="n">ECMWF_wind_file</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+                        <span class="n">name</span><span class="o">=</span><span class="s">&#39;ECMWF_wind_file&#39;</span><span class="p">,</span>
+                        <span class="n">group</span><span class="o">=</span><span class="s">&#39;special&#39;</span><span class="p">,</span>
+                        <span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;ECMWF_wind_file&#39;</span><span class="p">],</span>
+                        <span class="n">tokens</span><span class="o">=</span><span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.filename[FN_ECMWF_WIND_MAP]&#39;</span><span class="p">,</span><span class="n">datatype</span><span class="o">=</span><span class="nb">file</span><span class="p">),</span>
+                        <span class="n">developer</span><span class="o">=</span><span class="bp">True</span>
+                <span class="p">)</span>
+
+		<span class="n">satellite_geometry</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+                        <span class="n">name</span><span class="o">=</span><span class="s">&#39;satellite_geometry&#39;</span><span class="p">,</span>
+                        <span class="n">group</span><span class="o">=</span><span class="s">&#39;special&#39;</span><span class="p">,</span>
+                        <span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;satellite_geometry&#39;</span><span class="p">],</span>
+                        <span class="n">tokens</span><span class="o">=</span><span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.filename[FN_SATGEOMETRY]&#39;</span><span class="p">,</span><span class="n">datatype</span><span class="o">=</span><span class="nb">file</span><span class="p">),</span>
+                        <span class="n">developer</span><span class="o">=</span><span class="bp">True</span>
+                <span class="p">)</span>
+
+		<span class="n">satellite_pixel</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+                        <span class="n">name</span><span class="o">=</span><span class="s">&#39;satellite_pixel&#39;</span><span class="p">,</span>
+                        <span class="n">group</span><span class="o">=</span><span class="s">&#39;special&#39;</span><span class="p">,</span>
+                        <span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;satellite_pixel&#39;</span><span class="p">],</span>
+                        <span class="n">tokens</span><span class="o">=</span><span class="p">[</span><span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.sat_pixel_x&#39;</span><span class="p">,</span><span class="n">datatype</span><span class="o">=</span><span class="nb">int</span><span class="p">),</span>
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.sat_pixel_y&#39;</span><span class="p">,</span><span class="n">datatype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span> <span class="p">],</span>
+                        <span class="n">developer</span><span class="o">=</span><span class="bp">True</span>
+                <span class="p">)</span>
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">options</span> <span class="o">=</span> <span class="p">[</span> <span class="n">ECHAM_sza</span><span class="p">,</span>
+				<span class="n">ECMWF_ozone_climatology</span><span class="p">,</span> <span class="n">ECMWF_wc_file</span><span class="p">,</span> <span class="n">ECMWF_ic_file</span><span class="p">,</span> <span class="n">ECMWF_wind_file</span><span class="p">,</span> <span class="n">ECMWF_levels_only</span><span class="p">,</span>
+				<span class="n">cox_and_munk_u10_map</span><span class="p">,</span> <span class="n">cox_and_munk_pcl_map</span><span class="p">,</span> <span class="n">cox_and_munk_sal_map</span><span class="p">,</span>
+				<span class="n">cloud_fraction_map</span><span class="p">,</span> <span class="n">altitude_map</span><span class="p">,</span> <span class="n">albedo_map</span><span class="p">,</span> <span class="n">emissivity_map</span><span class="p">,</span>
+				<span class="n">surface_temperature_map</span><span class="p">,</span> <span class="n">surface_type_map</span><span class="p">,</span>
+				<span class="n">albedo_library</span><span class="p">,</span> <span class="n">satellite_geometry</span><span class="p">,</span> <span class="n">satellite_pixel</span><span class="p">,</span>
+				<span class="p">]</span>
+
+		<span class="c">#Special group belongs to developers options; should not be in Gui for EsasLight version; </span>
+		<span class="k">for</span> <span class="n">opt</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">:</span>
+			<span class="n">opt</span><span class="o">.</span><span class="n">showInGui</span> <span class="o">=</span> <span class="bp">False</span>
+
+	<span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
+		<span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">get_special_documentation</span><span class="p">():</span></div>
+<div class="viewcode-block" id="get_special_documentation"><a class="viewcode-back" href="../../../mortapi/morticia.rad.html#morticia.rad.special_options.get_special_documentation">[docs]</a>	<span class="k">return</span> <span class="p">{</span>
+		<span class="s">&#39;albedo_library&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Albedo libraries are a collection of spectral albedos of different surface types. </span>
+<span class="s">	This option must be used either with \code{bdrf_rpv_type} </span>
+<span class="s">	or \code{surface_type_map}, in order to select the specific surface type.</span>
+<span class="s">	There are two possibilities for libraries: </span>
+<span class="s">	the built-in IGBP library or a user defined albedo library.</span>
+
+<span class="s">	The built-in library of the International Geosphere Biosphere Programme is </span>
+<span class="s">	selected with </span>
+<span class="s">	\fcode{</span>
+<span class="s">	     albedo_library IGBP</span>
+<span class="s">	}</span>
+<span class="s">	The IGBP library contains 20 surface types which are set by \code{brdf_rpv_type}:</span>
+<span class="s">	\fcode{</span>
+<span class="s">	 1 evergreen_needle_forest\\</span>
+<span class="s">	 2 evergreen_broad_forest\\</span>
+<span class="s">	 3 deciduous_needle_forest\\</span>
+<span class="s">	 4 deciduous_broad_forest\\</span>
+<span class="s">	 5 mixed_forest\\</span>
+<span class="s">	 6 closed_shrub\\</span>
+<span class="s">	 7 open_shrubs\\</span>
+<span class="s">	 8 woody_savanna\\</span>
+<span class="s">	 9 savanna\\</span>
+<span class="s">	10 grassland\\</span>
+<span class="s">	11 wetland\\</span>
+<span class="s">	12 cropland\\</span>
+<span class="s">	13 urban\\</span>
+<span class="s">	14 crop_mosaic\\</span>
+<span class="s">	15 antarctic_snow\\</span>
+<span class="s">	16 desert\\</span>
+<span class="s">	17 ocean_water\\</span>
+<span class="s">	18 tundra\\</span>
+<span class="s">	19 fresh_snow\\</span>
+<span class="s">	20 sea_ice\\</span>
+<span class="s">	}</span>
+<span class="s">	Surface types 1 - 17 are defined by the International Geosphere Biosphere </span>
+<span class="s">	Programme (IGBP); additionally there are tundra, fresh\_snow, and sea\_ice surface types.</span>
+<span class="s">	The spectral albedo of the ground is determined as a function of solar </span>
+<span class="s">	zenith angle, precitable water, and clouds. The spectral resolution </span>
+<span class="s">	equals the grid of the correlated-k Fu/Liou parameterisation.</span>
+<span class="s">	This library originates from the NASA CERES/SARB Surface Properties Project, </span>
+<span class="s">	see \citet{Belward1996}.</span>
+
+<span class="s">	For creating your own albedo library use \code{albedo_library path}, where \code{path} is </span>
+<span class="s">	the path of the directory where the albedo data is stored. The files are expected to have the </span>
+<span class="s">	names \code{albedo_01.dat, albedo_02.dat, ...} If \code{brdf_rpv_type 1} is specified</span>
+<span class="s">	the albedo from \code{albedo_01.dat} will be used, and so on.  </span>
+<span class="s">	Each file is required to have two columns:</span>
+<span class="s">	Column 1 is the wavelength in nm, and column 2 the corresponding </span>
+<span class="s">	Lambertian surface albedo. The wavelength grid may be freely set. The </span>
+<span class="s">	albedo will be interpolated linearely to the wavelength grid used for the </span>
+<span class="s">	radiation calculation. Comments start with \code{\#}. Empty lines are ignored.</span>
+<span class="s">	This option is similar to \code{albedo_file}, except that it offers an</span>
+<span class="s">	easy way to use the option \code{surface_type_map} in combinition with albedo files.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;albedo_map&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	\emph{This option is preliminary and still subject to change (no wavelength dependency yet)!}</span>
+<span class="s">	It gives the possibility to specify a wavelength independent albedo with the help of </span>
+<span class="s">	a \emph{netCDF} file, which is used in combinition </span>
+<span class="s">	with the options \code{latitude}, \code{longitude}, and \code{time}.</span>
+<span class="s">	\fcode{</span>
+<span class="s">	albedo_map file [variable_name]</span>
+<span class="s">	}</span>
+<span class="s">	Here \code{file} is the location of the \emph{netCDF} file,</span>
+<span class="s">	The optional argument allows the name of the albedo variable in </span>
+<span class="s">	the \emph{netCDF} file to be specified (the default name is \code{AL}).</span>
+<span class="s">	The albedo must be provided as function of \code{latitude} and \code{longitude} \code{AL(lat, lon)}, </span>
+<span class="s">	and may also depend on time \code{AL(time, lat, lon)}. </span>
+<span class="s">	The latitude, longitude, and time grids must be provided as doubles </span>
+<span class="s">	\code{double lat(lat)}, \code{double lon(lon)}, and \code{double time(time)}.</span>
+<span class="s">	\code{uvspec} reads the value at the nearest pixel to the given \code{latitude} and </span>
+<span class="s">	\code{longitude}. No spatial interpolation or averaging of the values are performed.</span>
+<span class="s">	If a time-dependent albedo is provided, the albedo data nearest to the specified time </span>
+<span class="s">	will be selected (or linear interpolated if \code{time_interpolate} is switched on). </span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;altitude_map&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Specifies an altitude map which is used in combinition with  </span>
+<span class="s">	\code{latitude}, \code{longitude} in order to  </span>
+<span class="s">	select the altitude for the simulation. </span>
+<span class="s">	No interpolation is done between the pixels of the map. </span>
+<span class="s">	The format of the call is: </span>
+<span class="s">	\fcode{ </span>
+<span class="s">	altitude_map file [variable_name] </span>
+<span class="s">	} </span>
+<span class="s">	where \code{file} is the location of the altitude map file. The map is expected to  </span>
+<span class="s">	be in \emph{netCDF} format. The file must contain \code{double lat(lat)},  </span>
+<span class="s">	\code{double lon(lon)}, and the altitude variable, where \code{variable_name} is the  </span>
+<span class="s">	name of the surface elevation variable in the \emph{netCDF} file. The default name is Z. </span>
+<span class="s">	The altitude variable must be \code{altitude(lat, lon)}.  </span>
+<span class="s">	For format discribtion see also the example map included in {\sl libRadtran},  </span>
+<span class="s">	\file{data/altitude/ELEVATION_GTOPO_10min.cdf}. </span>
+<span class="s">	To use this map in \code{uvspec}, you may also use \code{altitude_map GTOPO}. This map has a resolution  </span>
+<span class="s">	of 10 arc minutes and the unit of the altitude is meter. Please note that this resolution </span>
+<span class="s">	might not ne adequate for your application.  </span>
+<span class="s">	If an altitude in the map is below the lowest level of the  </span>
+<span class="s">	\code{atmosphere_file}, the atmospheric profiles are extrapolated assuming a constant  </span>
+<span class="s">	gradient for temperature and mixing ratios. </span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;cloud_fraction_map&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Undocumented option.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;cox_and_munk_u10_map&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Specify wind speed (in m/s) for the \citet{cox54a,cox54b}</span>
+<span class="s">	ocean BRDF with the help of an \emph{netCDF} file, which is used in combinition </span>
+<span class="s">	with the options \code{latitude}, \code{longitude}, and \code{time}.</span>
+<span class="s">	\fcode{</span>
+<span class="s">	cox_and_munk_u10_map file</span>
+<span class="s">	}</span>
+<span class="s">	where \code{file} is the location of the \emph{netCDF} file. </span>
+<span class="s">	{\sl libRadtran} reads the value at the nearest pixel to the given \code{latitude} and </span>
+<span class="s">	\code{longitude}. No spatial interpolation or averaging of the values is done.</span>
+
+<span class="s">	The file must contain the elements of the wind vector \code{U10} and</span>
+<span class="s">	\code{V10}.  These must be specified as functions of \code{latitude}</span>
+<span class="s">	and \code{longitude} \code{U10(lat, lon)}, \code{V10(lat, lon)}, or</span>
+<span class="s">	additionally may also depent on time \code{U10(time, lat, lon)},</span>
+<span class="s">	\code{V10(time, lat, lon)}.  If the variable time is present in the</span>
+<span class="s">	file, the wind speed will be interpolated according to the option</span>
+<span class="s">	\code{time_interpolate}. All grids must be provided as \code{double</span>
+<span class="s">	lat(lat)}, \code{double lon(lon)}, and \code{double time(time)}.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;cox_and_munk_pcl_map&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	A possibility to specify pigment concentration (in mg/m3) for the Cox and Munk </span>
+<span class="s">	ocean BRDF with the help of an \emph{netCDF} file, which is used in combinition </span>
+<span class="s">	with options \code{latitude}, \code{longitude}, and \code{time}.</span>
+<span class="s">	\fcode{</span>
+<span class="s">	cox_and_munk_pcl_map file [variable_name]</span>
+<span class="s">	}</span>
+<span class="s">	where \code{file} is the location of the \emph{netCDF} file. </span>
+<span class="s">	{\sl libRadtran} reads the value at the nearest pixel to the given \code{latitude} and </span>
+<span class="s">	\code{longitude}. No spatial interpolation or averaging of the values is done.</span>
+<span class="s">	</span>
+<span class="s">	The default name of the pigment concentration variable is</span>
+<span class="s">	\code{chlorophyll}, but can be changed with the optional argument</span>
+<span class="s">	\code{variable_name}.  The pigment concentration must be provided as</span>
+<span class="s">	function of \code{latitude} and \code{longitude},</span>
+<span class="s">	\code{chlorophyll(lat, lon)}, or additionally may also depend on time</span>
+<span class="s">	\code{chlorophyll(time, lat, lon)}.  If a time-dependent pigment</span>
+<span class="s">	concentration is specified, the pigment concentration will be</span>
+<span class="s">	interpolated according to the option \code{time_interpolate}. All</span>
+<span class="s">	grids must be provided in the file as \code{double lat(lat)},</span>
+<span class="s">	\code{double lon(lon)}, and \code{double time(time)}.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;cox_and_munk_sal_map&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Specify ocean salinity (in ppt) for the \citet{cox54a,cox54b}</span>
+<span class="s">	ocean BRDF with the help of an \emph{netCDF} file, which is used in combinition </span>
+<span class="s">	with the options \code{latitude}, \code{longitude}, and \code{time}.</span>
+<span class="s">	\fcode{</span>
+<span class="s">	cox_and_munk_pcl_map file [variable_name]</span>
+<span class="s">	}</span>
+<span class="s">	where \code{file} is the location of the \emph{netCDF} file. </span>
+<span class="s">	{\sl libRadtran} reads the value at the nearest pixel to the given \code{latitude} and </span>
+<span class="s">	\code{longitude}. No spatial interpolation or averaging of the values is done.</span>
+<span class="s">	</span>
+<span class="s">	The expected name of the pigment concentration variable is per default</span>
+<span class="s">	\code{salinity}, but can be changed with the optional argument</span>
+<span class="s">	\code{variable_name}.  The pigment concentration must be provided as</span>
+<span class="s">	function of \code{latitude} and \code{longitude}, \code{salinity(lat,</span>
+<span class="s">	lon)}, or additionally may also depent on time \code{salinity(time,</span>
+<span class="s">	lat, lon)}.  If a time-dependent salinity is specified, the salinity</span>
+<span class="s">	will be interpolated according to the option</span>
+<span class="s">	\code{time_interpolate}. All grids must be provided as \code{double</span>
+<span class="s">	lat(lat)}, \code{double lon(lon)}, and \code{double time(time)}.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>	
+
+		<span class="s">&#39;emissivity_map&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	\emph{This option is preliminary and still subject to change (no wavelength dependency yet)!} </span>
+<span class="s">	Specify a wavelength independent emissivity with the help of  </span>
+<span class="s">	an \emph{netCDF} file, which is used in combinition  </span>
+<span class="s">	with the options \code{latitude}, \code{longitude}, and \code{time}. </span>
+<span class="s">	\fcode{ </span>
+<span class="s">	emissivity_map file [variable_name] </span>
+<span class="s">	} </span>
+<span class="s">	where \code{file} is the location of the \emph{netCDF} file.  </span>
+<span class="s">	With the optional argument \code{variable_name} the name of the emissivity variable in  </span>
+<span class="s">	the \emph{netCDF} file can be specified. (By default the expected name is \code{EMIS}.) </span>
+<span class="s">	The emissivity must be specified as function of \code{latitude} and \code{longitude} \code{EMIS(lat, lon)},  </span>
+<span class="s">	or additionally may also depent on time \code{EMIS(time, lat, lon)}.  </span>
+<span class="s">	All grids must be provided as  </span>
+<span class="s">	\code{double lat(lat)}, \code{double lon(lon)}, and \code{double time(time)}. </span>
+<span class="s">	{\sl libRadtran} reads the value at the nearest pixel to the given \code{latitude} and  </span>
+<span class="s">	\code{longitude}. No spatial interpolation or averaging of the values is done. </span>
+<span class="s">	If the variable time is present in the file, the emissivity data nearest to the specified time  </span>
+<span class="s">	will be selected (or interpolated if \code{time_interpolate} is switched on).  </span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;ECHAM_sza&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Undocumented option.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;ECMWF_ozone_climatology&#39;</span> <span class="p">:</span> <span class="s">&#39;&#39;&#39;</span>
+<span class="s">	The Integrated Forecast System (IFS) of the ECMWF uses a ozone </span>
+<span class="s">	climatology for radiative transfer instead of the ozone simulated by </span>
+<span class="s">	the IFS. If this option is activated the ozone profile of the </span>
+<span class="s">	\code{atmosphere_file} or \code{ECMWF_atmosphere_file} is replaced by </span>
+<span class="s">	the ozone climatology by Fortuin and Langematz (1995). </span>
+<span class="s">	(If there is also a \code{mol_file} for ozone, it modifies the ozone </span>
+<span class="s">	climatology profile.) </span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;ECMWF_ic_file&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	\fcode{ </span>
+<span class="s">	ECMWF_ic_file file </span>
+<span class="s">	} </span>
+<span class="s">	For further information see \code{ECMWF_wc_file}.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;ECMWF_levels_only&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	The atmosphere considered in the simulation has the same height range </span>
+<span class="s">	as the data in the </span>
+<span class="s">	\code{ECMWF_atmosphere_file}/\code{radiosonde}-file. No further levels </span>
+<span class="s">	are added above those.  This option has only an effect in combination </span>
+<span class="s">	with \code{ECMWF_atmosphere_file} or \code{radiosonde} </span>
+<span class="s">	(this option is identical to \code{radiosonde_levels_only}). </span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;ECMWF_wc_file&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Reads in combination with the options \code{latitude}, </span>
+<span class="s">	\code{longitude}, and \code{time} (all mandatory) the pressure, </span>
+<span class="s">	temperature, and cloud liqid water content (CLWC) and cloud cover (CC) </span>
+<span class="s">	from an ECMWF \emph{netCDF} data file. </span>
+<span class="s">	\fcode{ </span>
+<span class="s">	ECMWF_wc_file file </span>
+<span class="s">	} </span>
+<span class="s">	No spatial interpolation of the values is done.  The data nearest to </span>
+<span class="s">	the specified \code{time} will be selected (or linearly interpolated </span>
+<span class="s">	if \code{time_interpolate} is switched on).  In order to use the ECMWF </span>
+<span class="s">	data without cloud overlap assumption, use \code{cloud_overlap off}. </span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;ECMWF_wind_file&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Reads in combination with the options \code{latitude}, </span>
+<span class="s">	\code{longitude}, and \code{time} (all mandatory) the wind components </span>
+<span class="s">	U, V, and W from an ECMWF \emph{netCDF} data file. </span>
+<span class="s">	\fcode{ </span>
+<span class="s">	ECMWF_wind_file file </span>
+<span class="s">	} </span>
+<span class="s">	The data nearest to the specified \code{time} will be selected (or </span>
+<span class="s">	linearly interpolated, if \code{time_interpolate} is switched on). </span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;satellite_geometry&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	With this option the satellite geometry is determinded. The argument for this option </span>
+<span class="s">	\fcode{ </span>
+<span class="s">	satellite_geometry  netCDF_file  </span>
+<span class="s">	} </span>
+<span class="s">	is the location of a \code{netCDF_file}, which must contain latitude and longitude position </span>
+<span class="s">	as well as zenith and azimuth viewing angle for each pixel. </span>
+<span class="s"> </span>
+<span class="s">	%ak20100306 What is below does not belong in the general Users Guide yet. </span>
+<span class="s">	</span><span class="si">%F</span><span class="s">or format specification see the example file data/satellite/MSG\_seviri/MSG\_seviri\_geometry.nc. </span>
+<span class="s">	%This option has to be used in combination with \code{satellite_pixel}. </span>
+<span class="s">	%You can also use the abbreviation </span>
+<span class="s">	%\code{satellite_geometry MSG} </span>
+<span class="s">	</span><span class="si">%f</span><span class="s">or MSG simulation, \emph{but in order to use this, you have to copy the netCDF file} </span>
+<span class="s">	%\fcode{ </span>
+<span class="s">	</span><span class="si">%c</span><span class="s">p -r /data/A3/satellite_geometry/satellites libRadtran/data/ </span>
+<span class="s">	%} </span>
+<span class="s">	%\emph{which is not in cvs version, as it is too large.} </span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;satellite_pixel&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	This option specifies which pixel of the satellite image that should be simulated.  </span>
+<span class="s">	\fcode{ </span>
+<span class="s">	satellite_pixel  pixel_x pixel_y </span>
+<span class="s">	} </span>
+<span class="s">	The arguments \code{pixel_nr_x} and \code{pixel_nr_y} specifies the pixel position in the native  </span>
+<span class="s">	system of the satellite, which is determinded by the option \code{satellite_geometry}. </span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;surface_temperature_map&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Specify a surface\_temperature map with a \emph{netCDF} file which is used in combinition </span>
+<span class="s">	with the options \code{latitude}, \code{longitude}, and \code{time}.</span>
+<span class="s">	\fcode{</span>
+<span class="s">	surface_temperature_map file [variable_name]</span>
+<span class="s">	}</span>
+<span class="s">	where \code{file} is the location of the \emph{netCDF} file. </span>
+<span class="s">	\code{libRadtran} reads the value at the nearest pixel to the given \code{latitude} and </span>
+<span class="s">	\code{longitude}. No spatial interpolation or averaging of the values is done.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;surface_type_map&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Specify a surface type map, which is used in combinition with </span>
+<span class="s">	\code{albedo_library}, \code{latitude}, and \code{longitude} in order to </span>
+<span class="s">	select the surface type relevant for the simulation.</span>
+<span class="s">	No pixel interpolation is done.</span>
+<span class="s">	The format of the call is:</span>
+<span class="s">	\fcode{</span>
+<span class="s">	surface_type_map file [variable_name]</span>
+<span class="s">	}</span>
+<span class="s">	where \code{file} is the location of the surface type map file. The map is expected to </span>
+<span class="s">	be in \emph{netCDF} format. The file must contain the variables \code{double lat(nlat)}, </span>
+<span class="s">	\code{double lon(nlon)}, and \code{byte brdf_rpv_type (nlat, nlon)}. If the name of the </span>
+<span class="s">	surface type variable is different, the optional argument can be used in order to specify </span>
+<span class="s">	the variable name. For format specification see also </span>
+<span class="s">	\file{data/albedo/IGBP_map/SURFACE_TYPE_IGBP_10min.cdf}.</span>
+
+<span class="s">	For using the IGBP map, the call is \code{surface_type_map IGBP}. This map has a resolution of 10 </span>
+<span class="s">	minutes and contains the surface types 1 to 18 defined in the \code{albedo_library IGBP}. </span>
+<span class="s">	Fresh snow and sea ice are not included, as their extent is too variable. Attention:  </span>
+<span class="s">	That implies e.g. that the Arctic is considered ocean\_water and not sea\_ice!</span>
+
+<span class="s">	Locations on the pixel boundaries are interpreted as the pixel northward and</span>
+<span class="s">	eastward respectively. E.g. location 0 N, 0 E is interpreted like the pixel ranging from</span>
+<span class="s">	0 to 10min North and from 0 to 10min East.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div></div>
+
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, D Griffith, A Ramkilowan.
+    </p>
+  </div>
+
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

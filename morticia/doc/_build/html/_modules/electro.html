@@ -1,0 +1,570 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>electro &mdash; MORTICIA 1.0 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Roboto+Slab:400,700|Inconsolata:400,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="MORTICIA 1.0 documentation" href="../index.html"/>
+        <link rel="up" title="Module code" href="index.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+          <a href="../index.html" class="fa fa-home"> MORTICIA</a>
+        
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how_to_use.html">How to use MORTICIA</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../how_to_use.html#morticia-dependencies">MORTICIA Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../how_to_use.html#installation-and-requirements">Installation and Requirements</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../styleguide.html">The MORTICIA Style Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../styleguide.html#to-pep-8-or-not-to-pep-8">To PEP-8 or not to PEP-8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../styleguide.html#code-layout">Code Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../styleguide.html#import-statements">Import Statements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../styleguide.html#whitespace">Whitespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../styleguide.html#comments">Comments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../styleguide.html#documentation-strings-docstrings">Documentation Strings (docstrings)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../styleguide.html#naming-conventions">Naming Conventions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../styleguide.html#pep-257">PEP-257</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../styleguide.html#from-conventions-section"><em>From</em> Conventions Section</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../styleguide.html#general-terminology-and-conventions">General Terminology and Conventions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../for_developers.html">For the Developers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../for_developers.html#structure">Structure</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../packages.html">Packages</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../packages.html#sensor-package">Sensor Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../packages.html#radiometry-package">Radiometry Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../packages.html#scene-package">Scene Package</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../ChapLibRadtranODandPathRadiance.html">Transmittance and Path Radiance in libRadtran</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../01a-SpectralChannelsAndFilters.html">IPython Notebook and Sphinx</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../01a-SpectralChannelsAndFilters.html#a-spectralchannelsandfilters-ipython-notebook">01a-SpectralChannelsAndFilters IPython Notebook</a></li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">MORTICIA</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="index.html">Module code</a> &raquo;</li>
+      
+    <li>electro</li>
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <h1>Source code for electro</h1><div class="highlight"><pre>
+<span class="n">__author__</span> <span class="o">=</span> <span class="s">&#39;DGriffith, ARamkilowan&#39;</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">.. module:: electro</span>
+<span class="sd">    :synopsis: Realises electronic components in the imaging chain of a remote sensing or surveillance system.</span>
+<span class="sd">        - Detectors and focal plane arrays</span>
+<span class="sd">        - Image processing modules</span>
+<span class="sd">        - Displays</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">xray</span>
+<span class="kn">from</span> <span class="nn">morticia</span> <span class="kn">import</span> <span class="n">ureg</span><span class="p">,</span> <span class="n">Q_</span><span class="p">,</span> <span class="n">U_</span>  <span class="c"># Import the pint units registry from parent</span>
+<span class="kn">from</span> <span class="nn">morticia.tools.xd</span> <span class="kn">import</span> <span class="o">*</span>  <span class="c"># Import additional tools for working with xray.DataArray objects</span>
+<span class="kn">from</span> <span class="nn">morticia.moglo</span> <span class="kn">import</span> <span class="o">*</span>  <span class="c"># Import global glossary/vocabulary</span>
+<span class="kn">import</span> <span class="nn">copy</span>
+
+<div class="viewcode-block" id="xd_asr2sqe"><a class="viewcode-back" href="../packages.html#electro.xd_asr2sqe">[docs]</a><span class="k">def</span> <span class="nf">xd_asr2sqe</span><span class="p">(</span><span class="n">asr</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Convert absolute spectral response (ASR) to spectral quantum efficiency (SQE).</span>
+
+<span class="sd">        The conversion is performed through the Planck relationship</span>
+
+<span class="sd">        .. math::</span>
+<span class="sd">            E=h\\nu</span>
+
+<span class="sd">        where :math:`E` is the photon energy, :math:`h` is the planck constant and :math:`\\nu` is the optical</span>
+<span class="sd">        frequency.</span>
+<span class="sd">        In terms of optical wavelength in a vacuum, the planck relation is</span>
+
+<span class="sd">        .. math::</span>
+<span class="sd">            E=\\frac{hc}{\\lambda}</span>
+
+<span class="sd">        where :math:`c` is the speed of light and :math:`\\lambda` is the wavelength.</span>
+
+<span class="sd">    :param asr: An xray.DataArray object providing the absolute spectral response (ASR). The DataArray must have a single</span>
+<span class="sd">        axis providing the wavelength points, together with the standard attribute &#39;units&#39; for the wavelength axis.</span>
+<span class="sd">    :return: Spectral Quantum Efficiency as an xray.DataArray object. Returned wavelengths will be &#39;nm&#39; in</span>
+<span class="sd">        the wavelength (&#39;wvl&#39;) axis.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">h</span> <span class="o">=</span> <span class="mf">6.626069311e-34</span>  <span class="c"># planck&#39;s constant in Joule seconds</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="mi">299792458</span>  <span class="c"># speed of light in metres per second</span>
+    <span class="n">e</span> <span class="o">=</span> <span class="mf">1.6021765314e-19</span>  <span class="c"># charge on electron in coulombs</span>
+    <span class="n">xd_check_convert_units</span><span class="p">(</span><span class="n">asr</span><span class="p">,</span> <span class="s">&#39;wvl&#39;</span><span class="p">,</span> <span class="s">&#39;nm&#39;</span><span class="p">)</span>  <span class="c"># in-place conversion using pint</span>
+    <span class="n">xd_check_convert_units</span><span class="p">(</span><span class="n">asr</span><span class="p">,</span> <span class="s">&#39;asr&#39;</span><span class="p">,</span> <span class="s">&#39;A/W&#39;</span><span class="p">)</span>  <span class="c"># Preferred units for SQE is A/W</span>
+    <span class="c"># Get quantum energy</span>
+    <span class="n">E</span> <span class="o">=</span> <span class="n">h</span> <span class="o">*</span> <span class="n">c</span> <span class="o">/</span> <span class="n">asr</span><span class="p">[</span><span class="s">&#39;wvl&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="mf">1.0e-9</span>  <span class="c"># Wavelength in nm, convert to metres</span>
+    <span class="n">photocurrent</span> <span class="o">=</span> <span class="n">asr</span> <span class="o">/</span> <span class="n">e</span>
+    <span class="n">sqe</span> <span class="o">=</span> <span class="n">photocurrent</span> <span class="o">*</span> <span class="n">E</span>
+    <span class="n">sqe</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s">&#39;units&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+    <span class="n">sqe</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s">&#39;long_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">long_name</span><span class="p">[</span><span class="s">&#39;sqe&#39;</span><span class="p">]</span>
+    <span class="n">sqe</span><span class="p">[</span><span class="s">&#39;wvl&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s">&#39;units&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;nm&#39;</span>
+    <span class="n">sqe</span><span class="p">[</span><span class="s">&#39;wvl&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s">&#39;long_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;Wavelength&#39;</span>
+    <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">sqe</span><span class="o">.</span><span class="n">values</span> <span class="o">&gt;</span> <span class="mf">1.0</span><span class="p">):</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s">&#39;electro.xd_asr2sqe computed unphysical quantum efficiencies exceeding 1.&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">sqe</span>
+
+</div>
+<div class="viewcode-block" id="xd_sqe2asr"><a class="viewcode-back" href="../packages.html#electro.xd_sqe2asr">[docs]</a><span class="k">def</span> <span class="nf">xd_sqe2asr</span><span class="p">(</span><span class="n">sqe</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Convert spectral quantum efficiency (SQE) to absolute spectral response.</span>
+<span class="sd">    This is the reverse conversion of that provided by electro.xd_asr2sqe.</span>
+
+<span class="sd">    :param sqe: The spectral quantum efficiency (SQE), provided as a xray.DataArray object in which SQE is</span>
+<span class="sd">        provided as a function of wavelength. The wavelength axis must provide the &#39;units&#39; attribute.</span>
+<span class="sd">    :return: Absolute spectral response (ASR) as an xray.DataArray object, havin a single axis of wavelength</span>
+<span class="sd">        coordinates (&#39;wvl&#39;). Returned units for the wavelength axis will be &#39;nm&#39;.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">h</span> <span class="o">=</span> <span class="mf">6.626069311e-34</span>  <span class="c"># planck&#39;s constant in Joule seconds</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="mi">299792458</span>  <span class="c"># speed of light in metres per second</span>
+    <span class="n">e</span> <span class="o">=</span> <span class="mf">1.6021765314e-19</span>  <span class="c"># charge on electron in coulombs</span>
+    <span class="n">xd_check_convert_units</span><span class="p">(</span><span class="n">sqe</span><span class="p">,</span> <span class="s">&#39;wvl&#39;</span><span class="p">,</span> <span class="s">&#39;nm&#39;</span><span class="p">)</span>  <span class="c"># in-place conversion using pint</span>
+    <span class="c"># Get quantum energy</span>
+    <span class="n">E</span> <span class="o">=</span> <span class="n">h</span> <span class="o">*</span> <span class="n">c</span> <span class="o">/</span> <span class="n">sqe</span><span class="p">[</span><span class="s">&#39;wvl&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="mf">1.0e-9</span>  <span class="c"># Wavelength in nm, convert to metres</span>
+    <span class="n">photocurrent</span> <span class="o">=</span> <span class="n">sqe</span> <span class="o">/</span> <span class="n">E</span>
+    <span class="n">asr</span> <span class="o">=</span> <span class="n">photocurrent</span> <span class="o">*</span> <span class="n">e</span>
+    <span class="n">asr</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s">&#39;units&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;A/W&#39;</span>
+    <span class="n">asr</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s">&#39;long_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">long_name</span><span class="p">[</span><span class="s">&#39;asr&#39;</span><span class="p">]</span>
+    <span class="n">asr</span><span class="p">[</span><span class="s">&#39;wvl&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s">&#39;units&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;nm&#39;</span>
+    <span class="n">asr</span><span class="p">[</span><span class="s">&#39;wvl&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s">&#39;long_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;Wavelength&#39;</span>
+    <span class="k">return</span> <span class="n">asr</span>
+
+</div>
+<div class="viewcode-block" id="FocalPlaneArray"><a class="viewcode-back" href="../packages.html#electro.FocalPlaneArray">[docs]</a><span class="k">class</span> <span class="nc">FocalPlaneArray</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Focal plane array detector. This implementation is typically at the chip level. That is, all or most of the</span>
+<span class="sd">    information for building an FPA object can be found in the chip-level datasheet. The FPAs in question here</span>
+<span class="sd">    are usually CCD, CMOS, scientific CMOS or electron-multiplying CCD (EMCCD).</span>
+
+<span class="sd">    The FPA class can be combined with an image intensifier tube (IIT) to produce an ICCD device.</span>
+
+<span class="sd">    This class does not model Time-Delay and Integration (TDI), which is a dynamic imaging process.</span>
+
+<span class="sd">    The class does allow for setting of FPA operating temperature and recalculation of dark current</span>
+<span class="sd">    based on the dark current doubling delta temperature.</span>
+
+<span class="sd">    The FPA is a component of a Camera class object and has the basic function of converting photons to</span>
+<span class="sd">    photoelectrons. FPA object can have multiple spectral channels as with a colour camera. The colour sampling</span>
+<span class="sd">    spatial pattern can be as for a Bayer filter or a 3-CCD camera.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c"># Define the temperature property and associated setter method</span>
+    <span class="c"># This is required because the operating temperature affects the dark current</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">temperature</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__temperature</span>
+
+    <span class="nd">@temperature.setter</span>
+    <span class="k">def</span> <span class="nf">temperature</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">operating_temperature</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Set the current operating temperature of the FocalPlaneArray. This influences the dark current</span>
+<span class="sd">        according to the dark current doubling temperature. Result will not be reliable if the dark</span>
+<span class="sd">        current doubling temperature attribute of the FPA is not set correctly.</span>
+
+<span class="sd">        :param operating_temperature:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__temperature</span> <span class="o">=</span> <span class="n">Scalar</span><span class="p">(</span><span class="s">&#39;temp&#39;</span><span class="p">,</span> <span class="o">*</span><span class="n">operating_temperature</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_dark_current</span><span class="p">()</span>
+
+<div class="viewcode-block" id="FocalPlaneArray.__init__"><a class="viewcode-back" href="../packages.html#electro.FocalPlaneArray.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pitch</span><span class="p">,</span> <span class="n">aperture</span><span class="p">,</span> <span class="n">pixels</span><span class="p">,</span> <span class="n">wellcapacity</span><span class="p">,</span> <span class="n">readnoise</span><span class="p">,</span> <span class="n">darkcurrent</span><span class="p">,</span> <span class="n">dsnu</span><span class="p">,</span> <span class="n">prnu</span><span class="p">,</span> <span class="n">sqe</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">asr</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                 <span class="n">t_ref</span><span class="o">=</span><span class="p">(</span><span class="mf">25.0</span><span class="p">,</span> <span class="s">&#39;degC&#39;</span><span class="p">),</span> <span class="n">darkcurrent_delta_t</span><span class="o">=</span><span class="p">(</span><span class="mf">7.0</span><span class="p">,</span> <span class="s">&#39;delta_degC&#39;</span><span class="p">),</span> <span class="n">temperature</span><span class="o">=</span><span class="p">(</span><span class="mf">25.0</span><span class="p">,</span> <span class="s">&#39;degC&#39;</span><span class="p">),</span>
+                 <span class="n">attrs</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Constructor for FocalPlaneAArray objects</span>
+
+<span class="sd">        :param pitch: The centre-to-centre spacing of the FPA detector elements. This must be a list where the</span>
+<span class="sd">            first element is the centre-to-centre spacing in the x-direction (or both x and y), the second element is</span>
+<span class="sd">            the spacing in the y-direction (if different from the x-direction) and the last element is the units</span>
+<span class="sd">            in which the pitch is provided (string). The units must be pint-recognizable.</span>
+<span class="sd">        :param aperture: The effective pixel aperture of the FPA detector elements. This must also be a list, providing</span>
+<span class="sd">            the x-aperture of the pixel, y-aperture (if different from x) and the units (string).</span>
+<span class="sd">        :param pixels: A list of number of pixels in the x and y directions respectively</span>
+<span class="sd">        :param wellcapacity: The well capacity of the pixel in number of electrons</span>
+<span class="sd">        :param readnoise: The RMS read noise in electrons.</span>
+<span class="sd">        :param darkcurrent: The dark current as a list, giving nagnitude and units. Units can be electrons per pixel</span>
+<span class="sd">            per second (e/s), or in an amperage per pixel (A/s) or an amperage per unit area of the FPA (e.g. A/cm^2)</span>
+<span class="sd">        :param dsnu: The dark signal non uniformity provided as a list giving the magnitude in the first element</span>
+<span class="sd">            and units in the second element. The units can also be e/s, A or A/area. This is the standard deviation.</span>
+<span class="sd">            The DSNU can also be specified as 0.0 or None.</span>
+<span class="sd">        :param prnu: The photo-response non-uniformity. This is also a standard deviation and must be provided in units</span>
+<span class="sd">            of &#39;%&#39;. That is, the prnu input is a list with the magnitude in the first position and the obligatory</span>
+<span class="sd">            string &#39;%&#39; in the second position.</span>
+<span class="sd">        :param sqe: This is a xray.DataArray object providing the Spectral Quantum Efficiency of the FPA. SQE must be</span>
+<span class="sd">            provided with a single axis of wavelength values. The attribute sqe_units must be provided in the</span>
+<span class="sd">            DataArray attributes and it must be dimensionless (the literal empty string &#39;&#39;). If any of the values</span>
+<span class="sd">            exceeds unity, the SQE is assumed to be provided in percent. Alternatively, the asr input can be provided,</span>
+<span class="sd">            but either the sqe or the asr input must be provided and not both, since they can be converted one from</span>
+<span class="sd">            the other. SQE outside the spectral domain provided is assumed to be zero.</span>
+<span class="sd">        :param asr: This is a xray.DataArray object providing the Absolute Spectral Response of the FPA. It can be</span>
+<span class="sd">            provided as an alternative to the SQE. It must have the single axis of wavelength. Units are equivalent</span>
+<span class="sd">            to A/W (photoelectron current per unit optical flux).</span>
+<span class="sd">        :param t_ref: The reference temperature at which the dark current and other parameters are specified.</span>
+<span class="sd">            To be provided as a [value, &#39;units&#39;] list. Default is [25.0, &#39;degC&#39;].</span>
+<span class="sd">        :param darkcurrent_delta_t: The increase in temperature that causes doubling of the dark current.</span>
+<span class="sd">            Default is [7.0, &#39;delta_degC&#39;].</span>
+<span class="sd">        :param temperature: The operating temperature of the FocalPlaneArray. Default [25.0, &#39;degC&#39;]</span>
+<span class="sd">        :param attrs: Dictionary of attributes and metadata. Entries with &#39;name&#39;, &#39;long_name&#39;, &#39;title&#39;,</span>
+<span class="sd">            &#39;summary&#39; or others, especially as per netCDF attribute conventions.</span>
+<span class="sd">            The &#39;manufacturer&#39; should possibly also be provided.</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># Deal with the pitch of the pixels (centre-to-center spacing)</span>
+        <span class="c"># TODO : Reconsider storage of scalar quantities with units and attributes</span>
+        <span class="c"># TODO : Multiple channels - implies multi-axis SQE/ASR</span>
+        <span class="c"># TODO : SQE channel axis (&#39;R&#39;, &#39;G&#39;, &#39;B&#39; ?)</span>
+        <span class="c"># TODO : Add name field to FocalPlaneArray as well as long_name</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">pitch</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pitchx</span> <span class="o">=</span> <span class="n">Scalar</span><span class="p">(</span><span class="s">&#39;pitchx&#39;</span><span class="p">,</span> <span class="n">pitch</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pitch</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pitchy</span> <span class="o">=</span> <span class="n">Scalar</span><span class="p">(</span><span class="s">&#39;pitchy&#39;</span><span class="p">,</span> <span class="n">pitch</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">pitch</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">pitch</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pitchx</span> <span class="o">=</span> <span class="n">Scalar</span><span class="p">(</span><span class="s">&#39;pitchx&#39;</span><span class="p">,</span> <span class="n">pitch</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pitch</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pitchy</span> <span class="o">=</span> <span class="n">Scalar</span><span class="p">(</span><span class="s">&#39;pitchy&#39;</span><span class="p">,</span> <span class="n">pitch</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pitch</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s">&#39;The input &quot;pitch&quot; to FocalPlaneArray must be 2 or 3 element list with pitchx, &#39;</span>
+                          <span class="s">&#39;pitchy (if different) and units.&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pitch_units</span> <span class="o">=</span> <span class="s">&#39;mm&#39;</span>
+        <span class="c"># Deal with pixel aperture</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">aperture</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">aperturex</span> <span class="o">=</span> <span class="n">Scalar</span><span class="p">(</span><span class="s">&#39;pixapx&#39;</span><span class="p">,</span> <span class="n">aperture</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">aperture</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">aperturey</span> <span class="o">=</span> <span class="n">Scalar</span><span class="p">(</span><span class="s">&#39;pixapy&#39;</span><span class="p">,</span> <span class="n">aperture</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">aperture</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">aperture</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">aperturex</span> <span class="o">=</span> <span class="n">Scalar</span><span class="p">(</span><span class="s">&#39;pixapx&#39;</span><span class="p">,</span> <span class="n">aperture</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">aperture</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">aperturey</span> <span class="o">=</span> <span class="n">Scalar</span><span class="p">(</span><span class="s">&#39;pixapy&#39;</span><span class="p">,</span> <span class="n">aperture</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">aperture</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s">&#39;The input &quot;aperture&quot; to FocalPlaneArray must be 2 or 3 element list with aperturex, &#39;</span>
+                          <span class="s">&#39;aperturey (if different) and units.&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pixels</span> <span class="o">=</span> <span class="n">pixels</span>  <span class="c"># number of pixels in x and y directions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wellcapacity</span> <span class="o">=</span> <span class="n">Scalar</span><span class="p">(</span><span class="s">&#39;wellcap&#39;</span><span class="p">,</span> <span class="o">*</span><span class="n">wellcapacity</span><span class="p">)</span> <span class="c"># should be a scalar value in electrons</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">readnoise</span> <span class="o">=</span> <span class="n">Scalar</span><span class="p">(</span><span class="s">&#39;readnoise&#39;</span><span class="p">,</span> <span class="o">*</span><span class="n">readnoise</span><span class="p">)</span>
+        <span class="c"># Darkcurrent a little more complicated to deal with - need to check if given per unit area or per pixel</span>
+        <span class="n">q_darkcurrent</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="o">*</span><span class="n">darkcurrent</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s">&#39;[length]&#39;</span> <span class="ow">in</span> <span class="n">q_darkcurrent</span><span class="o">.</span><span class="n">dimensionality</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>  <span class="c"># The dark current is presumably given per unit area</span>
+            <span class="n">q_darkcurrent</span> <span class="o">=</span> <span class="n">q_darkcurrent</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="s">&#39;e/s/mm^2&#39;</span><span class="p">)</span>
+            <span class="n">q_darkcurrent</span> <span class="o">*=</span> <span class="n">Q_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pitchx</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">pitchy</span><span class="p">,</span> <span class="s">&#39;mm^2&#39;</span><span class="p">)</span>
+            <span class="n">darkcurrent</span> <span class="o">=</span> <span class="p">[</span><span class="n">q_darkcurrent</span><span class="o">.</span><span class="n">magnitude</span><span class="p">,</span> <span class="s">&#39;e/s&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">darkcurrent</span> <span class="o">=</span> <span class="n">Scalar</span><span class="p">(</span><span class="s">&#39;darkcurr&#39;</span><span class="p">,</span> <span class="o">*</span><span class="n">darkcurrent</span><span class="p">)</span>  <span class="c"># Actually e/s/pixel</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">darkcurrent_ref</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">darkcurrent</span><span class="p">)</span>  <span class="c"># Keep an original copy of the dark current at t_ref</span>
+        <span class="c">#self.dsnu = Scalar(&#39;dsnu&#39;, *dsnu)</span>
+        <span class="c">#self.prnu = Scalar(&#39;prnu&#39;, *prnu)</span>
+        <span class="c"># Deal with ASR or SQE</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">sqe</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">asr</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">):</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s">&#39;Either SQE or ASR (but not both) must be provided for FocalPlaneArray objects.&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="n">sqe</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">asr</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">):</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s">&#39;Either SQE or ASR (but not both) must be provided for FocalPlaneArray objects.&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">asr</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>  <span class="c"># Convert to SQE as primary required quantity</span>
+            <span class="n">xd_check_convert_units</span><span class="p">(</span><span class="n">asr</span><span class="p">,</span> <span class="s">&#39;wvl&#39;</span><span class="p">,</span> <span class="s">&#39;nm&#39;</span><span class="p">)</span>
+            <span class="n">xd_check_convert_units</span><span class="p">(</span><span class="n">asr</span><span class="p">,</span> <span class="s">&#39;asr&#39;</span><span class="p">,</span> <span class="s">&#39;A/W&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">asr</span> <span class="o">=</span> <span class="n">asr</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sqe</span> <span class="o">=</span> <span class="n">xd_asr2sqe</span><span class="p">(</span><span class="n">asr</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">xd_check_convert_units</span><span class="p">(</span><span class="n">sqe</span><span class="p">,</span> <span class="s">&#39;wvl&#39;</span><span class="p">,</span> <span class="s">&#39;nm&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sqe</span> <span class="o">=</span> <span class="n">sqe</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">asr</span> <span class="o">=</span> <span class="n">xd_sqe2asr</span><span class="p">(</span><span class="n">sqe</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t_ref</span> <span class="o">=</span> <span class="n">Scalar</span><span class="p">(</span><span class="s">&#39;tref&#39;</span><span class="p">,</span> <span class="o">*</span><span class="n">t_ref</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">darkcurrent_delta_t</span> <span class="o">=</span> <span class="n">Scalar</span><span class="p">(</span><span class="s">&#39;deltat&#39;</span><span class="p">,</span> <span class="o">*</span><span class="n">darkcurrent_delta_t</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__temperature</span> <span class="o">=</span> <span class="n">Scalar</span><span class="p">(</span><span class="s">&#39;temp&#39;</span><span class="p">,</span> <span class="o">*</span><span class="n">temperature</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_dark_current</span><span class="p">()</span>  <span class="c"># Set the dark current according to the current operating temperature</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">attrs</span> <span class="o">=</span> <span class="n">attrs</span>  <span class="c"># Attach user-defined attributes</span>
+        <span class="c"># Calculate the horizontal and vertical MTF of the array</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">compute_mtf</span><span class="p">()</span>
+
+</div>
+<div class="viewcode-block" id="FocalPlaneArray.set_dark_current"><a class="viewcode-back" href="../packages.html#electro.FocalPlaneArray.set_dark_current">[docs]</a>    <span class="k">def</span> <span class="nf">set_dark_current</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Set the dark current of the FocalPlaneArray (FPA) according to the dark current reference temperature and</span>
+<span class="sd">        the current operating temperature of the FPA.</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">temp_difference</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">temperature</span><span class="o">.</span><span class="n">data</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">t_ref</span><span class="o">.</span><span class="n">data</span>
+        <span class="n">factor</span> <span class="o">=</span> <span class="mf">2.0</span><span class="o">**</span><span class="p">(</span><span class="n">temp_difference</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">darkcurrent_delta_t</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">darkcurrent</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">darkcurrent_ref</span><span class="o">.</span><span class="n">data</span> <span class="o">*</span> <span class="n">factor</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">darkcurrent</span><span class="o">.</span><span class="n">units</span><span class="p">]</span>
+</div>
+<div class="viewcode-block" id="FocalPlaneArray.compute_mtf"><a class="viewcode-back" href="../packages.html#electro.FocalPlaneArray.compute_mtf">[docs]</a>    <span class="k">def</span> <span class="nf">compute_mtf</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Compute the MTF of a FocalPlaneArray. In this model, the FPA is assumed to be a rectangular array</span>
+<span class="sd">            having pixels with rectangular aperture.</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># First set up a set of spatial frequencies up to a factor of 20 times the pixel nyquist</span>
+        <span class="n">nyquist_x</span> <span class="o">=</span> <span class="mf">1.0</span><span class="o">/</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">pitchx</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>  <span class="c"># cy/mm</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nyquist_x</span> <span class="o">=</span> <span class="n">Scalar</span><span class="p">(</span><span class="s">&#39;nyqx&#39;</span><span class="p">,</span> <span class="n">nyquist_x</span><span class="p">,</span> <span class="s">&#39;1/&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">pitchx</span><span class="o">.</span><span class="n">units</span><span class="p">)</span>
+        <span class="n">nyquist_y</span> <span class="o">=</span> <span class="mf">1.0</span><span class="o">/</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">pitchy</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>  <span class="c"># cy/mm</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nyquist_y</span> <span class="o">=</span> <span class="n">Scalar</span><span class="p">(</span><span class="s">&#39;nyqy&#39;</span><span class="p">,</span> <span class="n">nyquist_y</span><span class="p">,</span> <span class="s">&#39;1/&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">pitchy</span><span class="o">.</span><span class="n">units</span><span class="p">)</span>
+        <span class="c"># Generate a relative set of spatial frequencies, with variable spacing up to 20 times relative nyquist</span>
+        <span class="n">spf_rel</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">1.</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">9</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">2.</span> <span class="p">,</span><span class="mi">3</span><span class="p">,</span> <span class="mi">7</span><span class="p">),</span>
+                             <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">3.</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">7</span><span class="p">),</span>  <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">4.</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">5.</span> <span class="p">,</span><span class="mi">6</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>
+                             <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">6.</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span>  <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">7.</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">8.</span> <span class="p">,</span><span class="mi">9</span> <span class="p">,</span><span class="mi">3</span><span class="p">),</span>
+                             <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">9.</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">3</span><span class="p">)))</span>  <span class="c"># Will use sinc function up to argument of 10</span>
+        <span class="n">spf_rel</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">spf_rel</span><span class="p">)</span>   <span class="c"># Will be duplication at the zeroes</span>
+        <span class="n">spf_x</span> <span class="o">=</span> <span class="n">spf_rel</span> <span class="o">*</span> <span class="n">nyquist_x</span> <span class="o">*</span> <span class="mf">2.0</span>
+        <span class="n">spf_y</span> <span class="o">=</span> <span class="n">spf_rel</span> <span class="o">*</span> <span class="n">nyquist_y</span> <span class="o">*</span> <span class="mf">2.0</span>
+        <span class="n">spf</span> <span class="o">=</span> <span class="n">xd_identity</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">spf_x</span><span class="p">,</span> <span class="n">spf_y</span><span class="p">))),</span> <span class="s">&#39;spf&#39;</span><span class="p">,</span> <span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;units&#39;</span><span class="p">:</span> <span class="s">&#39;1/mm&#39;</span><span class="p">})</span>  <span class="c"># Create spat freq axis</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spf</span> <span class="o">=</span> <span class="n">spf</span>
+        <span class="c"># Get back spf_rel, which could be different in x and y directions</span>
+        <span class="n">spf_rel_x</span> <span class="o">=</span> <span class="n">spf</span><span class="o">.</span><span class="n">data</span> <span class="o">/</span> <span class="p">(</span><span class="n">nyquist_x</span> <span class="o">*</span> <span class="mf">2.0</span><span class="p">)</span>
+        <span class="n">spf_rel_y</span> <span class="o">=</span> <span class="n">spf</span><span class="o">.</span><span class="n">data</span> <span class="o">/</span> <span class="p">(</span><span class="n">nyquist_y</span> <span class="o">*</span> <span class="mf">2.0</span><span class="p">)</span>
+        <span class="n">fldo</span> <span class="o">=</span> <span class="n">xd_identity</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">90.0</span><span class="p">],</span> <span class="s">&#39;fldo&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mtf</span> <span class="o">=</span> <span class="n">xray</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sinc</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">spf_rel_x</span><span class="p">,</span> <span class="n">spf_rel_y</span><span class="p">)))</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>
+                                  <span class="p">[(</span><span class="n">spf</span><span class="p">),</span> <span class="p">(</span><span class="n">fldo</span><span class="p">)],</span>
+                                  <span class="n">name</span><span class="o">=</span><span class="s">&#39;mtf&#39;</span><span class="p">,</span> <span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;units&#39;</span><span class="p">:</span> <span class="s">&#39;&#39;</span><span class="p">})</span>
+</div></div>
+<div class="viewcode-block" id="Camera"><a class="viewcode-back" href="../packages.html#electro.Camera">[docs]</a><span class="k">class</span> <span class="nc">Camera</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; The Camera class composes a FocalPlaneArray (FPA) together with a gain stage (signal transfer function),</span>
+<span class="sd">    an analogue-to-digital converter of specific bit depth and an additional amplifier noise. The Camera</span>
+<span class="sd">    converts photoelectrons to digital output data.</span>
+<span class="sd">    NB : A Camera object in MORTICIA does *not* include the Lens. The most basic sensor object that includes a lens</span>
+<span class="sd">    is an Imager object which includes a lens and a camera.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Camera.__init__"><a class="viewcode-back" href="../packages.html#electro.Camera.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fpa</span><span class="p">,</span> <span class="n">ad_bit_depth</span><span class="p">,</span> <span class="n">digital_gain</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">digital_offset</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="s">&#39;count&#39;</span><span class="p">),</span> <span class="n">noise</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="s">&#39;count&#39;</span><span class="p">),</span>
+                 <span class="n">sitf</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">exp_time_min</span><span class="o">=</span><span class="p">(</span><span class="mf">10.0e-6</span><span class="p">,</span> <span class="s">&#39;s&#39;</span><span class="p">),</span> <span class="n">exp_time_max</span><span class="o">=</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="s">&#39;s&#39;</span><span class="p">),</span> <span class="n">attrs</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Camera constructor. This class if for representation of a Camera, which incorporates</span>
+<span class="sd">        a FocalPlaneArray and a converter stage which converts photoelectrons into digital levels (also called</span>
+<span class="sd">        digital numbers - DN and in MORTICIA, the pint unit &#39;count&#39; is used).</span>
+
+<span class="sd">        :param fpa: The FocalPlaneArray incorporated into the Camera</span>
+<span class="sd">        :param ad_bit_depth: Number of bits in the Analogue-to-Digital A/D converter. Must be provided in MORTICIA</span>
+<span class="sd">            scalar format as e.g. [16, &#39;bit&#39;]</span>
+<span class="sd">        :param digital_gain: The number of photoelectrons required to raise the output by 1 digital level (DN)</span>
+<span class="sd">            Must be provided in MORTICIA scalar format as e.g. [2.2, &#39;e/count&#39;].</span>
+<span class="sd">        :param digital_offset: The digital level (DN) output of the camera for zero photoelectrons. This is not</span>
+<span class="sd">            the &quot;black level&quot;, which typically includes additional dark signal. Must be provided in MORTICIA</span>
+<span class="sd">            scalar format as e.g. [10.0, &#39;count&#39;].</span>
+<span class="sd">        :param noise: An optional additional noise component to add to the signal. Must be provided as a</span>
+<span class="sd">            MORTICIA scalar in either electrons or counts e.g. [2, &#39;e&#39;]. This is an RMS noise component,</span>
+<span class="sd">            which is equivalent to a standard deviation.</span>
+<span class="sd">        :param sitf: Signal transfer function (SiTF). As an alternative to providing the digital_gain and</span>
+<span class="sd">            digital_offset, (particularly should the camera have essentially non-linear response) the SiTF</span>
+<span class="sd">            can be provided as an xray.DataArray, with the input axis in units of electrons (&#39;e&#39;) and</span>
+<span class="sd">            the data in units of digital level (&#39;count&#39;). If digital_gain and digital_offset are provided,</span>
+<span class="sd">            the SiTF is calculated and stored internally as an xray.DataArray.</span>
+<span class="sd">        :param</span>
+<span class="sd">        :param attrs: A user-defined dictionary of other information about this Camera object. Could include</span>
+<span class="sd">            items such as &#39;model&#39;, &#39;manufacturer&#39; etc. A &#39;title&#39; and &#39;long_name&#39; are recommended attributes.</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fpa</span> <span class="o">=</span> <span class="n">fpa</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ad_bit_depth</span> <span class="o">=</span> <span class="n">Scalar</span><span class="p">(</span><span class="s">&#39;bitdepth&#39;</span><span class="p">,</span> <span class="o">*</span><span class="n">ad_bit_depth</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">digital_gain</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">digital_gain</span> <span class="o">=</span> <span class="n">Scalar</span><span class="p">(</span><span class="s">&#39;dgain&#39;</span><span class="p">,</span> <span class="o">*</span><span class="n">digital_gain</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">sitf</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s">&#39;The digital_gain and the sitf of a Camera object should not both be provided.&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">digital_offset</span> <span class="o">=</span> <span class="n">Scalar</span><span class="p">(</span><span class="s">&#39;doffset&#39;</span><span class="p">,</span> <span class="o">*</span><span class="n">digital_offset</span><span class="p">)</span>  <span class="c"># Initialise</span>
+        <span class="k">if</span> <span class="n">sitf</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>  <span class="c"># Check and save the sitf</span>
+            <span class="n">xd_check_convert_units</span><span class="p">(</span><span class="n">sitf</span><span class="p">,</span> <span class="s">&#39;phe&#39;</span><span class="p">,</span> <span class="n">default_units</span><span class="p">(</span><span class="s">&#39;phe&#39;</span><span class="p">))</span>
+            <span class="n">xd_check_convert_units</span><span class="p">(</span><span class="n">sitf</span><span class="p">,</span> <span class="s">&#39;dn&#39;</span><span class="p">,</span> <span class="n">default_units</span><span class="p">(</span><span class="s">&#39;dn&#39;</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sitf</span> <span class="o">=</span> <span class="n">sitf</span>
+        <span class="k">else</span><span class="p">:</span>  <span class="c"># Create an sitf from the digital gain and offet inputs</span>
+            <span class="k">if</span> <span class="n">digital_gain</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s">&#39;Estimating Camera digital gain from bit depth and FPA well capacity&#39;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">digital_gain</span> <span class="o">=</span> <span class="n">Scalar</span><span class="p">(</span><span class="s">&#39;dgain&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fpa</span><span class="o">.</span><span class="n">wellcapacity</span><span class="o">.</span><span class="n">data</span> <span class="o">/</span> <span class="mf">2.0</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">ad_bit_depth</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="s">&#39;e/count&#39;</span><span class="p">)</span>
+            <span class="n">slope</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">digital_gain</span><span class="o">.</span><span class="n">data</span>
+            <span class="c"># Compute the upper point of the sitf, taking A/D limit and well saturation into account</span>
+            <span class="c"># Calculate digital numbers at the well capacity</span>
+            <span class="n">dn_at_well_capacity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fpa</span><span class="o">.</span><span class="n">wellcapacity</span><span class="o">.</span><span class="n">data</span> <span class="o">*</span> <span class="n">slope</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">digital_offset</span><span class="o">.</span><span class="n">data</span>
+            <span class="c"># Calculate the number of photelectrons at maximum DN</span>
+            <span class="n">phe_at_max_dn</span> <span class="o">=</span> <span class="p">(</span><span class="mf">2.0</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">ad_bit_depth</span><span class="o">.</span><span class="n">data</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">digital_offset</span><span class="o">.</span><span class="n">data</span><span class="p">)</span> <span class="o">/</span> <span class="n">slope</span>
+            <span class="n">phe_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">phe_at_max_dn</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fpa</span><span class="o">.</span><span class="n">wellcapacity</span><span class="o">.</span><span class="n">data</span><span class="p">)</span> <span class="c"># Can&#39;t have more photoelectrons than well cap.</span>
+            <span class="n">dn_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">dn_at_well_capacity</span><span class="p">,</span> <span class="mf">2.0</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">ad_bit_depth</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>  <span class="c"># Can&#39;t have more DN than 2^bits</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sitf</span> <span class="o">=</span> <span class="n">xray</span><span class="o">.</span><span class="n">DataArray</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">digital_offset</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">dn_max</span><span class="p">],</span>
+                                       <span class="p">[(</span><span class="s">&#39;phe&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">phe_max</span><span class="p">],</span> <span class="p">{</span><span class="s">&#39;units&#39;</span><span class="p">:</span> <span class="s">&#39;e&#39;</span><span class="p">,</span> <span class="s">&#39;extrap_hi&#39;</span><span class="p">:</span> <span class="s">&#39;sustain&#39;</span><span class="p">,</span>
+                                                                 <span class="s">&#39;extrap_lo&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">})],</span>
+                                       <span class="n">name</span><span class="o">=</span><span class="s">&#39;dn&#39;</span><span class="p">,</span> <span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;units&#39;</span><span class="p">:</span> <span class="s">&#39;count&#39;</span><span class="p">})</span>
+        <span class="k">if</span> <span class="n">noise</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;e&#39;</span><span class="p">:</span>  <span class="c"># Convert to dn count using the sitf</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">noise</span> <span class="o">=</span> <span class="n">Scalar</span><span class="p">(</span><span class="s">&#39;dnoise&#39;</span><span class="p">,</span> <span class="n">noise</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">slope</span><span class="p">,</span> <span class="s">&#39;count&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">noise</span> <span class="o">=</span> <span class="n">Scalar</span><span class="p">(</span><span class="s">&#39;dnoise&#39;</span><span class="p">,</span> <span class="o">*</span><span class="n">noise</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">attrs</span> <span class="o">=</span> <span class="n">attrs</span>  <span class="c"># user-defined info about this camera</span>
+</div></div>
+<div class="viewcode-block" id="Imager"><a class="viewcode-back" href="../packages.html#electro.Imager">[docs]</a><span class="k">class</span> <span class="nc">Imager</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; The Imager class encapsulates a complete imaging system with an optics.Lens and an electro.Camera.</span>
+<span class="sd">    The Imager class can provide the digital outputs of the Lens+Camera when looking into a scene that provides the</span>
+<span class="sd">    at-aperture (or at-sensor) radiance (the radiance apparent at the aperture of the Lens).</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Imager.__init__"><a class="viewcode-back" href="../packages.html#electro.Imager.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lens</span><span class="p">,</span> <span class="n">camera</span><span class="p">,</span> <span class="n">attrs</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Constructor for Imager class.</span>
+
+<span class="sd">        :param lens: The optics.Lens for the Imager.</span>
+<span class="sd">        :param camera: The electro.Camera for the Imager.</span>
+<span class="sd">        :param attrs: User-defined dictionary of additional attributes, such as &#39;title&#39;, &#39;summary&#39;, &#39;long_name&#39;,</span>
+<span class="sd">            &#39;manufacturer&#39;, especially those recommended for the netCDF conventions.</span>
+<span class="sd">        :return: an Imager object</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># Mainly just save the input goodies and compute an Imager MTF</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lens</span> <span class="o">=</span> <span class="n">lens</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">camera</span> <span class="o">=</span> <span class="n">camera</span>
+        <span class="k">if</span> <span class="n">attrs</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">attrs</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">attrs</span> <span class="o">=</span> <span class="n">attrs</span>
+        <span class="c"># Compute the multi-dimensional MTF for the camera</span>
+        <span class="c"># The MTFs must be harmonised before taking the product</span>
+        <span class="n">mtf_a</span><span class="p">,</span> <span class="n">mtf_b</span> <span class="o">=</span> <span class="n">xd_harmonise_interp</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">lens</span><span class="o">.</span><span class="n">mtf</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">fpa</span><span class="o">.</span><span class="n">mtf</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mtf</span> <span class="o">=</span> <span class="n">mtf_a</span> <span class="o">*</span> <span class="n">mtf_b</span>
+        <span class="c"># self.mtf[&#39;spf&#39;].attrs = {&#39;units&#39;: &#39;1/mm&#39;}</span>
+        <span class="c"># Will trim off spatial frequencies above the maximum spatial frequency of the Lens MTF</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mtf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mtf</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="nb">dict</span><span class="p">(</span><span class="n">spf</span><span class="o">=</span><span class="nb">slice</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">lens</span><span class="o">.</span><span class="n">spf_max</span><span class="o">.</span><span class="n">data</span><span class="p">))]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mtf</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;mtf&#39;</span>
+        <span class="c"># Next convert spatial frequencies to cycles/mrad</span>
+        <span class="c"># TODO : Reconsider if this is the best idea</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mtf</span><span class="p">[</span><span class="s">&#39;spf&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mtf</span><span class="p">[</span><span class="s">&#39;spf&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">data</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">lens</span><span class="o">.</span><span class="n">efl</span><span class="o">.</span><span class="n">data</span> <span class="o">/</span> <span class="mf">1000.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mtf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mtf</span><span class="o">.</span><span class="n">rename</span><span class="p">({</span><span class="s">&#39;spf&#39;</span><span class="p">:</span> <span class="s">&#39;spfa&#39;</span><span class="p">})</span>  <span class="c"># Now dealing with angular spatial frequencies</span>
+        <span class="n">xd_attrs_update</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">mtf</span><span class="p">])</span>  <span class="c"># Update long_names and units</span>
+        <span class="c"># TODO : Consider also changing defocus to dioptres</span>
+        <span class="c"># TODO : This is simply dividing the fldz value by efl^2/1000</span>
+
+</div>
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s">&#39;An Imager Class Object&#39;</span>  <span class="c"># TODO : Something more informative here</span>
+
+
+<span class="c"># When computing the 2D MTF from MTFs in x and y, say f(x) and g(y), then weight</span>
+<span class="c"># w(x,y) = x^2 f(r)/r^2 + y^2 g(r)/r^2</span>
+</pre></div></div>
+
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, D Griffith, A Ramkilowan.
+    </p>
+  </div>
+
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -1,0 +1,1012 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>morticia.rad.cloud_options &mdash; MORTICIA 1.0 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Roboto+Slab:400,700|Inconsolata:400,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="MORTICIA 1.0 documentation" href="../../../index.html"/>
+        <link rel="up" title="morticia" href="../../morticia.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+          <a href="../../../index.html" class="fa fa-home"> MORTICIA</a>
+        
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../how_to_use.html">How to use MORTICIA</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../how_to_use.html#morticia-dependencies">MORTICIA Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../how_to_use.html#installation-and-requirements">Installation and Requirements</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../styleguide.html">The MORTICIA Style Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#to-pep-8-or-not-to-pep-8">To PEP-8 or not to PEP-8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#code-layout">Code Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#import-statements">Import Statements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#whitespace">Whitespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#comments">Comments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#documentation-strings-docstrings">Documentation Strings (docstrings)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#naming-conventions">Naming Conventions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#pep-257">PEP-257</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#from-conventions-section"><em>From</em> Conventions Section</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#general-terminology-and-conventions">General Terminology and Conventions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../for_developers.html">For the Developers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../for_developers.html#structure">Structure</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../packages.html">Packages</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../packages.html#sensor-package">Sensor Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../packages.html#radiometry-package">Radiometry Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../packages.html#scene-package">Scene Package</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ChapLibRadtranODandPathRadiance.html">Transmittance and Path Radiance in libRadtran</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../01a-SpectralChannelsAndFilters.html">IPython Notebook and Sphinx</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../01a-SpectralChannelsAndFilters.html#a-spectralchannelsandfilters-ipython-notebook">01a-SpectralChannelsAndFilters IPython Notebook</a></li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../../index.html">MORTICIA</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      
+          <li><a href="../../morticia.html">morticia</a> &raquo;</li>
+      
+    <li>morticia.rad.cloud_options</li>
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <h1>Source code for morticia.rad.cloud_options</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;--------------------------------------------------------------------</span>
+<span class="sd"> * $Id: cloud_options.py 3180 2015-08-24 09:34:08Z Claudia.Emde $</span>
+<span class="sd"> * </span>
+<span class="sd"> * This file is part of libRadtran.</span>
+<span class="sd"> * Copyright (c) 1997-2012 by Arve Kylling, Bernhard Mayer,</span>
+<span class="sd"> *                            Claudia Emde, Robert Buras</span>
+<span class="sd"> *</span>
+<span class="sd"> * ######### Contact info: http://www.libradtran.org #########</span>
+<span class="sd"> *</span>
+<span class="sd"> * This program is free software; you can redistribute it and/or </span>
+<span class="sd"> * modify it under the terms of the GNU General Public License   </span>
+<span class="sd"> * as published by the Free Software Foundation; either version 2</span>
+<span class="sd"> * of the License, or (at your option) any later version.        </span>
+<span class="sd"> * </span>
+<span class="sd"> * This program is distributed in the hope that it will be useful, </span>
+<span class="sd"> * but WITHOUT ANY WARRANTY; without even the implied warranty of  </span>
+<span class="sd"> * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the   </span>
+<span class="sd"> * GNU General Public License for more details.                    </span>
+<span class="sd"> * </span>
+<span class="sd"> * You should have received a copy of the GNU General Public License          </span>
+<span class="sd"> * along with this program; if not, write to the Free Software                </span>
+<span class="sd"> * Foundation, Inc., 59 Temple Place - Suite 330, </span>
+<span class="sd"> * Boston, MA 02111-1307, USA.</span>
+<span class="sd"> *--------------------------------------------------------------------&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">option_definition</span> <span class="kn">import</span> <span class="o">*</span>
+
+<div class="viewcode-block" id="setup_cloud_group"><a class="viewcode-back" href="../../../mortapi/morticia.rad.html#morticia.rad.cloud_options.setup_cloud_group">[docs]</a><span class="k">class</span> <span class="nc">setup_cloud_group</span><span class="p">():</span>
+
+	<span class="n">group_name</span> <span class="o">=</span> <span class="s">&#39;Water and ice clouds&#39;</span>
+
+<div class="viewcode-block" id="setup_cloud_group.__init__"><a class="viewcode-back" href="../../../mortapi/morticia.rad.html#morticia.rad.cloud_options.setup_cloud_group.__init__">[docs]</a>	<span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="n">documentation</span> <span class="o">=</span> <span class="n">get_cloud_documentation</span><span class="p">()</span>
+		<span class="c">#uvspec function to initialize new profile</span>
+
+		<span class="n">wc_file</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span> 	<span class="c">#TODO: option 3D only ifthreedmystic</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;wc_file&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;cloud&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Location of file defining water cloud properties.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;wc_file&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span> <span class="o">=</span> <span class="p">[</span> <span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;isp&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="n">CaothType</span><span class="p">(</span><span class="s">&#39;wc&#39;</span><span class="p">)</span> <span class="p">),</span>
+				<span class="n">addLogical</span><span class="p">(</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.caoth[isp].source&#39;</span><span class="p">,</span> <span class="n">logicals</span><span class="o">=</span><span class="n">ProfileType</span><span class="p">()</span><span class="o">.</span><span class="n">get_valid_range</span><span class="p">(),</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;CAOTH_FROM_&#39;</span><span class="p">),</span> 
+				<span class="n">addToken</span><span class="p">(</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.caoth[isp].filename&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">file</span> <span class="p">)</span> <span class="p">],</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+			<span class="n">childs</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;wc_modify&#39;</span><span class="p">,</span>\
+				 <span class="s">&#39;interpret_as_level&#39;</span><span class="p">,</span>\
+				 <span class="s">&#39;wc_properties&#39;</span><span class="p">,</span>\
+				 <span class="s">&#39;cloudcover&#39;</span><span class="p">],</span>
+			<span class="n">plot</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;plot_type&#39;</span><span class="p">:</span> <span class="s">&#39;2D&#39;</span><span class="p">,</span>
+				<span class="s">&#39;optional_args&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;column_names&#39;</span><span class="p">:</span> <span class="p">(</span>
+						<span class="s">&quot;altitude&quot;</span><span class="p">,</span>
+						<span class="s">&quot;liquid water content&quot;</span><span class="p">,</span>
+						<span class="s">&quot;effective radius&quot;</span><span class="p">,)</span>
+						  <span class="p">}</span>
+				<span class="p">}</span>
+		<span class="p">)</span>
+
+		<span class="n">wc_properties</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;wc_properties&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;cloud&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Define how liquid water content and effective droplet radius are translated to optical properties. &#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;wc_properties&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span> <span class="o">=</span> <span class="p">[</span> <span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;isp&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="n">CaothType</span><span class="p">(</span><span class="s">&#39;wc&#39;</span><span class="p">)</span> <span class="p">),</span>
+				<span class="n">addLogical</span><span class="p">(</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.caoth[isp].properties&#39;</span><span class="p">,</span> <span class="n">logicals</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;hu&#39;</span><span class="p">,</span> <span class="s">&#39;echam4&#39;</span><span class="p">,</span> <span class="s">&#39;mie&#39;</span><span class="p">,</span> <span class="nb">file</span><span class="p">],</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;PROP_&#39;</span><span class="p">,</span> <span class="n">gui_name</span><span class="o">=</span><span class="s">&#39;properties&#39;</span><span class="p">),</span> 
+				<span class="n">addLogical</span><span class="p">(</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.caoth[isp].interpolate&#39;</span> <span class="p">,</span> <span class="n">logicals</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;interpolate&#39;</span><span class="p">],</span> <span class="n">optional</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">gui_name</span><span class="o">=</span><span class="s">&#39;interpolate&#39;</span><span class="p">)</span> <span class="p">],</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;wc_file&#39;</span><span class="p">],</span>
+		<span class="p">)</span>
+
+		<span class="n">wc_modify</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>	<span class="c">#TODO: valid_ranges for GUI!!</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;wc_modify&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;cloud&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Modify water cloud optical properties.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;wc_modify&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span> <span class="o">=</span> <span class="p">[</span> <span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;isp&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="n">CaothType</span><span class="p">(</span><span class="s">&#39;wc&#39;</span><span class="p">)</span> <span class="p">),</span>
+				<span class="n">addLogical</span><span class="p">(</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;id1&#39;</span><span class="p">,</span> <span class="n">logicals</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;gg&#39;</span><span class="p">,</span><span class="s">&#39;ssa&#39;</span><span class="p">,</span> <span class="s">&#39;tau&#39;</span><span class="p">,</span> <span class="s">&#39;tau550&#39;</span><span class="p">],</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;MODIFY_VAR_&#39;</span><span class="p">,</span> <span class="n">gui_name</span><span class="o">=</span><span class="s">&#39;variable&#39;</span> <span class="p">),</span>
+				<span class="n">addLogical</span><span class="p">(</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;id2&#39;</span><span class="p">,</span> <span class="n">logicals</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;set&#39;</span><span class="p">,</span> <span class="s">&#39;scale&#39;</span> <span class="p">],</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;MODIFY_TYPE_&#39;</span><span class="p">,</span> <span class="n">gui_name</span><span class="o">=</span><span class="s">&#39;scale/set&#39;</span> <span class="p">),</span>
+				<span class="n">addToken</span><span class="p">(</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.caoth[isp].modify[id1][id2]&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">gui_name</span><span class="o">=</span><span class="s">&#39;value&#39;</span> <span class="p">)</span> <span class="p">],</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;wc_file&#39;</span><span class="p">],</span>
+			<span class="n">non_unique</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+		<span class="p">)</span>
+
+		<span class="n">ic_file</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span> 	<span class="c">#TODO: option 3D only ifthreedmystic</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;ic_file&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;cloud&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Location of file defining ice cloud properties.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;ic_file&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span> <span class="o">=</span> <span class="p">[</span> <span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;isp&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="n">CaothType</span><span class="p">(</span><span class="s">&#39;ic&#39;</span><span class="p">)</span> <span class="p">),</span>
+				<span class="n">addLogical</span><span class="p">(</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.caoth[isp].source&#39;</span><span class="p">,</span> <span class="n">logicals</span><span class="o">=</span><span class="n">ProfileType</span><span class="p">()</span><span class="o">.</span><span class="n">get_valid_range</span><span class="p">(),</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;CAOTH_FROM_&#39;</span> <span class="p">),</span>
+				<span class="n">addToken</span><span class="p">(</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.caoth[isp].filename&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">file</span> <span class="p">)</span> <span class="p">],</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+			<span class="n">childs</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;ic_modify&#39;</span><span class="p">,</span><span class="s">&#39;ic_habit&#39;</span><span class="p">,</span>\
+				 <span class="s">&#39;ic_fu&#39;</span><span class="p">,</span> <span class="s">&#39;interpret_as_level&#39;</span><span class="p">,</span>\
+				 <span class="s">&#39;ic_properties&#39;</span><span class="p">,</span>\
+				 <span class="s">&#39;cloudcover&#39;</span><span class="p">],</span>
+			<span class="n">plot</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;plot_type&#39;</span><span class="p">:</span> <span class="s">&#39;2D&#39;</span><span class="p">,</span>
+				<span class="s">&#39;optional_args&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;column_names&#39;</span><span class="p">:</span> <span class="p">(</span>
+						<span class="s">&quot;altitude&quot;</span><span class="p">,</span>
+						<span class="s">&quot;ice water content&quot;</span><span class="p">,</span>
+						<span class="s">&quot;effective radius&quot;</span><span class="p">,)</span>
+						  <span class="p">}</span>
+				<span class="p">}</span>
+		<span class="p">)</span>
+
+		<span class="n">ic_properties</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;ic_properties&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;cloud&#39;</span><span class="p">,</span> 
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Define how ice water content and effective droplet radius are translated to optical properties. &#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;ic_properties&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span> <span class="o">=</span> <span class="p">[</span> <span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;isp&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="n">CaothType</span><span class="p">(</span><span class="s">&#39;ic&#39;</span><span class="p">)</span> <span class="p">),</span>
+                                   <span class="n">addLogical</span><span class="p">(</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.caoth[isp].properties&#39;</span><span class="p">,</span> <span class="n">logicals</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;fu&#39;</span><span class="p">,</span> <span class="s">&#39;echam4&#39;</span><span class="p">,</span> <span class="s">&#39;yang&#39;</span><span class="p">,</span> <span class="s">&#39;key&#39;</span><span class="p">,</span> <span class="s">&#39;baum&#39;</span><span class="p">,</span> <span class="s">&#39;baum_v36&#39;</span><span class="p">,</span> <span class="s">&#39;hey&#39;</span><span class="p">,</span> <span class="s">&#39;yang2013&#39;</span><span class="p">,</span> <span class="nb">file</span><span class="p">],</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;PROP_&#39;</span><span class="p">,</span> <span class="n">gui_name</span><span class="o">=</span><span class="s">&#39;properties&#39;</span> <span class="p">),</span> 
+                        <span class="n">addLogical</span><span class="p">(</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.caoth[isp].interpolate&#39;</span> <span class="p">,</span> <span class="n">logicals</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;interpolate&#39;</span><span class="p">],</span> <span class="n">optional</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">gui_name</span><span class="o">=</span><span class="s">&#39;interpolate&#39;</span><span class="p">)</span> <span class="p">],</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;ic_file&#39;</span><span class="p">],</span>
+			<span class="n">childs</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;ic_habit&#39;</span><span class="p">,</span> <span class="s">&#39;ic_habit_yang2013&#39;</span><span class="p">],</span>
+			<span class="n">continious_update</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+		<span class="p">)</span>
+
+		<span class="n">ic_modify</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>	<span class="c">#TODO: valid_ranges for GUI!!</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;ic_modify&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;cloud&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Modify ice cloud optical properties.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;ic_modify&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span> <span class="o">=</span> <span class="p">[</span><span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;isp&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="n">CaothType</span><span class="p">(</span><span class="s">&#39;ic&#39;</span><span class="p">)</span> <span class="p">),</span>
+				<span class="n">addLogical</span><span class="p">(</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;id1&#39;</span><span class="p">,</span> <span class="n">logicals</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;gg&#39;</span><span class="p">,</span><span class="s">&#39;ssa&#39;</span><span class="p">,</span> <span class="s">&#39;tau&#39;</span><span class="p">,</span> <span class="s">&#39;tau550&#39;</span><span class="p">],</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;MODIFY_VAR_&#39;</span><span class="p">,</span> <span class="n">gui_name</span><span class="o">=</span><span class="s">&#39;variable&#39;</span> <span class="p">),</span>
+				<span class="n">addLogical</span><span class="p">(</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;id2&#39;</span><span class="p">,</span> <span class="n">logicals</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;set&#39;</span><span class="p">,</span> <span class="s">&#39;scale&#39;</span> <span class="p">],</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;MODIFY_TYPE_&#39;</span><span class="p">,</span> <span class="n">gui_name</span><span class="o">=</span><span class="s">&#39;scale/set&#39;</span> <span class="p">),</span>
+				<span class="n">addToken</span><span class="p">(</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.caoth[isp].modify[id1][id2]&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">gui_name</span> <span class="o">=</span> <span class="s">&#39;value&#39;</span> <span class="p">)</span> <span class="p">],</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;ic_file&#39;</span><span class="p">],</span>
+			<span class="n">non_unique</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+		<span class="p">)</span>
+
+		<span class="n">ic_habit</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span> 
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;ic_habit&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;cloud&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Ice crystal habit for the \citet{Yang2000}, \citet{Key2002}, \code{baum_v36}, \code{hey} parameterizations.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;ic_habit&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span> <span class="o">=</span> <span class="p">[</span> <span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;isp&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="n">CaothType</span><span class="p">(</span><span class="s">&#39;ic&#39;</span><span class="p">)</span> <span class="p">),</span>
+				<span class="n">addLogical</span><span class="p">(</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.caoth[isp].habit&#39;</span><span class="p">,</span>  
+					<span class="n">logicals</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;solid-column&#39;</span><span class="p">,</span> <span class="s">&#39;hollow-column&#39;</span><span class="p">,</span> <span class="s">&#39;rough-aggregate&#39;</span><span class="p">,</span> <span class="s">&#39;rosette-4&#39;</span><span class="p">,</span> <span class="s">&#39;rosette-6&#39;</span><span class="p">,</span> 
+					          <span class="s">&#39;plate&#39;</span><span class="p">,</span> <span class="s">&#39;droxtal&#39;</span><span class="p">,</span> <span class="s">&#39;dendrite&#39;</span><span class="p">,</span> <span class="s">&#39;ghm&#39;</span><span class="p">],</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;IC_HABIT_&#39;</span> <span class="p">)</span> <span class="p">],</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;ic_file&#39;</span><span class="p">],</span>
+			<span class="n">speaker</span><span class="o">=</span><span class="s">&#39;ic_properties&#39;</span><span class="p">,</span>
+			<span class="n">enable_values</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;key&#39;</span><span class="p">,</span><span class="s">&#39;yang&#39;</span><span class="p">,</span><span class="s">&#39;hey&#39;</span><span class="p">,</span><span class="s">&#39;baum_v36&#39;</span><span class="p">),</span>
+		<span class="p">)</span>
+                
+                <span class="n">ic_habit_yang2013</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span> 
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;ic_habit_yang2013&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;cloud&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Ice crystal habit for the \citet{yang2013} parameterization.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;ic_habit_yang2013&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span> <span class="o">=</span> <span class="p">[</span> <span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;isp&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="n">CaothType</span><span class="p">(</span><span class="s">&#39;ic&#39;</span><span class="p">)</span> <span class="p">),</span>
+                                   <span class="n">addLogical</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.caoth[isp].habit&#39;</span><span class="p">,</span>  
+                                              <span class="n">logicals</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;column_8elements&#39;</span><span class="p">,</span> <span class="s">&#39;droxtal&#39;</span><span class="p">,</span> <span class="s">&#39;hollow_bullet_rosette&#39;</span><span class="p">,</span> <span class="s">&#39;hollow_column&#39;</span><span class="p">,</span> <span class="s">&#39;plate&#39;</span><span class="p">,</span> <span class="s">&#39;plate_10elements&#39;</span><span class="p">,</span>
+                                                        <span class="s">&#39;plate_5elements&#39;</span><span class="p">,</span> <span class="s">&#39;solid_bullet_rosette&#39;</span><span class="p">,</span> <span class="s">&#39;solid_column&#39;</span><span class="p">],</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;IC_HABIT_&#39;</span> <span class="p">),</span>
+                                   <span class="n">addLogical</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.caoth[isp].roughness&#39;</span><span class="p">,</span>
+                                              <span class="n">logicals</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;smooth&#39;</span><span class="p">,</span> <span class="s">&#39;moderate&#39;</span><span class="p">,</span> <span class="s">&#39;severe&#39;</span><span class="p">],</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;IC_ROUGHNESS_&#39;</span><span class="p">)</span> <span class="p">],</span>
+                        <span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;ic_file&#39;</span><span class="p">],</span>
+			<span class="n">speaker</span><span class="o">=</span><span class="s">&#39;ic_properties&#39;</span><span class="p">,</span>
+			<span class="n">enable_values</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;yang2013&#39;</span><span class="p">,),</span>
+		<span class="p">)</span>
+
+                
+		<span class="n">ic_fu</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>	
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;ic_fu&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;cloud&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;ic_fu&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span> <span class="o">=</span> <span class="p">[</span> <span class="n">addSetting</span><span class="p">(</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;isp&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="n">CaothType</span><span class="p">(</span><span class="s">&#39;ic&#39;</span><span class="p">)</span> <span class="p">),</span>
+				<span class="n">addLogical</span><span class="p">(</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;id1&#39;</span><span class="p">,</span> <span class="n">logicals</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;reff_def&#39;</span><span class="p">,</span> <span class="s">&#39;deltascaling&#39;</span><span class="p">],</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;IC_FU_&#39;</span> <span class="p">),</span>
+				<span class="n">addLogical</span><span class="p">(</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;id2&#39;</span><span class="p">,</span> <span class="n">logicals</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;on&#39;</span><span class="p">,</span> <span class="s">&#39;off&#39;</span> <span class="p">],</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;SWITCH_&#39;</span> <span class="p">),</span>
+				<span class="n">addSetting</span><span class="p">(</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.caoth[isp].ic_fu[id1]&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;id2&#39;</span> <span class="p">)</span> <span class="p">],</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;ic_file&#39;</span><span class="p">],</span>
+			<span class="n">non_unique</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+		<span class="p">)</span>
+
+		<span class="n">cloud_fraction_file</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;cloud_fraction_file&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;cloud&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;cloud_fraction_file&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="p">[</span><span class="n">addToken</span><span class="p">(</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.filename[FN_CLOUD_FRACTION]&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">file</span> <span class="p">),],</span>
+		<span class="p">)</span>
+
+		<span class="n">cloud_overlap</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;cloud_overlap&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;cloud&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;cloud_overlap&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="p">[</span><span class="n">addLogical</span><span class="p">(</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.cloud_overlap&#39;</span><span class="p">,</span> <span class="n">logicals</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;rand&#39;</span><span class="p">,</span> <span class="s">&#39;max&#39;</span><span class="p">,</span> <span class="s">&#39;maxrand&#39;</span><span class="p">,</span> <span class="s">&#39;off&#39;</span> <span class="p">],</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;CLOUD_OVERLAP_&#39;</span> <span class="p">)],</span>
+		<span class="p">)</span>
+
+		<span class="n">cloudcover</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;cloudcover&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;cloud&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Fraction of the horizontal sky area which is covered by clouds.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;cloudcover&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span> <span class="o">=</span> <span class="p">[</span> <span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;isp&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="n">CaothType</span><span class="p">,</span> <span class="n">valid_range</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;wc&#39;</span><span class="p">,</span><span class="s">&#39;ic&#39;</span><span class="p">]</span> <span class="p">),</span>
+				<span class="n">addToken</span><span class="p">(</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.caoth[isp].cloudcover&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">valid_range</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="p">)</span> <span class="p">,</span>
+				<span class="n">addSetting</span><span class="p">(</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.caoth[isp].ipa&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="mi">1</span> <span class="p">),</span>
+				<span class="n">addSetting</span><span class="p">(</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.ipa&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span> <span class="p">)</span> <span class="p">],</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;ic_file&#39;</span><span class="p">,</span><span class="s">&#39;wc_file&#39;</span><span class="p">],</span>
+			<span class="n">non_unique</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+		<span class="p">)</span>
+
+
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">options</span> <span class="o">=</span> <span class="p">[</span><span class="n">wc_file</span><span class="p">,</span> <span class="n">wc_properties</span><span class="p">,</span> <span class="n">wc_modify</span><span class="p">,</span> 
+				<span class="n">ic_file</span><span class="p">,</span> <span class="n">ic_properties</span><span class="p">,</span> <span class="n">ic_modify</span><span class="p">,</span> 
+				<span class="n">ic_habit</span><span class="p">,</span> <span class="n">ic_habit_yang2013</span><span class="p">,</span> <span class="n">ic_fu</span><span class="p">,</span>
+				<span class="n">cloud_fraction_file</span><span class="p">,</span> <span class="n">cloud_overlap</span><span class="p">,</span> <span class="n">cloudcover</span><span class="p">]</span>
+		</div>
+	<span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="get_cloud_documentation"><a class="viewcode-back" href="../../../mortapi/morticia.rad.html#morticia.rad.cloud_options.get_cloud_documentation">[docs]</a><span class="k">def</span> <span class="nf">get_cloud_documentation</span><span class="p">():</span>
+	<span class="k">return</span> <span class="p">{</span>
+		<span class="s">&#39;wc_file&#39;</span>	<span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Location of file defining water cloud properties. </span>
+<span class="s">	\fcode{</span>
+<span class="s">	wc\_file type file</span>
+<span class="s">	}</span>
+<span class="s">	\code{type} defines the file type, which can be one of the</span>
+<span class="s">	following:</span>
+<span class="s">	\begin{description}</span>
+
+<span class="s">	\item[1D] Location of file defining one-dimensional profile.</span>
+
+<span class="s">	The file must contain three columns: Column 1 is the altitude in km,</span>
+<span class="s">	column 2 the liquid water content (LWC) in grams per cubic meter, and</span>
+<span class="s">	column 3 the effective droplet radius in micrometer. Empty lines are</span>
+<span class="s">	ignored. Comments start with \code{\#}.  Note that the definition of</span>
+<span class="s">	cloud altitudes in \code{wc\_file 1D} refers to sea level, not to altitude</span>
+<span class="s">	above ground. E.g., when \code{altitude} is set to 1.63km, and the</span>
+<span class="s">	first cloud level is defined at 3km, the cloud would start at 1.37km</span>
+<span class="s">	above ground.  An example of a water cloud is given in</span>
+<span class="s">	\file{examples/WC.DAT}.</span>
+<span class="s">	</span>
+<span class="s">	Per default the cloud properties are interpreted as layer</span>
+<span class="s">	properties. Before version 1.4 the default was level properties: The</span>
+<span class="s">	optical depth of a layer was calculated using information from the</span>
+<span class="s">	upper and lower levels defining the layer.  </span>
+<span class="s">	To switch to the old behaviour, use \code{interpret\_as\_level}. </span>
+<span class="s">	See section~\ref{seq:wc} about water clouds for a</span>
+<span class="s">	realistic example how the contents of the \code{wc\_file 1D} are converted</span>
+<span class="s">	to optical properties.</span>
+<span class="s">	</span>
+<span class="s">	\ifthreedmystic{</span>
+
+<span class="s">	\item[3D] Define a MYSTIC 3D water cloud input file. </span>
+<span class="s">	In case the \code{rte\_solver} is not \code{mystic},</span>
+<span class="s">	independent column calculations are performed for the 3D field.</span>
+<span class="s">	(See \file{examples/UVSPEC\_WC\_IPA.INP} for an example.)</span>
+<span class="s">	The expected format of the cloud file is: </span>
+<span class="s">	\fcode{</span>
+<span class="s">	Nx  Ny  Nz flag \\</span>
+<span class="s">	dx  dy  z(1) z(2) ... z(n) \\</span>
+<span class="s">	ix  iy  iz  ext  g     ssa  (if flag == 1)\\</span>
+<span class="s">	ix  iy  iz  ext  reff       (if flag == 2)\\</span>
+<span class="s">	ix  iy  iz  LWC  reff       (if flag == 3)\\</span>
+<span class="s">	}</span>
+<span class="s">	where \code{Nx}, \code{Ny} and \code{Nz} are the number of grid boxes in </span>
+<span class="s">	\code{x}, \code{y}, and \code{z}-direction.</span>
+<span class="s">	The parameter \code{flag} determines the format of the 3rd and </span>
+<span class="s">	following lines. In the second line \code{dx} and \code{dy} are the sizes of the boxes in x- </span>
+<span class="s">	and y-direction in km. </span>
+<span class="s">	In the third and following lines the indices \code{ix}, \code{iy}, and \code{iz} specify cloudy pixels. </span>
+<span class="s">	The optical properties of the cloud, are given by the other parameters in the line, </span>
+<span class="s">	where \code{ext} is the extinction coefficient [1/km], \code{g} the asymmetry parameter,</span>
+<span class="s">	\code{reff} the effective radius [micrometer], and \code{ssa} the single scattering albedo.</span>
+<span class="s">	The conversion from microphysical to optical properties is defined by \code{wc\_properties} </span>
+<span class="s">	(identical to the 1D case). Note that the first dimension (x)</span>
+<span class="s">	propagates east, and the second dimension (y) north. For more</span>
+<span class="s">	information see section~\ref{sec:mystic}.</span>
+
+<span class="s">%	\item[ipa] Define a 3D input file.</span>
+<span class="s">%	Independent column calculations are performed for the 3D field.</span>
+<span class="s">%	As argument a name of a 3D cloud file must be given. This file has to</span>
+<span class="s">%	be in the format as needed by MYSTIC, see \code{wc\_file 3D}.</span>
+<span class="s">%	(See \file{examples/UVSPEC\_WC\_IPA.INP} for an example.)</span>
+<span class="s">	}</span>
+<span class="s">	</span>
+<span class="s">	\item[ipa\_files] A two-column file, defining water cloud property files (see \code{wc\_file 1D}) in the first </span>
+<span class="s">	column and the correspoding weights in the second column. </span>
+<span class="s">	The radiative transfer calculation is performed independently for each</span>
+<span class="s">	cloud column and the result is the weighted average of all independent</span>
+<span class="s">	columns. If \code{ic\_file ipa\_files} and \code{wc\_file ipa\_files} are both</span>
+<span class="s">	defined, both must have the same columns in the same order, otherwise</span>
+<span class="s">	\code{uvspec} will complain. See</span>
+<span class="s">	\file{examples/UVSPEC\_WC\_IC\_IPA\_FILES.INP} for an example.</span>
+<span class="s">	</span>
+<span class="s">	\item[moments] A way to specify water cloud extinction coefficient, single</span>
+<span class="s">	scattering albedo, and scattering phase function for each layer.</span>
+
+<span class="s">	The file specified by </span>
+<span class="s">	\code{wc\_file moments} has two columns where column 1 is the altitude in km. The second</span>
+<span class="s">	column is the name of a file which defines the optical properties of the layer </span>
+<span class="s">	starting at the given altitude. The files specified in the second column must </span>
+<span class="s">	have the following format:</span>
+<span class="s">	\begin{description}</span>
+<span class="s">	\item{Column 1: } </span>
+<span class="s">	The wavelength in nm. These wavelengths may be different from those in \code{source solar filename}. </span>
+<span class="s">	Optical properties are interpolated to the requested wavelengths.</span>
+<span class="s">	\item{Column 2:} </span>
+<span class="s">	The extinction coefficient of the layer in units km-1. </span>
+<span class="s">	\item{Column 3:} </span>
+<span class="s">	The single scattering albedo of the layer.</span>
+<span class="s">	\item{Column 4-(nmom+4):} </span>
+<span class="s">	The moments of the scattering phase function. </span>
+<span class="s">	\end{description}</span>
+<span class="s">	Note that if using the \code{rte\_solver disort} or \code{rte\_solver</span>
+<span class="s">	fdisort2} it makes good sense to make the number of moments larger</span>
+<span class="s">	than \code{number\_of\_streams} because all moments are used in the calculation. For</span>
+<span class="s">	\code{rte\_solver fdisort1} and \code{rte\_solver polradtran} the number</span>
+<span class="s">	of moments included in the calculations will be \code{number\_of\_streams}+1. Higher</span>
+<span class="s">	order moments will be ignored for these solvers.  Please note that the</span>
+<span class="s">	uppermost line of the \code{wc\_file moments} denotes simply the top altitude</span>
+<span class="s">	of the uppermost layer. The optical properties of this line are</span>
+<span class="s">	consequently ignored. There are two options for this line: either an</span>
+<span class="s">	optical property file with zero optical thickness is specified</span>
+<span class="s">	or &quot;NULL&quot; instead.</span>
+
+<span class="s">	\end{description}</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;wc_properties&#39;</span>	<span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Define how liquid water content and effective radius are translated to optical properties.</span>
+<span class="s">	\fcode{</span>
+<span class="s">	wc\_properties property [interpolate]</span>
+<span class="s">	}</span>
+<span class="s">	Possible choices for \code{property} are:</span>
+<span class="s">	\begin{description}</span>
+<span class="s">	\parameter{hu} </span>
+<span class="s">	Parameterization by \citet{Hu1993}; </span>
+<span class="s">	this is the default setting. Note that </span>
+<span class="s">	the parameterization is somewhat different for \code{mol\_abs\_param FU} than for all other </span>
+<span class="s">	cases because in the latter case the parameterization from the newer (March 2000) </span>
+<span class="s">	Fu and Liou code is used while otherwise the data are taken from the original </span>
+<span class="s">	paper by \citet{Hu1993}. Note that this parameterization has been</span>
+<span class="s">	developed to calculate irradiances, hence it is less suitable for radiances.</span>
+<span class="s">	This is due to the use of the Henyey-Greenstein phase function as an approximation</span>
+<span class="s">	of the real Mie phase function.</span>
+<span class="s">	\parameter{echam4} </span>
+<span class="s">	Use the very simple two-band parameterization of the ECHAM4 climate model, described </span>
+<span class="s">	in \cite{Roeckner1996}; this is probably only meaningful if you want to compare</span>
+<span class="s">	your results with ECHAM4, the two bands are 0.2 - 0.68 micrometer and 0.68 - 4.0 micrometer;</span>
+<span class="s">	within these bands, the optical properties are assumed constant.</span>
+<span class="s">	\parameter{mie} </span>
+<span class="s">	Use pre-calculated Mie tables; useful for \code{mol\_abs\_param}; </span>
+<span class="s">	the tables are expected in \code{data\_files\_path}\file{/correlated\_k/.../}. \\</span>
+<span class="s">	For spectral or pseudo-spectral (\code{mol\_abs\_param sbdart}) calculations, </span>
+<span class="s">	a set of pre-calculated tables is also available.</span>
+<span class="s">	%CE: commented some parts. Should be rewritten when new Mie tables are well</span>
+<span class="s">	</span><span class="si">% o</span><span class="s">ptimized.</span>
+<span class="s">	% the wavelength grid points of these </span>
+<span class="s">	</span><span class="si">%d</span><span class="s">ata has been carefully selected such that the extinction cross section, </span>
+<span class="s">	</span><span class="si">%s</span><span class="s">ingle scattering albedo, and the asymmetry parameter are accurate to 1\% </span>
+<span class="s">	%(compared to the fully-resolved Mie calculation) for all wavelengths</span>
+<span class="s">	%between 250nm and 100 micrometer. </span>
+<span class="s">	For spectral or pseudo-spectral</span>
+<span class="s">	calculations optional argument \code{interpolate} has to be defined explicitely to</span>
+<span class="s">	initiate the interpolation of the optical properties to the internal wavelength grid.</span>
+<span class="s">	%Please note that this option may be extremely memory-consuming because for each </span>
+<span class="s">	</span><span class="si">%i</span><span class="s">nternal wavelength a full set of Legendre moments of the phase function is </span>
+<span class="s">	</span><span class="si">%s</span><span class="s">tored (up to several thousands). </span>
+<span class="s">	The Mie tables are not part of the standard distribution </span>
+<span class="s">	(because of their large size) but they are freely available from http://www.libradtran.org. </span>
+<span class="s">	This is the correct option to calculate radiances, to be preferred over the </span>
+<span class="s">	Henyey-Greenstein approach of \citet{Hu1993}.</span>
+<span class="s">	\parameter{filename} </span>
+<span class="s">	Read optical properties from specified filename; file format is as produced </span>
+<span class="s">	by the \code{mie}-tool of the {\sl libRadtran} package (see \code{output\_user netcdf}).</span>
+<span class="s">	\end{description}</span>
+
+<span class="s">	With the optional argument \code{interpolate} the water cloud optical properties </span>
+<span class="s">	are interpolated over wavelength; useful for precalculated optical property files. </span>
+<span class="s">	Please note that this option may be extremely memory-consuming because for each internal wavelength </span>
+<span class="s">	a full set of Legendre moments of the phase function is stored (up to several thousands). </span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;wc_modify&#39;</span>	<span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Modify water cloud optical properties.</span>
+<span class="s">	\fcode{</span>
+<span class="s">	wc\_modify variable scale/set value</span>
+<span class="s">	}</span>
+<span class="s">	\code{variable} can be one of the following parameter:</span>
+<span class="s">	\begin{description}</span>
+
+<span class="s">	\parameter{gg}</span>
+<span class="s">	Modify the water cloud asymmetry factor for all wavelengths and altitudes.</span>
+<span class="s">	\begin{description}</span>
+<span class="s">	\item[set]</span>
+<span class="s">	\code{value} can be a float between -1.0 and 1.0. </span>
+<span class="s">	Please note that this option is only applied if a Henyey-Greenstein </span>
+<span class="s">	phase function is used but not if an explicit phase function is </span>
+<span class="s">	defined e.g. with \code{wc\_file moments}. It doesn&#39;t make sense to modify only </span>
+<span class="s">	the first moment of an explicit phase function.  </span>
+<span class="s">	This option is useful only for monochromatic </span>
+<span class="s">	calculations or in wavelength regions where the optical </span>
+<span class="s">	properties of water clouds can be considered constant, </span>
+<span class="s">	e.g. the ultraviolet range. </span>
+<span class="s">	\item[scale]</span>
+<span class="s">	Scale the water cloud asymmetry factor for all wavelengths and altitudes</span>
+<span class="s">	with \code{value} between 0.0 and 1.0.</span>
+<span class="s">	\end{description}</span>
+<span class="s">	</span>
+<span class="s">	\parameter{ssa}</span>
+<span class="s">	Modify the water cloud single scattering albedo for all wavelengths</span>
+<span class="s">	and altitudes.</span>
+<span class="s">	\begin{description}</span>
+<span class="s">	\item[set] \code{value} can be a float between 0.0 and 1.0. </span>
+<span class="s">	This option is useful only for monochromatic </span>
+<span class="s">	calculations or in wavelength regions where the optical properties of water clouds </span>
+<span class="s">	can be considered constant, e.g. the ultraviolet range.</span>
+<span class="s">	\item[scale]</span>
+<span class="s">	Scale the water cloud single scattering albedo for all wavelengths and altitudes</span>
+<span class="s">	with \code{value} between 0.0 and 1.0.</span>
+<span class="s">	\end{description}</span>
+
+<span class="s">	\parameter{tau}</span>
+<span class="s">	Modify the total water cloud optical thickness.</span>
+<span class="s">	\begin{description}</span>
+<span class="s">	\item[set] Set optical thickness to a constant value for all wavelengths.</span>
+<span class="s">	The optical thickness defined here is the integral from the surface at the </span>
+<span class="s">	user-defined \code{altitude} to TOA (top of atmosphere). This option is useful only </span>
+<span class="s">	for monochromatic calculations or in wavelength regions where the optical properties </span>
+<span class="s">	of water clouds can be considered constant, e.g. the ultraviolet range.</span>
+<span class="s">	\item[scale] Scale the water cloud optical thickness for all wavelengths and altitudes</span>
+<span class="s">	with \code{value} between 0.0 and 1000000.0. Also works for 3d clouds.</span>
+<span class="s">	\end{description}</span>
+
+<span class="s">	\parameter{tau550}</span>
+<span class="s">	Set the water cloud optical thickness at 550nm. </span>
+<span class="s">	The optical thickness defined here </span>
+<span class="s">	is the integral from the surface at the user-defined \code{altitude} </span>
+<span class="s">	to TOA (top of atmosphere). Other wavelengths are scaled accordingly.</span>
+<span class="s">	Note that this option requires for technical reasons that the</span>
+<span class="s">	wavelength interval defined by \code{wavelength} does contain 550nm.</span>
+<span class="s">	\end{description}</span>
+<span class="s">	\fcode{</span>
+<span class="s">	wc\_modify tau550 set value</span>
+<span class="s">	}</span>
+<span class="s">			&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;ic_file&#39;</span>	<span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Location of file defining ice cloud properties. </span>
+<span class="s">	\fcode{</span>
+<span class="s">	ic\_file type file</span>
+<span class="s">	}</span>
+<span class="s">	</span>
+<span class="s">	\code{type} defines the file type, which is identical to \code{wc\_file type}.</span>
+<span class="s">	See \code{wc\_file} for choices of \code{type} and a description on the file structures.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;ic_properties&#39;</span>	<span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Defines how ice water content and effective particle radius are translated </span>
+<span class="s">	to optical properties. </span>
+<span class="s">	\fcode{</span>
+<span class="s">	ic\_properties property [interpolate]</span>
+<span class="s">	}</span>
+<span class="s">	Possible choices for \code{property} are</span>
+<span class="s">	\begin{description}</span>
+<span class="s">	\parameter{fu}</span>
+<span class="s">	Parameterization by \citet{Fu1996,Fu1998}, see \code{ic\_file}; </span>
+<span class="s">	this is the default setting. Note that this is a parameterization</span>
+<span class="s">	which has been created to calculate fluxes but not radiances. </span>
+<span class="s">	Note also that the optical properties in the solar range provided by </span>
+<span class="s">	\citet{Fu1996} are delta-scaled properties (that is, the forward peak of</span>
+<span class="s">	the phase function is truncated and optical thickness, asymmetry</span>
+<span class="s">	parameter, and single scattering albedo are reduced accordingly),</span>
+<span class="s">	whereas \code{uvspec} uses non delta-scaled properties unless the option</span>
+<span class="s">	\code{ic\_fu deltascaling on} is specified. By default the parameterization</span>
+<span class="s">	by \citet{Fu1996} is treated consistently with all other ice cloud</span>
+<span class="s">	parameterizations. </span>
+<span class="s">	For wavelengths up to 4 micrometer \citet{Fu1996} is used while for wavelengths </span>
+<span class="s">	larger than 4 micrometer \citet{Fu1998} is chosen. Please note that </span>
+<span class="s">	\citet{Fu1996} is based on ray-tracing calculations while \citet{Fu1998}</span>
+<span class="s">	is a mixture of ray-tracing and Mie calculations (which is required for </span>
+<span class="s">	the infrared wavelengths where the geometrical assumption does not hold).</span>
+<span class="s">	Hence, both parameterizations are not fully consistent. Rather, differences</span>
+<span class="s">	of some \% are to be expected in the wavelength region where both </span>
+<span class="s">	parameterizations overlap. Also, the wavelength dependence in the solar </span>
+<span class="s">	and infrared parts is treated differently: In the solar part \citep{Fu1996}</span>
+<span class="s">	the optical properties are defined for wavelength bands - hence they </span>
+<span class="s">	are assumed constant within each band. In the infrared \citep{Fu1998} </span>
+<span class="s">	they are defined at certain wavelengths and linearely interpolated </span>
+<span class="s">	in between. If you use this option, please see also the</span>
+<span class="s">	discussion of \code{ic\_fu deltascaling} and \code{ic\_fu reff\_def}.</span>
+<span class="s">	The allowed range for the effective radius is from 9.315 -  65.120 micrometer. </span>
+<span class="s">	\parameter{echam4}</span>
+<span class="s">	Use the simple two-band parameterization of the ECHAM4 climate model, described </span>
+<span class="s">	in \cite{Roeckner1996}; this is probably only meaningful if you want to compare</span>
+<span class="s">	your results with ECHAM4, the two bands are 0.2 - 0.68 micrometer and 0.68 - 4.0 micrometer.</span>
+<span class="s">	Within the two ECHAM4 bands, the optical properties are assumed constant.</span>
+<span class="s">	\parameter{key}</span>
+<span class="s">	Parameterization by \citet{Key2002}. This parameterization can also</span>
+<span class="s">	be used to calculate radiances because it uses a</span>
+<span class="s">	double-Henyey-Greenstein phase function which better represents both</span>
+<span class="s">	forward and backward peaks. This parameterization covers the wavelength region  </span>
+<span class="s">	from 0.2 to 5.0 micrometer and is available for the following \code{habit}:</span>
+<span class="s">	\code{solid-column}, \code{hollow-column}, \code{rough-aggregate}, \code{rosette-4}, </span>
+<span class="s">	\code{rosette-6}, and \code{plate}.</span>
+<span class="s">	\parameter{yang}</span>
+<span class="s">	Parameterization similar to \citet{Key2002} but based on more recent</span>
+<span class="s">	single scattering calculations. Below 3.4 micrometer it actually equals</span>
+<span class="s">	the \citet{Key2002} parameterization while from 3.4 - 100 micrometer new </span>
+<span class="s">	coefficients have been calculated with much higher wavelength</span>
+<span class="s">	resolution and better accuracy. Hence, \code{yang} should give a reasonably</span>
+<span class="s">	consistent approximation from 0.2 - 100 micrometer, suitable for spectrally</span>
+<span class="s">	resolved calculations of radiance and irradiance.</span>
+<span class="s">	The covered range for the effective radius depends on the \code{ic\_habit}.</span>
+<span class="s">	(In micrometer: \code{solid-column} [5.96, 84.22], \code{hollow-column} [4.97, 70.24],</span>
+<span class="s">	 \code{rough-aggregate} [3.55, 108.10], \code{rosettes-4} [2.77, 45.30], </span>
+<span class="s">	\code{rosettes-6} [2.85, 46.01], \code{plate} [4.87, 48.18], \code{dendrites}</span>
+<span class="s">	 [0.45, 1.88], \code{droxtal} [9.48, 293.32], </span>
+<span class="s">	\code{spheroid}  [6.58, 203.39]). </span>
+<span class="s">	\parameter{baum}</span>
+<span class="s">	Use ice cloud parameterization from \citet{baum05a:_bulk,baum05b:_bulk},</span>
+<span class="s">	\url{http://www.ssec.wisc.edu/\~baum/Cirrus/IceCloudModels.html}.</span>
+<span class="s">	In combination with the radiative transfer solvers \code{disort}, \ifmystic{\code{montecarlo},}</span>
+<span class="s">	 and \code{fdisort2}, accurate phase functions are used.</span>
+<span class="s">        \parameter{baum_v36} Use cloud parameterization from</span>
+<span class="s">	\citet{heymsfield2013,yang2013,baum2014} covering the </span>
+<span class="s">	spectral range from 0.2 to 100~$\mu$m and effective radii from</span>
+<span class="s">	5 to 60 $\mu$m. The parameterization</span>
+<span class="s">	assumes severly roughened and randomly oriented ice particles</span>
+<span class="s">	and includes the full phase matrix. Three set of models are</span>
+<span class="s">	available, they can be selected using \code{ic\_habit}:</span>
+<span class="s">	\code{ghm} is based on a general habit mixture involving 9</span>
+<span class="s">	habits, \code{solid-column} assumes severely roughened solid</span>
+<span class="s">	columns, and \code{rough-aggregate} is based on severly</span>
+<span class="s">        roughened aggregates. The default is \code{solid-column}. </span>
+<span class="s">	%\parameter{baum\_hufit }</span>
+<span class="s">	%Similar to the option \code{baum} but here the phase function</span>
+<span class="s">	</span><span class="si">%i</span><span class="s">s parameterized by 128 Legendre coefficients, calculated with the</span>
+<span class="s">	</span><span class="si">%d</span><span class="s">elta-fit method from </span>
+<span class="s">	%\citet{Hu2000}. This parameterization covers the region  </span>
+<span class="s">	</span><span class="si">%f</span><span class="s">rom 0.4 to 2.2 micrometer. If high accuracy is needed e.g. in the vicinity of the halo, </span>
+<span class="s">	%the forward peak, or the backscatter peak, \code{ic\_properties baum}</span>
+<span class="s">	</span><span class="si">%i</span><span class="s">s recommended.</span>
+<span class="s">	\parameter{hey}</span>
+<span class="s">	Use pre-calculated ice cloud optical properties including full phase</span>
+<span class="s">	matrices.</span>
+<span class="s">	The parameterization</span>
+<span class="s">	is currently only available for the spectral region from 0.2 to 5</span>
+<span class="s">	micrometers. The single scattering</span>
+<span class="s">	properties have been been generated by Hong Gang using the</span>
+<span class="s">	models by \citet{Yang2000}. The parameterization is based on</span>
+<span class="s">	simple gamma distributions </span>
+<span class="s">	\begin{equation}</span>
+<span class="s">	n(r) = n_0 r^{\alpha} \exp\left(-\frac{(\alpha+3)r}{r_e}\right),</span>
+<span class="s">	\end{equation}</span>
+<span class="s">	where $n_0$ is found by normalization and $\alpha$ is set to 1. In case of</span>
+<span class="s">	spherical particles the parameter $r_e$ would be the effective</span>
+<span class="s">	radius. For aspherical particles, the parameter $r_e$ is found</span>
+<span class="s">	iteratively so that the size distribution yields the required</span>
+<span class="s">	effective radius. The</span>
+<span class="s">	parameterization is availabe for the following habits: \code{solid-column},</span>
+<span class="s">	\code{hollow-column}, \code{rough-aggregate}, \code{rosette-6},</span>
+<span class="s">	\code{plate}, and \code{droxtal}. The</span>
+<span class="s">	default habit is \code{solid-column}. Furthermore a general</span>
+<span class="s">        habit mixture \code{ghm} similar to the one defined by</span>
+<span class="s">	\citet{baum05b:_bulk} may be selected.  For the HEY</span>
+<span class="s">	parameterization the ice crystals are assumed to be smooth, in</span>
+<span class="s">	contrast to the severely roughened particles assumed by</span>
+<span class="s">	\code{baum_v36}. The habit can be specified using the option</span>
+<span class="s">	\code{ic\_habit}.</span>
+<span class="s">        \parameter{yang2013} Pre-calculated ice optical properties</span>
+<span class="s">	including full phase matrices for the spectral region from 0.2</span>
+<span class="s">	to 99 $\mu$m. The parameterization uses single scattering data by</span>
+<span class="s">	\citet{yang2013} and assumes gamma size distributions as the</span>
+<span class="s">	\code{hey} parameterization. It is available for 9 habits and</span>
+<span class="s">	3 degrees of roughness, which can be selected using the option</span>
+<span class="s">	\code{ic\_habit\_yang2013}. </span>
+<span class="s">	%\parameter{ic-mie}</span>
+<span class="s">	%Use pre-calculated Mie tables; useful for \code{mol\_abs\_param}; </span>
+<span class="s">	%the tables are expected in \code{data\_files\_path}\file{/correlated\_k/.../}.</span>
+<span class="s">	</span><span class="si">%F</span><span class="s">or spectral or pseudo-spectral (\code{mol\_abs\_param sbdart}) calculations, </span>
+<span class="s">	%a set of pre-calculated tables is also available; the wavelength grid points of these </span>
+<span class="s">	</span><span class="si">%d</span><span class="s">ata has been carefully selected such that the extinction cross section, </span>
+<span class="s">	</span><span class="si">%s</span><span class="s">ingle scattering albedo, and the asymmetry parameter are accurate to 1\% </span>
+<span class="s">	%(compared to the fully-resolved Mie calculation) for all wavelengths</span>
+<span class="s">	%between 250nm and 100 micrometer. </span>
+<span class="s">	</span><span class="si">%F</span><span class="s">or spectral or pseudo-spectral</span>
+<span class="s">	</span><span class="si">%c</span><span class="s">alculations the optional argument \code{interpolate} has to be defined explicitely to</span>
+<span class="s">	</span><span class="si">%i</span><span class="s">nitiate the interpolation of the optical properties to the internal wavelength grid.</span>
+<span class="s">	%Please note that this option may be extremely memory-consuming because for each </span>
+<span class="s">	</span><span class="si">%i</span><span class="s">nternal wavelength a full set of Legendre moments of the phase function is </span>
+<span class="s">	</span><span class="si">%s</span><span class="s">tored (up to several thousands). The Mie tables are not part of the standard distribution </span>
+<span class="s">	%(because of their large size) but they are freely available from http://www.libradtran.org. </span>
+<span class="s">	%Note that a Mie calculation assumes spherical ice particles, the scattering function of </span>
+<span class="s">	%which differs systematically from non-spherical particles. Hence, \code{ic\_properties mie}</span>
+<span class="s">	</span><span class="si">%i</span><span class="s">s usually not representative of natural ice clouds.</span>
+<span class="s">	\parameter{filename}</span>
+<span class="s">	Read optical properties from specified filename; file format is as produced </span>
+<span class="s">	by the \code{mie} tool of {\sl libRadtran} (see \code{output\_user netcdf}). </span>
+<span class="s">	</span><span class="si">% o</span><span class="s">r by Frank Evans&#39; \code{cloudprp}.</span>
+<span class="s">	\end{description}</span>
+<span class="s">	The default property is \code{fu}.</span>
+
+<span class="s">	Please note also that, in contrast to spherical particles, there is no unique </span>
+<span class="s">	definition of effective size for non-spherical particles. In particular, the</span>
+<span class="s">	above parameterizations use different definitions which, however, differ only by </span>
+<span class="s">	a constant factor. </span>
+<span class="s">	\citet{Yang2000}, \cite{Key2002}, and \citet{baum05a:_bulk,baum05b:_bulk}</span>
+<span class="s">	 use the general definition </span>
+<span class="s">	\begin{equation}</span>
+<span class="s">	   r_{\rm eff} = {{3}\over{4}}{{\int V(h) n(h) dh}\over{\int A(h) n(h) dh}}</span>
+<span class="s">	\end{equation}</span>
+<span class="s">	  where $h$ is the maximum dimension of an ice crystal, $n(h)$ is the</span>
+<span class="s">	  number of particles with maximum dimension $h$ in the size distribution,</span>
+<span class="s">	  and $V$ and $A$ are the volume and mean</span>
+<span class="s">	  projected area of the particles, respectively. The volume and area are</span>
+<span class="s">	  based on the spherical diameter with equivalent volume and the</span>
+<span class="s">	  spherical diameter with equivalent projected area as defined by </span>
+<span class="s">	  \citet{Yang2000}. On the other hand, \citet{Fu1996,Fu1998} use</span>
+<span class="s">	  hexagonal columns and use the following definition</span>
+<span class="s">	\begin{equation}</span>
+<span class="s">	   r_{\rm eff} =  {{\int D^2 L n(L) dL}\over{2 \int (D L + {\sqrt{3}\over{4}} D^2) n(L) dL}}</span>
+<span class="s">	\end{equation}</span>
+<span class="s">	  where $D$ is the width of the ice crystal (that is, the maximum diameter of the </span>
+<span class="s">	  hexagonal area) and $L$ is the length. The integrand in the numerator is proportional </span>
+<span class="s">	  to the volume while that in the denominator is proportional to the projected area. </span>
+<span class="s">	  Evaluating these formulas one finds that, for the same hexagonal particle, the effective</span>
+<span class="s">	  radius would be $3 \sqrt{3} / 4 = 1.299$ times larger following the </span>
+<span class="s">	  \citet{Yang2000}, \citet{Key2002} definition rather than the \citet{Fu1996,Fu1998} definition.</span>
+<span class="s">	  As an example, an effective radius of 20$\mu m$ with </span>
+<span class="s">	  \code{ic\_properties fu} and \code{ic\_fu reff\_def on} and</span>
+<span class="s">	  1.299 $\cdot$ 20$\mu m$ = 26$\mu m$ with \code{ic\_properties yang} would give comparable results</span>
+<span class="s">	  for hexagonal columns. </span>
+<span class="s">	To use the original definition of the effective radius by \citet{Fu1996,Fu1998} use</span>
+<span class="s">	\code{ic\_fu reff\_def on}!</span>
+
+<span class="s">	With the optional argument \code{interpolate} the ice cloud optical properties are interpolated </span>
+<span class="s">	over wavelength; useful for precalculated optical property files defined with \code{ic\_properties}. </span>
+<span class="s">	Please note that this option may be extremely memory-consuming because for each internal wavelength </span>
+<span class="s">	a full set of Legendre moments of the phase function is stored (up to several thousands). </span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;ic_modify&#39;</span>	<span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Modify ice cloud optical properties.</span>
+<span class="s">	\fcode{</span>
+<span class="s">	ic\_modify variable scale/set value</span>
+<span class="s">	}</span>
+<span class="s">	This option is identical to \code{wc\_modify}.</span>
+<span class="s">	Please refer to \code{wc\_modify} for a detailed description of \code{variable}.</span>
+<span class="s">	</span>
+<span class="s">	If you use this option in combination with the ice</span>
+<span class="s">	cloud properties by \citet{Fu1996}, please make sure that you understand</span>
+<span class="s">	the explanation of \code{ic\_fu}.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;ic_habit&#39;</span>	<span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Ice crystal habit for the \citet{Yang2000}, \citet{Key2002} and</span>
+<span class="s">	\code{hey} parameterizations, see also  \code{ic\_properties key/yang/hey}.</span>
+<span class="s">	\fcode{</span>
+<span class="s">	ic\_habit type</span>
+<span class="s">	} </span>
+<span class="s">	For Key/Yang \code{type} may be one of \code{solid-column}, </span>
+<span class="s">	\code{hollow-column}, \code{rough-aggregate}, \code{rosette-4}, </span>
+<span class="s">	\code{rosette-6}, \code{plate}, \code{droxtal}, \code{dendrite}</span>
+<span class="s">	and \code{spheroid}. Please note that this parameterization is only valid for</span>
+<span class="s">	a restricted size range, depending on the habit (see table 1 in </span>
+<span class="s">	\citet{Key2002}. Also, some of the habits are only available for</span>
+<span class="s">	wavelengths below 5 micrometer (\code{rosette-4}) while others are only available</span>
+<span class="s">	for wavelengths larger than 3 micrometer (\code{droxtal}, \code{spheroid}).</span>
+
+<span class="s">	For \code{hey} the following habits can be chosen: \code{solid-column}, </span>
+<span class="s">	\code{hollow-column}, \code{rough-aggregate}, \code{rosette-6}, </span>
+<span class="s">	\code{plate}, \code{droxtal}, and the general habit mixture \code{ghm} </span>
+<span class="s">        which follows the ``recipe&#39;&#39; by \citet{baum05a:_bulk}. All</span>
+<span class="s">	habits and the habit mixture are available for effective radii from 5 to 90 micrometers in</span>
+<span class="s">	the wavelength region from 0.2 to 5 micrometers.</span>
+
+<span class="s">        The parameterization \code{baum\_v36} includes the general habit mixture</span>
+<span class="s">        \code{ghm} and the habits \code{solid-column} and \code{aggregate}, </span>
+<span class="s">        all crystals modeled with severe roughness.          </span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;ic_habit_yang2013&#39;</span>	<span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Ice crystal habit for the \citet{yang2013} parameterization,</span>
+<span class="s">        \code{ic\_properties yang2013}.</span>
+<span class="s">	\fcode{</span>
+<span class="s">	ic\_habit type roughness</span>
+<span class="s">	} </span>
+<span class="s">	The following habits are available: \code{column\_8elements}, </span>
+<span class="s">        \code{droxtal}, \code{hollow\_bullet\_rosette}, \code{hollow\_column}, </span>
+<span class="s">        \code{plate}, \code{plate\_10elements}, \code{plate\_5elements}, \code{solid\_bullet\_rosette}, </span>
+<span class="s">        and \code{solid\_column}.</span>
+
+<span class="s">        For each habit three degrees of roughness needs to be specified, options are \code{smooth}, </span>
+<span class="s">        \code{moderate} and \code{severe}.         </span>
+<span class="s">        </span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>        
+
+		<span class="s">&#39;ic_fu&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	\fcode{</span>
+<span class="s">	ic\_fu reff\_def on/off</span>
+<span class="s">	}</span>
+<span class="s">	Specify wich definition of the effective radius is used.</span>
+<span class="s">	</span>
+<span class="s">	If \code{on} the parameterization uses the original definition of the effective radius</span>
+<span class="s">	as specified in \citet{Fu1996,Fu1998}. </span>
+
+<span class="s">	Default is \code{off}. The same definition of the effective radius is used as the \citet{Key2002},</span>
+<span class="s">	\citet{Yang2000} and \citet{baum05a:_bulk,baum05b:_bulk}</span>
+<span class="s">	parameterizations; see discussion of \code{ic\_properties}.</span>
+
+<span class="s">	\fcode{</span>
+<span class="s">	ic\_fu deltascaling on/off</span>
+<span class="s">	}</span>
+<span class="s">	Specify if the \citet{Fu1996} optical properties are delta-scaled or not. </span>
+
+<span class="s">	If \code{on} delta-scaling is switched on.</span>
+
+<span class="s">	If  \code{off} delta-scaling is switched off. The default is without delta-scaling.</span>
+<span class="s">	Please note that this was changed on July 22, 2008: </span>
+<span class="s">	Before, delta-scaling was switched on by default which might have</span>
+<span class="s">	caused some confusion, because irradiance calculations were not</span>
+<span class="s">	consistent with the other ice cloud parameterizations implemented in</span>
+<span class="s">	\code{uvspec}. </span>
+<span class="s">	Using the \citet{Fu1996} parameterization in combination with one of </span>
+<span class="s">	\code{ic\_modify} you now get</span>
+<span class="s">	consistent results with all other ice cloud parameterizations.</span>
+<span class="s">	</span>
+<span class="s">	%THIS IS THE OLD DOCUMENTATION (BEFORE CHANGE OF DELTA-SCALING</span>
+<span class="s">	%				      DEFAULT).</span>
+<span class="s">	%</span>
+<span class="s">	%It has been confirmed that the difference with and </span>
+<span class="s">	%without delta-scaling is typically on the order of less than 1 - 2\% </span>
+<span class="s">	%and therefore it was decided to switch delta-scaling off by default.</span>
+<span class="s">	%Please note that this has nothing to do with the internal delta-scaling</span>
+<span class="s">	%by the solvers: e.g. disort2 always applies it&#39;s own internal delta-scaling </span>
+<span class="s">	%anyway. (THE FOLLOWING NEEDS TO BE MODIFIED).</span>
+<span class="s">	%If you define a cloud only by its microphysical properties (ice water</span>
+<span class="s">	</span><span class="si">%c</span><span class="s">ontent, effective radius), delta-scaling should certainly be switched</span>
+<span class="s">	</span><span class="si">%o</span><span class="s">n and you do not need to read further. </span>
+<span class="s">	%If, however, you want to</span>
+<span class="s">	</span><span class="si">%u</span><span class="s">se the Fu (1996) parameterization in combination with one of </span>
+<span class="s">	%\code{ic_set_tau/tau550/gg/ssa} or \code{ic_scale_gg/ssa} it might be</span>
+<span class="s">	</span><span class="si">%r</span><span class="s">easonable to switch delta-scaling off and you should make sure that</span>
+<span class="s">	%you understand the following. Citing from Fu (1996): &quot;For nonspherical</span>
+<span class="s">	%particles in cirrus clouds, it is found that a simple representation</span>
+<span class="s">	</span><span class="si">%o</span><span class="s">f the scattering phase function through the asymmetry factor is</span>
+<span class="s">	</span><span class="si">%i</span><span class="s">nadequate (Fu and Takano 1994). As demonstrated in appendix A, the</span>
+<span class="s">	</span><span class="si">%f</span><span class="s">raction of scattered energy residing in the forward peak, f, needs to</span>
+<span class="s">	%be removed from the scattering parameters to incorporate the strong</span>
+<span class="s">	</span><span class="si">%f</span><span class="s">orward peak contribution in multiple scattering.&quot; Or in other words,</span>
+<span class="s">	%the sharp forward peak is truncated and added to the unscattered</span>
+<span class="s">	</span><span class="si">%d</span><span class="s">irect radiation. The remaining phase function (excluding the sharp</span>
+<span class="s">	</span><span class="si">%f</span><span class="s">orward peak) can be safely approximated by a Henyey-Greenstein</span>
+<span class="s">	</span><span class="si">%f</span><span class="s">unction. The scaling implies a reduction of the optical thickness,</span>
+<span class="s">	%the asymmetry parameter, and the single scattering albedo. This</span>
+<span class="s">	</span><span class="si">%r</span><span class="s">eduction can be rather severe, e.g. a factor of about 3 for the</span>
+<span class="s">	</span><span class="si">%o</span><span class="s">ptical thickness in the visible spectral range. This implies</span>
+<span class="s">	</span><span class="si">%s</span><span class="s">eemingly inconsistent optical properties: For idential IWC content</span>
+<span class="s">	%and effective radius, \code{ic_properties key/yang} would give an</span>
+<span class="s">	</span><span class="si">%(unscaled) o</span><span class="s">ptical thickness about three times higher than</span>
+<span class="s">	%\code{ic_properties fu}. The effect on the radiation field, however,</span>
+<span class="s">	%will be comparable, due the consistent scaling of optical thickness,</span>
+<span class="s">	%asymmetry parameter, and single scattering albedo. If you, however,</span>
+<span class="s">	%adjust the optical thickness using e.g. \code{ic_set_tau}, the effect</span>
+<span class="s">	</span><span class="si">%o</span><span class="s">n the radiation field will be completely different because the</span>
+<span class="s">	</span><span class="si">%(unscaled) o</span><span class="s">ptical thickness by Key (2002) has a completely different</span>
+<span class="s">	%meaning as the (scaled) optical thickness by Fu (1996). In such cases</span>
+<span class="s">	</span><span class="si">%i</span><span class="s">t might be reasonable to switch scaling off. This is a complicated</span>
+<span class="s">	%and confusing topic and it is suggested that you play around a bit</span>
+<span class="s">	%with the options, read the Fu (1996) paper, and make heavy use of the</span>
+<span class="s">	%\code{verbose} feature.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+                <span class="s">&#39;cloud_fraction_file&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">        File containing a cloud fraction profile. </span>
+<span class="s">        \fcode{</span>
+<span class="s">        cloud\_fraction\_file file</span>
+<span class="s">        }</span>
+<span class="s">        Two columns are expected:</span>
+<span class="s">        altitude [km] and cloud fraction, including ice and water clouds. If \code{cloud\_fraction\_file}</span>
+<span class="s">        is defined, effective cloud properties are calculated assuming either random overlap or maximum random overlap</span>
+<span class="s">        of the cloud layers (see also \code{cloud\_overlap}). An example is provided in \file{examples/CF.DAT}.</span>
+<span class="s">                &#39;&#39;&#39;</span><span class="p">,</span>
+
+                <span class="s">&#39;cloud_overlap&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">        Cloud overlap assumption. </span>
+<span class="s">        \fcode{</span>
+<span class="s">        cloud\_overlap type</span>
+<span class="s">        }</span>
+<span class="s">        Following types are implemented:</span>
+<span class="s">        \begin{description}</span>
+<span class="s">        \item[rand] Random overlap of cloud layers </span>
+<span class="s">        \item[maxrand]  Maximum random overlap scheme</span>
+<span class="s">        \item[max]      Maximum overlap scheme</span>
+<span class="s">        \item[off]      Turn off cloud overlap for ECMWF clouds                                        </span>
+<span class="s">        \end{description}</span>
+<span class="s">        Per default the \code{cloud\_overlap} scheme is switched off.</span>
+<span class="s">                &#39;&#39;&#39;</span><span class="p">,</span>
+
+                <span class="s">&#39;cloudcover&#39;</span>    <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">        Set the fraction of the horizontal sky area which is covered by clouds.</span>
+<span class="s">        \fcode{</span>
+<span class="s">        cloudcover typename value</span>
+<span class="s">        }</span>
+<span class="s">        \code{typename} describes the name of the cloud type, which can be &quot;wc&quot; and &quot;ic&quot;:</span>
+
+<span class="s">        \begin{description}</span>
+<span class="s">        \item[ic] Cloud cover of ice cloud, where the cloud properties are taken</span>
+<span class="s">        from \code{ic\_file}.</span>
+<span class="s">        \item[wc] Cloud cover of water cloud, where the cloud properties are taken </span>
+<span class="s">        from \code{wc\_file}.</span>
+<span class="s">        \end{description}</span>
+
+<span class="s">        When a cloud cover is specified, the result will be calculated by</span>
+<span class="s">        the independent pixel approximation (IPA), that is, as weighted average </span>
+<span class="s">        of cloudless sky and overcast sky. </span>
+<span class="s">        Please note that, if both \code{cloudcover ic} and</span>
+<span class="s">        \code{cloudcover wc} are set, both must be equal.</span>
+<span class="s">        </span>
+<span class="s">        This option is ignored, if the option \code{cloud\_fraction\_file} is used.</span>
+<span class="s">                &#39;&#39;&#39;</span><span class="p">,</span>
+
+	<span class="p">}</span></div>
+</pre></div>
+
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, D Griffith, A Ramkilowan.
+    </p>
+  </div>
+
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -1,0 +1,1156 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>morticia.rad.surface_options &mdash; MORTICIA 1.0 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Roboto+Slab:400,700|Inconsolata:400,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="MORTICIA 1.0 documentation" href="../../../index.html"/>
+        <link rel="up" title="morticia" href="../../morticia.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+          <a href="../../../index.html" class="fa fa-home"> MORTICIA</a>
+        
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../how_to_use.html">How to use MORTICIA</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../how_to_use.html#morticia-dependencies">MORTICIA Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../how_to_use.html#installation-and-requirements">Installation and Requirements</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../styleguide.html">The MORTICIA Style Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#to-pep-8-or-not-to-pep-8">To PEP-8 or not to PEP-8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#code-layout">Code Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#import-statements">Import Statements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#whitespace">Whitespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#comments">Comments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#documentation-strings-docstrings">Documentation Strings (docstrings)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#naming-conventions">Naming Conventions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#pep-257">PEP-257</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#from-conventions-section"><em>From</em> Conventions Section</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#general-terminology-and-conventions">General Terminology and Conventions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../for_developers.html">For the Developers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../for_developers.html#structure">Structure</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../packages.html">Packages</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../packages.html#sensor-package">Sensor Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../packages.html#radiometry-package">Radiometry Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../packages.html#scene-package">Scene Package</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ChapLibRadtranODandPathRadiance.html">Transmittance and Path Radiance in libRadtran</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../01a-SpectralChannelsAndFilters.html">IPython Notebook and Sphinx</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../01a-SpectralChannelsAndFilters.html#a-spectralchannelsandfilters-ipython-notebook">01a-SpectralChannelsAndFilters IPython Notebook</a></li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../../index.html">MORTICIA</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      
+          <li><a href="../../morticia.html">morticia</a> &raquo;</li>
+      
+    <li>morticia.rad.surface_options</li>
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <h1>Source code for morticia.rad.surface_options</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;--------------------------------------------------------------------</span>
+<span class="sd"> * $Id: surface_options.py 3155 2015-08-10 10:48:25Z robert.buras $</span>
+<span class="sd"> * </span>
+<span class="sd"> * This file is part of libRadtran.</span>
+<span class="sd"> * Copyright (c) 1997-2012 by Arve Kylling, Bernhard Mayer,</span>
+<span class="sd"> *                            Claudia Emde, Robert Buras</span>
+<span class="sd"> *</span>
+<span class="sd"> * ######### Contact info: http://www.libradtran.org #########</span>
+<span class="sd"> *</span>
+<span class="sd"> * This program is free software; you can redistribute it and/or </span>
+<span class="sd"> * modify it under the terms of the GNU General Public License   </span>
+<span class="sd"> * as published by the Free Software Foundation; either version 2</span>
+<span class="sd"> * of the License, or (at your option) any later version.        </span>
+<span class="sd"> * </span>
+<span class="sd"> * This program is distributed in the hope that it will be useful, </span>
+<span class="sd"> * but WITHOUT ANY WARRANTY; without even the implied warranty of  </span>
+<span class="sd"> * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the   </span>
+<span class="sd"> * GNU General Public License for more details.                    </span>
+<span class="sd"> * </span>
+<span class="sd"> * You should have received a copy of the GNU General Public License          </span>
+<span class="sd"> * along with this program; if not, write to the Free Software                </span>
+<span class="sd"> * Foundation, Inc., 59 Temple Place - Suite 330, </span>
+<span class="sd"> * Boston, MA 02111-1307, USA.</span>
+<span class="sd"> *--------------------------------------------------------------------&quot;&quot;&quot;</span>
+
+
+<span class="kn">from</span> <span class="nn">option_definition</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="k">class</span> <span class="nc">setup_surface_group</span><span class="p">():</span>
+<div class="viewcode-block" id="setup_surface_group"><a class="viewcode-back" href="../../../mortapi/morticia.rad.html#morticia.rad.surface_options.setup_surface_group">[docs]</a>
+	<span class="n">group_name</span> <span class="o">=</span> <span class="s">&#39;Surface&#39;</span>
+
+	<span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="setup_surface_group.__init__"><a class="viewcode-back" href="../../../mortapi/morticia.rad.html#morticia.rad.surface_options.setup_surface_group.__init__">[docs]</a>		<span class="n">documentation</span> <span class="o">=</span> <span class="n">get_surface_documentation</span><span class="p">()</span>
+
+                <span class="n">brdf_non_parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;albedo&#39;</span><span class="p">,</span><span class="s">&#39;albedo_file&#39;</span><span class="p">,</span><span class="s">&#39;albedo_library&#39;</span><span class="p">,</span>
+                                  <span class="s">&#39;brdf_rossli&#39;</span><span class="p">,</span> <span class="s">&#39;brdf_rossli_file&#39;</span><span class="p">,</span> <span class="s">&#39;brdf_rossli_hotspot&#39;</span><span class="p">,</span>
+                                  <span class="s">&#39;brdf_ambrals&#39;</span><span class="p">,</span> <span class="s">&#39;brdf_ambrals_file&#39;</span><span class="p">,</span> <span class="s">&#39;brdf_ambrals_hotspot&#39;</span><span class="p">,</span>
+                                  <span class="s">&#39;brdf_cam&#39;</span><span class="p">,</span> <span class="s">&#39;brdf_cam_solar_wind&#39;</span><span class="p">,</span> <span class="s">&#39;cox_and_munk_u10_map&#39;</span><span class="p">,</span> 
+                                  <span class="s">&#39;brdf_rpv_file&#39;</span><span class="p">,</span> <span class="s">&#39;brdf_rpv&#39;</span><span class="p">,</span> <span class="s">&#39;brdf_rpv_library&#39;</span><span class="p">,</span><span class="s">&#39;brdf_rpv_type&#39;</span><span class="p">,</span>
+                                  <span class="s">&#39;brdf_hapke&#39;</span><span class="p">,</span> <span class="s">&#39;brdf_hapke_file&#39;</span><span class="p">,</span>
+                                  <span class="s">&#39;mc_albedo_file&#39;</span><span class="p">,</span> <span class="s">&#39;mc_albedo_spectral_file&#39;</span><span class="p">,</span> <span class="s">&#39;mc_albedo_type&#39;</span><span class="p">,</span>
+                                  <span class="s">&#39;mc_rossli_file&#39;</span><span class="p">,</span> <span class="s">&#39;mc_ambrals_file&#39;</span><span class="p">,</span> <span class="s">&#39;mc_rpv_type&#39;</span><span class="p">,</span> <span class="s">&#39;mc_rpv_file&#39;</span><span class="p">,</span>
+                                  <span class="s">&#39;bpdf_tsang_u10&#39;</span><span class="p">]</span>
+
+		<span class="n">altitude</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;altitude&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;surface&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Set the bottom level atmosphere provided in atmosphere_file to be at the given altitude.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;altitude&#39;</span><span class="p">],</span> 
+			<span class="n">gui_inputs</span><span class="o">=</span><span class="p">(</span><span class="n">FloatInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.alt.altitude&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s">&#39;NOT_DEFINED_FLOAT&#39;</span><span class="p">,</span> <span class="n">valid_range</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">1000000.0</span><span class="p">,</span> <span class="mf">1000000.0</span><span class="p">]),</span> <span class="n">FloatInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.alt.altitude_dz&#39;</span><span class="p">,</span> <span class="n">valid_range</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1000000.0</span><span class="p">],</span> <span class="n">optional</span><span class="o">=</span><span class="bp">True</span><span class="p">),),</span>
+			<span class="n">tokens</span> <span class="o">=</span> <span class="p">[</span> <span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.alt.source&#39;</span><span class="p">,</span><span class="n">setting</span><span class="o">=</span><span class="s">&#39;ALT_DIRECT_INPUT&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s">&#39;ALT_NOT_DEFINED&#39;</span><span class="p">),</span> 
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.alt.altitude&#39;</span><span class="p">,</span><span class="n">datatype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s">&#39;NOT_DEFINED_FLOAT&#39;</span><span class="p">,</span> <span class="n">valid_range</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">1e6</span><span class="p">,</span><span class="mf">1e6</span><span class="p">]),</span>
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.alt.altitude_dz&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">valid_range</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mf">1e6</span><span class="p">],</span> <span class="n">optional</span><span class="o">=</span><span class="bp">True</span> <span class="p">)</span> <span class="p">],</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span> 
+		<span class="p">)</span>
+
+		<span class="n">mc_elevation_file</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;mc_elevation_file&#39;</span><span class="p">,</span> 
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;surface&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Define a MYSTIC 2D elevation input file.&#39;</span><span class="p">,</span> 
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;mc_elevation_file&#39;</span><span class="p">],</span> 
+			<span class="n">gui_inputs</span><span class="o">=</span><span class="p">(</span><span class="n">FileInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.filename[FN_MC_ELEVATION]&#39;</span><span class="p">),),</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.filename[FN_MC_ELEVATION]&#39;</span><span class="p">,</span><span class="n">datatype</span><span class="o">=</span><span class="nb">file</span><span class="p">),</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span> 
+			<span class="n">speaker</span><span class="o">=</span><span class="s">&#39;rte_solver&#39;</span><span class="p">,</span>
+			<span class="n">enable_values</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;mystic&quot;</span><span class="p">,</span><span class="s">&quot;montecarlo&quot;</span><span class="p">),</span>
+			<span class="n">threedmystic</span> <span class="o">=</span><span class="bp">True</span>
+		<span class="p">)</span>
+
+		<span class="n">albedo</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;albedo&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;surface&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Lambertian surface albedo&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;albedo&#39;</span><span class="p">],</span> 
+			<span class="n">gui_inputs</span><span class="o">=</span><span class="p">(</span><span class="n">FloatInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.alb.albedo&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">valid_range</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),),</span>
+			<span class="n">tokens</span> <span class="o">=</span> <span class="p">[</span> <span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.alb.albedo&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">valid_range</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]),</span>
+				<span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.alb.source&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;ALBEDO_CONSTANT&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s">&#39;NOT_DEFINED_INTEGER&#39;</span><span class="p">)</span> <span class="p">],</span> 
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span> 
+			<span class="n">non_parents</span><span class="o">=</span><span class="n">brdf_non_parents</span><span class="p">,</span>
+		<span class="p">)</span>
+
+		<span class="n">albedo_file</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;albedo_file&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;surface&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Location of surface albedo file for wavelength dependent surface albedo.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;albedo_file&#39;</span><span class="p">],</span> 
+			<span class="n">gui_inputs</span><span class="o">=</span><span class="p">(</span><span class="n">FileInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.filename[FN_ALBEDO]&#39;</span><span class="p">),),</span>
+			<span class="n">tokens</span> <span class="o">=</span> <span class="p">[</span> <span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.filename[FN_ALBEDO]&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">file</span><span class="p">),</span> 
+				<span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.alb.source&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;ALBEDO_FROM_ALBEDO_FILE&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s">&#39;NOT_DEFINED_INTEGER&#39;</span><span class="p">),</span> 
+				<span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.alb.surf_type_map&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="bp">False</span><span class="p">),</span> 
+				<span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.alb.albedo&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=-</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span> <span class="p">],</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>  
+			<span class="n">non_parents</span><span class="o">=</span><span class="n">brdf_non_parents</span><span class="p">,</span> 
+			<span class="n">plot</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;plot_type&#39;</span><span class="p">:</span> <span class="s">&#39;2D&#39;</span><span class="p">,</span>
+				<span class="s">&#39;optional_args&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;column_names&#39;</span><span class="p">:</span> <span class="p">(</span>
+						<span class="s">&quot;wavelength&quot;</span><span class="p">,</span>
+						<span class="s">&quot;Albedo&quot;</span><span class="p">,)</span>
+						  <span class="p">}</span>
+				<span class="p">}</span>
+		<span class="p">)</span>
+
+		<span class="n">brdf_cam</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;brdf_cam&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;surface&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;brdf_cam&#39;</span><span class="p">],</span> 
+			<span class="n">gui_inputs</span><span class="o">=</span><span class="p">(</span> <span class="n">ListInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;id&#39;</span><span class="p">,</span><span class="n">valid_range</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;pcl&#39;</span><span class="p">,</span><span class="s">&#39;sal&#39;</span><span class="p">,</span><span class="s">&#39;u10&#39;</span><span class="p">,</span><span class="s">&#39;uphi&#39;</span><span class="p">]),</span>
+				<span class="n">FloatInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.cm.cam[id]&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s">&#39;NOT_DEFINED_FLOAT&#39;</span><span class="p">,</span> <span class="n">valid_range</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1e6</span><span class="p">]),),</span>
+			<span class="n">tokens</span> <span class="o">=</span> <span class="p">[</span> <span class="n">addLogical</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;id&#39;</span><span class="p">,</span><span class="n">logicals</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;pcl&#39;</span><span class="p">,</span><span class="s">&#39;sal&#39;</span><span class="p">,</span><span class="s">&#39;u10&#39;</span><span class="p">,</span><span class="s">&#39;uphi&#39;</span><span class="p">],</span><span class="n">setting</span><span class="o">=</span><span class="s">&#39;BRDF_CAM_&#39;</span><span class="p">),</span>
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.cm.param[id]&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">valid_range</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mf">1e6</span><span class="p">]),</span>
+				<span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.disort2_brdf&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;BRDF_CAM&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s">&#39;BRDF_NONE&#39;</span><span class="p">)</span> <span class="p">],</span> 
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+			<span class="n">non_parents</span><span class="o">=</span><span class="n">brdf_non_parents</span><span class="p">,</span>
+                        <span class="n">non_parent_exceptions</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;brdf_cam&#39;</span><span class="p">,</span> <span class="s">&#39;brdf_cam_solar_wind&#39;</span><span class="p">,</span> <span class="s">&#39;cox_and_munk_u10_map&#39;</span><span class="p">,</span> <span class="s">&#39;mc_rossli_file&#39;</span><span class="p">,</span> <span class="s">&#39;mc_ambrals_file&#39;</span><span class="p">],</span>
+			<span class="n">speaker</span><span class="o">=</span><span class="s">&#39;rte_solver&#39;</span><span class="p">,</span>
+			<span class="n">enable_values</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;disort&quot;</span><span class="p">,</span><span class="s">&quot;mystic&quot;</span><span class="p">),</span>
+			<span class="n">non_unique</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+		<span class="p">)</span>
+		
+		<span class="n">brdf_cam_solar_wind</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;brdf_cam_solar_wind&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;surface&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Wind azimuth identical to the incoming photon azimuth.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;brdf_cam_solar_wind&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="p">[</span> <span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.disort2_brdf&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;BRDF_CAM&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s">&#39;BRDF_NONE&#39;</span><span class="p">),</span> 
+				   <span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.cm.solar_wind&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="p">],</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+			<span class="n">non_parents</span><span class="o">=</span><span class="n">brdf_non_parents</span><span class="p">,</span>
+                        <span class="n">non_parent_exceptions</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;brdf_cam&#39;</span><span class="p">,</span> <span class="s">&#39;brdf_cam_solar_wind&#39;</span><span class="p">,</span> <span class="s">&#39;cox_and_munk_u10_map&#39;</span><span class="p">,</span> <span class="s">&#39;mc_rossli_file&#39;</span><span class="p">,</span> <span class="s">&#39;mc_ambrals_file&#39;</span><span class="p">],</span>
+			<span class="n">speaker</span><span class="o">=</span><span class="s">&#39;rte_solver&#39;</span><span class="p">,</span>
+			<span class="n">enable_values</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;mystic&quot;</span><span class="p">,)</span>
+		<span class="p">)</span>
+		
+		<span class="n">brdf_hapke</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;brdf_hapke&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;surface&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Constant parameters for Hapke BRDF.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;brdf_hapke&#39;</span><span class="p">],</span> 
+			<span class="n">gui_inputs</span><span class="o">=</span><span class="p">(</span><span class="n">ListInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;id&#39;</span><span class="p">,</span><span class="n">valid_range</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;b0&#39;</span><span class="p">,</span><span class="s">&#39;h&#39;</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">]),</span> <span class="n">FloatInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.hapke.hapke[id]&#39;</span><span class="p">),),</span>
+			<span class="n">tokens</span><span class="o">=</span> <span class="p">[</span><span class="n">addLogical</span><span class="p">(</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;id&#39;</span><span class="p">,</span> <span class="n">logicals</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;b0&#39;</span><span class="p">,</span><span class="s">&#39;h&#39;</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">],</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;BRDF_HAPKE_&#39;</span><span class="p">),</span> 
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.hapke.hapke[id]&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span> <span class="p">],</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span> 
+			<span class="n">non_parents</span><span class="o">=</span><span class="n">brdf_non_parents</span><span class="p">,</span>
+			<span class="n">non_unique</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+		<span class="p">)</span>
+
+		<span class="n">brdf_hapke_file</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;brdf_hapke_file&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;surface&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;File containing the Hapke BDRF parameterization.&#39;</span><span class="p">,</span> 
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;brdf_hapke_file&#39;</span><span class="p">],</span> 
+			<span class="n">gui_inputs</span><span class="o">=</span><span class="p">(</span><span class="n">FileInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.filename[FN_HAPKE]&#39;</span><span class="p">),),</span>
+			<span class="n">tokens</span> <span class="o">=</span> <span class="p">[</span> <span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.filename[FN_HAPKE]&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">file</span><span class="p">),</span> 
+				<span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.hapke.source&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;HAPKE_FROM_HAPKE_FILE&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s">&#39;HAPKE_CONSTANT&#39;</span><span class="p">)</span> <span class="p">],</span> 
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span> 
+			<span class="n">non_parents</span><span class="o">=</span><span class="n">brdf_non_parents</span><span class="p">,</span>
+		<span class="p">)</span>
+
+		<span class="n">brdf_rossli</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;brdf_rossli&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;surface&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Three-parameter Ross-Li BRDF fit for vegetated and non-vegetated surfaces.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;brdf_rossli&#39;</span><span class="p">],</span>
+			<span class="n">gui_inputs</span><span class="o">=</span><span class="p">(</span><span class="n">ListInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;id&#39;</span><span class="p">,</span> <span class="n">valid_range</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;iso&#39;</span><span class="p">,</span><span class="s">&#39;vol&#39;</span><span class="p">,</span><span class="s">&#39;geo&#39;</span><span class="p">]),</span> <span class="n">FloatInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rossli.rossli[id]&#39;</span><span class="p">),</span> <span class="p">),</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="p">[</span> <span class="n">addLogical</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;id&#39;</span><span class="p">,</span> <span class="n">logicals</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;iso&#39;</span><span class="p">,</span><span class="s">&#39;vol&#39;</span><span class="p">,</span><span class="s">&#39;geo&#39;</span><span class="p">],</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;BRDF_ROSSLI_&#39;</span><span class="p">),</span>
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rossli.rossli[id]&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span> <span class="p">],</span> 
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+			<span class="n">non_parents</span><span class="o">=</span><span class="n">brdf_non_parents</span><span class="p">,</span> 
+                        <span class="n">non_parent_exceptions</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;brdf_rossli_hotspot&#39;</span><span class="p">],</span>
+			<span class="n">non_unique</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+			<span class="n">showInGui</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+                        <span class="n">developer</span> <span class="o">=</span> <span class="bp">True</span>
+		<span class="p">)</span>
+
+		<span class="n">brdf_rossli_hotspot</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;brdf_rossli_hotspot&#39;</span><span class="p">,</span> 
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;surface&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Turn on hot spot correction factor in Ross-Li BRDF.&#39;</span><span class="p">,</span> 
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;brdf_rossli_hotspot&#39;</span><span class="p">],</span> 
+			<span class="n">tokens</span><span class="o">=</span><span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rossli.hotspot&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;BRDF_ROSSLI_HOTSPOT_ON&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s">&#39;BRDF_ROSSLI_HOTSPOT_OFF&#39;</span><span class="p">),</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+			<span class="n">non_parents</span><span class="o">=</span><span class="n">brdf_non_parents</span><span class="p">,</span> 
+                        <span class="n">non_parent_exceptions</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;brdf_rossli&#39;</span><span class="p">],</span>
+			<span class="n">showInGui</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+                        <span class="n">developer</span> <span class="o">=</span> <span class="bp">True</span>
+			<span class="p">)</span>
+	
+
+		<span class="n">brdf_rossli_file</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;brdf_rossli_file&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;surface&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;File containing the Ross-Li BDRF parameterization.&#39;</span><span class="p">,</span> 
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;brdf_rossli_file&#39;</span><span class="p">],</span> 
+			<span class="n">gui_inputs</span><span class="o">=</span><span class="p">(</span><span class="n">FileInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.filename[FN_ROSSLI]&#39;</span><span class="p">),),</span>
+			<span class="n">tokens</span> <span class="o">=</span> <span class="p">[</span> <span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.filename[FN_ROSSLI]&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">file</span><span class="p">),</span> 
+				<span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rossli.source&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;ROSSLI_FROM_ROSSLI_FILE&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s">&#39;ROSSLI_CONSTANT&#39;</span><span class="p">)</span> <span class="p">],</span> 
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span> 
+			<span class="n">non_parents</span><span class="o">=</span><span class="n">brdf_non_parents</span><span class="p">,</span>
+                        <span class="n">non_parent_exceptions</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;brdf_rossli_hotspot&#39;</span><span class="p">],</span>
+			<span class="n">showInGui</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+                        <span class="n">developer</span> <span class="o">=</span> <span class="bp">True</span>
+		<span class="p">)</span>
+
+		<span class="n">brdf_ambrals</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;brdf_ambrals&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;surface&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Three-parameter Ross-Li BRDF fit for vegetated and non-vegetated surfaces.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;brdf_ambrals&#39;</span><span class="p">],</span>
+			<span class="n">gui_inputs</span><span class="o">=</span><span class="p">(</span><span class="n">ListInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;id&#39;</span><span class="p">,</span> <span class="n">valid_range</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;iso&#39;</span><span class="p">,</span><span class="s">&#39;vol&#39;</span><span class="p">,</span><span class="s">&#39;geo&#39;</span><span class="p">]),</span> <span class="n">FloatInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rossli.rossli[id]&#39;</span><span class="p">),</span> <span class="p">),</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="p">[</span> <span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rossli.source&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;ROSSLI_AMBRALS_CONSTANT&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s">&#39;ROSSLI_CONSTANT&#39;</span><span class="p">),</span>
+                                <span class="n">addLogical</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;id&#39;</span><span class="p">,</span> <span class="n">logicals</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;iso&#39;</span><span class="p">,</span><span class="s">&#39;vol&#39;</span><span class="p">,</span><span class="s">&#39;geo&#39;</span><span class="p">],</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;BRDF_ROSSLI_&#39;</span><span class="p">),</span>
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rossli.rossli[id]&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span> <span class="p">],</span> 
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+			<span class="n">non_parents</span><span class="o">=</span><span class="n">brdf_non_parents</span><span class="p">,</span> 
+                        <span class="n">non_parent_exceptions</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;brdf_ambrals_hotspot&#39;</span><span class="p">],</span>
+			<span class="n">non_unique</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+		<span class="p">)</span>
+
+		<span class="n">brdf_ambrals_hotspot</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;brdf_ambrals_hotspot&#39;</span><span class="p">,</span> 
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;surface&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Turn on hot spot correction factor in Ross-Li BRDF.&#39;</span><span class="p">,</span> 
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;brdf_ambrals_hotspot&#39;</span><span class="p">],</span> 
+			<span class="n">tokens</span><span class="o">=</span><span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rossli.hotspot&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;BRDF_ROSSLI_HOTSPOT_ON&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s">&#39;BRDF_ROSSLI_HOTSPOT_OFF&#39;</span><span class="p">),</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+			<span class="n">non_parents</span><span class="o">=</span><span class="n">brdf_non_parents</span><span class="p">,</span> 
+                        <span class="n">non_parent_exceptions</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;brdf_ambrals&#39;</span><span class="p">],</span>
+			<span class="p">)</span>
+	
+
+		<span class="n">brdf_ambrals_file</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;brdf_ambrals_file&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;surface&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;File containing the Ross-Li BDRF parameterization.&#39;</span><span class="p">,</span> 
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;brdf_ambrals_file&#39;</span><span class="p">],</span> 
+			<span class="n">gui_inputs</span><span class="o">=</span><span class="p">(</span><span class="n">FileInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.filename[FN_ROSSLI]&#39;</span><span class="p">),),</span>
+			<span class="n">tokens</span> <span class="o">=</span> <span class="p">[</span> <span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.filename[FN_ROSSLI]&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">file</span><span class="p">),</span> 
+				<span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rossli.source&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;ROSSLI_FROM_AMBRALS_FILE&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s">&#39;ROSSLI_CONSTANT&#39;</span><span class="p">)</span> <span class="p">],</span> 
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span> 
+			<span class="n">non_parents</span><span class="o">=</span><span class="n">brdf_non_parents</span><span class="p">,</span>
+                        <span class="n">non_parent_exceptions</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;brdf_ambrals_hotspot&#39;</span><span class="p">],</span>
+		<span class="p">)</span>
+
+		<span class="n">fluorescence</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;fluorescence&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;surface&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Bottom surface isotropic fluorescence source.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;fluorescence&#39;</span><span class="p">],</span> 
+			<span class="n">gui_inputs</span><span class="o">=</span><span class="p">(</span><span class="n">FloatInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.flu.fluorescence&#39;</span><span class="p">),),</span>
+			<span class="n">tokens</span> <span class="o">=</span> <span class="p">[</span> <span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.flu.fluorescence&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mf">0.0</span><span class="p">),</span>
+				<span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.flu.source&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;FLUORESCENCE_CONSTANT&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s">&#39;NOT_DEFINED_INTEGER&#39;</span><span class="p">)</span> <span class="p">],</span> 
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span> 
+			<span class="n">non_parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;fluorescence_file&#39;</span><span class="p">],</span>
+		<span class="p">)</span>
+
+		<span class="n">fluorescence_file</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;fluorescence_file&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;surface&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Bottom surface isotropic fluorescence source file, wavelength dependent.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;fluorescence_file&#39;</span><span class="p">],</span> 
+			<span class="n">gui_inputs</span><span class="o">=</span><span class="p">(</span><span class="n">FileInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.filename[FN_FLUORESCENCE]&#39;</span><span class="p">),),</span>
+			<span class="n">tokens</span> <span class="o">=</span> <span class="p">[</span> <span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.filename[FN_FLUORESCENCE]&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">file</span><span class="p">),</span> 
+				<span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.flu.source&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;FLUORESCENCE_FROM_FLUORESCENCE_FILE&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s">&#39;NOT_DEFINED_INTEGER&#39;</span><span class="p">)</span> <span class="p">],</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>  
+			<span class="n">non_parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;fluorescence&#39;</span><span class="p">],</span> 
+			<span class="n">plot</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;plot_type&#39;</span><span class="p">:</span> <span class="s">&#39;2D&#39;</span><span class="p">,</span>
+				<span class="s">&#39;optional_args&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;column_names&#39;</span><span class="p">:</span> <span class="p">(</span>
+						<span class="s">&quot;wavelength&quot;</span><span class="p">,</span>
+						<span class="s">&quot;Fluorescence&quot;</span><span class="p">,)</span>
+						  <span class="p">}</span>
+				<span class="p">}</span>
+		<span class="p">)</span>
+
+		<span class="n">brdf_rpv_file</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;brdf_rpv_file&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;surface&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;File containing the RPV BDRF parameterization.&#39;</span><span class="p">,</span> 
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;brdf_rpv_file&#39;</span><span class="p">],</span> 
+			<span class="n">gui_inputs</span><span class="o">=</span><span class="p">(</span><span class="n">FileInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.filename[FN_RPV]&#39;</span><span class="p">),),</span>
+			<span class="n">tokens</span> <span class="o">=</span> <span class="p">[</span> <span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.filename[FN_RPV]&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">file</span><span class="p">),</span> 
+				<span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rpv.source&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;RPV_FROM_RPV_FILE&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s">&#39;RPV_CONSTANT&#39;</span><span class="p">)</span> <span class="p">],</span> 
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span> 
+			<span class="n">non_parents</span><span class="o">=</span><span class="n">brdf_non_parents</span><span class="p">,</span>
+                        <span class="n">non_parent_exceptions</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;brdf_rpv_file&#39;</span><span class="p">,</span> <span class="s">&#39;brdf_rpv&#39;</span><span class="p">,</span> <span class="s">&#39;brdf_rpv_library&#39;</span><span class="p">],</span>
+		<span class="p">)</span>
+		
+		<span class="n">brdf_rpv</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;brdf_rpv&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;surface&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Constant RPV parameters.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;brdf_rpv&#39;</span><span class="p">],</span> 
+			<span class="n">gui_inputs</span><span class="o">=</span><span class="p">(</span><span class="n">ListInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;id&#39;</span><span class="p">,</span><span class="n">valid_range</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;k&#39;</span><span class="p">,</span><span class="s">&#39;rho0&#39;</span><span class="p">,</span> <span class="s">&#39;theta&#39;</span><span class="p">,</span> <span class="s">&#39;sigma&#39;</span><span class="p">,</span> <span class="s">&#39;t1&#39;</span><span class="p">,</span> <span class="s">&#39;t2&#39;</span><span class="p">,</span> <span class="s">&#39;scale&#39;</span><span class="p">]),</span> <span class="n">FloatInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rpv.rpv[id]&#39;</span><span class="p">),),</span>
+			<span class="n">tokens</span><span class="o">=</span> <span class="p">[</span><span class="n">addLogical</span><span class="p">(</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;id&#39;</span><span class="p">,</span> <span class="n">logicals</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;k&#39;</span><span class="p">,</span><span class="s">&#39;rho0&#39;</span><span class="p">,</span> <span class="s">&#39;theta&#39;</span><span class="p">,</span> <span class="s">&#39;sigma&#39;</span><span class="p">,</span> <span class="s">&#39;t1&#39;</span><span class="p">,</span> <span class="s">&#39;t2&#39;</span><span class="p">,</span> <span class="s">&#39;scale&#39;</span><span class="p">],</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;BRDF_RPV_&#39;</span><span class="p">),</span> 
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rpv.rpv[id]&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span> <span class="p">],</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span> 
+			<span class="n">non_parents</span><span class="o">=</span><span class="n">brdf_non_parents</span><span class="p">,</span>
+                        <span class="n">non_parent_exceptions</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;brdf_rpv_file&#39;</span><span class="p">,</span> <span class="s">&#39;brdf_rpv&#39;</span><span class="p">,</span> <span class="s">&#39;brdf_rpv_library&#39;</span><span class="p">],</span>
+			<span class="n">non_unique</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+		<span class="p">)</span>
+
+
+		<span class="n">brdf_rpv_library</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;brdf_rpv_library&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;surface&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Collections of spectral BRDFs of different surface types.&#39;</span><span class="p">,</span> 
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;brdf_rpv_library&#39;</span><span class="p">],</span> 
+			<span class="n">tokens</span><span class="o">=</span><span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rpv.library&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">valid_range</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;IGBP&#39;</span><span class="p">,</span> <span class="nb">file</span><span class="p">]),</span> 
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span> 
+			<span class="n">non_parents</span><span class="o">=</span><span class="n">brdf_non_parents</span><span class="p">,</span>
+                        <span class="n">non_parent_exceptions</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;brdf_rpv_file&#39;</span><span class="p">,</span> <span class="s">&#39;brdf_rpv&#39;</span><span class="p">,</span> <span class="s">&#39;brdf_rpv_library&#39;</span><span class="p">,</span><span class="s">&#39;brdf_rpv_type&#39;</span><span class="p">],</span>
+			<span class="n">childs</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;brdf_rpv_type&#39;</span><span class="p">]</span>
+		<span class="p">)</span>
+		
+		<span class="n">brdf_rpv_type</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;brdf_rpv_type&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;surface&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Select surface type.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;brdf_rpv_type&#39;</span><span class="p">],</span> 
+			<span class="n">gui_inputs</span><span class="o">=</span><span class="p">(</span><span class="n">IntegerInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.alb.surface&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s">&#39;NOT_DEFINED_INTEGER&#39;</span><span class="p">,</span> <span class="n">valid_range</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">99</span><span class="p">]),),</span>
+			<span class="n">tokens</span> <span class="o">=</span> <span class="p">[</span> <span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.alb.surface&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s">&#39;NOT_DEFINED_INTEGER&#39;</span><span class="p">,</span> <span class="n">valid_range</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">99</span><span class="p">]),</span> 
+				<span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.alb.surf_type_map&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span> <span class="p">],</span> 
+			<span class="n">non_parents</span><span class="o">=</span><span class="n">brdf_non_parents</span><span class="p">,</span>
+                        <span class="n">non_parent_exceptions</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;brdf_rpv_file&#39;</span><span class="p">,</span> <span class="s">&#39;brdf_rpv&#39;</span><span class="p">,</span> <span class="s">&#39;brdf_rpv_library&#39;</span><span class="p">,</span><span class="s">&#39;brdf_rpv_type&#39;</span><span class="p">],</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;albedo_library&#39;</span><span class="p">,</span><span class="s">&#39;brdf_rpv_library&#39;</span><span class="p">],</span> 
+		<span class="p">)</span>
+		
+		<span class="n">sur_temperature</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;sur_temperature&#39;</span><span class="p">,</span> 
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;surface&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Surface temperature.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;sur_temperature&#39;</span><span class="p">],</span> 
+			<span class="n">gui_inputs</span><span class="o">=</span><span class="p">(</span><span class="n">FloatInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.surface_temperature&#39;</span><span class="p">),),</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.surface_temperature&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s">&#39;NOT_DEFINED_FLOAT&#39;</span><span class="p">),</span> 
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span> 
+		<span class="p">)</span>
+
+		<span class="n">sur_temperature_file</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;sur_temperature_file&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;surface&#39;</span><span class="p">,</span> 
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Define a MYSTIC 2D temperature input file.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;sur_temperature_file&#39;</span><span class="p">],</span>
+			<span class="n">gui_inputs</span><span class="o">=</span><span class="p">(</span><span class="n">FileInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.filename[FN_MC_TEMPERATURE]&#39;</span><span class="p">),),</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="n">addToken</span><span class="p">(</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.filename[FN_MC_TEMPERATURE]&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">file</span> <span class="p">),</span>	
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span> 
+			<span class="n">speaker</span><span class="o">=</span><span class="s">&#39;rte_solver&#39;</span><span class="p">,</span>
+			<span class="n">enable_values</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;mystic&quot;</span><span class="p">,</span><span class="s">&quot;montecarlo&quot;</span><span class="p">),</span>
+			<span class="n">threedmystic</span> <span class="o">=</span><span class="bp">True</span>
+		<span class="p">)</span>
+
+		<span class="n">mc_albedo_file</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;mc_albedo_file&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;surface&#39;</span><span class="p">,</span> 
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Define a MYSTIC 2D albedo input file.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;mc_albedo_file&#39;</span><span class="p">],</span>
+			<span class="n">gui_inputs</span><span class="o">=</span><span class="p">(</span><span class="n">FileInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.filename[FN_MC_ALBEDO]&#39;</span><span class="p">),),</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="n">addToken</span><span class="p">(</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.filename[FN_MC_ALBEDO]&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">file</span> <span class="p">),</span>	
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span> 
+			<span class="n">non_parents</span><span class="o">=</span><span class="n">brdf_non_parents</span><span class="p">,</span>
+			<span class="n">speaker</span><span class="o">=</span><span class="s">&#39;rte_solver&#39;</span><span class="p">,</span>
+			<span class="n">enable_values</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;mystic&quot;</span><span class="p">,</span><span class="s">&quot;montecarlo&quot;</span><span class="p">),</span>
+			<span class="n">threedmystic</span> <span class="o">=</span><span class="bp">True</span>
+		<span class="p">)</span>
+
+		<span class="n">mc_albedo_type</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;mc_albedo_type&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;surface&#39;</span><span class="p">,</span> 
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Define a MYSTIC 2D albedo type file.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;mc_albedo_type&#39;</span><span class="p">],</span>
+			<span class="n">gui_inputs</span><span class="o">=</span><span class="p">(</span><span class="n">FileInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.filename[FN_MC_ALBEDOTYPE]&#39;</span><span class="p">),),</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="n">addToken</span><span class="p">(</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.filename[FN_MC_ALBEDOTYPE]&#39;</span><span class="p">,</span><span class="n">datatype</span><span class="o">=</span><span class="nb">file</span> <span class="p">),</span>	
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span> 
+			<span class="n">non_parents</span><span class="o">=</span><span class="n">brdf_non_parents</span><span class="p">,</span>
+                        <span class="n">non_parent_exceptions</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;mc_albedo_spectral_file&#39;</span><span class="p">],</span>
+			<span class="n">speaker</span><span class="o">=</span><span class="s">&#39;rte_solver&#39;</span><span class="p">,</span>
+			<span class="n">enable_values</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;mystic&quot;</span><span class="p">,</span><span class="s">&quot;montecarlo&quot;</span><span class="p">),</span>
+			<span class="n">threedmystic</span> <span class="o">=</span><span class="bp">True</span>
+
+		<span class="p">)</span>
+
+		<span class="n">mc_albedo_spectral_file</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;mc_albedo_spectral_file&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;surface&#39;</span><span class="p">,</span> 
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Define a MYSTIC 2D spectral albedo input file.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;mc_albedo_spectral_file&#39;</span><span class="p">],</span>
+			<span class="n">gui_inputs</span><span class="o">=</span><span class="p">(</span><span class="n">FileInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.filename[FN_MC_ALBEDO_SPECTRAL]&#39;</span><span class="p">),),</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="n">addToken</span><span class="p">(</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.filename[FN_MC_ALBEDO_SPECTRAL]&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">file</span> <span class="p">),</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span> 
+			<span class="n">non_parents</span><span class="o">=</span><span class="n">brdf_non_parents</span><span class="p">,</span>
+                        <span class="n">non_parent_exceptions</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;mc_albedo_type&#39;</span><span class="p">],</span>
+			<span class="n">speaker</span><span class="o">=</span><span class="s">&#39;rte_solver&#39;</span><span class="p">,</span>
+			<span class="n">enable_values</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;mystic&quot;</span><span class="p">,</span><span class="s">&quot;montecarlo&quot;</span><span class="p">),</span>
+			<span class="n">threedmystic</span> <span class="o">=</span><span class="bp">True</span>
+
+		<span class="p">)</span>
+
+		<span class="n">mc_rossli_file</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;mc_rossli_file&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;surface&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Define a MYSTIC 2D Ross-Li BRDF input file.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;mc_rossli_file&#39;</span><span class="p">],</span> 
+			<span class="n">gui_inputs</span><span class="o">=</span><span class="p">(</span><span class="n">FileInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.filename[FN_MC_ROSSLI]&#39;</span><span class="p">),),</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.filename[FN_MC_ROSSLI]&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">file</span><span class="p">),</span>	
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span> 
+			<span class="n">non_parents</span><span class="o">=</span><span class="n">brdf_non_parents</span><span class="p">,</span>
+                        <span class="n">non_parent_exceptions</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;brdf_cam&#39;</span><span class="p">,</span> <span class="s">&#39;brdf_cam_solar_wind&#39;</span><span class="p">,</span> <span class="s">&#39;cox_and_munk_u10_map&#39;</span><span class="p">],</span>
+			<span class="n">speaker</span><span class="o">=</span><span class="s">&#39;rte_solver&#39;</span><span class="p">,</span>
+			<span class="n">enable_values</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;mystic&quot;</span><span class="p">,</span><span class="s">&quot;montecarlo&quot;</span><span class="p">),</span>
+			<span class="n">threedmystic</span> <span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+			<span class="n">showInGui</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+                        <span class="n">developer</span> <span class="o">=</span> <span class="bp">True</span>
+		<span class="p">)</span>
+
+		<span class="n">mc_ambrals_file</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;mc_ambrals_file&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;surface&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Define a MYSTIC 2D AMBRALS (Ross-Li) BRDF input file.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;mc_ambrals_file&#39;</span><span class="p">],</span> 
+			<span class="n">gui_inputs</span><span class="o">=</span><span class="p">(</span><span class="n">FileInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.filename[FN_MC_AMBRALS]&#39;</span><span class="p">),),</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.filename[FN_MC_AMBRALS]&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">file</span><span class="p">),</span>	
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span> 
+			<span class="n">non_parents</span><span class="o">=</span><span class="n">brdf_non_parents</span><span class="p">,</span>
+                        <span class="n">non_parent_exceptions</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;brdf_cam&#39;</span><span class="p">,</span> <span class="s">&#39;brdf_cam_solar_wind&#39;</span><span class="p">,</span> <span class="s">&#39;cox_and_munk_u10_map&#39;</span><span class="p">],</span>
+			<span class="n">speaker</span><span class="o">=</span><span class="s">&#39;rte_solver&#39;</span><span class="p">,</span>
+			<span class="n">enable_values</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;mystic&quot;</span><span class="p">,</span><span class="s">&quot;montecarlo&quot;</span><span class="p">),</span>
+			<span class="n">threedmystic</span> <span class="o">=</span><span class="bp">True</span>
+		<span class="p">)</span>
+
+		<span class="n">mc_rpv_type</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;mc_rpv_type&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;surface&#39;</span><span class="p">,</span> 
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Define a MYSTIC 2D rpv albedo type file.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;mc_rpv_type&#39;</span><span class="p">],</span>
+			<span class="n">gui_inputs</span><span class="o">=</span><span class="p">(</span><span class="n">FileInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.filename[FN_MC_RPVTYPE]&#39;</span><span class="p">),),</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="n">addToken</span><span class="p">(</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.filename[FN_MC_RPVTYPE]&#39;</span><span class="p">,</span><span class="n">datatype</span><span class="o">=</span><span class="nb">file</span> <span class="p">),</span>	
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span> 
+			<span class="n">non_parents</span><span class="o">=</span><span class="n">brdf_non_parents</span><span class="p">,</span>
+                        <span class="n">non_parent_exceptions</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;mc_rpv_file&#39;</span><span class="p">],</span>
+			<span class="n">speaker</span><span class="o">=</span><span class="s">&#39;rte_solver&#39;</span><span class="p">,</span>
+			<span class="n">enable_values</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;mystic&quot;</span><span class="p">,</span><span class="s">&quot;montecarlo&quot;</span><span class="p">),</span>
+			<span class="n">threedmystic</span> <span class="o">=</span><span class="bp">True</span>
+
+		<span class="p">)</span>
+
+		<span class="n">mc_rpv_file</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;mc_rpv_file&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;surface&#39;</span><span class="p">,</span> 
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Define a MYSTIC 2D rpv albedo input file.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;mc_rpv_file&#39;</span><span class="p">],</span>
+			<span class="n">gui_inputs</span><span class="o">=</span><span class="p">(</span><span class="n">FileInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.filename[FN_MC_RPV_SPECTRAL]&#39;</span><span class="p">),),</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="n">addToken</span><span class="p">(</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.filename[FN_MC_RPV_SPECTRAL]&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">file</span> <span class="p">),</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span> 
+			<span class="n">non_parents</span><span class="o">=</span><span class="n">brdf_non_parents</span><span class="p">,</span>
+                        <span class="n">non_parent_exceptions</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;mc_rpv_type&#39;</span><span class="p">],</span>
+			<span class="n">speaker</span><span class="o">=</span><span class="s">&#39;rte_solver&#39;</span><span class="p">,</span>
+			<span class="n">enable_values</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;mystic&quot;</span><span class="p">,</span><span class="s">&quot;montecarlo&quot;</span><span class="p">),</span>
+			<span class="n">threedmystic</span> <span class="o">=</span><span class="bp">True</span>
+
+		<span class="p">)</span>
+
+		<span class="n">bpdf_tsang_u10</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;bpdf_tsang_u10&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;surface&#39;</span><span class="p">,</span> 
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;bpdf_tsang_u10&#39;</span><span class="p">],</span>
+			<span class="n">gui_inputs</span><span class="o">=</span><span class="p">(</span><span class="n">FloatInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.bpdf.u10&#39;</span><span class="p">),),</span>
+			<span class="n">tokens</span><span class="o">=</span> <span class="p">[</span> <span class="n">addToken</span><span class="p">(</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.bpdf.u10&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">float</span> <span class="p">),</span>
+				<span class="n">addSetting</span><span class="p">(</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.bpdf.type&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;BPDF_TSANG&#39;</span> <span class="p">)</span> <span class="p">],</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span> 
+			<span class="n">non_parents</span><span class="o">=</span><span class="n">brdf_non_parents</span><span class="p">,</span>
+			<span class="n">mystic</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+		<span class="p">)</span>
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">options</span> <span class="o">=</span> <span class="p">[</span><span class="n">altitude</span><span class="p">,</span>
+				<span class="n">mc_elevation_file</span><span class="p">,</span>
+				<span class="n">albedo</span><span class="p">,</span> <span class="n">albedo_file</span><span class="p">,</span> <span class="n">mc_albedo_file</span><span class="p">,</span>
+                                <span class="n">mc_albedo_spectral_file</span><span class="p">,</span> <span class="n">mc_albedo_type</span><span class="p">,</span> 
+				<span class="n">brdf_rossli</span><span class="p">,</span><span class="n">brdf_rossli_hotspot</span><span class="p">,</span>
+                                <span class="n">brdf_rossli_file</span><span class="p">,</span>
+				<span class="n">mc_rossli_file</span><span class="p">,</span> 
+				<span class="n">brdf_ambrals</span><span class="p">,</span><span class="n">brdf_ambrals_hotspot</span><span class="p">,</span>
+                                <span class="n">brdf_ambrals_file</span><span class="p">,</span>
+				<span class="n">mc_ambrals_file</span><span class="p">,</span> 
+				<span class="n">brdf_cam</span><span class="p">,</span> 
+				<span class="n">brdf_cam_solar_wind</span><span class="p">,</span> 
+				<span class="n">bpdf_tsang_u10</span><span class="p">,</span>
+				<span class="n">brdf_rpv_library</span><span class="p">,</span> 
+				<span class="n">brdf_rpv</span><span class="p">,</span> <span class="n">brdf_rpv_type</span><span class="p">,</span> <span class="n">mc_rpv_type</span><span class="p">,</span> 
+				<span class="n">brdf_hapke</span><span class="p">,</span> <span class="n">brdf_hapke_file</span><span class="p">,</span>
+				<span class="n">brdf_rpv_file</span><span class="p">,</span> <span class="n">mc_rpv_file</span><span class="p">,</span> 
+				<span class="n">fluorescence</span><span class="p">,</span> <span class="n">fluorescence_file</span><span class="p">,</span>
+				<span class="n">sur_temperature</span><span class="p">,</span> <span class="n">sur_temperature_file</span><span class="p">,</span> 
+				<span class="p">]</span>
+
+	<span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
+		<span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">get_surface_documentation</span><span class="p">():</span></div>
+<div class="viewcode-block" id="get_surface_documentation"><a class="viewcode-back" href="../../../mortapi/morticia.rad.html#morticia.rad.surface_options.get_surface_documentation">[docs]</a>	<span class="k">return</span> <span class="p">{</span>
+		<span class="s">&#39;brdf_hapke&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+
+<span class="s">	Wavelength-independent Hapke BRDF values.</span>
+<span class="s">        Hapke is a parameterization of extraterrestial solid bodies such as</span>
+<span class="s">        the moon, asteroids or the inner planets by \cite{hapke1993}.</span>
+<span class="s">	\fcode{</span>
+<span class="s">	brdf\_hapke variable value</span>
+<span class="s">	}</span>
+<span class="s">	\code{variable} can be one of the following:</span>
+<span class="s">	\begin{description}</span>
+<span class="s">	\item[w] Single scattering albedo of surface.</span>
+<span class="s">	\item[B0] Hot spot factor.</span>
+<span class="s">	\item[h] Surface roughness parameter.</span>
+<span class="s">	\end{description}</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+		<span class="s">&#39;brdf_hapke_file&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	        4 column file, containing the Hapke BDRF</span>
+<span class="s">	        parameterization, see \code{brdf\_hapke}.</span>
+<span class="s">	\fcode{</span>
+<span class="s">	brdf\_hapke\_file file</span>
+<span class="s">	}</span>
+<span class="s">	This option is only supported with</span>
+<span class="s">	solvers: \code{disort}\ifmystic{ and \code{rte\_solver</span>
+<span class="s">	mystic}}. The columns of the input file are wavelength</span>
+<span class="s">	[nm], w, B0, and h.  The parameters are interpolated linearly to</span>
+<span class="s">	the internal wavelength grid.  To make sure that the results are</span>
+<span class="s">	reasonable, specify the Hapke data on a wavelength grid similar or equal</span>
+<span class="s">	to that used internally for the radiative transfer calculation!</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+		<span class="s">&#39;brdf_ambrals&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	AMBRALS (Ross-Li) BRDF, a three-parameter BRDF fit for vegetated and </span>
+<span class="s">	non-vegetated surfaces \citep{roujean1992,wanner97,lucht2000,</span>
+<span class="s">        schaaf2002}, based on the RossThickLiSparseReciprocal</span>
+<span class="s">        model. The implementation is according to</span>
+<span class="s">        \cite{lucht2000}. See also http://www-modis.bu.edu/brdf/models.html.</span>
+<span class="s">	\fcode{</span>
+<span class="s">	brdf\_ambrals variable value </span>
+<span class="s">	}</span>
+<span class="s">	\code{variable} can be one of the following:</span>
+<span class="s">	\begin{description}</span>
+<span class="s">        \item[iso] f\_iso, Eq. (37) \cite{lucht2000}.</span>
+<span class="s">	\item[vol] f\_vol, Eq. (37) \cite{lucht2000}.</span>
+<span class="s">	\item[geo] f\_geo, Eq. (37) \cite{lucht2000}.</span>
+<span class="s">	\end{description}</span>
+<span class="s">        The hot spot correction factor introduced by \cite{maignan2004}</span>
+<span class="s">        can be turned on by the option \code{brdf\_ambrals\_hotspot}.</span>
+<span class="s">        May be combined with \ifmystic{\code{mystic}},</span>
+<span class="s">	\code{disort}, and \code{fdisort2}.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+		<span class="s">&#39;brdf_ambrals_hotspot&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Turn on hot spot correction factor by \cite{maignan2004} when using the AMBRALS (Ross-Li) BRDF.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+		<span class="s">&#39;brdf_ambrals_file&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	        4 column file, containing the AMBRALS (Ross-Li) BDRF</span>
+<span class="s">	parameterization, see \code{brdf\_ambrals}.</span>
+<span class="s">	\fcode{</span>
+<span class="s">	brdf\_ambrals\_file file</span>
+<span class="s">	}</span>
+<span class="s">	This option is only supported with</span>
+<span class="s">	solvers: \code{disort}\ifmystic{ and \code{rte\_solver</span>
+<span class="s">	mystic}}. The columns of the input file are wavelength</span>
+<span class="s">	[nm], iso, vol, and geo.  The parameters are interpolated linearly to</span>
+<span class="s">	the internal wavelength grid.  To make sure that the results are</span>
+<span class="s">	reasonable, specify the Ambrals data on a wavelength grid similar or equal</span>
+<span class="s">	to that used internally for the radiative transfer calculation!</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+		<span class="s">&#39;brdf_rossli&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">        This is the \cite{Lin2015} implementation of the Ross-Li (AMBRALS) BRDF, see also </span>
+<span class="s">        \code{brdf\_ambrals} BRDF. For unknown reasons, these formulas</span>
+<span class="s">        differ in their overall factors of the three terms from the factors in</span>
+<span class="s">        \cite{lucht2000}. Identical results can be obtained by using: f\_iso=$\pi$ k\_iso, f\_geo=$\pi$ k\_geo, f\_vol = 4 k\_vol / 3.</span>
+<span class="s">	\fcode{</span>
+<span class="s">	brdf\_rossli variable value </span>
+<span class="s">	}</span>
+<span class="s">	\code{variable} can be one of the following:</span>
+<span class="s">	\begin{description}</span>
+<span class="s">	\item[iso] k\_iso, Eq. (31) \cite{Lin2015}.</span>
+<span class="s">	\item[vol] k\_vol, Eq. (31) \cite{Lin2015}.</span>
+<span class="s">	\item[geo] k\_geo, Eq. (31) \cite{Lin2015}.</span>
+<span class="s">	\end{description}</span>
+<span class="s">        The hot spot correction factor introduced by \cite{maignan2004}</span>
+<span class="s">        can be turned on by the option \code{brdf\_rossli\_hotspot}.</span>
+<span class="s">        May be combined with \ifmystic{\code{mystic}},</span>
+<span class="s">	\code{disort}, and \code{fdisort2}.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+		<span class="s">&#39;brdf_rossli_hotspot&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Turn on hot spot correction factor by \cite{maignan2004} when using the Ross-Li (AMBRALS) BRDF.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+		<span class="s">&#39;brdf_rossli_file&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">        4 column file, containing the Ross-Li (AMBRALS) BDRF</span>
+<span class="s">        parameterization, see \code{brdf\_rossli} and \code{brdf\_ambrals\_file}.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+		<span class="s">&#39;brdf_rpv&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+
+<span class="s">	Wavelength independent RPV values, see \code{brdf\_rpv\_file}.</span>
+<span class="s">	\fcode{</span>
+<span class="s">	brdf\_rpv variable value</span>
+<span class="s">	}</span>
+<span class="s">	\code{variable} can be one of the following:</span>
+<span class="s">	\begin{description}</span>
+<span class="s">	\item[k] Overwrite the wavelength-dependent</span>
+<span class="s">	k value defined in \code{brdf\_rpv\_file}.</span>
+<span class="s">	\item[rho0] Overwrite the wavelength-dependent</span>
+<span class="s">	rpv0 value defined in \code{brdf\_rpv\_file}.</span>
+<span class="s">	\item[theta] Overwrites the wavelength-dependent</span>
+<span class="s">	theta value defined in \code{brdf\_rpv\_file}.</span>
+<span class="s">	\item[sigma] Constant RPV sigma, to be used for snow \citep{Degunther2000b}.</span>
+<span class="s">	\item[t1] Constant RPV t1, to be used for snow \citep{Degunther2000b}.</span>
+<span class="s">	\item[t2] Constant RPV t2, to be used for snow \citep{Degunther2000b}.</span>
+<span class="s">	\item[scale] Apply a constant scaling factor for the RPV BRDF. </span>
+<span class="s">	Required e.g. if the the albedo should be set to a certain value. This</span>
+<span class="s">	factor is only used by \code{rte\_solver disort}, \code{rte\_solver</span>
+<span class="s">	fdisort2}\ifmystic{ and \code{rte\_solver mystic}}.</span>
+<span class="s">	\end{description}</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;bpdf_tsang_u10&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Wind speed for ocean BPDF (in m/s) at present only available with </span>
+<span class="s">	\code{rte\_solver mystic}.</span>
+<span class="s">	\fcode{</span>
+<span class="s">	bpdf\_tsang\_u10 value</span>
+<span class="s">	}</span>
+<span class="s">	The BPDF model has been developed by \citet{Tsang1985}. </span>
+<span class="s">	The wind speed is the most important parameter affecting the ocean reflectance</span>
+<span class="s">	matrix. The BPDF model also takes into account shadowing by surface waves. </span>
+<span class="s">	The model has been implemented in a FORTRAN routine by Mishchenko </span>
+<span class="s">	(http://www.giss.nasa.gov/staff/mmishchenko/brf/)</span>
+<span class="s">	which has been included into {\sl libRadtran}.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;mc_rpv_file&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Define a MYSTIC 2D RPV BRDF input file.</span>
+<span class="s">	\fcode{</span>
+<span class="s">	mc\_rpv\_file file</span>
+<span class="s">	}</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;mc_rpv_type&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	File containing wavelength-dependent RPVs to be used in combination with \code{mc\_rpv\_file}.</span>
+<span class="s">	\fcode{</span>
+<span class="s">	mc\_rpv\_type file</span>
+<span class="s">	}</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;mc_rossli_file&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">        Same as \code{mc\_ambrals\_file}, but using the \cite{Lin2015}</span>
+<span class="s">        implementation of the Ross-Li (AMBRALS) BRDF</span>
+<span class="s">        parameterization. See also \code{brdf\_rossli} and</span>
+<span class="s">        \code{brdf\_ambrals}.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;mc_ambrals_file&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">        Define a MYSTIC 2D AMBRALS (Ross-Li) BRDF input file, see \code{brdf\_ambrals}.</span>
+<span class="s">	\fcode{</span>
+<span class="s">	mc\_ambrals\_file file</span>
+<span class="s">	}</span>
+<span class="s">        The format of the BRDF file is:</span>
+<span class="s">	\fcode{</span>
+<span class="s">	Nx  Ny  dx  dy</span>
+<span class="s">	ix  iy  iso vol geo</span>
+<span class="s">	...</span>
+<span class="s">	}</span>
+<span class="s">	where Nx and Ny are the number of grid boxes in x- and y-direction,</span>
+<span class="s">	dx and dy are the size of the pixels in km.</span>
+<span class="s">	In the second and the following lines the indices in x- and y-direction</span>
+<span class="s">	(ix=1...Nx; iy=1...Ny) and the three parameters iso, vol, and geo. </span>
+<span class="s">	</span>
+<span class="s">	Optionally, it is now possibly to mix Ross-Li with Cox and Munk</span>
+<span class="s">	(CaM). To this end, the format of the albedo file is:</span>
+<span class="s">	\fcode{</span>
+<span class="s">	Nx  Ny  dx  dy</span>
+<span class="s">	ix  iy  iso vol geo isCaM</span>
+<span class="s">	...</span>
+<span class="s">	}</span>
+<span class="s">	where isCaM is 1 if CaM shall be used in the pixel, and 0 if Ross-Li</span>
+<span class="s">	shall be used. In case of CaM, the values of iso, vol, and geo are</span>
+<span class="s">	ignored. Note that this will only work if the CaM parameters are set</span>
+<span class="s">	(that is as minimal configuration u10).</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;mc_albedo_file&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Define a MYSTIC 2D albedo input file (default: albedo2D.dat).</span>
+<span class="s">	\fcode{</span>
+<span class="s">	mc\_albedo\_file file</span>
+<span class="s">	}</span>
+<span class="s">	The format of the albedo file is:</span>
+<span class="s">	\fcode{</span>
+<span class="s">	Nx  Ny  dx  dy</span>
+<span class="s">    ix  iy  albedo</span>
+<span class="s">	...</span>
+<span class="s">	}</span>
+<span class="s">	where Nx and Ny are the number of grid boxes in x- and y-direction,</span>
+<span class="s">	dx and dy are the size of the pixels in km.</span>
+<span class="s">	In the second and the following lines the indices in x- and y-direction</span>
+<span class="s">	(ix=1...Nx; iy=1...Ny) and the albedo of the pixel are specified. </span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;mc_albedo_spectral_file&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Define a MYSTIC 2D spectral albedo input file.</span>
+<span class="s">	\fcode{</span>
+<span class="s">	mc\_albedo\_spectral\_file file</span>
+<span class="s">	}</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;mc_albedo_type&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	File containing wavelength-dependent albedos to be used in combination with \code{mc\_albedo\_spectral\_file}.</span>
+<span class="s">	\fcode{</span>
+<span class="s">	mc\_albedo\_type file</span>
+<span class="s">	}</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;mc_elevation_file&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Define a MYSTIC 2D elevation input file (default: elevation2D.dat). </span>
+<span class="s">	\fcode{</span>
+<span class="s">	mc\_elevation\_file file</span>
+<span class="s">	}</span>
+<span class="s">	The </span>
+<span class="s">	expected format of the elevation file is:</span>
+<span class="s">	\fcode{</span>
+<span class="s">	Nx  Ny  dx  dy</span>
+<span class="s">	ix  iy  elevation</span>
+<span class="s">	...</span>
+<span class="s">	}</span>
+<span class="s">	where Nx and Ny are the number of grid boxes in x- and y-direction,</span>
+<span class="s">	dx and dy are the size of the grid boxes in km.</span>
+<span class="s">	In the second and the following lines the indices in x- and y-direction</span>
+<span class="s">	(ix=1...Nx, iy=1...Ny) and the elevation in km of each point are specified.</span>
+<span class="s">	</span>
+<span class="s">	Attention: While the other files refer to grid boxes,</span>
+<span class="s">	the elevation is defined at grid points. It has to be this </span>
+<span class="s">	way because each &quot;elevation pixel&quot; contains a surface </span>
+<span class="s">	which is defined by the four cornes of the pixel. If the</span>
+<span class="s">	grid covers an area of 200x200 km$^2$ and the pixel sizes </span>
+<span class="s">	are dx = 1km and dy = 1km, the elevation has to be defined </span>
+<span class="s">	at 201x201 points (ix = 1 .. Nx, iy = 1 .. Ny).</span>
+<span class="s">	</span>
+<span class="s">	Also, make sure that the elevation doesn&#39;t cross or </span>
+<span class="s">	even touch the 1D surface. Since the default altitude is 0</span>
+<span class="s">	that means that the minimum elevation must be larger than 0!</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;altitude&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Set the bottom level in the model atmosphere provided in </span>
+<span class="s">	\code{atmosphere\_file} to be at the given altitude above sea level (km).</span>
+<span class="s">	\fcode{</span>
+<span class="s">	altitude 0.73   \# Altitude of IFU, Garmisch-Partenkirchen </span>
+<span class="s">	}</span>
+<span class="s">	The profiles of pressure, temperature, molecular absorbers, </span>
+<span class="s">	ice and water clouds are cut at the specified altitude. </span>
+<span class="s">	The aerosol profile is not affected by \code{altitude} but starts</span>
+<span class="s">	right from the model surface. This is a convenient way for the user to calculate the </span>
+<span class="s">	radiation at other altitudes than sealevel. Note that \code{altitude} is very different</span>
+<span class="s">	from \code{zout} where the radiation is calculated at an altitude of zout</span>
+<span class="s">	above the surface. E.g. to calculate the radiation field 1 km above the surface </span>
+<span class="s">	at a location at 0.73 km above sealevel, one would specify &#39;\code{altitude} 0.73&#39; </span>
+<span class="s">	and &#39;\code{zout} 1.0&#39;.</span>
+<span class="s">	If an altitude is specified which is below the lowest level in the </span>
+<span class="s">	\code{atmosphere\_file}, the atmospheric profiles are extrapolated assuming a constant </span>
+<span class="s">	gradient for temperature and mixing ratios.</span>
+<span class="s">	A second optional argument may be given to \code{altitude} as e.g.</span>
+<span class="s">	\fcode{</span>
+<span class="s">	altitude 0.73 0.5</span>
+<span class="s">	}</span>
+<span class="s">	Here the bottom level will be at 0.73 km and the vertical resolution</span>
+<span class="s">	of the model atmosphere will be redistributed to have a spacing</span>
+<span class="s">	between levels specified by the second number, here 0.5 km, starting</span>
+<span class="s">	however from 0km. (Levels 0.73, 1., 1.5 ... will be added to the</span>
+<span class="s">	original atmosphere grid and optical properties are devided into the</span>
+<span class="s">	new layers. In order to use interpolated properties use</span>
+<span class="s">	\code{zout\_interpolate}.  See verbose output for details.)  Be aware</span>
+<span class="s">	that specifying a fine vertical spacing will produce many layers thus</span>
+<span class="s">	increasing the computing time. Also the radiative transfer equation</span>
+<span class="s">	solvers implemented in Fortran 77 might need to have some array sizes</span>
+<span class="s">	increased (see \file{src\_f/DISORT.MXD}).</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;albedo&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	The Lambertian surface albedo</span>
+<span class="s">	\fcode{</span>
+<span class="s">	   albedo value</span>
+<span class="s">	}</span>
+<span class="s">	where \code{value} is a number between 0.0 and 1.0,</span>
+<span class="s">	constant for all wavelengths. For wavelength dependent surface albedo </span>
+<span class="s">	use \code{albedo\_file}. The default albedo is 0.0.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;albedo_file&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Location of surface albedo file for wavelength dependent surface albedo. </span>
+<span class="s">	\fcode{</span>
+<span class="s">	albedo\_file file</span>
+<span class="s">	}</span>
+<span class="s">	The file must have two columns.</span>
+<span class="s">	Column 1 is the wavelength in nm, and column 2 the corresponding </span>
+<span class="s">	Lambertian surface albedo. An arbitrary wavelength grid may be chosen as the </span>
+<span class="s">	albedo will be interpolated linearely to the wavelength grid used for the </span>
+<span class="s">	radiation calculation. Comments start with \code{\#}. Empty lines are ignored.</span>
+<span class="s">	A large collection of spectral albedos are available e.g. at http://speclib.jpl.nasa.gov/ </span>
+<span class="s">	\citep{Baldridge2009}.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;fluorescence&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Specifies the magnitude of a bottom surface isotropic fluorescence source.</span>
+<span class="s">	\fcode{</span>
+<span class="s">	   fluorescence value</span>
+<span class="s">	}</span>
+<span class="s">	where \code{value} is a number greater or equal to 0.0, </span>
+<span class="s">	constant for all wavelengths.</span>
+<span class="s">	Must be used together with  \code{source solar file}. The units of the fluorescence should </span>
+<span class="s">	obviously be the same as for the solar source in \code{source solar file}.</span>
+<span class="s">	For wavelength dependent fluorescence use \code{fluorescence\_file}. The default fluorescence is 0.0. </span>
+<span class="s">	Currently only works with the \code{disort} solver.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;fluorescence_file&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Location of fluorescence file for wavelength dependent fluorescence emission </span>
+<span class="s">	from the bottom surface. </span>
+<span class="s">	\fcode{</span>
+<span class="s">	   fluorescence\_file file</span>
+<span class="s">	}</span>
+<span class="s">	The file must have two columns.</span>
+<span class="s">	Column 1 is the wavelength in nm, and column 2 the corresponding </span>
+<span class="s">	fluorescence. An arbitrary wavelength grid may be chosen as the </span>
+<span class="s">	fluorescence will be interpolated linearely to the wavelength grid used for the </span>
+<span class="s">	radiation calculation. Comments start with \code{\#}. Empty lines are ignored.</span>
+<span class="s">	Currently only works with the \code{disort} solver. Furthermore. if \code{raman} is </span>
+<span class="s">	not set, \code{wavelength\_grid\_file} </span>
+<span class="s">	must be specified with the same resolution as the \code{source solar file}, and the first value</span>
+<span class="s">	must be the value specified by \code{wavelength}. The units of the fluorescence should </span>
+<span class="s">	obviously be the same as for the \code{source solar file}.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;brdf_rpv_type&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	With this option the (RPV) BRDF surface type is selected.</span>
+<span class="s">	This option can be used with \code{albedo\_library} in order to select a spectral albedo </span>
+<span class="s">	or with \code{brdf\_rpv\_library} in order to select a BRDF function.</span>
+<span class="s">	\fcode{</span>
+<span class="s">	brdf\_rpv\_type surface\_type\_number</span>
+<span class="s">	}</span>
+<span class="s">	where \code{surface\_type\_number} is an integer starting from 0,</span>
+<span class="s">	where 0 refers to a black surface and the following numbers to </span>
+<span class="s">	the entries in the specified \code{library}.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;brdf_rpv_file&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	4 to 7 column file, containing the Rahman, Pinty, and Verstraete (RPV) BDRF</span>
+<span class="s">	parameterization \citep{Rahman1993} and the snow extension by \citep{Degunther2000b}.</span>
+<span class="s">	\fcode{</span>
+<span class="s">	brdf\_rpv\_file file</span>
+<span class="s">	}</span>
+<span class="s">	Bidirectional reflectance distribution functions for a variety of</span>
+<span class="s">	surfaces are given in the paper. This option is only supported with</span>
+<span class="s">	solvers: \code{disort}, \code{fdisort2}\ifmystic{ and \code{rte\_solver</span>
+<span class="s">	mystic}}. The columns of the input file are wavelength</span>
+<span class="s">	[nm], rho0, k, and theta.  The parameters are interpolated linearly to</span>
+<span class="s">	the internal wavelength grid.  To make sure that the results are</span>
+<span class="s">	reasonable, specify the RPV data on a wavelength grid similar or equal</span>
+<span class="s">	to that used internally for the radiative transfer calculation!</span>
+<span class="s">	Optionally, a fifth column with a constant scaling factor may be</span>
+<span class="s">	defined.  If it has seven columns, the fifth to seventh are sigma, t1,</span>
+<span class="s">	t2, and if it has eight, the eighth is scale again.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;brdf_rpv_library&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	The rpv libraries are collections of spectral BRDFs of different surface types, </span>
+<span class="s">	This option must be used either with \code{brdf\_rpv\_type} </span>
+<span class="s">	or \code{surface\_type\_map}, in order to select the specific surface type.</span>
+<span class="s">				</span>
+<span class="s">	For using a \code{brdf\_rpv\_library} write </span>
+<span class="s">	\fcode{</span>
+<span class="s">	brdf\_rpv\_library library\_path </span>
+<span class="s">	}</span>
+<span class="s">	where \code{library\_path} is the path of the directory, where the BRDF data is stored. The files are </span>
+<span class="s">	expected to have the names \code{IGBP.01.rpv, IGBP.02.rpv, ...} If \code{brdf\_rpv\_type 1} is specified</span>
+<span class="s">	the BRDF from \code{IGBP.01.rpv} will be used, and so on.</span>
+<span class="s">	Each file must have the structure like an \code{brdf\_rpv\_file}.</span>
+<span class="s">	(This option is quite the same as \code{brdf\_rpv\_file}, except that it offers you an</span>
+<span class="s">	easy way to use the option \code{surface\_type\_map} in combinition with your \code{brdf\_rpv\_files}.)</span>
+<span class="s">	</span>
+<span class="s">	%ak \emph{For our group there is also a built-in library for IGBP surface types.}</span>
+<span class="s">	\fcode{</span>
+<span class="s">	brdf\_rpv\_library IGBP</span>
+<span class="s">	}</span>
+<span class="s">	The built-in library contains the first 17 surface types see</span>
+<span class="s">	\code{albedo\_library}.  The data is given for the wavelengths 443nm,</span>
+<span class="s">	565nm, 670nm, and 865nm. Stay near this wavelength in order to get</span>
+<span class="s">	reasonable results. In future this the rpv-library will be NDVI</span>
+<span class="s">	dependent, but until now the most common NDVI class is selected</span>
+<span class="s">	automatically.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;brdf_cam&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Set \citet{cox54a,cox54b} ocean BRDF properties.</span>
+<span class="s">	\fcode{</span>
+<span class="s">	brdf\_cam variable value</span>
+<span class="s">	}</span>
+<span class="s">	\code{variable} can be one of the following:</span>
+<span class="s">	\begin{description}</span>
+<span class="s">	\parameter{pcl} </span>
+<span class="s">	Pigment concentration for \citet{cox54a,cox54b} ocean BRDF (in mg/m$^{-3}$).</span>
+<span class="s">	The default value is 0.01 mg/m$^{-3}$. </span>
+<span class="s">	\parameter{sal}</span>
+<span class="s">	Salinity for \citet{cox54a,cox54b} ocean BRDF (in &quot;per mille&quot;, 0.1\%; this </span>
+<span class="s">        unit is equivalent to the other common units for salinity, </span>
+<span class="s">        ppt - parts per thousand, psu - practical salinity unit).</span>
+<span class="s">	The default value is 34.3. </span>
+<span class="s">	\parameter{u10}</span>
+<span class="s">	Wind speed for \citet{cox54a,cox54b} ocean BRDF (in m/s).</span>
+<span class="s">	The wind speed is the most important parameter affecting ocean BRDF.  The</span>
+<span class="s">        minimum allowed wind speed is 1 m/s because otherwise the strong</span>
+<span class="s">        specular reflection causes numerical problems. If a lower value is</span>
+<span class="s">        specified, the wind speed is automatically set to 1m/s.</span>
+<span class="s">	\parameter{uphi}</span>
+<span class="s">	Wind direction for \citet{cox54a,cox54b} ocean BRDF.</span>
+<span class="s">	Default value is 0 degrees,</span>
+<span class="s">        which is wind from the South. 90 degrees corresponds to wind from the West, etc. (Honestly, this was</span>
+<span class="s">        never truly validated. It could possibly be that 0 is wind from the North, 90 is wind from the East, etc.)</span>
+<span class="s">	The option is only implemented for the \code{mystic} solver. </span>
+<span class="s">        \end{description}</span>
+
+<span class="s">	At present only available with \code{rte\_solver disort}, </span>
+<span class="s">        \ifmystic{\code{rte\_solver mystic}}</span>
+<span class="s">        and \code{rte\_solver fdisort2}.  The</span>
+<span class="s">        number of streams (\code{number\_of\_streams}) is automatically increased to 16 if</span>
+<span class="s">        \code{cox\_and\_munk} BRDF is switched on, to avoid numerical</span>
+<span class="s">        problems.</span>
+<span class="s">	To switch on Cox and Munk BRDF,</span>
+<span class="s">        specify any of the \code{brdf\_cam} options and define at least</span>
+<span class="s">        \code{brdf\_cam u10}.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;brdf_cam_solar_wind&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Use old definition of wind direction for Monte Carlo simulations. If this switch is set,</span>
+<span class="s">	the wind azimuth is identical to the incoming photon azimuth. Else, the wind azimuth is set by</span>
+<span class="s">	\code{brdf\_cam uphi} or is 0 by default.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;sur_temperature&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Surface temperature, used for thermal infrared calculations. </span>
+<span class="s">	\fcode{</span>
+<span class="s">	sur\_temperature value</span>
+<span class="s">	}</span>
+<span class="s">	If not specified, the</span>
+<span class="s">	temperature of the lowest atmospheric level is used as surface temperature.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;sur_temperature_file&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Define a MYSTIC 2D temperature input file.</span>
+<span class="s">	\fcode{</span>
+<span class="s">	sur\_temperature\_file file</span>
+<span class="s">	}</span>
+<span class="s">	The expected format of the temperature file is:</span>
+<span class="s">		\fcode{</span>
+<span class="s">		Nx  Ny  dx  dy</span>
+<span class="s">		ix  iy  temperature</span>
+<span class="s">		}</span>
+<span class="s">	where Nx and Ny are the number of grid boxes in x- and y-direction,</span>
+<span class="s">	dx and dy are the size of the grid boxes in km.</span>
+<span class="s">	In the second and the following lines the indices in x- and y-direction</span>
+<span class="s">	and the temperature of the pixel are specified. </span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+	<span class="p">}</span>
+</pre></div></div>
+
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, D Griffith, A Ramkilowan.
+    </p>
+  </div>
+
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

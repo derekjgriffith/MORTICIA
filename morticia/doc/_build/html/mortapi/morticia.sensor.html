@@ -1,0 +1,628 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>morticia.sensor package &mdash; MORTICIA 1.0 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Roboto+Slab:400,700|Inconsolata:400,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="MORTICIA 1.0 documentation" href="../index.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+          <a href="../index.html" class="fa fa-home"> MORTICIA</a>
+        
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how_to_use.html">How to use MORTICIA</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../how_to_use.html#morticia-dependencies">MORTICIA Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../how_to_use.html#installation-and-requirements">Installation and Requirements</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../styleguide.html">The MORTICIA Style Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../styleguide.html#to-pep-8-or-not-to-pep-8">To PEP-8 or not to PEP-8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../styleguide.html#code-layout">Code Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../styleguide.html#import-statements">Import Statements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../styleguide.html#whitespace">Whitespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../styleguide.html#comments">Comments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../styleguide.html#documentation-strings-docstrings">Documentation Strings (docstrings)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../styleguide.html#naming-conventions">Naming Conventions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../styleguide.html#pep-257">PEP-257</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../styleguide.html#from-conventions-section"><em>From</em> Conventions Section</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../styleguide.html#general-terminology-and-conventions">General Terminology and Conventions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../for_developers.html">For the Developers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../for_developers.html#structure">Structure</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../packages.html">Packages</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../packages.html#sensor-package">Sensor Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../packages.html#radiometry-package">Radiometry Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../packages.html#scene-package">Scene Package</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../ChapLibRadtranODandPathRadiance.html">Transmittance and Path Radiance in libRadtran</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../01a-SpectralChannelsAndFilters.html">IPython Notebook and Sphinx</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../01a-SpectralChannelsAndFilters.html#a-spectralchannelsandfilters-ipython-notebook">01a-SpectralChannelsAndFilters IPython Notebook</a></li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">MORTICIA</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+    <li>morticia.sensor package</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          <a href="../_sources/mortapi/morticia.sensor.txt" rel="nofollow"> View page source</a>
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <div class="section" id="morticia-sensor-package">
+<h1>morticia.sensor package<a class="headerlink" href="#morticia-sensor-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-morticia.sensor.optics">
+<span id="morticia-sensor-optics-module"></span><h2>morticia.sensor.optics module<a class="headerlink" href="#module-morticia.sensor.optics" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="morticia.sensor.optics.Lens">
+<em class="property">class </em><code class="descclassname">morticia.sensor.optics.</code><code class="descname">Lens</code><span class="sig-paren">(</span><em>efl</em>, <em>fno</em>, <em>trn</em>, <em>wfe=None</em>, <em>obs=None</em>, <em>mtf=None</em>, <em>wvn_step=500.0</em>, <em>wfe_allowed=0.3</em>, <em>attrs=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/morticia/sensor/optics.html#Lens"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#morticia.sensor.optics.Lens" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>The Lens class encapsulates information and behaviour related to imaging lens systems.
+The chief characteristics of a lens are its spectral through-field, through-focus and
+through-frequency MTF, as well as the spectral transmission.
+In order to transform spatial frequencies in the image plane to angular spatial frequencies
+in object space, the effective focal length of the lens (efl) must also be known.
+The basic lens model is a near diffraction-limited system with a centred circular aperture
+having a centred circular obscuration (which may be absent), where the MTF is constant over
+the entire field of view (FOV). A lens with field-dependent MTF can be constructed by
+providing wavefront error input that varies with field.</p>
+<p>The most basic lens model implemented here, from which more complicated lens models could inherit
+their properties have the following attributes</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>efl</strong> &#8211; The effective focal length of the lens in mm</li>
+<li><strong>fno</strong> &#8211; The focal ratio of the lens</li>
+<li><strong>trn</strong> &#8211; The spectral transmission of the lens (zero to unity).</li>
+<li><strong>wfe</strong> &#8211; The wavefront error measured in waves. This can be a scalar, assumed the same for
+all wavelengths, or it can be provided as a function of wavelength and/or field position.</li>
+<li><strong>obs</strong> &#8211; The obscuration ratio, being the ratio of the circular obscuration diameter to the
+full circular aperture aperture diameter</li>
+<li><strong>mtf</strong> &#8211; The MTF of the lens. Either the MTF can be provided as a set of measurements or it can be
+computed from efl, fno, obs and wfe</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>The lens MTF is computed as a function of spatial frequency in the image, wavelength, defocus and field position.</p>
+<p>The total RMS wavefront error is computed as</p>
+<div class="math">
+\[W=\sqrt{W_{\Delta\!z}^{2}+W_{a}^{2}}=\sqrt{\left(\frac{\Delta\!z}{8\lambda F^{2}}\right)^{2}+W_{a}^{2}}\]</div>
+<p>where <span class="math">\(\Delta\!z\)</span> is the defocus expressed in the same units as the wavelength <span class="math">\(\lambda\)</span>, <span class="math">\(F\)</span> is
+the focal ratio and <span class="math">\(W_a\)</span> is the RMS waverfront error due to aberrations at best focus.</p>
+<p>Lens constructor.
+The lens is constructed using the focal length, focal ratio and spectral transmittance, and
+optionally also the obscuration ratio and wavefront error.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>efl</strong> &#8211; The effective focal length of the lens. The effective focal length must be a scalar value
+with units, e.g. [30, &#8216;mm&#8217;].</li>
+<li><strong>fno</strong> &#8211; The focal ratio (or f-number) which is th ratio of focal length to aperture diameter. This input
+must be a scalar value.</li>
+<li><strong>trn</strong> (<em>xray.DataArray</em>) &#8211; The spectral transmission function, typically a function of wavelength. The spectral
+transmittance function must be</li>
+<li><strong>wfe</strong> &#8211; The wavefront error must be expressed in waves (unitless). It can be a function of
+wavelength (wvl) and field position (flr) , but not focus (fldz). If no input is provided, the wfe
+will default to zero over the same spectral region as the lens transmission function.</li>
+<li><strong>obs</strong> &#8211; The obscuration ratio of the lens (scalar numeric) range 0.0 - 1.0, Default None (0.0)</li>
+<li><strong>mtf</strong> &#8211; A complete pre-computed or measured MTF, with axes of spf, wvl, fldz, flr, flo</li>
+<li><strong>wvn_step</strong> &#8211; Minimum spectral increment in wavenumbers (cm^-1) for MTF calculation. Default 500 cm^-1</li>
+<li><strong>wfe_allowed</strong> &#8211; Maximum allowed wfe when computing lens defocus wfe, Default 0.5 waves at mean wavelength
+of transmission function domain.</li>
+<li><strong>attrs</strong> &#8211; A dictionary of user-defined attributes and metadata. Consider including &#8216;name&#8217; and
+&#8216;long_name&#8217;, &#8216;title&#8217;, &#8216;summary&#8217; or other netCDF convention attributes.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="morticia.sensor.optics.Lens.mtf_obs_wfe">
+<code class="descname">mtf_obs_wfe</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/morticia/sensor/optics.html#Lens.mtf_obs_wfe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#morticia.sensor.optics.Lens.mtf_obs_wfe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the multidimensional MTF of a Lens class object</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<ul class="last">
+<li><dl class="first docutils">
+<dt>optics.atf which shows the method and formula by which the aberration/defocus MTF degradation is</dt>
+<dd><p class="first last">computed.</p>
+</dd>
+</dl>
+</li>
+<li><p class="first">optics.mtf_obs shows documents the typical calculation formulas for obscured MTF</p>
+</li>
+</ul>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="morticia.sensor.optics.atf">
+<code class="descclassname">morticia.sensor.optics.</code><code class="descname">atf</code><span class="sig-paren">(</span><em>spf</em>, <em>wvl</em>, <em>fno</em>, <em>rms_wavefront_error</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/morticia/sensor/optics.html#atf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#morticia.sensor.optics.atf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the MTF degradation factor for a lens operating at the given wavelengths and and with the given
+focal ratios, RMS wavefront errors at the the specified spatial frequencies in the image plane.
+ATF stands for Aberration Transfer Function.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>spf</strong> &#8211; Spatial frequencies in the image plane at which to compute the ATF. Spatial frequencies must be in
+reciprocal units to wavelengths i.e. if wavelengths are in mm, spatial frequencies must be in cycles per mm.</li>
+<li><strong>wvl</strong> &#8211; Wavelengths at which to compute the ATF</li>
+<li><strong>fno</strong> &#8211; Focal ratios at which to compute the ATF</li>
+<li><strong>rms_wavefront_error</strong> &#8211; RMS wavefront error magnitudes (in waves) at which to compute the ATF</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A numpy array with the aberration transfer function.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Reference : Shannon, R.R., Handbook of Optics, Volume 1, 2nd Edition, Chapter 35 - Optical
+Specifications. &#8220;This is an approximation, however, and it becomes progressively less accurate as
+the amount of the rms wavefront error exceeds about 0.18 wavelength.&#8221;</p>
+<p>The formula used for computing the aberration MTF due to RMS wavefront error of <span class="math">\(W\)</span> at spatial frequency
+<span class="math">\(f\)</span> is</p>
+<div class="math">
+\[M\!T\!F_{W}(f)=1-\left(\frac{W}{0.18}\right)^{2}\left[1-4\left(\frac{f}{f_{c}}-\frac{1}{2}\right)^{2}\right]\]</div>
+<p>where the diffraction cutoff (or &#8220;critical&#8221;) frequency is <span class="math">\(f_c\)</span>.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">optics.pmtf_obs_wfe</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="morticia.sensor.optics.autocorr_circle">
+<code class="descclassname">morticia.sensor.optics.</code><code class="descname">autocorr_circle</code><span class="sig-paren">(</span><em>circle_radius</em>, <em>shift</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/morticia/sensor/optics.html#autocorr_circle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#morticia.sensor.optics.autocorr_circle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute autocorrelation of a circular aperture of radius <strong>circle_radius</strong> with centre-to-centre sample
+displacements of <strong>shift</strong>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>circle_radius</strong> &#8211; Radius of circle</li>
+<li><strong>shift</strong> &#8211; Centre-to-centre displacements at which to compute the autocorrelation</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Autocorrelation magnitude</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">optics.crosscorr_circle</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="morticia.sensor.optics.crosscorr_circle">
+<code class="descclassname">morticia.sensor.optics.</code><code class="descname">crosscorr_circle</code><span class="sig-paren">(</span><em>circle_radius</em>, <em>shift</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/morticia/sensor/optics.html#crosscorr_circle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#morticia.sensor.optics.crosscorr_circle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cross correlation of unit circle with circle of radius <strong>circle_radius</strong>.
+Compute the cross-correlation of a circular aperture of unit radius at the origin,
+with a circular aperture of radius <strong>circle_radius</strong>, with centre-to-centre displacements of <strong>shift</strong>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>circle_radius</strong> &#8211; Radius of circle to cross-correlate with unit circle (scalar numeric)</li>
+<li><strong>shift</strong> &#8211; Centre-to-centre displacements at which to compute the cross-correlation</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Cross-correlation magnitude</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">optics.autocorr_circle</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="morticia.sensor.optics.ctf_eye">
+<code class="descclassname">morticia.sensor.optics.</code><code class="descname">ctf_eye</code><span class="sig-paren">(</span><em>spf</em>, <em>lum</em>, <em>w</em>, <em>num_eyes=2</em>, <em>formula=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/morticia/sensor/optics.html#ctf_eye"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#morticia.sensor.optics.ctf_eye" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the contrast transfer function of the human eye.
+By default, uses the condensed version of the Barten CTF.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>spf</strong> &#8211; spatial frequencies in eye-space in cycles per milliradian (scalar or vector numpy array input)</li>
+<li><strong>lum</strong> &#8211; mean luminance of the viewing area in <span class="math">\(cd/m^2\)</span> (scalar or vector numpy array input)</li>
+<li><strong>w</strong> &#8211; the angular width of the viewing area, or the square root of the angular viewing area in square degrees
+(scalar or vector numpy input).</li>
+<li><strong>num_eyes</strong> &#8211; The number of eyes used for viewing (2 for binocular viewing or 1 for monocular viewing). The
+default is num_eyes=2.</li>
+<li><strong>formula</strong> &#8211; The formula variant used for the computation. Defaults (formula=1) to the simple formula first
+published by Barten in SPIE 2003. Other options are formula=11 and formula=14, which are slight variations.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The CTF with respect to spf, lum and w (up to a 3D numpy array). Singular dimensions are squeezed out
+using numpy.squeeze().</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="morticia.sensor.optics.mtf">
+<code class="descclassname">morticia.sensor.optics.</code><code class="descname">mtf</code><span class="sig-paren">(</span><em>spf</em>, <em>wvl</em>, <em>fno</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/morticia/sensor/optics.html#mtf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#morticia.sensor.optics.mtf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the simple (optimally focussed) diffraction Modulation Transfer Function (MTF) of a prefect lens with an
+unobscured circular aperture.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>spf</strong> &#8211; Spatial frequencies in the image at which to compute the MTF</li>
+<li><strong>wvl</strong> &#8211; Wavelength in units consistent with the spatial frequencies f</li>
+<li><strong>fno</strong> &#8211; Focal ratio (working focal ratio) of the lens</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Modulation Transfer Function, with spatial frequency (spf) varying down columns and wavelength across rows
+If the frequencies are given in cycles per millimetre, the wavelengths must be in mm.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Any of the inputs can be a vector. The spatial frequencies are assigned to the rows of the output array, the
+wavelengths vary from column to column and Fno will vary in the third dimension, but singleton dimensions will
+be squeezed out.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">optics.pmtf, optics.pmtf_obs, optics.pmtf_obs_wfe</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="morticia.sensor.optics.mtf_obs">
+<code class="descclassname">morticia.sensor.optics.</code><code class="descname">mtf_obs</code><span class="sig-paren">(</span><em>spf</em>, <em>wvl</em>, <em>fno</em>, <em>obs=0.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/morticia/sensor/optics.html#mtf_obs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#morticia.sensor.optics.mtf_obs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the optimally focussed diffraction Modulation Transfer Function of a perfect lens with an
+circular aperture having a centred circular obscuration. This is the monochromatic MTF computed at
+a number of discrete given wavelengths.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>spf</strong> &#8211; Spatial frequencies in the image at which to compute the MTF (numpy vector).</li>
+<li><strong>wvl</strong> &#8211; Wavelength in units consistent with the spatial frequencies <strong>spf</strong> (numpy vector)</li>
+<li><strong>fno</strong> &#8211; Focal ratio (working focal ratio) of the lens (numpy vector).</li>
+<li><strong>obs</strong> &#8211; The obscuration ratio (ratio of obscuration diameter to total aperture diameter).
+The obs input must be a scalar numeric.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">MTF with respect to spatial frequency, wavelength, focal ratio and obscuration ratio.
+Singleton dimensions are squeezed out.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="morticia.sensor.optics.n_air">
+<code class="descclassname">morticia.sensor.optics.</code><code class="descname">n_air</code><span class="sig-paren">(</span><em>wvl</em>, <em>temperature</em>, <em>pressure</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/morticia/sensor/optics.html#n_air"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#morticia.sensor.optics.n_air" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the refractive index of air computed using the same formula used by ZEMAX
+See the section on Index of Refraction Computation in the Thermal Analysis chapter of the ZEMAX manual.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>wvl</strong> &#8211; Wavelength(s) in microns. If all values of wvl exceed 100, then wavelengths are assumed to be in nm</li>
+<li><strong>temperature</strong> &#8211; Temperature in Celsius.</li>
+<li><strong>pressure</strong> &#8211; Relative air pressure (atmospheres, with 1 atm = 101 325 Pa).</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">This function returns a matrix with wvl varying from row to row, temperature varying from column to column
+and pressure varying in the depth dimension. The returned matrix is subject to np.squeeze() to remove any
+singleton dimensions.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Reference :
+F. Kohlrausch, Praktische Physik, 1968, Vol 1, page 408</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="morticia.sensor.optics.patf">
+<code class="descclassname">morticia.sensor.optics.</code><code class="descname">patf</code><span class="sig-paren">(</span><em>spf</em>, <em>wvl</em>, <em>fno</em>, <em>rms_wavefront_error</em>, <em>wvl_weights</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/morticia/sensor/optics.html#patf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#morticia.sensor.optics.patf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the polychromatic aberration transfer function.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>spf</strong> &#8211; Spatial frequencies in the image plane at which to compute the ATF. Spatial frequencies must be in
+reciprocal units to wavelengths i.e. if wavelengths are in mm, spatial frequencies must be in cycles per mm.</li>
+<li><strong>wvl</strong> &#8211; Wavelengths at which to compute the ATF</li>
+<li><strong>fno</strong> &#8211; Focal ratios at which to compute the ATF</li>
+<li><strong>rms_wavefront_error</strong> &#8211; RMS wavefront error magnitudes (in waves) at which to compute the ATF</li>
+<li><strong>wvl_weights</strong> &#8211; A numpy vector having the same length as the wvl vector, providing the relative weights of each
+of the wavelengths.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Polychromatic Aberration Transfer Function in a numpy array.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">optics.atf</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="morticia.sensor.optics.pmtf">
+<code class="descclassname">morticia.sensor.optics.</code><code class="descname">pmtf</code><span class="sig-paren">(</span><em>spf</em>, <em>wvl</em>, <em>fno</em>, <em>wvl_weights</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/morticia/sensor/optics.html#pmtf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#morticia.sensor.optics.pmtf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute polychromatic MTF of lens at given spatial frequencies (in the image plane) for specified wavelengths
+and wavelength weighting factors.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>spf</strong> &#8211; Spatial frequencies in the image at which to compute the polychromatic MTF (numpy vector).</li>
+<li><strong>wvl</strong> &#8211; Wavelength in units consistent with the spatial frequencies <strong>spf</strong> (numpy vector)</li>
+<li><strong>fno</strong> &#8211; Focal ratio (working focal ratio) of the lens (numpy vector).</li>
+<li><strong>wvl_weights</strong> &#8211; A numpy vector having the same length as the wvl vector, providing the relative weights of each
+of the wavelengths.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Polychromatic MTF with respect to spatial frequency, wavelength and focal ratio.
+Singleton dimensions are squeezed out of the returned numpy array.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="morticia.sensor.optics.pmtf_obs">
+<code class="descclassname">morticia.sensor.optics.</code><code class="descname">pmtf_obs</code><span class="sig-paren">(</span><em>spf</em>, <em>wvl</em>, <em>fno</em>, <em>wvl_weights</em>, <em>obs=0.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/morticia/sensor/optics.html#pmtf_obs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#morticia.sensor.optics.pmtf_obs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute polychromatic MTF of obscured lens at given spatial frequencies (in the image plane) for specified
+wavelengths and wavelength weighting factors. The lens may have a circular obcuration of specific ratio.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>spf</strong> &#8211; Spatial frequencies in the image at which to compute the polychromatic MTF (numpy vector).</li>
+<li><strong>wvl</strong> &#8211; Wavelength in units consistent with the spatial frequencies <strong>spf</strong> (numpy vector)</li>
+<li><strong>fno</strong> &#8211; Focal ratio (working focal ratio) of the lens (numpy vector).</li>
+<li><strong>wvl_weights</strong> &#8211; A numpy vector having the same length as the wvl vector, providing the relative weights of each
+of the wavelengths.</li>
+<li><strong>obs</strong> &#8211; Obscuration ratio</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Polychromatic obscured MTF with respect to spatial frequency, wavelength and focal ratio.
+Singleton dimensions are squeezed out of the returned numpy array.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="morticia.sensor.optics.pmtf_obs_wfe">
+<code class="descclassname">morticia.sensor.optics.</code><code class="descname">pmtf_obs_wfe</code><span class="sig-paren">(</span><em>spf</em>, <em>wvl</em>, <em>fno</em>, <em>rms_wavefront_error</em>, <em>wvl_weights</em>, <em>obs=0.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/morticia/sensor/optics.html#pmtf_obs_wfe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#morticia.sensor.optics.pmtf_obs_wfe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute polychromatic modulation transfer function for lens having circular pupil with centred circular
+obscuration and with aberrations expressed in terms of RMS wavefront error.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>spf</strong> &#8211; Spatial frequencies in the image at which to compute the polychromatic MTF (numpy vector).</li>
+<li><strong>wvl</strong> &#8211; Wavelength in units consistent with the spatial frequencies <strong>spf</strong> (numpy vector)</li>
+<li><strong>fno</strong> &#8211; Focal ratio (working focal ratio) of the lens (numpy vector).</li>
+<li><strong>rms_wavefront_error</strong> &#8211; Numpy vector of RMS wavefront error values</li>
+<li><strong>wvl_weights</strong> &#8211; A numpy vector having the same length as the wvl vector, providing the relative weights of each
+of the wavelengths.</li>
+<li><strong>obs</strong> &#8211; Obscuration ratio (centred circular obscuration in circular pupil), ratio of obscuration diameter to
+aperture diameter.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Numpy array with polychromatic modulation transfer function.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">optics.atf, optics.pmtf_obs, optics.pmtf</p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="module-morticia.sensor.test_optics">
+<span id="morticia-sensor-test-optics-module"></span><h2>morticia.sensor.test_optics module<a class="headerlink" href="#module-morticia.sensor.test_optics" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="morticia.sensor.test_optics.test_patf">
+<code class="descclassname">morticia.sensor.test_optics.</code><code class="descname">test_patf</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/morticia/sensor/test_optics.html#test_patf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#morticia.sensor.test_optics.test_patf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform nose test case for optics.patf function
+:return:</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-morticia.sensor">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-morticia.sensor" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, D Griffith, A Ramkilowan.
+    </p>
+  </div>
+
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

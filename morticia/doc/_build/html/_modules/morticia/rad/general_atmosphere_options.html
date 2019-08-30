@@ -1,0 +1,457 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>morticia.rad.general_atmosphere_options &mdash; MORTICIA 1.0 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Roboto+Slab:400,700|Inconsolata:400,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="MORTICIA 1.0 documentation" href="../../../index.html"/>
+        <link rel="up" title="morticia" href="../../morticia.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+          <a href="../../../index.html" class="fa fa-home"> MORTICIA</a>
+        
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../how_to_use.html">How to use MORTICIA</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../how_to_use.html#morticia-dependencies">MORTICIA Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../how_to_use.html#installation-and-requirements">Installation and Requirements</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../styleguide.html">The MORTICIA Style Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#to-pep-8-or-not-to-pep-8">To PEP-8 or not to PEP-8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#code-layout">Code Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#import-statements">Import Statements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#whitespace">Whitespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#comments">Comments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#documentation-strings-docstrings">Documentation Strings (docstrings)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#naming-conventions">Naming Conventions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#pep-257">PEP-257</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#from-conventions-section"><em>From</em> Conventions Section</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#general-terminology-and-conventions">General Terminology and Conventions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../for_developers.html">For the Developers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../for_developers.html#structure">Structure</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../packages.html">Packages</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../packages.html#sensor-package">Sensor Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../packages.html#radiometry-package">Radiometry Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../packages.html#scene-package">Scene Package</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ChapLibRadtranODandPathRadiance.html">Transmittance and Path Radiance in libRadtran</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../01a-SpectralChannelsAndFilters.html">IPython Notebook and Sphinx</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../01a-SpectralChannelsAndFilters.html#a-spectralchannelsandfilters-ipython-notebook">01a-SpectralChannelsAndFilters IPython Notebook</a></li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../../index.html">MORTICIA</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      
+          <li><a href="../../morticia.html">morticia</a> &raquo;</li>
+      
+    <li>morticia.rad.general_atmosphere_options</li>
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <h1>Source code for morticia.rad.general_atmosphere_options</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;--------------------------------------------------------------------</span>
+<span class="sd"> * $Id: general_atmosphere_options.py 3054 2014-07-21 09:43:44Z Claudia.Emde $</span>
+<span class="sd"> * </span>
+<span class="sd"> * This file is part of libRadtran.</span>
+<span class="sd"> * Copyright (c) 1997-2012 by Arve Kylling, Bernhard Mayer,</span>
+<span class="sd"> *                            Claudia Emde, Robert Buras</span>
+<span class="sd"> *</span>
+<span class="sd"> * ######### Contact info: http://www.libradtran.org #########</span>
+<span class="sd"> *</span>
+<span class="sd"> * This program is free software; you can redistribute it and/or </span>
+<span class="sd"> * modify it under the terms of the GNU General Public License   </span>
+<span class="sd"> * as published by the Free Software Foundation; either version 2</span>
+<span class="sd"> * of the License, or (at your option) any later version.        </span>
+<span class="sd"> * </span>
+<span class="sd"> * This program is distributed in the hope that it will be useful, </span>
+<span class="sd"> * but WITHOUT ANY WARRANTY; without even the implied warranty of  </span>
+<span class="sd"> * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the   </span>
+<span class="sd"> * GNU General Public License for more details.                    </span>
+<span class="sd"> * </span>
+<span class="sd"> * You should have received a copy of the GNU General Public License          </span>
+<span class="sd"> * along with this program; if not, write to the Free Software                </span>
+<span class="sd"> * Foundation, Inc., 59 Temple Place - Suite 330, </span>
+<span class="sd"> * Boston, MA 02111-1307, USA.</span>
+<span class="sd"> *--------------------------------------------------------------------&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">option_definition</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="k">class</span> <span class="nc">setup_general_atm_group</span><span class="p">():</span>
+<div class="viewcode-block" id="setup_general_atm_group"><a class="viewcode-back" href="../../../mortapi/morticia.rad.html#morticia.rad.general_atmosphere_options.setup_general_atm_group">[docs]</a>
+	<span class="n">group_name</span> <span class="o">=</span> <span class="s">&#39;General atmosphere&#39;</span>
+
+	<span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="setup_general_atm_group.__init__"><a class="viewcode-back" href="../../../mortapi/morticia.rad.html#morticia.rad.general_atmosphere_options.setup_general_atm_group.__init__">[docs]</a>		<span class="n">documentation</span> <span class="o">=</span> <span class="n">get_general_atmosphere_documentation</span><span class="p">()</span>
+
+		<span class="n">atmos_region</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;atmos_region&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;general atmosphere&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Define atmospheric region.&#39;</span><span class="p">,</span> 
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;atmos_region&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span> <span class="o">=</span> <span class="p">[</span> <span class="n">addSetting</span><span class="p">(</span> <span class="n">name</span><span class="o">=</span><span class="s">&quot;Input.rte.mc.backward.yes&quot;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&quot;Input.rte.mc.ixmin&quot;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s">&#39;NOT_DEFINED_INTEGER&#39;</span><span class="p">),</span>
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&quot;Input.rte.mc.iymin&quot;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s">&#39;NOT_DEFINED_INTEGER&#39;</span><span class="p">),</span>
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&quot;Input.rte.mc.ixmax&quot;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s">&#39;NOT_DEFINED_INTEGER&#39;</span><span class="p">),</span>
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&quot;Input.rte.mc.iymax&quot;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s">&#39;NOT_DEFINED_INTEGER&#39;</span><span class="p">)</span> <span class="p">]</span> <span class="p">,</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+			<span class="n">showInGui</span> <span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                        <span class="n">developer</span><span class="o">=</span><span class="bp">True</span>
+			<span class="p">)</span>
+
+		<span class="n">no_absorption</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;no_absorption&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;general atmosphere&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Switch off absorption.&#39;</span><span class="p">,</span> 
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;no_absorption&#39;</span><span class="p">],</span>
+			<span class="n">gui_inputs</span><span class="o">=</span><span class="p">(</span><span class="n">TextInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;no_absorption&#39;</span><span class="p">,</span><span class="n">optional</span><span class="o">=</span><span class="bp">True</span><span class="p">),),</span>
+			<span class="n">tokens</span> <span class="o">=</span> <span class="p">[</span> <span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;ispoff&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;get_caothoff_index(&amp;Input.caothoff,&amp;Input.n_caothoff, &quot;all&quot;)&#39;</span> <span class="p">),</span>
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;ispoff&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="n">CaothoffType</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="bp">True</span><span class="p">),</span>
+				<span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.caothoff[ispoff].no_absorption&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="p">],</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+			<span class="n">non_unique</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+			<span class="p">)</span>
+
+		<span class="n">no_scattering</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;no_scattering&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;general atmosphere&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Switch off scattering.&#39;</span><span class="p">,</span> 
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;no_scattering&#39;</span><span class="p">],</span>
+			<span class="n">gui_inputs</span><span class="o">=</span><span class="p">(</span><span class="n">TextInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;no_scattering&#39;</span><span class="p">,</span><span class="n">optional</span><span class="o">=</span><span class="bp">True</span><span class="p">),),</span>
+			<span class="n">tokens</span> <span class="o">=</span> <span class="p">[</span> <span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;ispoff&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;get_caothoff_index(&amp;Input.caothoff,&amp;Input.n_caothoff, &quot;all&quot;)&#39;</span> <span class="p">),</span>
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;ispoff&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="n">CaothoffType</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="bp">True</span><span class="p">),</span>
+				<span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.caothoff[ispoff].no_scattering&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="p">],</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+			<span class="n">non_unique</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+			<span class="p">)</span>
+
+		<span class="n">interpret_as_level</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;interpret_as_level&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;general atmosphere&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Interpret profile properties as level properties.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;interpret_as_level&#39;</span><span class="p">],</span>
+			<span class="n">gui_inputs</span><span class="o">=</span><span class="p">(</span><span class="n">TextInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.caothoff[isp].layer&#39;</span><span class="p">),),</span>
+			<span class="n">tokens</span> <span class="o">=</span> <span class="p">[</span> <span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;isp&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="n">CaothType</span> <span class="p">),</span>
+				<span class="n">addSetting</span><span class="p">(</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.caoth[isp].layer&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;FALSE&#39;</span><span class="p">)</span> <span class="p">],</span> 
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;wc_file&#39;</span><span class="p">,</span><span class="s">&#39;ic_file&#39;</span><span class="p">,</span><span class="s">&#39;profile_file&#39;</span><span class="p">],</span>
+			<span class="n">non_unique</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+		<span class="p">)</span>
+		
+		<span class="n">zout_interpolate</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;zout_interpolate&#39;</span><span class="p">,</span> 
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;general_atmosphere&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Interpolate atmospheric profiles.&#39;</span><span class="p">,</span> 
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;zout_interpolate&#39;</span><span class="p">],</span> 
+			<span class="n">tokens</span><span class="o">=</span><span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.atm.zout_interpolate&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;ZOUT_INTERPOLATE&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s">&#39;NO_ZOUT_INTERPOLATE&#39;</span><span class="p">),</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+			<span class="p">)</span>
+	
+		<span class="n">z_interpolate</span> <span class="o">=</span> <span class="n">not_yet_lex2py_option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;z_interpolate&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;general_atmosphere&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="c">#documentation[&#39;z_interpolate&#39;], #TODO: Missing documentation</span>
+			<span class="n">gui_inputs</span><span class="o">=</span><span class="p">(</span><span class="n">TextInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">),),</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+			<span class="n">non_unique</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+		<span class="p">)</span>
+
+		<span class="n">atm_z_grid</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;atm_z_grid&#39;</span><span class="p">,</span> 
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;atmosphere&#39;</span><span class="p">,</span> 
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;atm_z_grid&#39;</span><span class="p">],</span>
+			<span class="n">gui_inputs</span><span class="o">=</span><span class="p">(</span><span class="n">TextInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.atm.z_atm_forced_sea&#39;</span><span class="p">),),</span>
+			<span class="n">tokens</span><span class="o">=</span> <span class="p">[</span> <span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.atm.z_atm_forced_sea&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="n">SignedFloats</span><span class="p">),</span> 
+				<span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.atm.nz_atm_forced_sea&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;ntokens&#39;</span><span class="p">)</span> <span class="p">],</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+			<span class="p">)</span>
+
+		<span class="n">reverse_atmosphere</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;reverse_atmosphere&#39;</span><span class="p">,</span> 
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;atmosphere&#39;</span><span class="p">,</span> 
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Atmosphere is turned on the head.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;reverse_atmosphere&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.reverse&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> 
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+			<span class="p">)</span>
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">options</span> <span class="o">=</span> <span class="p">[</span><span class="n">atmos_region</span><span class="p">,</span> <span class="n">no_absorption</span><span class="p">,</span> <span class="n">no_scattering</span><span class="p">,</span> 
+				<span class="n">interpret_as_level</span><span class="p">,</span> <span class="n">zout_interpolate</span><span class="p">,</span> <span class="n">z_interpolate</span><span class="p">,</span>
+				<span class="n">atm_z_grid</span><span class="p">,</span> <span class="n">reverse_atmosphere</span><span class="p">]</span>
+
+	<span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
+		<span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">get_general_atmosphere_documentation</span><span class="p">():</span></div>
+<div class="viewcode-block" id="get_general_atmosphere_documentation"><a class="viewcode-back" href="../../../mortapi/morticia.rad.html#morticia.rad.general_atmosphere_options.get_general_atmosphere_documentation">[docs]</a>	<span class="k">return</span> <span class="p">{</span>
+		<span class="s">&#39;atmos_region&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">                Very experimental option, ask Robert Buras or Luca Bugliaro for usage.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;no_absorption&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Switch off absorption. Please note that this option simply sets</span>
+<span class="s">	the absorption optical thickness to 0.</span>
+<span class="s">	\fcode{</span>
+<span class="s">	no\_absorption [name]</span>
+<span class="s">	}</span>
+<span class="s">	If \code{name} is not set, all absorption (molecular, aerosol, cloud, ice cloud, and any profile) is switched off.</span>
+
+<span class="s">	If used together with \code{xxx\_modify set tau} this might be a bit confusing but </span>
+<span class="s">	probably the most logical way. E.g. when using \code{aerosol\_default} and </span>
+<span class="s">	\code{aerosol\_modify set tau 1}, the aerosol optical thickness is set to 1,</span>
+<span class="s">	with 0.940539 scattering and 0.059461 absorption. If \code{no\_absorption} </span>
+<span class="s">	is added, the absorption optical thickness is set to 0 while the scattering</span>
+<span class="s">	optical thickness is preserved at 0.940539 (even though 1 was specified by </span>
+<span class="s">	the user). We find this the most logical solution of the problem because </span>
+<span class="s">	by switching \code{no\_absorption} off and on one tests the effect of the </span>
+<span class="s">	absorber in an isolated way, rather than mixing absorption and scattering. </span>
+<span class="s">	The same is true for water and ice clouds. Note, that thermal emission of </span>
+<span class="s">	molecules is also switched off. </span>
+
+<span class="s">	Possible choises for the optional argument \code{name} are:</span>
+<span class="s">	\begin{description}</span>
+<span class="s">	\item[mol] Switch off molecular absorption.</span>
+<span class="s">	\end{description}</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;no_scattering&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Switch scattering off.</span>
+<span class="s">	\fcode{</span>
+<span class="s">	no\_scattering [name]</span>
+<span class="s">	}</span>
+<span class="s">	If \code{name} is not set, all scattering (molecular, aerosol, cloud, ice cloud, and any profile) is switched off.</span>
+
+<span class="s">	Possible choises for the optional argument \code{name} are:</span>
+<span class="s">	\begin{description}</span>
+<span class="s">	\item[mol] Switch off molecular scattering.</span>
+<span class="s">	\item[aer] Switch off scattering by aerosols.</span>
+<span class="s">	\item[wc]  Switch off scattering by water clouds.</span>
+<span class="s">	\item[ic]  Switch off scattering by ice clouds.</span>
+<span class="s">	\item[profile] Switch off scattering by any profile defined in \code{profile typename}.</span>
+<span class="s">	\end{description}</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;interpret_as_level&#39;</span>	<span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Interpret profile properties as level properties (this was the default</span>
+<span class="s">	behaviour before version 1.4). </span>
+<span class="s">	\fcode{</span>
+<span class="s">	interpret\_as\_level profile</span>
+<span class="s">	}</span>
+<span class="s">	profile can be either \code{wc}, \code{ic} or any profile type specified in \code{profile\_file}.</span>
+
+<span class="s">	If \code{interpret\_as\_level wc} is defined, a \code{wc\_file} would be interpreted as</span>
+<span class="s">	follows:</span>
+<span class="s">	\begin{verbatim}</span>
+<span class="s">	#      z     LWC    R\_eff</span>
+<span class="s">	#     (km)  (g/m^3) (um)  </span>
+<span class="s">	       5.000    0      0   </span>
+<span class="s">	       4.000   0.2   12.0 </span>
+<span class="s">	       3.000   0.1   10.0 </span>
+<span class="s">	       2.000   0.1    8.0 </span>
+<span class="s">	\end{verbatim}</span>
+<span class="s">	The value 0.2 g/m$^3$ refers to altitude 4.0km, as e.g. in a</span>
+<span class="s">	radiosonde profile. The properties of each layer are calculated as</span>
+<span class="s">	average over the adjacent levels. E.g. the single scattering</span>
+<span class="s">	properties for the model layer between 3 and 4km are obtained by</span>
+<span class="s">	averaging over the two levels 3km and 4km. To allow easy definition of</span>
+<span class="s">	sharp cloud boundaries, clouds are only formed if both liquid water</span>
+<span class="s">	contents above and below the respective layer are larger than</span>
+<span class="s">	0. Hence, in the above example, the layers between 2 and 3 as well as</span>
+<span class="s">	between 3 and 4km are cloudy while those between 1 and 2km and between</span>
+<span class="s">	4 and 5km are not.</span>
+
+<span class="s">	Note that since version 1.4 the default is to interpret profile properties as </span>
+<span class="s">	layer properties. For example wc properties are assumed to be constant over the layer. </span>
+<span class="s">	The layer reaches from the level, where the properties are defined in the</span>
+<span class="s">	\code{wc\_file} to the level above that one.  The following lines</span>
+<span class="s">	\begin{verbatim}</span>
+<span class="s">	#      z     LWC    R_eff</span>
+<span class="s">	#     (km)  (g/m^3) (um) </span>
+<span class="s">	       4.000   0.0   0.0</span>
+<span class="s">	       3.000   1.0  10.0</span>
+<span class="s">	\end{verbatim}</span>
+<span class="s">	define a cloud in the layer between 3 and 4 km with sharp boundaries.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;atm_z_grid&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	With this option the vertical resolution of the \code{atmosphere\_file} data is changed to </span>
+<span class="s">	the levels (in km above sea surface) given as argument. This might be useful in oder to reduce the number </span>
+<span class="s">	of levels (save computational time)\ifmystic{ or in order to easily adjust the atmosphere profile to the resolution </span>
+<span class="s">	of a Monte Carlo cloud file \code{wc\_file 3D} or \code{ic\_file 3D}}.</span>
+<span class="s">	\fcode{</span>
+<span class="s">	atm\_z\_grid 0 2 4 6 8 10 20 30 ...</span>
+<span class="s">	}</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;zout_interpolate&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	The z-grid of optical properties is determined by the \code{atmosphere\_file},</span>
+<span class="s">	and, if specified, by other profile files like \code{mol\_file}, \code{rh\_file}, </span>
+<span class="s">	or \code{refractive\_index\_file}. </span>
+<span class="s">	Additional levels might be introduced by the \code{zout} </span>
+<span class="s">	option and the second argument of the \code{altitude} option. By default </span>
+<span class="s">	(if \code{zout\_interpolate} is not specified) levels introduced </span>
+<span class="s">	by the \code{zout} option will not affect the optical property </span>
+<span class="s">	profiles, that is, the optical properties are constant within the layers specified by </span>
+<span class="s">	the \code{atmosphere\_file} and profile files.</span>
+<span class="s">	If \code{zout\_interpolate} is specified, the atmospheric profiles (tracegases, temperature ...) </span>
+<span class="s">	are interpolated to the levels introduced by \code{zout}, and optical </span>
+<span class="s">	properties are determined from the interpolated atmospheric properties.</span>
+<span class="s">	If \code{heating\_rate}, \code{rte\_solver polradtran}, \code{rte\_solver rodents},</span>
+<span class="s">	or \code{rte\_solver twostrebe}</span>
+<span class="s">	is specified, \code{zout\_interpolate} </span>
+<span class="s">	will also be automatically activated. </span>
+<span class="s">	\code{zout\_interpolate} generally causes smoother variation of the optical properties.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;reverse_atmosphere&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Option for the strong and bold. Reverses the atmospheric input to the radiative</span>
+<span class="s">	transfer solvers. That is, the atmosphere is turned on the head.</span>
+<span class="s">	Yes, that is actually useful for some purposes. If you think</span>
+<span class="s">	you need this contact the author. Otherwise, do not use.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+	<span class="p">}</span>
+</pre></div></div>
+
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, D Griffith, A Ramkilowan.
+    </p>
+  </div>
+
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

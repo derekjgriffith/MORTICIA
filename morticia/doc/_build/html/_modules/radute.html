@@ -1,0 +1,681 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>radute &mdash; MORTICIA 1.0 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Roboto+Slab:400,700|Inconsolata:400,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="MORTICIA 1.0 documentation" href="../index.html"/>
+        <link rel="up" title="Module code" href="index.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+          <a href="../index.html" class="fa fa-home"> MORTICIA</a>
+        
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how_to_use.html">How to use MORTICIA</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../how_to_use.html#morticia-dependencies">MORTICIA Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../how_to_use.html#installation-and-requirements">Installation and Requirements</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../styleguide.html">The MORTICIA Style Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../styleguide.html#to-pep-8-or-not-to-pep-8">To PEP-8 or not to PEP-8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../styleguide.html#code-layout">Code Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../styleguide.html#import-statements">Import Statements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../styleguide.html#whitespace">Whitespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../styleguide.html#comments">Comments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../styleguide.html#documentation-strings-docstrings">Documentation Strings (docstrings)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../styleguide.html#naming-conventions">Naming Conventions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../styleguide.html#pep-257">PEP-257</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../styleguide.html#from-conventions-section"><em>From</em> Conventions Section</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../styleguide.html#general-terminology-and-conventions">General Terminology and Conventions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../for_developers.html">For the Developers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../for_developers.html#structure">Structure</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../packages.html">Packages</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../packages.html#sensor-package">Sensor Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../packages.html#radiometry-package">Radiometry Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../packages.html#scene-package">Scene Package</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../ChapLibRadtranODandPathRadiance.html">Transmittance and Path Radiance in libRadtran</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../01a-SpectralChannelsAndFilters.html">IPython Notebook and Sphinx</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../01a-SpectralChannelsAndFilters.html#a-spectralchannelsandfilters-ipython-notebook">01a-SpectralChannelsAndFilters IPython Notebook</a></li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">MORTICIA</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="index.html">Module code</a> &raquo;</li>
+      
+    <li>radute</li>
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <h1>Source code for radute</h1><div class="highlight"><pre>
+<span class="n">__author__</span> <span class="o">=</span> <span class="s">&#39;DGriffith, ARamkilowan&#39;</span>
+
+<span class="sd">&quot;&quot;&quot; This module provides a variety of utilities related to radiometry, including, but not limited to</span>
+<span class="sd">- Creating, writing and reading of MODTRAN-format .flt (filter) files commonly used to to represent</span>
+<span class="sd">    spectral power/density functions such as transmittances, reflectance or spectral responsivity functions (SRF).</span>
+<span class="sd">    The original purpose was to specify sensor spectral response functions (i.e. more than just a &quot;filter&quot;).</span>
+<span class="sd">-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">xray</span>
+<span class="kn">import</span> <span class="nn">StringIO</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">easygui</span>  <span class="c"># for simple file/open dialogs and such</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">morticia.tools.xd</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="sd">&quot;&quot;&quot; This module provides much of functionality related radiometry required by MORTICIA.</span>
+<span class="sd">Included here is functionality for :</span>
+<span class="sd">1) Interfacing to radiative transfer codes.</span>
+<span class="sd">2) Dealing with spectral filtering and convolution</span>
+<span class="sd">3) Creation, reading and writing of MODTRAN-style flt filter/SRF definitions</span>
+
+<span class="sd">TO DO : Check that MODTRAN can read the .flt files created using the Flt class here</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c">#_micronsymbol = u&quot;\u00B5&quot;</span>
+<span class="c"># _micrometres = _micronsymbol + u&quot;m&quot;</span>
+
+<span class="c"># Micron symbol can be encoded in UTF-8 with</span>
+<span class="n">_micronsymbol</span> <span class="o">=</span> <span class="s">u&#39;</span><span class="se">\xB5</span><span class="s">&#39;</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">&#39;UTF-8&#39;</span><span class="p">)</span>
+<span class="n">_micrometres</span> <span class="o">=</span> <span class="n">_micronsymbol</span> <span class="o">+</span> <span class="s">&quot;m&quot;</span>
+
+
+<div class="viewcode-block" id="srfgen"><a class="viewcode-back" href="../packages.html#radute.srfgen">[docs]</a><span class="k">def</span> <span class="nf">srfgen</span><span class="p">(</span><span class="n">center</span><span class="p">,</span> <span class="n">fwhm</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">101</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="s">&#39;gauss&#39;</span><span class="p">,</span> <span class="n">yedge</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">wvmin</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">wvmax</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">centerflat</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+           <span class="n">oob</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nextafter</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">peakval</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s">&#39;nm&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Generate a spectral filter or spectral response function of various shapes</span>
+
+<span class="sd">    :param center: center wavelength of the filter in nm</span>
+<span class="sd">    :param fwhm: full width at half maximum of the filter  in nm</span>
+<span class="sd">    :param n: number of spectral samples in the filter (minimum of 3, default 101), should be odd</span>
+<span class="sd">    :param shape: filter shape, one of &#39;gauss&#39;, &#39;bartlett&#39;, &#39;welch&#39;, &#39;cosine&#39;, &#39;box&#39;, &#39;cos^2&#39; (default &#39;gauss&#39;)</span>
+<span class="sd">    :param yedge: minimum y-value at the limits of the filter (default 0.001). No filter values below this threshold</span>
+<span class="sd">    :param wvmin: extend spectral definition by adding a single point at (wvmin, oob)</span>
+<span class="sd">    :param wvmax: exptend spectral definition by adding a single point at (wvmax, oob)</span>
+<span class="sd">    :param centerflat: opens a flat region in the centre of filter having a width of centerflat nm</span>
+<span class="sd">    :param oob: out-of-band leakage, default 0.0, must be &lt;= yedge</span>
+<span class="sd">    :param peakval: simply scales the peak of the filter function to this value (default 1.0)</span>
+<span class="sd">    :param units: spectral axis units, either &#39;nm&#39;, &#39;cm^-1&#39; or &#39;um&#39; (nanometers, wavenumber per cm or microns)</span>
+<span class="sd">        will be returned</span>
+<span class="sd">    :return: wvlnm, y, wvn, wvlum (wavelengths in nm, filter values, wavenumbers per cm and wavelengths in microns)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Input parameter n to rad.srfgen must be greater than 3.&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">oob</span> <span class="o">&gt;</span> <span class="n">yedge</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Input parameter oob to rad.srfgen must be smaller than paramter yedge (default 0.001).&#39;</span><span class="p">)</span>
+    <span class="c"># force an odd number of points</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">mod</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">):</span>
+        <span class="n">n</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="n">n2</span> <span class="o">=</span> <span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mf">1.0</span><span class="p">)</span><span class="o">/</span><span class="mf">2.0</span>  <span class="c"># mid-point</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="n">n2</span><span class="p">,</span> <span class="n">n2</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>  <span class="c"># relative x-coordinates for filter</span>
+    <span class="n">shape</span> <span class="o">=</span> <span class="n">shape</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">shape</span> <span class="o">==</span> <span class="s">&#39;gauss&#39;</span> <span class="ow">or</span> <span class="n">shape</span> <span class="o">==</span> <span class="s">&#39;gaussian&#39;</span><span class="p">:</span>
+        <span class="n">sigma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="o">-</span><span class="n">n2</span><span class="o">**</span><span class="mf">2.0</span> <span class="o">/</span> <span class="mf">2.0</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">yedge</span><span class="p">))</span>  <span class="c"># scalar standard deviation</span>
+        <span class="n">nfwhm</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">2.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mf">2.0</span><span class="p">))</span> <span class="o">*</span> <span class="n">sigma</span>  <span class="c"># normalized fwhm (scalar)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">**</span><span class="mf">2.0</span> <span class="o">/</span> <span class="mf">2.0</span> <span class="o">/</span> <span class="n">sigma</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">shape</span> <span class="o">==</span> <span class="s">&#39;bartlett&#39;</span> <span class="ow">or</span> <span class="n">shape</span> <span class="o">==</span> <span class="s">&#39;triangle&#39;</span><span class="p">:</span>
+        <span class="n">fudge</span> <span class="o">=</span> <span class="n">n2</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">yedge</span><span class="o">+</span><span class="p">(</span><span class="n">yedge</span><span class="o">/</span><span class="mf">100.0</span><span class="p">))</span>
+        <span class="n">nfwhm</span> <span class="o">=</span> <span class="n">n2</span> <span class="o">+</span> <span class="p">(</span><span class="n">yedge</span> <span class="o">*</span> <span class="n">fudge</span><span class="p">)</span>  <span class="c"># normalized fwhm</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">/</span> <span class="n">nfwhm</span><span class="p">)</span>  <span class="c"># bartlett</span>
+        <span class="n">y</span><span class="p">[</span><span class="n">y</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nextafter</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  <span class="c"># in case of negative samples, make very small positive value</span>
+    <span class="k">elif</span> <span class="n">shape</span> <span class="o">==</span> <span class="s">&#39;welch&#39;</span><span class="p">:</span>
+        <span class="n">fudge</span> <span class="o">=</span> <span class="n">n2</span> <span class="o">*</span> <span class="p">(</span><span class="mf">0.5</span><span class="o">+</span><span class="p">(</span><span class="n">yedge</span><span class="o">*</span><span class="mf">0.378</span><span class="p">))</span>
+        <span class="n">alph</span> <span class="o">=</span> <span class="n">n2</span> <span class="o">+</span> <span class="p">(</span><span class="n">yedge</span> <span class="o">*</span> <span class="n">fudge</span><span class="p">)</span>
+        <span class="n">nfwhm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)</span> <span class="o">*</span> <span class="n">alph</span>  <span class="c"># normalized fwhm</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="p">((</span><span class="n">x</span> <span class="o">**</span> <span class="mf">2.0</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">alph</span> <span class="o">**</span> <span class="mf">2.0</span><span class="p">))</span>  <span class="c"># welch</span>
+        <span class="n">y</span><span class="p">[</span><span class="n">y</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nextafter</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  <span class="c"># in case of negative samples, make very small positive value</span>
+    <span class="k">elif</span> <span class="n">shape</span> <span class="o">==</span> <span class="s">&#39;cosine&#39;</span><span class="p">:</span>
+        <span class="n">fudge</span> <span class="o">=</span> <span class="n">n2</span> <span class="o">*</span> <span class="p">(</span><span class="o">.</span><span class="mi">6365</span><span class="o">+</span><span class="p">(</span><span class="n">yedge</span><span class="o">*.</span><span class="mi">5</span><span class="p">))</span>
+        <span class="n">alph</span> <span class="o">=</span> <span class="n">n2</span> <span class="o">+</span> <span class="p">(</span><span class="n">yedge</span> <span class="o">*</span> <span class="n">fudge</span><span class="p">)</span>
+        <span class="n">nfwhm</span> <span class="o">=</span> <span class="p">(</span><span class="mf">4.0</span><span class="o">/</span><span class="mf">3.0</span><span class="p">)</span> <span class="o">*</span> <span class="n">alph</span>  <span class="c"># normalized fwhm</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">x</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mf">2.0</span> <span class="o">*</span> <span class="n">alph</span><span class="p">))</span>
+        <span class="n">y</span><span class="p">[</span><span class="n">y</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nextafter</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  <span class="c"># in case of negative samples, make very small positive value</span>
+    <span class="k">elif</span> <span class="n">shape</span> <span class="o">==</span> <span class="s">&#39;cos^2&#39;</span> <span class="ow">or</span> <span class="n">shape</span> <span class="o">==</span> <span class="s">&#39;cosquared&#39;</span><span class="p">:</span>
+        <span class="n">fudge</span> <span class="o">=</span> <span class="n">n2</span> <span class="o">*</span> <span class="p">(</span><span class="o">.</span><span class="mi">6365</span><span class="o">+</span><span class="p">(</span><span class="n">yedge</span><span class="o">*.</span><span class="mi">5</span><span class="p">))</span>
+        <span class="n">alph</span> <span class="o">=</span> <span class="n">n2</span> <span class="o">+</span> <span class="p">(</span><span class="n">yedge</span> <span class="o">*</span> <span class="n">fudge</span><span class="p">)</span>  <span class="c"># calculate alpha</span>
+        <span class="n">nfwhm</span> <span class="o">=</span> <span class="n">alph</span>  <span class="c"># normalized fwhm</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">x</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mf">2.0</span> <span class="o">*</span> <span class="n">alph</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span>
+    <span class="k">elif</span> <span class="n">shape</span> <span class="o">==</span> <span class="s">&#39;box&#39;</span> <span class="ow">or</span> <span class="n">shape</span> <span class="o">==</span> <span class="s">&#39;tophat&#39;</span><span class="p">:</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nextafter</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">y</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nextafter</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">nfwhm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">trapz</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Unknown SRF/filter shape input to rad.srfgen&#39;</span><span class="p">)</span>
+    <span class="n">delta</span> <span class="o">=</span> <span class="n">fwhm</span> <span class="o">/</span> <span class="n">nfwhm</span>  <span class="c"># Determine sample delta (scalar)</span>
+    <span class="n">y</span><span class="p">[</span><span class="n">y</span><span class="o">&lt;</span><span class="n">yedge</span><span class="p">]</span> <span class="o">=</span> <span class="n">oob</span>  <span class="c"># suppress values dropping below the edge threshold</span>
+    <span class="n">wvl</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">)</span> <span class="o">*</span> <span class="n">center</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">delta</span> <span class="o">*</span> <span class="n">x</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">centerflat</span><span class="p">:</span>  <span class="c"># Open a central flat region simply by shifting the wvl-coordinates</span>
+        <span class="n">wvl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">wvl</span><span class="p">[:</span><span class="n">n2</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">centerflat</span><span class="o">/</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">wvl</span><span class="p">[</span><span class="n">n2</span><span class="p">:]</span><span class="o">+</span><span class="n">centerflat</span><span class="o">/</span><span class="mf">2.0</span><span class="p">))</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">y</span><span class="p">[:</span><span class="n">n2</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">n2</span><span class="p">:]))</span>
+    <span class="k">if</span> <span class="n">wvmin</span> <span class="ow">and</span> <span class="n">wvmin</span> <span class="o">&lt;</span> <span class="n">wvl</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>  <span class="c"># insert a point at lower wavelength extremity</span>
+        <span class="n">wvl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">wvmin</span><span class="p">,</span> <span class="n">wvl</span><span class="p">))</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">oob</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">wvmax</span> <span class="ow">and</span> <span class="n">wvmax</span> <span class="o">&gt;</span> <span class="n">wvl</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>  <span class="c"># insert a point at upper wavelength extremity</span>
+        <span class="n">wvl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">wvl</span><span class="p">,</span> <span class="n">wvmax</span><span class="p">))</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">y</span><span class="p">,</span> <span class="n">oob</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">units</span> <span class="o">==</span> <span class="s">&#39;cm^-1&#39;</span><span class="p">:</span>  <span class="c"># wavenumber per cm</span>
+        <span class="n">wvn</span> <span class="o">=</span> <span class="n">wvl</span>
+        <span class="n">wvlnm</span> <span class="o">=</span> <span class="mf">1.0e7</span> <span class="o">/</span> <span class="n">wvn</span>
+        <span class="n">wvlum</span> <span class="o">=</span> <span class="n">wvlnm</span> <span class="o">/</span> <span class="mf">1000.0</span>
+    <span class="k">elif</span> <span class="n">units</span> <span class="o">==</span> <span class="s">&#39;nm&#39;</span><span class="p">:</span>  <span class="c"># wavelength in nm</span>
+        <span class="n">wvlnm</span> <span class="o">=</span> <span class="n">wvl</span>
+        <span class="n">wvn</span> <span class="o">=</span> <span class="mf">1.0e7</span> <span class="o">/</span> <span class="n">wvlnm</span>
+        <span class="n">wvlum</span> <span class="o">=</span> <span class="n">wvlnm</span> <span class="o">/</span> <span class="mf">1000.0</span>
+    <span class="k">elif</span> <span class="n">units</span> <span class="o">==</span> <span class="s">&#39;um&#39;</span> <span class="ow">or</span> <span class="n">units</span> <span class="o">==</span> <span class="n">_micrometres</span><span class="p">:</span>  <span class="c"># wavelength in microns</span>
+        <span class="n">wvlum</span> <span class="o">=</span> <span class="n">wvl</span>
+        <span class="n">wvlnm</span> <span class="o">=</span> <span class="mf">1000.0</span> <span class="o">*</span> <span class="n">wvlum</span>
+        <span class="n">wvn</span> <span class="o">=</span> <span class="mf">1e7</span> <span class="o">/</span> <span class="n">wvlnm</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Wavelength/wavenumber units for MODTRAN .flt definitions must be &quot;cm^1&quot;, &quot;nm&quot; or &quot;um&quot;.&#39;</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">*=</span> <span class="n">peakval</span>  <span class="c"># finally, scale the peak value</span>
+    <span class="k">return</span> <span class="n">wvlnm</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">wvn</span><span class="p">,</span> <span class="n">wvlum</span>
+
+</div>
+<div class="viewcode-block" id="tophat"><a class="viewcode-back" href="../packages.html#radute.tophat">[docs]</a><span class="k">def</span> <span class="nf">tophat</span><span class="p">(</span><span class="n">center</span><span class="p">,</span> <span class="n">fwhm</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">wvmin</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">wvmax</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">oob</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s">&#39;nm&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Return tophat/box filter defined by 6 points</span>
+<span class="sd">    Can also specify out-of-band values and extreme limits, which adds upper and lower bound points</span>
+
+<span class="sd">    :param center: center wavelength in nm</span>
+<span class="sd">    :param fwhm: full width at half max in nm</span>
+<span class="sd">    :param delta: smallest x-coordinate increment, default see np.nextafter</span>
+<span class="sd">    :param wvmin: minimum wavelength to reach default None</span>
+<span class="sd">    :param wvmax: maximum wavelength to reach default None</span>
+<span class="sd">    :param oob: out-of-band leakage</span>
+<span class="sd">    :param units: spectral axis units, either &#39;nm&#39;, &#39;cm^-1&#39; or &#39;um&#39; (nanometers, wavenumber per cm or microns)</span>
+<span class="sd">        will be returned</span>
+<span class="sd">    :return: wvlnm, y, wvn, wvlum (wavelengths in nm, filter values, wavenumbers per cm and wavelengths in microns)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">edgelo</span> <span class="o">=</span> <span class="n">center</span> <span class="o">-</span> <span class="n">fwhm</span><span class="o">/</span><span class="mf">2.0</span>
+    <span class="n">edgehi</span> <span class="o">=</span> <span class="n">center</span> <span class="o">+</span> <span class="n">fwhm</span><span class="o">/</span><span class="mf">2.0</span>
+    <span class="k">if</span> <span class="n">delta</span> <span class="o">!=</span> <span class="mf">0.0</span><span class="p">:</span>
+        <span class="n">wvl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">edgelo</span><span class="o">-</span><span class="n">delta</span><span class="p">,</span> <span class="n">edgelo</span><span class="p">,</span> <span class="n">edgelo</span><span class="o">+</span><span class="n">delta</span><span class="p">,</span> <span class="n">edgehi</span><span class="o">-</span><span class="n">delta</span><span class="p">,</span> <span class="n">edgehi</span><span class="p">,</span> <span class="n">edgehi</span><span class="o">+</span><span class="n">delta</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">wvl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">nextafter</span><span class="p">(</span><span class="n">edgelo</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">edgelo</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nextafter</span><span class="p">(</span><span class="n">edgelo</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+                        <span class="n">np</span><span class="o">.</span><span class="n">nextafter</span><span class="p">(</span><span class="n">edgehi</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">edgehi</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nextafter</span><span class="p">(</span><span class="n">edgehi</span><span class="p">,</span> <span class="mi">1</span><span class="p">)])</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">oob</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">oob</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">wvmin</span><span class="p">:</span>
+        <span class="n">wvl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">wvmin</span><span class="p">,</span> <span class="n">wvl</span><span class="p">))</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">oob</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">wvmax</span><span class="p">:</span>
+        <span class="n">wvl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">wvl</span><span class="p">,</span> <span class="n">wvmax</span><span class="p">))</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">y</span><span class="p">,</span> <span class="n">oob</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">units</span> <span class="o">==</span> <span class="s">&#39;cm^-1&#39;</span><span class="p">:</span>  <span class="c"># wavenumber per cm</span>
+        <span class="n">wvn</span> <span class="o">=</span> <span class="n">wvl</span>
+        <span class="n">wvlnm</span> <span class="o">=</span> <span class="mf">1.0e7</span> <span class="o">/</span> <span class="n">wvn</span>
+        <span class="n">wvlum</span> <span class="o">=</span> <span class="n">wvlnm</span> <span class="o">/</span> <span class="mf">1000.0</span>
+    <span class="k">elif</span> <span class="n">units</span> <span class="o">==</span> <span class="s">&#39;nm&#39;</span><span class="p">:</span>  <span class="c"># wavelength in nm</span>
+        <span class="n">wvlnm</span> <span class="o">=</span> <span class="n">wvl</span>
+        <span class="n">wvn</span> <span class="o">=</span> <span class="mf">1.0e7</span> <span class="o">/</span> <span class="n">wvlnm</span>
+        <span class="n">wvlum</span> <span class="o">=</span> <span class="n">wvlnm</span> <span class="o">/</span> <span class="mf">1000.0</span>
+    <span class="k">elif</span> <span class="n">units</span> <span class="o">==</span> <span class="s">&#39;um&#39;</span> <span class="ow">or</span> <span class="n">units</span> <span class="o">==</span> <span class="n">_micrometres</span><span class="p">:</span>  <span class="c"># wavelength in microns</span>
+        <span class="n">wvlum</span> <span class="o">=</span> <span class="n">wvl</span>
+        <span class="n">wvlnm</span> <span class="o">=</span> <span class="mf">1000.0</span> <span class="o">*</span> <span class="n">wvlum</span>
+        <span class="n">wvn</span> <span class="o">=</span> <span class="mf">1e7</span> <span class="o">/</span> <span class="n">wvlnm</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Wavelength/wavenumber units for MODTRAN .flt definitions must be &quot;cm^1&quot;, &quot;nm&quot; or &quot;um&quot;.&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">wvl</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">wvn</span><span class="p">,</span> <span class="n">wvlum</span>
+
+</div>
+<div class="viewcode-block" id="Flt"><a class="viewcode-back" href="../packages.html#radute.Flt">[docs]</a><span class="k">class</span> <span class="nc">Flt</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Encapsulates a MODTRAN-style .flt spectral response function/filter function definition file.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Flt.__init__"><a class="viewcode-back" href="../packages.html#radute.Flt.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s">&#39;nm&#39;</span><span class="p">,</span> <span class="n">filterheaders</span><span class="o">=</span><span class="p">[],</span> <span class="n">filters</span><span class="o">=</span><span class="p">[],</span> <span class="n">centers</span><span class="o">=</span><span class="p">[],</span>
+                 <span class="n">fwhms</span><span class="o">=</span><span class="p">[],</span> <span class="n">shapes</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;gauss&#39;</span><span class="p">],</span> <span class="n">yedges</span><span class="o">=</span><span class="p">[</span><span class="mf">0.001</span><span class="p">],</span> <span class="n">centerflats</span><span class="o">=</span><span class="p">[</span><span class="mf">0.0</span><span class="p">],</span> <span class="n">peakvals</span><span class="o">=</span><span class="p">[</span><span class="mf">1.0</span><span class="p">],</span> <span class="n">wvmins</span><span class="o">=</span><span class="p">[],</span> <span class="n">wvmaxs</span><span class="o">=</span><span class="p">[],</span>
+                 <span class="n">oobs</span><span class="o">=</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nextafter</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)]):</span>
+        <span class="sd">&quot;&quot;&quot; Create a filter definition object (MODTRAN flt style)</span>
+<span class="sd">        Input name is mandatory. All other inputs are optional, but the filterheaders list must have the same number of</span>
+<span class="sd">        string elements as the number of filters. Also, either the filters are given explicitly in the filters input, or</span>
+<span class="sd">        a list of filter definitions are provided for use with rad.srfgen().</span>
+<span class="sd">        If not empty, inputs centers through to oobs must be either scalar or have the same number of list elements as</span>
+<span class="sd">        the filterheaders list. If scalar, the value will be replicated up to the number of filterheader values.</span>
+
+<span class="sd">        :param name: Name of the set of filters. If the filterheaders input to this constructor function</span>
+<span class="sd">            is empty, an attempt will be made to read the data from a file called name + &#39;.flt&#39;</span>
+<span class="sd">        :param units: Spectral coordinate units for the filter, &#39;nm&#39;, &#39;um&#39; or &#39;cm^-1&#39;</span>
+<span class="sd">        :param filterheaders: List of strings, one header for each filter/SRF in the set.</span>
+<span class="sd">        :param filters: A list of numpy arrays. Each list element must comprise a 2-column numpy array with the</span>
+<span class="sd">            spectral coordinate (wavelength in nm or micron or wavenumber per cm) in the first column and the filter</span>
+<span class="sd">            magnitude in the second column.</span>
+<span class="sd">        :param centres: rather than provide filters, the inputs to rad.srfgen can be provided, this is a list of center</span>
+<span class="sd">            wavelengths in nm</span>
+<span class="sd">        :param fwhms: list of full width at half maximum in nm</span>
+<span class="sd">        :param shapes: list of strings providing the shapes of the filters (see rad.srfgen for alternatives)</span>
+<span class="sd">        :param yedges: list of yedge values (see rad.srfgen)</span>
+<span class="sd">        :param centerflats: list of centerflat values (see rad.srfgen). Note that giving a centerflat value adds this</span>
+<span class="sd">            amount ot the fwhm of the filters (broadens the resulting width to centerflat + fwhm)</span>
+<span class="sd">        :param peakvals: list of peak values of the filters</span>
+<span class="sd">        :param wvmins: list of minimum wavelength limits in nm</span>
+<span class="sd">        :param wvmaxs: list of maximum wavelength limits in nm</span>
+<span class="sd">        :param oobs: list of out-of-band leakage values</span>
+<span class="sd">        :return: MODTRAN-style filter/SRF object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="k">if</span> <span class="n">name</span><span class="p">[</span><span class="o">-</span><span class="mi">4</span><span class="p">:]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span> <span class="s">&#39;.flt&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="n">name</span> <span class="o">+</span> <span class="s">&#39;.flt&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">filterheaders</span><span class="p">:</span>  <span class="c"># Attempt to read from a file</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="c"># Check the units input and set up the file header</span>
+        <span class="k">if</span> <span class="n">units</span> <span class="o">==</span> <span class="s">&#39;cm^-1&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">unitsheader</span> <span class="o">=</span> <span class="s">&#39;W&#39;</span> <span class="c"># wavenumber</span>
+        <span class="k">elif</span> <span class="n">units</span> <span class="o">==</span> <span class="s">&#39;nm&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">unitsheader</span> <span class="o">=</span> <span class="s">&#39;N&#39;</span>
+        <span class="k">elif</span> <span class="n">units</span> <span class="o">==</span> <span class="s">&#39;um&#39;</span> <span class="ow">or</span> <span class="n">units</span> <span class="o">==</span> <span class="n">_micrometres</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">unitsheader</span> <span class="o">=</span> <span class="s">&#39;M&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Wavelength/wavenumber units for MODTRAN .flt definitions must be &quot;cm^1&quot;, &quot;nm&quot; or &quot;um&quot;.&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">units</span> <span class="o">=</span> <span class="n">units</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fileheader</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">unitsheader</span> <span class="o">+</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+        <span class="c">#if len(filterheaders) != len(filters):</span>
+        <span class="c">#    raise ValueError(&#39;Number of filterheaders must equal number of filters when creating .flt objects.&#39;)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filterheaders</span> <span class="o">=</span> <span class="n">filterheaders</span>
+        <span class="k">if</span> <span class="n">filters</span> <span class="ow">and</span> <span class="n">centers</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Do not give both explicit filter definitions and rad.srfgen definitions for rad.flt.&#39;</span><span class="p">)</span>
+        <span class="n">nfilters</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">filterheaders</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nfilters</span> <span class="o">=</span> <span class="n">nfilters</span>
+        <span class="k">if</span> <span class="n">filters</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">filters</span><span class="p">)</span> <span class="o">!=</span> <span class="n">nfilters</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Number of filters must equal number of filter headers in rad.flt instantiation.&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">filters</span> <span class="o">=</span> <span class="n">filters</span>  <span class="c"># now fix the filters into the correct column order</span>
+            <span class="k">for</span> <span class="n">ifilt</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nfilters</span><span class="p">):</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">unitsheader</span> <span class="o">==</span> <span class="s">&#39;W&#39;</span><span class="p">:</span>  <span class="c"># wavenumber</span>
+                    <span class="c"># column order is wvnm, y, wvn, wvum</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">[</span><span class="n">ifilt</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="mf">1.0e7</span><span class="o">/</span><span class="n">filters</span><span class="p">[</span><span class="n">ifilt</span><span class="p">][:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">filters</span><span class="p">[</span><span class="n">ifilt</span><span class="p">][:,</span><span class="mi">1</span><span class="p">],</span>
+                                                     <span class="n">filters</span><span class="p">[</span><span class="n">ifilt</span><span class="p">][:,</span><span class="mi">0</span><span class="p">],</span> <span class="mf">1.0e7</span><span class="o">/</span><span class="n">filters</span><span class="p">[</span><span class="n">ifilt</span><span class="p">][:,</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mf">1000.0</span><span class="p">))</span><span class="o">.</span><span class="n">T</span>
+                <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">unitsheader</span> <span class="o">==</span> <span class="s">&#39;N&#39;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">[</span><span class="n">ifilt</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">filters</span><span class="p">[</span><span class="n">ifilt</span><span class="p">][:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">filters</span><span class="p">[</span><span class="n">ifilt</span><span class="p">][:,</span><span class="mi">1</span><span class="p">],</span>
+                                                     <span class="mf">1.0e7</span> <span class="o">/</span> <span class="n">filters</span><span class="p">[</span><span class="n">ifilt</span><span class="p">][:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">filters</span><span class="p">[</span><span class="n">ifilt</span><span class="p">][:,</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="mf">1000.0</span><span class="p">))</span><span class="o">.</span><span class="n">T</span>
+                <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">unitsheader</span> <span class="o">==</span> <span class="s">&#39;M&#39;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">[</span><span class="n">ifilt</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="mf">1000.0</span><span class="o">*</span><span class="n">filters</span><span class="p">[</span><span class="n">ifilt</span><span class="p">][:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">filters</span><span class="p">[</span><span class="n">ifilt</span><span class="p">][:,</span><span class="mi">1</span><span class="p">],</span>
+                                                     <span class="mf">1.0e10</span> <span class="o">/</span><span class="n">filters</span><span class="p">[</span><span class="n">ifilt</span><span class="p">][:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">filters</span><span class="p">[</span><span class="n">ifilt</span><span class="p">][:,</span><span class="mi">0</span><span class="p">]))</span><span class="o">.</span><span class="n">T</span>
+            <span class="k">return</span>  <span class="c"># filter definitions have been given explicitly</span>
+        <span class="c"># Check that parameters are scalar or multiply them up to size</span>
+        <span class="n">checklist</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;centers&#39;</span><span class="p">,</span> <span class="s">&#39;fwhms&#39;</span><span class="p">,</span> <span class="s">&#39;shapes&#39;</span><span class="p">,</span> <span class="s">&#39;yedges&#39;</span><span class="p">,</span> <span class="s">&#39;centerflats&#39;</span><span class="p">,</span> <span class="s">&#39;peakvals&#39;</span><span class="p">,</span> <span class="s">&#39;oobs&#39;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">checkitem</span> <span class="ow">in</span> <span class="n">checklist</span><span class="p">:</span>
+            <span class="n">checkcall</span> <span class="o">=</span> <span class="s">&#39;use_&#39;</span> <span class="o">+</span> <span class="n">checkitem</span> <span class="o">+</span> <span class="s">&#39; = Flt.checkparm(&quot;&#39;</span> <span class="o">+</span> <span class="n">checkitem</span> <span class="o">+</span> <span class="s">&#39;&quot;, &#39;</span> <span class="o">+</span> <span class="n">checkitem</span> <span class="o">+</span> <span class="s">&#39;, nfilters)&#39;</span>
+            <span class="k">exec</span><span class="p">(</span><span class="n">checkcall</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">wvmins</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">wvmins</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">use_wvmins</span> <span class="o">=</span> <span class="n">wvmins</span> <span class="o">*</span> <span class="n">nfilters</span>
+        <span class="k">elif</span> <span class="n">wvmins</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">wvmins</span><span class="p">)</span> <span class="o">!=</span> <span class="n">nfilters</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Number of wvmins must equal number of filterheaders in rad.flt instantiation&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">use_wvmins</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">ie</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nfilters</span><span class="p">)]</span>
+        <span class="c"># Check wvmaxs</span>
+        <span class="n">use_filters</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">wvmaxs</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">wvmaxs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">use_wvmaxs</span> <span class="o">=</span> <span class="n">wvmaxs</span> <span class="o">*</span> <span class="n">nfilters</span>
+        <span class="k">elif</span> <span class="n">wvmaxs</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">wvmaxs</span><span class="p">)</span> <span class="o">!=</span> <span class="n">nfilters</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Number of wvmaxs must equal number of filterheaders in rad.flt instantiation&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">use_wvmaxs</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">ie</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nfilters</span><span class="p">)]</span>
+        <span class="k">for</span> <span class="n">ifilt</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nfilters</span><span class="p">):</span>
+            <span class="n">wvl</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">wvn</span><span class="p">,</span> <span class="n">wu</span> <span class="o">=</span> <span class="n">srfgen</span><span class="p">(</span><span class="n">center</span><span class="o">=</span><span class="n">use_centers</span><span class="p">[</span><span class="n">ifilt</span><span class="p">],</span> <span class="n">fwhm</span><span class="o">=</span><span class="n">use_fwhms</span><span class="p">[</span><span class="n">ifilt</span><span class="p">],</span> <span class="n">shape</span><span class="o">=</span><span class="n">use_shapes</span><span class="p">[</span><span class="n">ifilt</span><span class="p">],</span>
+                                 <span class="n">yedge</span><span class="o">=</span><span class="n">use_yedges</span><span class="p">[</span><span class="n">ifilt</span><span class="p">],</span> <span class="n">wvmin</span><span class="o">=</span><span class="n">use_wvmins</span><span class="p">[</span><span class="n">ifilt</span><span class="p">],</span> <span class="n">wvmax</span><span class="o">=</span><span class="n">use_wvmaxs</span><span class="p">[</span><span class="n">ifilt</span><span class="p">],</span>
+                                 <span class="n">centerflat</span><span class="o">=</span><span class="n">use_centerflats</span><span class="p">[</span><span class="n">ifilt</span><span class="p">],</span> <span class="n">oob</span><span class="o">=</span><span class="n">use_oobs</span><span class="p">[</span><span class="n">ifilt</span><span class="p">],</span> <span class="n">peakval</span><span class="o">=</span><span class="n">use_peakvals</span><span class="p">[</span><span class="n">ifilt</span><span class="p">])</span>
+            <span class="n">use_filters</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">wvl</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">wvn</span><span class="p">,</span> <span class="n">wu</span><span class="p">))</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filters</span> <span class="o">=</span> <span class="n">use_filters</span>
+
+        <span class="c"># Convert the wavelengths to microns or wavenumbers</span>
+</div>
+    <span class="nd">@staticmethod</span>  <span class="c"># Some input parameter checking for Flt constructor</span>
+<div class="viewcode-block" id="Flt.checkparm"><a class="viewcode-back" href="../packages.html#radute.Flt.checkparm">[docs]</a>    <span class="k">def</span> <span class="nf">checkparm</span><span class="p">(</span><span class="n">parmname</span><span class="p">,</span> <span class="n">parm</span><span class="p">,</span> <span class="n">nfilters</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Input parameter checking for Flt constructor</span>
+
+<span class="sd">        :param parmname: Name of parameter fpr checking</span>
+<span class="sd">        :param parm: Parameter value</span>
+<span class="sd">        :param nfilters: Number of filters</span>
+<span class="sd">        :return: Checked parameter</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parm</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">parm</span> <span class="o">*=</span> <span class="n">nfilters</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">parm</span><span class="p">)</span> <span class="o">!=</span> <span class="n">nfilters</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;Number of &#39;</span> <span class="o">+</span> <span class="n">parmname</span> <span class="o">+</span> <span class="s">&#39; must equal number of filterheaders in rad.flt instantiation&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">parm</span>
+</div>
+<div class="viewcode-block" id="Flt.read"><a class="viewcode-back" href="../packages.html#radute.Flt.read">[docs]</a>    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;Unknown&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Read a .flt format spectral band filter definitions file (MODTRAN format)</span>
+
+<span class="sd">        :param filename:</span>
+<span class="sd">        :return: object of class Flt, if the file is a well-formatted MODTRAN-style .flt file</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">isfloatnum</span> <span class="o">=</span> <span class="s">&#39;^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$&#39;</span>  <span class="c"># regular expression to match a floating point number</span>
+        <span class="k">if</span> <span class="n">filename</span> <span class="o">==</span> <span class="s">&#39;.flt&#39;</span><span class="p">:</span>
+            <span class="n">filename</span> <span class="o">=</span> <span class="n">easygui</span><span class="o">.</span><span class="n">fileopenbox</span><span class="p">(</span><span class="n">msg</span><span class="o">=</span><span class="s">&#39;Please select a .flt file.&#39;</span><span class="p">,</span> <span class="n">filetypes</span><span class="o">=</span><span class="p">[</span><span class="s">&quot;*.flt&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="n">filename</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s">&#39;rt&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fltfil</span><span class="p">:</span>
+            <span class="n">fileheader</span> <span class="o">=</span> <span class="n">fltfil</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">unitsheader</span> <span class="o">=</span> <span class="n">fileheader</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>  <span class="c"># Must be W, N or M for wavenumber per cm, nm or microns</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">unitsheader</span> <span class="o">==</span> <span class="s">&#39;W&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">units</span> <span class="o">=</span> <span class="s">&#39;cm^-1&#39;</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">unitsheader</span> <span class="o">==</span> <span class="s">&#39;N&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">units</span> <span class="o">=</span> <span class="s">&#39;nm&#39;</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">unitsheader</span> <span class="o">==</span> <span class="s">&#39;M&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">units</span> <span class="o">=</span> <span class="n">_micrometres</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;File header for &#39;</span> <span class="o">+</span> <span class="n">filename</span> <span class="o">+</span> <span class="s">&#39; does not start with N, M or W as required for&#39;</span>
+                                                                 <span class="s">&#39; .flt files.&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">fileheader</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fileheader</span> <span class="o">=</span> <span class="n">fileheader</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">filterheaders</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">filters</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">ifilter</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c"># count the filters</span>
+            <span class="n">nexlin</span> <span class="o">=</span> <span class="n">fltfil</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+            <span class="k">while</span> <span class="n">nexlin</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">filterheaders</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nexlin</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+                <span class="n">nexlin</span> <span class="o">=</span> <span class="n">fltfil</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">nexlin</span><span class="p">:</span>
+                    <span class="k">break</span>  <span class="c"># all done</span>
+                <span class="n">slin</span> <span class="o">=</span> <span class="n">nexlin</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>  <span class="c"># split line up into a list of tokens at whitespace</span>
+                <span class="n">thisfilterdata</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="o">.</span><span class="n">append</span><span class="p">([])</span>
+                <span class="c"># if all tokens match</span>
+                <span class="k">while</span> <span class="nb">all</span><span class="p">([</span><span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">isfloatnum</span><span class="p">,</span> <span class="n">tok</span><span class="p">)</span> <span class="k">for</span> <span class="n">tok</span> <span class="ow">in</span> <span class="n">slin</span><span class="p">]):</span>  <span class="c"># all tokens a are numbers-this is a line of data</span>
+                    <span class="c"># accumulate the data</span>
+                    <span class="n">thelinedata</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">slin</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">thisfilterdata</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">thisfilterdata</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">thisfilterdata</span><span class="p">,</span> <span class="n">thelinedata</span><span class="p">))</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">thisfilterdata</span> <span class="o">=</span> <span class="n">thelinedata</span>
+                    <span class="n">nexlin</span> <span class="o">=</span> <span class="n">fltfil</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">nexlin</span><span class="p">:</span>
+                        <span class="k">break</span>  <span class="c"># all done</span>
+                    <span class="n">slin</span> <span class="o">=</span> <span class="n">nexlin</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>  <span class="c"># split line up into a list of tokens at whitespace</span>
+                <span class="c"># process the accumulated data depending on what the units are</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">unitsheader</span> <span class="o">==</span> <span class="s">&#39;W&#39;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">[</span><span class="n">ifilter</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="mf">1e7</span><span class="o">/</span><span class="n">thisfilterdata</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">thisfilterdata</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span>
+                                                       <span class="n">thisfilterdata</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="mf">1e9</span><span class="o">/</span><span class="n">thisfilterdata</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]))</span><span class="o">.</span><span class="n">T</span>
+                <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">unitsheader</span> <span class="o">==</span> <span class="s">&#39;N&#39;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">[</span><span class="n">ifilter</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">thisfilterdata</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">thisfilterdata</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span>
+                                                       <span class="mf">1e7</span><span class="o">/</span><span class="n">thisfilterdata</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">thisfilterdata</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="mf">1000.0</span><span class="p">))</span><span class="o">.</span><span class="n">T</span>
+                <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">unitsheader</span> <span class="o">==</span> <span class="s">&#39;M&#39;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">[</span><span class="n">ifilter</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">thisfilterdata</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mf">1000.0</span><span class="p">,</span> <span class="n">thisfilterdata</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span>
+                                                       <span class="mf">1e9</span><span class="o">/</span><span class="n">thisfilterdata</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">thisfilterdata</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]))</span><span class="o">.</span><span class="n">T</span>
+                <span class="n">ifilter</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">nfilters</span> <span class="o">=</span> <span class="n">ifilter</span>
+
+</div>
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">format</span><span class="o">=</span><span class="s">&#39;  </span><span class="si">%f</span><span class="s">&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Return representation of a .flt MODTRAN-style spectral filter or SRF. This is the same as the format in</span>
+<span class="sd">         the .flt file is written.</span>
+
+<span class="sd">        :param format: format in which to present the numeric data, default is &#39;  %f&#39;</span>
+<span class="sd">        :return: File representation of .flt object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">selfrep</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fileheader</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">ifilt</span><span class="p">,</span> <span class="nb">filter</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">):</span>
+            <span class="n">selfrep</span> <span class="o">=</span> <span class="n">selfrep</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">filterheaders</span><span class="p">[</span><span class="n">ifilt</span><span class="p">]</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+            <span class="c"># Create a string buffer</span>
+            <span class="n">strbuff</span> <span class="o">=</span> <span class="n">StringIO</span><span class="o">.</span><span class="n">StringIO</span><span class="p">()</span>
+            <span class="c"># column ordering depends on original unit specification</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">unitsheader</span> <span class="o">==</span> <span class="s">&#39;W&#39;</span><span class="p">:</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="n">strbuff</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">[</span><span class="n">ifilt</span><span class="p">][:,[</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]],</span> <span class="n">fmt</span><span class="o">=</span><span class="n">format</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">unitsheader</span> <span class="o">==</span> <span class="s">&#39;N&#39;</span><span class="p">:</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="n">strbuff</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">[</span><span class="n">ifilt</span><span class="p">][:,[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]],</span> <span class="n">fmt</span><span class="o">=</span><span class="n">format</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">unitsheader</span> <span class="o">==</span> <span class="s">&#39;M&#39;</span><span class="p">:</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span><span class="n">strbuff</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">[</span><span class="n">ifilt</span><span class="p">][:,[</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]],</span> <span class="n">fmt</span><span class="o">=</span><span class="n">format</span><span class="p">)</span>
+            <span class="n">selfrep</span> <span class="o">=</span> <span class="n">selfrep</span> <span class="o">+</span> <span class="n">strbuff</span><span class="o">.</span><span class="n">getvalue</span><span class="p">()</span>
+            <span class="n">strbuff</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>  <span class="c"># delete the buffer</span>
+        <span class="k">return</span> <span class="n">selfrep</span>
+
+<div class="viewcode-block" id="Flt.write"><a class="viewcode-back" href="../packages.html#radute.Flt.write">[docs]</a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">format</span><span class="o">=</span><span class="s">&#39;  </span><span class="si">%f</span><span class="s">&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Write a MODTRAN-style .flt file for this filter/SRF set</span>
+
+<span class="sd">        :param filename: Optional filename without extension. If not given, the filter name will be used with</span>
+<span class="sd">        :param format: Format specifier as for np.savetext for writing the data, default is &#39;  %f&#39;</span>
+<span class="sd">            extension .flt</span>
+<span class="sd">        :return: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">selfrep</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__repr__</span><span class="p">(</span><span class="n">format</span><span class="o">=</span><span class="n">format</span><span class="p">)</span>
+        <span class="c"># Write the string to the file</span>
+        <span class="k">if</span> <span class="n">filename</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">filename</span><span class="p">[</span><span class="o">-</span><span class="mi">4</span><span class="p">:]</span><span class="o">.</span><span class="n">lower</span> <span class="o">!=</span> <span class="s">&#39;.flt&#39;</span><span class="p">:</span>
+                <span class="n">filename</span> <span class="o">=</span> <span class="n">filename</span> <span class="o">+</span> <span class="s">&#39;.flt&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">filename</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filename</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s">&#39;wt&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fltfile</span><span class="p">:</span>
+            <span class="n">fltfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">selfrep</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Flt.plot"><a class="viewcode-back" href="../packages.html#radute.Flt.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Plot a MODTRAN-style set of filter/SRF curves.</span>
+
+<span class="sd">        :return: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">hold</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">ifilt</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nfilters</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">unitsheader</span> <span class="o">==</span> <span class="s">&#39;W&#39;</span><span class="p">:</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">[</span><span class="n">ifilt</span><span class="p">][:,</span> <span class="mi">2</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">[</span><span class="n">ifilt</span><span class="p">][:,</span><span class="mi">1</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">unitsheader</span> <span class="o">==</span> <span class="s">&#39;N&#39;</span><span class="p">:</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">[</span><span class="n">ifilt</span><span class="p">][:,</span> <span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">[</span><span class="n">ifilt</span><span class="p">][:,</span><span class="mi">1</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">unitsheader</span> <span class="o">==</span> <span class="s">&#39;M&#39;</span><span class="p">:</span>
+                <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">[</span><span class="n">ifilt</span><span class="p">][:,</span> <span class="mi">3</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">[</span><span class="n">ifilt</span><span class="p">][:,</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;Spectral Response/Transmission&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span> <span class="o">==</span> <span class="s">&#39;cm^-1&#39;</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Wavenumber [&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span> <span class="o">+</span> <span class="s">&#39;]&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Wavelength [&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span> <span class="o">+</span> <span class="s">&#39;]&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filterheaders</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">12</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filterheaders</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s">&#39;best&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">hold</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Flt.flt_as_xd"><a class="viewcode-back" href="../packages.html#radute.Flt.flt_as_xd">[docs]</a>    <span class="k">def</span> <span class="nf">flt_as_xd</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Convert an Flt class object to a list of xray DataArray objects</span>
+
+<span class="sd">        :return: The set of Flt filters as a list of xray DataArray objects, with a wavelength coordinate</span>
+<span class="sd">            axis (&#39;wvl&#39;, long_name = &#39;Wavelength&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">xd_flt_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">ifilt</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nfilters</span><span class="p">):</span>
+            <span class="n">wvl</span> <span class="o">=</span> <span class="n">xd_identity</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">[</span><span class="n">ifilt</span><span class="p">][:,</span><span class="mi">0</span><span class="p">],</span> <span class="s">&#39;wvl&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">units</span><span class="p">)</span>
+            <span class="c">#print wvl</span>
+            <span class="n">xd_flt_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">xray</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">[</span><span class="n">ifilt</span><span class="p">][:,</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="n">wvl</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;srf&#39;</span><span class="p">,</span>
+                                                <span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;long_name&#39;</span><span class="p">:</span> <span class="n">long_name</span><span class="p">[</span><span class="s">&#39;srf&#39;</span><span class="p">],</span>
+                                                       <span class="s">&#39;labels&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">filterheaders</span><span class="p">[</span><span class="n">ifilt</span><span class="p">],</span>
+                                                       <span class="s">&#39;units&#39;</span><span class="p">:</span> <span class="n">default_units</span><span class="p">[</span><span class="s">&#39;srf&#39;</span><span class="p">],</span>
+                                                       <span class="s">&#39;title&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">},</span>
+                                                <span class="p">))</span>
+        <span class="k">return</span> <span class="n">xd_flt_list</span>
+</div>
+<div class="viewcode-block" id="Flt.flt_as_xd_harmonised"><a class="viewcode-back" href="../packages.html#radute.Flt.flt_as_xd_harmonised">[docs]</a>    <span class="k">def</span> <span class="nf">flt_as_xd_harmonised</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">quantity_name</span><span class="o">=</span><span class="s">&#39;srf&#39;</span><span class="p">,</span> <span class="n">chn_start_index</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Convert the Flt class object into a single, wavelength-harmonised xray.DataArray.</span>
+
+<span class="sd">        :param quantity_name: The name of the quantity as defined the long_names variable in moglo.py. Defaults to</span>
+<span class="sd">            &#39;srf&#39;, a Spectral Response Function, but could also be a transmission functions &#39;trn&#39; or other spectral</span>
+<span class="sd">            quantity known to moglo.py.</span>
+<span class="sd">        :param chn_start_index: Use this parameter to select the starting channel number. Defaults to zero.</span>
+<span class="sd">        :return: The set of Flt filters as a single, wavelength-harmonised xray.DataArray object. The filter</span>
+<span class="sd">            headers are returned in an attribute called &#39;labels&#39;. The fileheader of the Flt object is</span>
+<span class="sd">            returned in an attribute called &#39;title&#39; (netCDF recommendation)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">xd_flt_list</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">flt_as_xd</span><span class="p">()</span>  <span class="c"># Create a list of xray.DataArray objects</span>
+        <span class="c"># Harmonise the wavelength axes</span>
+        <span class="n">xd_flt_list_harmonised</span> <span class="o">=</span> <span class="n">xd_harmonise_interp</span><span class="p">(</span><span class="n">xd_flt_list</span><span class="p">)</span>
+        <span class="n">xd_attrs_update</span><span class="p">(</span><span class="n">xd_flt_list_harmonised</span><span class="p">)</span>  <span class="c"># Update the attribute</span>
+        <span class="n">chn_indices</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">chn_start_index</span><span class="p">,</span> <span class="n">chn_start_index</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">xd_flt_list</span><span class="p">))</span>
+        <span class="c"># Compile the list into a single object</span>
+        <span class="n">flt_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">xd_flt_list_harmonised</span><span class="p">[</span><span class="n">ifilt</span><span class="p">]</span><span class="o">.</span><span class="n">data</span> <span class="k">for</span> <span class="n">ifilt</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">xd_flt_list</span><span class="p">))])</span>
+        <span class="n">xd_flt_harmonised</span> <span class="o">=</span> <span class="n">xray</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">flt_data</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="p">[(</span><span class="n">xd_flt_list_harmonised</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s">&#39;wvl&#39;</span><span class="p">]),</span>
+                                                      <span class="p">(</span><span class="s">&#39;chn&#39;</span><span class="p">,</span> <span class="n">chn_indices</span><span class="p">,</span>
+                                                         <span class="p">{</span><span class="s">&#39;labels&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">filterheaders</span><span class="p">})],</span>
+                                           <span class="n">name</span><span class="o">=</span><span class="n">quantity_name</span><span class="p">,</span>
+                                           <span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;long_name&#39;</span><span class="p">:</span> <span class="n">long_name</span><span class="p">[</span><span class="n">quantity_name</span><span class="p">],</span>
+                                                  <span class="s">&#39;units&#39;</span><span class="p">:</span> <span class="n">default_units</span><span class="p">[</span><span class="n">quantity_name</span><span class="p">],</span>
+                                                  <span class="s">&#39;title&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">})</span>
+        <span class="k">return</span> <span class="n">xd_flt_harmonised</span>
+</div></div>
+<div class="viewcode-block" id="SpectralChannel"><a class="viewcode-back" href="../packages.html#radute.SpectralChannel">[docs]</a><span class="k">class</span> <span class="nc">SpectralChannel</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; The SpectralChannel class defines any band-limited spectral distribution function. This could be</span>
+<span class="sd">    the spectral response functions of a sensor, or the spectral transmittance of an optical filter, the spectral</span>
+<span class="sd">    radiance, irradiance or any other band-limited spectral quantity. The actual spectral distribution</span>
+<span class="sd">    function is represented by an xray.DataArray object with a wavelength axis in preferred units of &#39;nm&#39;.</span>
+
+<span class="sd">    SpectralChannels is a list of channels that can be indexed in the usual way, by the global channel index</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_channel_counter</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c"># This is a class global counter, incremented for each channel, so that every</span>
+                          <span class="c"># defined channel gets a unique number</span>
+    <span class="n">_channel_list</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c"># The global list of spectral channels indexed self.ichn</span>
+    <span class="n">_channel_groups</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c"># Global list of channel group names</span>
+    <span class="n">_channel_group_dict</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c"># Dictionary of channels indexed by group name</span>
+<div class="viewcode-block" id="SpectralChannel.__init__"><a class="viewcode-back" href="../packages.html#radute.SpectralChannel.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sdf</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">group</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="n">channels</span><span class="o">=</span><span class="s">&#39;all&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Create one or a group of spectral distribution functions</span>
+
+<span class="sd">        :param sdf: The spectral distribution function as an xray.DataArray object.</span>
+<span class="sd">        :param group:</span>
+<span class="sd">        :param channels:</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span>
+</pre></div></div></div>
+
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, D Griffith, A Ramkilowan.
+    </p>
+  </div>
+
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

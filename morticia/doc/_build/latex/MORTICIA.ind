@@ -1,0 +1,24 @@
+\begin{theindex}
+
+  \item ac\_circle() (in module optics), \hyperpage{7}
+  \item atf() (in module optics), \hyperpage{7}
+
+  \indexspace
+
+  \item cc\_circle() (in module optics), \hyperpage{7}
+  \item ctf\_eye() (in module optics), \hyperpage{8}
+
+  \indexspace
+
+  \item mtf() (in module optics), \hyperpage{8}
+  \item mtf\_obs() (in module optics), \hyperpage{8}
+
+  \indexspace
+
+  \item n\_air() (in module optics), \hyperpage{9}
+
+  \indexspace
+
+  \item optics (module), \hyperpage{7}
+
+\end{theindex}

@@ -1,0 +1,422 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>The MORTICIA Style Guide &mdash; MORTICIA 1.0 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Roboto+Slab:400,700|Inconsolata:400,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="MORTICIA 1.0 documentation" href="index.html"/>
+        <link rel="next" title="For the Developers" href="for_developers.html"/>
+        <link rel="prev" title="How to use MORTICIA" href="how_to_use.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+          <a href="index.html" class="fa fa-home"> MORTICIA</a>
+        
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="how_to_use.html">How to use MORTICIA</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="how_to_use.html#morticia-dependencies">MORTICIA Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="how_to_use.html#installation-and-requirements">Installation and Requirements</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">The MORTICIA Style Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#to-pep-8-or-not-to-pep-8">To PEP-8 or not to PEP-8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#code-layout">Code Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#import-statements">Import Statements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#whitespace">Whitespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#comments">Comments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#documentation-strings-docstrings">Documentation Strings (docstrings)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#naming-conventions">Naming Conventions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pep-257">PEP-257</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#from-conventions-section"><em>From</em> Conventions Section</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#general-terminology-and-conventions">General Terminology and Conventions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="for_developers.html">For the Developers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="for_developers.html#structure">Structure</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="packages.html">Packages</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="packages.html#sensor-package">Sensor Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="packages.html#radiometry-package">Radiometry Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="packages.html#scene-package">Scene Package</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ChapLibRadtranODandPathRadiance.html">Transmittance and Path Radiance in libRadtran</a></li>
+<li class="toctree-l1"><a class="reference internal" href="01a-SpectralChannelsAndFilters.html">IPython Notebook and Sphinx</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="01a-SpectralChannelsAndFilters.html#a-spectralchannelsandfilters-ipython-notebook">01a-SpectralChannelsAndFilters IPython Notebook</a></li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">MORTICIA</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>The MORTICIA Style Guide</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          <a href="_sources/styleguide.txt" rel="nofollow"> View page source</a>
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <div class="section" id="the-morticia-style-guide">
+<h1>The MORTICIA Style Guide<a class="headerlink" href="#the-morticia-style-guide" title="Permalink to this headline">¶</a></h1>
+<blockquote>
+<div><p>The <code class="docutils literal"><span class="pre">MORTICIA</span></code> style guide is a comprehensive source of all things related to <code class="docutils literal"><span class="pre">MORTICIA</span></code> nomenclature. This guide is developed to be compatible with python 2.7, no
+immediate consideration is given to python 3.x at this stage. <code class="docutils literal"><span class="pre">MORTICIA</span></code> developers suspect that any changes for python 3.x will be subtle, unobtrusive and non-detrimental
+to <code class="docutils literal"><span class="pre">MORTICIA</span></code> development.</p>
+<p>The style guide will be segmented into the following sections:</p>
+<ul class="simple">
+<li>Code formatting, in particular the use of PEP-8</li>
+<li>Code documenting, with a focus on docstring formatting</li>
+<li>Conventions indigenous to MORTICIA framework</li>
+</ul>
+</div></blockquote>
+<div class="section" id="to-pep-8-or-not-to-pep-8">
+<span id="pep8"></span><h2>To PEP-8 or not to PEP-8<a class="headerlink" href="#to-pep-8-or-not-to-pep-8" title="Permalink to this headline">¶</a></h2>
+<p>While PEP-8, a high-level set of conventions has become the <em>de facto</em> standard for pythonic coding, it was deemed necessary by the <code class="docutils literal"><span class="pre">MORTICIA</span></code> developers
+to make certain exceptions. Similarly the PEP-257 is a set of guidelines for python docstrings.</p>
+<p>A comprehensive PEP-8 guide can be found <a class="reference external" href="http://legacy.python.org/dev/peps/pep-0008/#a-foolish-consistency-is-the-hobgoblin-of-little-minds">here</a>, while a pdf
+PEP-8 cheat sheet can be found <a class="reference external" href="https://www.google.co.za/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=1&amp;cad=rja&amp;uact=8&amp;ved=0ahUKEwjZr-egubPKAhVH1RQKHaZKDF8QFggaMAA&amp;url=https%3A%2F%2Fwww.pkimber.net%2Fopen%2F_downloads%2Fpep8_cheat.pdf&amp;usg=AFQjCNGGoQ7DSCwaprDjuc356SwegyEkWA&amp;sig2=Z-aVuunhXiWS-byXk3TGCQ">here</a>.</p>
+<p>The PEP-8 guides referenced above provides a thorough encapsulation of the do&#8217;s and dont&#8217;s of efficient and consistent python programming, it is however not all inclusive.
+There are topics which the guide does not address. This is in no way detrimental to any python development and attempting to fill these gaps are probably not an essential topic for the PEP-8 authors to address.
+Importantly, the PEP-8 is just a guide and one should not become indoctrinated with it&#8217;s contents. To paraphrase <a class="reference external" href="https://en.wikipedia.org/wiki/Guido_van_Rossum">Guido Van Rossum</a> (Python&#8217;s creator), it is important for ones python code
+to be consistent with PEP-8, it is more important to be consistent within a project, but it is most important to be consistent within one function or module.</p>
+<p>The Python programming language is designed to be an <em>easy-to-read, easy-to-write</em> language. The PEP-8 style guide aims to accentuate this strong point of python by providing a means of consistency and optimal readability.</p>
+<p>For sake of completeness the more commonly used cases of PEP-8 will be shown herein. It will be split into sub sections, after which a short section on <code class="docutils literal"><span class="pre">MORTICIA's</span></code> deviations will be noted. Where feasible
+a short discussion/ motivation together with an example will be provided</p>
+</div>
+<div class="section" id="code-layout">
+<h2>Code Layout<a class="headerlink" href="#code-layout" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><dl class="first docutils">
+<dt><em>Indentation</em> <span class="classifier-delimiter">:</span> <span class="classifier">Use four space indentations. Most editors enforce this rule automatically. Spaces are preferred over tabs for indentation, tabs should be used however when adding to</span></dt>
+<dd><p class="first last">code that already implements tabs for indentation (<strong>consistency is key</strong>).</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><em>Blank lines</em> <span class="classifier-delimiter">:</span> <span class="classifier">Two blank lines on either side of a top level function or class definition. Method definitions inside a class are surrounded by a single blank line. Use blank lines</span></dt>
+<dd><blockquote class="first">
+<div><p>sparingly inside function definitions to indicate logical sections.</p>
+</div></blockquote>
+<div class="last highlight-python"><div class="highlight"><pre><span class="sd">&quot;&quot;&quot;docstrings enclosed by triple quotes go here.</span>
+
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">statements_go_here</span>
+
+
+<span class="k">def</span> <span class="nf">top_level_func</span><span class="p">():</span>
+        <span class="n">does</span> <span class="n">stuff</span>
+        <span class="k">return</span> <span class="n">things</span>
+
+
+<span class="k">class</span> <span class="nc">FooBar</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Class docstrings supplied for all public classes, functions and methods</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+
+        <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">foo</span><span class="p">,</span> <span class="n">bar</span><span class="p">):</span>
+
+                <span class="n">initialise</span> <span class="n">things</span> <span class="ow">in</span> <span class="n">here</span>
+                <span class="k">return</span>
+
+        <span class="k">def</span> <span class="nf">internal_func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bar</span><span class="p">,</span> <span class="n">foo</span><span class="p">):</span>
+                <span class="sd">&quot;&quot;&quot;note that method this local function is surrounded by a single blank line</span>
+<span class="sd">                &quot;&quot;&quot;</span>
+                <span class="n">perform</span> <span class="n">some</span> <span class="n">calculation</span><span class="o">/</span> <span class="n">data</span> <span class="n">manipulation</span>
+
+                <span class="k">return</span> <span class="n">something</span>
+
+
+<span class="c"># do stuff outside the class</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+</li>
+<li><p class="first"><em>Line length</em> :       The PEP-8 style guide suggests a 79 column limit to all lines. The following is captured verbatim from the python PEP-8 style guide referenced earlier`</p>
+<blockquote>
+<div><p>&#8220;The limits are chosen to avoid wrapping in editors with the window width set to 80, even if the tool places
+a marker glyph in the final column when wrapping lines. Some web based tools may not offer dynamic line
+wrapping at all.</p>
+<p>Some teams strongly prefer a longer line length. For code maintained exclusively or primarily by a
+team that can reach agreement on this issue, it is okay to increase the nominal line length from 80 to 100
+characters (effectively increasing the maximum length to 99 characters), provided that comments
+and docstrings are still wrapped at 72 characters....&#8221;</p>
+<p>The <cite>MORTICIA</cite> team have decided to conservatively follow the 99 character limit. Where possible and proves
+efficient line splitting is used.</p>
+</div></blockquote>
+</li>
+</ul>
+</div>
+<div class="section" id="import-statements">
+<h2>Import Statements<a class="headerlink" href="#import-statements" title="Permalink to this headline">¶</a></h2>
+<p>This is a simple example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="kn">as</span> <span class="nn">sns</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="whitespace">
+<h2>Whitespace<a class="headerlink" href="#whitespace" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="comments">
+<h2>Comments<a class="headerlink" href="#comments" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="documentation-strings-docstrings">
+<h2>Documentation Strings (docstrings)<a class="headerlink" href="#documentation-strings-docstrings" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="naming-conventions">
+<h2>Naming Conventions<a class="headerlink" href="#naming-conventions" title="Permalink to this headline">¶</a></h2>
+<p>This is an important one, the style of naming different python objects should make identifying the type of object intuitive</p>
+</div>
+<div class="section" id="pep-257">
+<h2>PEP-257<a class="headerlink" href="#pep-257" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="from-conventions-section">
+<h2><em>From</em> Conventions Section<a class="headerlink" href="#from-conventions-section" title="Permalink to this headline">¶</a></h2>
+<p>There is a data dictionary for <code class="docutils literal"><span class="pre">MORTICIA</span></code> which defines commonly used variable and data names.</p>
+<p>xray.DataArray objects are created routinely, so the constructor is abbreviated to xD.</p>
+<p><code class="docutils literal"><span class="pre">MORTICIA</span></code> often deals with spectral variables, such as spectral transmission, spectral radiance etc.
+More often than not, these arrays are multidimensional. The <cite>xray</cite> package is used in <cite>MORTICIA</cite> for
+purposes of representing N-dimensional arrays (the <cite>xray.DataArray</cite> class).</p>
+<p>However, <cite>xray</cite> does not (yet) support interpolation when the coordinates of the data hypercube are
+not the same and two or more <cite>xray.DataArray</cite> objects must be added, divided or multiplied.</p>
+<p>Utility functions that operate on xray.DataArray objects are found in the <cite>morticia.tools.xd</cite> package.
+These functions perform axis harmonisation as well as unit checking and conversion.</p>
+<p>The axis harmonisation functions for <cite>xray.DataArray</cite> objects requires that all axes have numeric coordinates.
+This applies also to axes that would benefit from having text labels. Text labels would be more appropriate for
+axes such as spectral channels and field orientation for MTF data. In the case of spectral channels (with axis label
+<cite>chn</cite>) will be channel numbers. These channel numbers would normally start from 0, but in some cases, such as when
+using a sub-range of correlated-k band models (e.g. <cite>kato</cite> or <cite>fu</cite> in libRadtran) the channel numbers would be a
+range of integers. The convention in <code class="docutils literal"><span class="pre">MORTICIA</span></code> is that the text labels then be placed in an axis attribute called
+<cite>labels</cite>.</p>
+<p>This curently applies equally well to timeseries. For incorporation in multi-axis <cite>xray.DataArray</cite> objects, timestamps
+must be converted to Julian date. A list of labels for such axes can and should be maintained in the <cite>xray.DataArray</cite>
+attributes (<cite>attrs</cite>).</p>
+<div class="section" id="units-of-measure">
+<h3>Units of Measure<a class="headerlink" href="#units-of-measure" title="Permalink to this headline">¶</a></h3>
+<p>Tracking of units of measure is not performed automatically in <code class="docutils literal"><span class="pre">MORTICIA</span></code> such as with the use of the pint package.
+However, many functions and classes in <code class="docutils literal"><span class="pre">MORTICIA</span></code> expect xray.DataArray instances that provide units of measure in
+the metadata. When units are provided in this way, they should be provided in manner consistent with the Python units
+package <a class="reference external" href="https://pint.readthedocs.org/">pint</a> .</p>
+<p>Commonly, when a <code class="docutils literal"><span class="pre">MORTICIA</span></code> function or method requires a scalar numeric input, it must be provided as a list
+with magnitude and units e.g. [30, &#8216;mm&#8217;]. Unitless quantities are provided as a simple numeric magnitude.</p>
+<p>If a variable is named <code class="docutils literal"><span class="pre">x</span></code>, then the units for the variable can be stored as <code class="docutils literal"><span class="pre">units</span></code> in the xray.DataArray
+attributes dictionary (actually an OrderedDict). This units string should be recognizable to <cite>pint</cite> as a valid unit.
+When exporting xray.DataArray objects to NetCDF files in xray.Dataset objects, this convention of using the
+<cite>units</cite> attribute is recognised by NetCDF browsers and other NetCDF utilities. Further information on conventional
+NetCDF attributes can be found at
+<a class="reference external" href="https://www.unidata.ucar.edu/software/thredds/current/netcdf-java/metadata/DataDiscoveryAttConvention.html">UCAR/Unidata</a>.
+See the <code class="docutils literal"><span class="pre">MORTICIA</span></code> notebooks for examples of creating <cite>xray</cite> objects with unit attributes.</p>
+<p>The UCAR/Unidata attributes for NetCDF file elements considered as highly recommended are</p>
+<ul class="simple">
+<li><cite>units</cite>, units expressed as a string - SI units preferred</li>
+<li><cite>long_name</cite>, such as may commonly be used to label graph axes</li>
+<li><cite>standard_name</cite>, the standard name that may be used in a specific scientific community</li>
+</ul>
+<p>and for <code class="docutils literal"><span class="pre">MORTICIA</span></code>, also</p>
+<ul class="simple">
+<li><cite>title</cite>, such as may be used on the title of a plot of the data</li>
+<li><cite>labels</cite>, such as may be used in the legends of a plot</li>
+</ul>
+<p>The <cite>standard_name</cite> should come from the CF (Climate and Forecasting) name glossary, or the project should have
+its own vocabulary of short, standard and long names for all variables. These are to be found in the
+<cite>morticia.moglo.py</cite> module and may be expanded or updated from time to time.</p>
+<p>A pint global unit registry is created when <cite>morticia</cite> or any sub-package is imported. Any other <cite>morticia</cite> paackages
+or modules share a single global unit registry called ureg. Convenience functions <code class="docutils literal"><span class="pre">Q_</span></code> for <code class="docutils literal"><span class="pre">Quantity</span></code> and <code class="docutils literal"><span class="pre">U_</span></code> for
+<code class="docutils literal"><span class="pre">Quantity(1.0,</span> <span class="pre">unit_str)</span></code> are also defined. Examples of usage are provided in the Jupyter notebooks/tutorials.</p>
+</div>
+<div class="section" id="from-coordinate-systems">
+<h3><em>From</em> Coordinate Systems<a class="headerlink" href="#from-coordinate-systems" title="Permalink to this headline">¶</a></h3>
+<p>The general observer/target topocentric, cartesian coordinate system used in <cite>MORTICIA</cite> is +x towards North, +y towards
+the East and +z towards the zenith. Zenith angles are polar angles measured from the +z axis. This is a left-handed
+system and the alternative right-handed sytem is the same, except with +z towards nadir.</p>
+<p>The global Earth Centered Earth Fixed (ECEF) coordinate system has the north pole in the +Z direction, the prime
+meridian (0 deg longitude) in the +X direction and the +Y direction at 90 deg east longitude. This is a right-handed
+coordinate system.</p>
+<p>When dealing with sightlines and camera orientations, several conventions can be used. The
+<a class="reference external" href="https://en.wikipedia.org/wiki/Euler_angles">Euler angles</a> provide (relative to a given coordinate system,
+typically topocentric/geodetic) the view azimuth angle (VAZ = <span class="math">\(\alpha\)</span>) and view zenith angle (VZA =
+<span class="math">\(\beta\)</span>). The camera roll is then the third Euler angle <span class="math">\(\gamma\)</span>.</p>
+</div>
+<div class="section" id="logging-warnings-and-exception-handling">
+<h3>Logging Warnings and Exception Handling<a class="headerlink" href="#logging-warnings-and-exception-handling" title="Permalink to this headline">¶</a></h3>
+<p>As a rule, <cite>MORTICIA</cite> does not use logging to files. Preferably, if any checking is performed, exceptions are thrown.
+Informational messages should printed to the terminal using the <cite>logging.info()</cite> or <cite>logging.debug()</cite> calls.
+Warnings that the user should take action on are provided through <cite>warnings.warn()</cite>. If the warning may relate to
+the fact that <cite>MORTICIA</cite> code should be improved or debugged, it should be issued through <cite>logging.warning()</cite>.
+<cite>MORTICIA</cite> internal modules do not define any logging handlers or filters. This is left to the user.</p>
+</div>
+</div>
+<div class="section" id="general-terminology-and-conventions">
+<h2>General Terminology and Conventions<a class="headerlink" href="#general-terminology-and-conventions" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="camera-and-imager">
+<h3>Camera and Imager<a class="headerlink" href="#camera-and-imager" title="Permalink to this headline">¶</a></h3>
+<p>A <cite>Camera</cite> object in MORTICIA does <em>not</em> include a Lens - it is a camera body, including an FPA and a
+digitisation stage (which may be fully integrated into the FPA chip - a so-called &#8220;camera on a chip&#8221;).
+The <cite>Imager</cite> class incorporates a Camera and a Lens and is capable of producing actual imagery.</p>
+</div>
+<div class="section" id="modulation-transfer-function-calculation">
+<h3>Modulation Transfer Function Calculation<a class="headerlink" href="#modulation-transfer-function-calculation" title="Permalink to this headline">¶</a></h3>
+<p>For image modelling purposes, it is necessary to know the full 2D MTF, whereas the normal situation is that the
+MTF is described using horizontal and vertical MTF profile functions. Suppose that <span class="math">\(\eta\)</span> and <span class="math">\(\xi\)</span> are
+the spatial frequencies in the horizontal and vertical directions respectively and the <span class="math">\(M\!T\!F_\eta(\eta)\)</span> and
+<span class="math">\(M\!T\!F_\xi(\xi)\)</span> are the 1D MTFs in the horizontal and vertical directions. The 2D MTF is then computed as
+a rotationally weighted mean of the 1D MTFs as</p>
+<div class="math">
+\[M\!T\!F(\eta,\xi)=\frac{\eta^{2}M\!T\!F_{\eta}\left(\sqrt{\eta^{2}+\xi^{2}}\right)+\xi^{2}M\!T\!F_{\xi}\left(\sqrt{\eta^{2}+\xi^{2}}\right)}{\eta^{2}+\xi^{2}},\]</div>
+<p>and if the sagittal spatial frequency is defined as <span class="math">\(\rho=\sqrt{\eta^{2}+\xi^{2}}\)</span>, then</p>
+<div class="math">
+\[M\!T\!F(\eta,\xi)=\frac{\eta^{2}M\!T\!F_{\eta}\left(\rho\right)+\xi^{2}M\!T\!F_{\xi}\left(\rho\right)}{\rho^{2}}.\]</div>
+<p>It is assumed here that the horizontal and vertical MTFs are symmetrical about the origin.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="for_developers.html" class="btn btn-neutral float-right" title="For the Developers">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="how_to_use.html" class="btn btn-neutral" title="How to use MORTICIA"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, D Griffith, A Ramkilowan.
+    </p>
+  </div>
+
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

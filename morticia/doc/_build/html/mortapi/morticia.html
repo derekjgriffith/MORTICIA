@@ -1,0 +1,349 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>morticia package &mdash; MORTICIA 1.0 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Roboto+Slab:400,700|Inconsolata:400,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="MORTICIA 1.0 documentation" href="../index.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+          <a href="../index.html" class="fa fa-home"> MORTICIA</a>
+        
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how_to_use.html">How to use MORTICIA</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../how_to_use.html#morticia-dependencies">MORTICIA Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../how_to_use.html#installation-and-requirements">Installation and Requirements</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../styleguide.html">The MORTICIA Style Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../styleguide.html#to-pep-8-or-not-to-pep-8">To PEP-8 or not to PEP-8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../styleguide.html#code-layout">Code Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../styleguide.html#import-statements">Import Statements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../styleguide.html#whitespace">Whitespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../styleguide.html#comments">Comments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../styleguide.html#documentation-strings-docstrings">Documentation Strings (docstrings)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../styleguide.html#naming-conventions">Naming Conventions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../styleguide.html#pep-257">PEP-257</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../styleguide.html#from-conventions-section"><em>From</em> Conventions Section</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../styleguide.html#general-terminology-and-conventions">General Terminology and Conventions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../for_developers.html">For the Developers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../for_developers.html#structure">Structure</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../packages.html">Packages</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../packages.html#sensor-package">Sensor Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../packages.html#radiometry-package">Radiometry Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../packages.html#scene-package">Scene Package</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../ChapLibRadtranODandPathRadiance.html">Transmittance and Path Radiance in libRadtran</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../01a-SpectralChannelsAndFilters.html">IPython Notebook and Sphinx</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../01a-SpectralChannelsAndFilters.html#a-spectralchannelsandfilters-ipython-notebook">01a-SpectralChannelsAndFilters IPython Notebook</a></li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">MORTICIA</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+    <li>morticia package</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          <a href="../_sources/mortapi/morticia.txt" rel="nofollow"> View page source</a>
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <div class="section" id="morticia-package">
+<h1>morticia package<a class="headerlink" href="#morticia-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="morticia.rad.html">morticia.rad package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="morticia.rad.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="morticia.rad.html#module-morticia.rad.GUI_definition">morticia.rad.GUI_definition module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="morticia.rad.html#module-morticia.rad.aerosol_options">morticia.rad.aerosol_options module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="morticia.rad.html#module-morticia.rad.cloud_options">morticia.rad.cloud_options module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="morticia.rad.html#module-morticia.rad.general_atmosphere_options">morticia.rad.general_atmosphere_options module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="morticia.rad.html#module-morticia.rad.geometry_options">morticia.rad.geometry_options module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="morticia.rad.html#morticia-rad-libradtranpyexplore-module">morticia.rad.libRadtranPyExplore module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="morticia.rad.html#morticia-rad-libradtrantutorial-module">morticia.rad.libRadtranTutorial module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="morticia.rad.html#module-morticia.rad.librad">morticia.rad.librad module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="morticia.rad.html#module-morticia.rad.mc_options">morticia.rad.mc_options module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="morticia.rad.html#module-morticia.rad.molecular_options">morticia.rad.molecular_options module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="morticia.rad.html#module-morticia.rad.option_definition">morticia.rad.option_definition module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="morticia.rad.html#module-morticia.rad.output_options">morticia.rad.output_options module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="morticia.rad.html#module-morticia.rad.profile_options">morticia.rad.profile_options module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="morticia.rad.html#module-morticia.rad.radute">morticia.rad.radute module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="morticia.rad.html#module-morticia.rad.solver_options">morticia.rad.solver_options module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="morticia.rad.html#module-morticia.rad.special_options">morticia.rad.special_options module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="morticia.rad.html#module-morticia.rad.spectral_options">morticia.rad.spectral_options module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="morticia.rad.html#module-morticia.rad.surface_options">morticia.rad.surface_options module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="morticia.rad.html#module-morticia.rad.test_librad">morticia.rad.test_librad module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="morticia.rad.html#module-morticia.rad.writeLex">morticia.rad.writeLex module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="morticia.rad.html#module-morticia.rad">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="morticia.sensor.html">morticia.sensor package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="morticia.sensor.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="morticia.sensor.html#module-morticia.sensor.optics">morticia.sensor.optics module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="morticia.sensor.html#module-morticia.sensor.test_optics">morticia.sensor.test_optics module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="morticia.sensor.html#module-morticia.sensor">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-morticia.moglo">
+<span id="morticia-moglo-module"></span><h2>morticia.moglo module<a class="headerlink" href="#module-morticia.moglo" title="Permalink to this headline">¶</a></h2>
+<dl class="exception">
+<dt id="morticia.moglo.MissingDataArrayAxis">
+<em class="property">exception </em><code class="descclassname">morticia.moglo.</code><code class="descname">MissingDataArrayAxis</code><a class="reference internal" href="../_modules/morticia/moglo.html#MissingDataArrayAxis"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#morticia.moglo.MissingDataArrayAxis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">exceptions.Exception</span></code></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="morticia.moglo.MissingUnits">
+<em class="property">exception </em><code class="descclassname">morticia.moglo.</code><code class="descname">MissingUnits</code><a class="reference internal" href="../_modules/morticia/moglo.html#MissingUnits"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#morticia.moglo.MissingUnits" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">exceptions.Exception</span></code></p>
+</dd></dl>
+
+<dl class="class">
+<dt id="morticia.moglo.Scalar">
+<em class="property">class </em><code class="descclassname">morticia.moglo.</code><code class="descname">Scalar</code><span class="sig-paren">(</span><em>mnemonic</em>, <em>data</em>, <em>units</em>, <em>attrs=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/morticia/moglo.html#Scalar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#morticia.moglo.Scalar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>The Scalar class is for representation of scalar numeric values, together with units of measure, a
+mnemonic, being one of those listed in the MORTICIA long_name vocabulary.</p>
+<p>A feature of the Scalar class is that the data attribute can only be set using a.data = [value, units]</p>
+<p>Construct a scalar value using a MORTICIA mnemonic (from the long_name vocabulary), the scalar value
+and the units of measure.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>mnemonic</strong> &#8211; A string such as &#8216;efl&#8217; for Effective Focal Length, which is defined in the MORTICIA
+long_name vocabulary</li>
+<li><strong>data</strong> &#8211; The scalar numeric value to be stored</li>
+<li><strong>units</strong> &#8211; The units string of the data. This string must be known to the Python Pint package.</li>
+<li><strong>attrs</strong> &#8211; A user-defined dictionary of any other attributes for the scalar value. The mnemonic will
+be looked up in moglo.long_name and the long_name will be added as an attribute.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="morticia.moglo.Scalar.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>mnemonic</em>, <em>data</em>, <em>units</em>, <em>attrs=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/morticia/moglo.html#Scalar.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#morticia.moglo.Scalar.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Construct a scalar value using a MORTICIA mnemonic (from the long_name vocabulary), the scalar value
+and the units of measure.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>mnemonic</strong> &#8211; A string such as &#8216;efl&#8217; for Effective Focal Length, which is defined in the MORTICIA
+long_name vocabulary</li>
+<li><strong>data</strong> &#8211; The scalar numeric value to be stored</li>
+<li><strong>units</strong> &#8211; The units string of the data. This string must be known to the Python Pint package.</li>
+<li><strong>attrs</strong> &#8211; A user-defined dictionary of any other attributes for the scalar value. The mnemonic will
+be looked up in moglo.long_name and the long_name will be added as an attribute.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="morticia.moglo.Scalar.data">
+<code class="descname">data</code><a class="headerlink" href="#morticia.moglo.Scalar.data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="morticia.moglo.Scalar.mnemonic">
+<code class="descname">mnemonic</code><a class="headerlink" href="#morticia.moglo.Scalar.mnemonic" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="morticia.moglo.Scalar.units">
+<code class="descname">units</code><a class="headerlink" href="#morticia.moglo.Scalar.units" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="exception">
+<dt id="morticia.moglo.UnitMismatch">
+<em class="property">exception </em><code class="descclassname">morticia.moglo.</code><code class="descname">UnitMismatch</code><a class="reference internal" href="../_modules/morticia/moglo.html#UnitMismatch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#morticia.moglo.UnitMismatch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">exceptions.Exception</span></code></p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-morticia">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-morticia" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="morticia.U_">
+<code class="descclassname">morticia.</code><code class="descname">U_</code><span class="sig-paren">(</span><em>units</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/morticia.html#U_"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#morticia.U_" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a pint.Quantity of magnitude one with the given units</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>units</strong> &#8211; A string providing a unit of measure in the pint unit registry</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A pint.Quantity object with a magnitude of 1 and the specified units.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, D Griffith, A Ramkilowan.
+    </p>
+  </div>
+
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

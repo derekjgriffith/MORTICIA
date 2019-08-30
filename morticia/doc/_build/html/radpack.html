@@ -1,0 +1,1042 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Radiometry Package &mdash; MORTICIA 1.0 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Roboto+Slab:400,700|Inconsolata:400,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="MORTICIA 1.0 documentation" href="index.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+          <a href="index.html" class="fa fa-home"> MORTICIA</a>
+        
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="how_to_use.html">How to use MORTICIA</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="how_to_use.html#morticia-dependencies">MORTICIA Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="how_to_use.html#installation-and-requirements">Installation and Requirements</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="styleguide.html">The MORTICIA Style Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="styleguide.html#to-pep-8-or-not-to-pep-8">To PEP-8 or not to PEP-8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="styleguide.html#code-layout">Code Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="styleguide.html#import-statements">Import Statements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="styleguide.html#whitespace">Whitespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="styleguide.html#comments">Comments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="styleguide.html#documentation-strings-docstrings">Documentation Strings (docstrings)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="styleguide.html#naming-conventions">Naming Conventions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="styleguide.html#pep-257">PEP-257</a></li>
+<li class="toctree-l2"><a class="reference internal" href="styleguide.html#from-conventions-section"><em>From</em> Conventions Section</a></li>
+<li class="toctree-l2"><a class="reference internal" href="styleguide.html#general-terminology-and-conventions">General Terminology and Conventions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="for_developers.html">For the Developers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="for_developers.html#structure">Structure</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="packages.html">Packages</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="packages.html#sensor-package">Sensor Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="packages.html#radiometry-package">Radiometry Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="packages.html#scene-package">Scene Package</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ChapLibRadtranODandPathRadiance.html">Transmittance and Path Radiance in libRadtran</a></li>
+<li class="toctree-l1"><a class="reference internal" href="01a-SpectralChannelsAndFilters.html">IPython Notebook and Sphinx</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="01a-SpectralChannelsAndFilters.html#a-spectralchannelsandfilters-ipython-notebook">01a-SpectralChannelsAndFilters IPython Notebook</a></li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">MORTICIA</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>Radiometry Package</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          <a href="_sources/radpack.txt" rel="nofollow"> View page source</a>
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <div class="section" id="radiometry-package">
+<h1>Radiometry Package<a class="headerlink" href="#radiometry-package" title="Permalink to this headline">¶</a></h1>
+<p>The radiometry package provides all MORTICIA functionality relating to radiometry and atmospheric radiative transfer.
+Atmospheric radiative transfer is performed by the libRadtran suite of tools (<a class="reference external" href="http://www.libradtran.org">http://www.libradtran.org</a> ).</p>
+<span class="target" id="module-librad"></span><dl class="class">
+<dt id="librad.Case">
+<em class="property">class </em><code class="descclassname">librad.</code><code class="descname">Case</code><span class="sig-paren">(</span><em>casename=''</em>, <em>filename=None</em>, <em>optionlist=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/librad.html#Case"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#librad.Case" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class which encapsulates a run case of libRadtran/uvspec.
+This class has methods to read libRadtran/uvspec input files, write uvspec input files, run uvspec in parallel on
+multiple compute nodes and read uvspec output files. An important use-case is that of reading a uvspec input
+file called the &#8220;base case&#8221;, altering the parameters of particular option keywords and then running the case
+and reading the outputs. This class is also used by the RadEnv class which encapsulates a radiant environment.
+Construction of radiant environment maps typically requires running an array of librad.Case instances.</p>
+<p>Instantiate a libRadtran/uvspec case, typically by reading a uvspec .INP file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>casename</strong> &#8211; A user-defined name for the libRadtran/uvspec case</li>
+<li><strong>filename</strong> &#8211; An optional filename from which to read the libRadtran/uvspec input</li>
+<li><strong>optionlist</strong> &#8211; A list of option keywords and parameteres (tokens). The keyword existence
+is verified. Besides that, no error checking is performed automatically.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">None</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># Read a libRadtran/uvspec case from a .INP file and display the expanded input</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">morticia.rad.librad</span> <span class="kn">as</span> <span class="nn">librad</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">libRadCase</span> <span class="o">=</span> <span class="n">librad</span><span class="o">.</span><span class="n">Case</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s">&#39;./examples/UVSPEC_AEROSOL.INP&#39;</span><span class="p">)</span>  <span class="c"># Read uvspec input and expand includes, if any</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">libRadCase</span>   <span class="c"># This prints the uvspec input file, compare to contents of UVSPEC_AEROSOL.INP</span>
+<span class="go">atmosphere_file ../data/atmmod/afglus.dat</span>
+<span class="go">source solar ../data/solar_flux/atlas_plus_modtran</span>
+<span class="go">mol_modify O3 300. DU</span>
+<span class="go">day_of_year 170</span>
+<span class="go">albedo 0.2</span>
+<span class="go">sza 32.0</span>
+<span class="go">rte_solver disort</span>
+<span class="go">number_of_streams 6</span>
+<span class="go">wavelength 299.0 341.0</span>
+<span class="go">slit_function_file ../examples/TRI_SLIT.DAT</span>
+<span class="go">spline 300 340 1</span>
+<span class="go">quiet</span>
+<span class="go">aerosol_vulcan 1</span>
+<span class="go">aerosol_haze 6</span>
+<span class="go">aerosol_season 1</span>
+<span class="go">aerosol_visibility 20.0</span>
+<span class="go">aerosol_angstrom 1.1 0.2</span>
+<span class="go">aerosol_modify ssa scale 0.85</span>
+<span class="go">aerosol_modify gg set 0.70</span>
+<span class="go">aerosol_file tau ../examples/AERO_TAU.DAT</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="librad.Case.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>casename=''</em>, <em>filename=None</em>, <em>optionlist=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/librad.html#Case.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#librad.Case.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instantiate a libRadtran/uvspec case, typically by reading a uvspec .INP file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>casename</strong> &#8211; A user-defined name for the libRadtran/uvspec case</li>
+<li><strong>filename</strong> &#8211; An optional filename from which to read the libRadtran/uvspec input</li>
+<li><strong>optionlist</strong> &#8211; A list of option keywords and parameteres (tokens). The keyword existence
+is verified. Besides that, no error checking is performed automatically.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">None</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># Read a libRadtran/uvspec case from a .INP file and display the expanded input</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">morticia.rad.librad</span> <span class="kn">as</span> <span class="nn">librad</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">libRadCase</span> <span class="o">=</span> <span class="n">librad</span><span class="o">.</span><span class="n">Case</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s">&#39;./examples/UVSPEC_AEROSOL.INP&#39;</span><span class="p">)</span>  <span class="c"># Read uvspec input and expand includes, if any</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">libRadCase</span>   <span class="c"># This prints the uvspec input file, compare to contents of UVSPEC_AEROSOL.INP</span>
+<span class="go">atmosphere_file ../data/atmmod/afglus.dat</span>
+<span class="go">source solar ../data/solar_flux/atlas_plus_modtran</span>
+<span class="go">mol_modify O3 300. DU</span>
+<span class="go">day_of_year 170</span>
+<span class="go">albedo 0.2</span>
+<span class="go">sza 32.0</span>
+<span class="go">rte_solver disort</span>
+<span class="go">number_of_streams 6</span>
+<span class="go">wavelength 299.0 341.0</span>
+<span class="go">slit_function_file ../examples/TRI_SLIT.DAT</span>
+<span class="go">spline 300 340 1</span>
+<span class="go">quiet</span>
+<span class="go">aerosol_vulcan 1</span>
+<span class="go">aerosol_haze 6</span>
+<span class="go">aerosol_season 1</span>
+<span class="go">aerosol_visibility 20.0</span>
+<span class="go">aerosol_angstrom 1.1 0.2</span>
+<span class="go">aerosol_modify ssa scale 0.85</span>
+<span class="go">aerosol_modify gg set 0.70</span>
+<span class="go">aerosol_file tau ../examples/AERO_TAU.DAT</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="librad.Case.alter_option">
+<code class="descname">alter_option</code><span class="sig-paren">(</span><em>option</em>, <em>origin=('user'</em>, <em>None)</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/librad.html#Case.alter_option"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#librad.Case.alter_option" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alter the parameters of a uvspec input option. If the option is not found, the option is appended with
+append_option instead.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>option</strong> &#8211; List of keyword and tokens (parameters) to provide to the option keyword (list of strings).</li>
+<li><strong>origin</strong> &#8211; A 2-tuple noting the &#8220;origin&#8221; of the change to this keyword. Default (&#8216;user&#8217;, None)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="librad.Case.append_option">
+<code class="descname">append_option</code><span class="sig-paren">(</span><em>option</em>, <em>origin=('user'</em>, <em>None)</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/librad.html#Case.append_option"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#librad.Case.append_option" title="Permalink to this definition">¶</a></dt>
+<dd><p>Append a libRadtran/uvspec options to this uvspec case. It will be appended at the end of the file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>option</strong> &#8211; A list containing the keyword and keyword parameters (tokens)</li>
+<li><strong>origin</strong> &#8211; A 2-tuple giving the origin of the option and a &#8220;line number&#8221; reference. Default (&#8216;user&#8217;, None)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>uvspec options.
+:return:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="librad.Case.del_option">
+<code class="descname">del_option</code><span class="sig-paren">(</span><em>option</em>, <em>all=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/librad.html#Case.del_option"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#librad.Case.del_option" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete a uvspec input option matching the given option.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>option</strong> &#8211; Keyword of option to be deleted</li>
+<li><strong>all</strong> &#8211; A flag indicating if all matching options must be deleted or only the first occurrence. The</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>default is to delete all matching occurrences.
+:return: True if an option was deleted or False if not</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="librad.Case.distribute_flux_data">
+<code class="descname">distribute_flux_data</code><span class="sig-paren">(</span><em>fluxdata</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/librad.html#Case.distribute_flux_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#librad.Case.distribute_flux_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Distribute flux/user data read from uvspec output file to various data fields.
+This method will look at <cite>output_user</cite> options and attempt to assign flux/user data in a sensible way.
+.. note:</p>
+<div class="highlight-python"><div class="highlight"><pre>There are potentially uvspec output formats that are not possible to process or to assign correctly.
+These are typically cases in which it is not possible to determine from the .INP and/or .OUT file
+how this data should be assigned.
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fluxdata</strong> &#8211; Flux (irradiance) data read from uvspec output file</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="librad.Case.irrad_units_str">
+<code class="descname">irrad_units_str</code><span class="sig-paren">(</span><em>latex=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/librad.html#Case.irrad_units_str"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#librad.Case.irrad_units_str" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provide an irradiance units string e.g. W/m^2/nm.
+If output_quantity is set to &#8216;brightness&#8217; or &#8216;reflectivity&#8217;, irrad_units will be &#8216;K&#8217; or &#8216;&#8217; respectively.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Irradiance units as a string</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="librad.Case.prepare_for_keyword">
+<code class="descname">prepare_for_keyword</code><span class="sig-paren">(</span><em>keyword</em>, <em>tokens</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/librad.html#Case.prepare_for_keyword"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#librad.Case.prepare_for_keyword" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make any possible preparations for occurrences of particular keywords
+:param keyword: The uvspec option keyword (string)
+:param tokens: The parameters (tokens) for the keyword as a list of strings
+:return:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="librad.Case.prepare_for_mol_abs_param">
+<code class="descname">prepare_for_mol_abs_param</code><span class="sig-paren">(</span><em>tokens</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/librad.html#Case.prepare_for_mol_abs_param"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#librad.Case.prepare_for_mol_abs_param" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make preparations for the desired molecular absorption parametrization. There are various
+molecular absorption options in libRadtran/uvspec and the options will certainly evolve.
+The default mode is to perform a spectral calculation (fine wavelength grid) with output
+of spectral radiances and irradiances. Some of the other modes, such as <cite>crs</cite> also output
+spectral data. The <cite>crs</cite> mode actually switches off molecular line absorption and considers
+only spectrally continuous scattering and absorption. This is really only good for the UV/blue
+spectrum. The <cite>reptran_channel</cite> mode and the correlated-k modes (<cite>kato</cite> variants, <cite>fu</cite>, <cite>avhrr_kratz</cite>
+and <cite>lowtran</cite>/<cite>sbdart</cite>) do not produce spectral radiances and irradiances. They produce band quantities
+which may even be summed using the <cite>output_process sum</cite> directive. A sub-range of correlated-k
+bins/channels can be selected using the <cite>wavelength_index</cite> directive.</p>
+<p>See the libRadtran manual for further information on the relevant options.
+:return:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="librad.Case.prepare_for_output_process">
+<code class="descname">prepare_for_output_process</code><span class="sig-paren">(</span><em>tokens</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/librad.html#Case.prepare_for_output_process"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#librad.Case.prepare_for_output_process" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prepare for effects of the <cite>output_process</cite> keyword in the libRadtran/uvspec input file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>tokens</strong> &#8211; Keyword tokens of the uvspec <cite>output_process</cite> keyword.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="librad.Case.prepare_for_polradtran">
+<code class="descname">prepare_for_polradtran</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/librad.html#Case.prepare_for_polradtran"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#librad.Case.prepare_for_polradtran" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prepare for output from the polradtran solver</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="librad.Case.prepare_for_source">
+<code class="descname">prepare_for_source</code><span class="sig-paren">(</span><em>tokens</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/librad.html#Case.prepare_for_source"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#librad.Case.prepare_for_source" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prepare for source, particularly units of various kinds, depending on the source.
+libRadtran/uvspec source options are mainly &#8216;solar&#8217; and &#8216;thermal&#8217; with some additional options
+for units.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>tokens</strong> &#8211; uvspec &#8216;source&#8217; keyword option parameters (tokens)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="librad.Case.process_outputs">
+<code class="descname">process_outputs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/librad.html#Case.process_outputs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#librad.Case.process_outputs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process outputs from libRadtran into moglo.Scalar and xray.DataArray objects.
+Currently only radiance outputs are processed, along with a few typical flux outputs, such as <cite>edir</cite>.</p>
+<p>Note that this method probably does not cover all libRadtran/uvspec inputs and outputs and will most
+likely continue to evolve, perhaps breaking existing code.
+:return: None</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="librad.Case.rad_units_str">
+<code class="descname">rad_units_str</code><span class="sig-paren">(</span><em>latex=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/librad.html#Case.rad_units_str"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#librad.Case.rad_units_str" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provide a radiance units string e.g. W/sr/m^2/nm.
+If output_quantity is set to &#8216;brightness&#8217; or &#8216;reflectivity&#8217;, rad_units will be &#8216;K&#8217; or &#8216;&#8217; respectively.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Radiance units as a string</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="librad.Case.read">
+<em class="property">static </em><code class="descname">read</code><span class="sig-paren">(</span><em>path</em>, <em>includes_seen=[]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/librad.html#Case.read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#librad.Case.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads a libRadtran input file. This will construct the libRadtran case from the contents of the .INP file
+Adapted from code by libRadtran developers.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>path</strong> &#8211; File path from which to read the uvspec input</li>
+<li><strong>includes_seen</strong> &#8211; List of files already included (for recursion purposes to avoid infinite include loops)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">data, line_nos, path
+where data is the full data in the file with includes, line_nos shows the source of every line and
+path is the path to the main input file.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="librad.Case.readout">
+<code class="descname">readout</code><span class="sig-paren">(</span><em>filename=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/librad.html#Case.readout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#librad.Case.readout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read uvspec output and assign to variables as intelligently as possible.</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>The general process of reading is:</dt>
+<dd><ol class="first last arabic simple">
+<li>If the user has specified output_user, just assume a flat file and read using
+np.loadtxt or np.genfromtxt.</li>
+<li>If not user_output and the solver has no radiance blocks, assume a flat file and
+read using np.loadtxt. The variables to be read should be contained in the self.fluxline attribute.</li>
+<li>Otherwise, if the output has radiance blocks, read those depending on the radiance block
+format for the specific solver. Keep reading flux and radiance blocks until the file is exhausted.</li>
+</ol>
+</dd>
+</dl>
+<p>Once the data has all been read, the data is split up between the number of output levels and number of
+wavelengths. For radiance data, the order of numpy dimensions is <em>umu</em>, <em>phi</em>, <em>wavelength</em>, <em>zout</em> and <em>stokes</em>. That
+is, if a case has multiple zenith angles, multiple azimuth angles, multiple wavelengths and multiple output
+levels, the radiance property uu will have 4 dimensions. In the case of polradtran, there will be 5
+dimensions to include the stokes parameters (if more than 1, which is the I = intensity parameter).</p>
+</div></blockquote>
+<p>Output from uvspec depends on the solver and a number of other inputs, including the directive <code class="docutils literal"><span class="pre">output_user`.</span>
+<span class="pre">For</span> <span class="pre">the</span> <span class="pre">solvers</span> <span class="pre">``disort</span></code>, <code class="docutils literal"><span class="pre">sdisort</span></code>, <code class="docutils literal"><span class="pre">spsdisort</span></code> and presumably also <code class="docutils literal"><span class="pre">disort2</span></code>, the irradiance (flux) outputs default
+to</p>
+<div class="highlight-python"><div class="highlight"><pre>lambda edir edn eup uavgdir uavgdn uavgup
+</pre></div>
+</div>
+<p>If radiances (intensities) have been requested with the umu
+(cosine zenith angles input), each line of flux data is followed
+by a block of radiance data as follows:</p>
+<div class="highlight-python"><div class="highlight"><pre>umu(0) u0u(umu(0))
+umu(1) u0u(umu(1))
+. . . .
+. . . .
+umu(n) u0u(umu(n))
+</pre></div>
+</div>
+<p>where u0u is the azimuthally averaged radiance for the requested zenith
+angles.</p>
+<p>If azimuth angles (phi) have also been specified, then the
+radiance block is extended as follows:</p>
+<div class="highlight-python"><div class="highlight"><pre>                       phi(0)        ...     phi(m)
+umu(0) u0u(umu(0)) uu(umu(0),phi(0)) ... uu(umu(0),phi(m))
+umu(1) u0u(umu(1)) uu(umu(1),phi(0)) ... uu(umu(1),phi(m))
+. . . .
+. . . .
+umu(n) u0u(umu(n)) uu(umu(n),phi(0)) ... uu(umu(n),phi(m))
+</pre></div>
+</div>
+<p>Radiance outputs are not affected by output_user options.</p>
+<p>For the polradtran solver, the flux block is as follows:</p>
+<div class="highlight-python"><div class="highlight"><pre>lambda down_flux(1) up_flux(1) ... down_flux(iS) up_flux(iS)
+</pre></div>
+</div>
+<p>where iS is the number of Stokes parameters specified using the
+&#8216;polradtran nstokes&#8217; directive.
+If umu and phi are also specified, the radiance block is as
+follows:</p>
+<div class="highlight-python"><div class="highlight"><pre>                        phi(0)      ...      phi(m)
+Stokes vector I
+umu(0) u0u(umu(0)) uu(umu(0),phi(0)) ... uu(umu(0),phi(m))
+umu(1) u0u(umu(1)) uu(umu(1),phi(0)) ... uu(umu(1),phi(m))
+. . . .
+. . . .
+umu(n) u0u(umu(n)) uu(umu(n),phi(0)) ... uu(umu(n),phi(m))
+Stokes vector Q
+. . .
+. . .
+</pre></div>
+</div>
+<p>The u0u (azimuthally averaged radiance) is always zero for
+polradtran.</p>
+<p>For the two-stream solver (twostr), the flux block is</p>
+<div class="highlight-python"><div class="highlight"><pre>lambda edir edn eup uavg
+</pre></div>
+</div>
+<p>The directive keyword <code class="docutils literal"><span class="pre">brightness</span></code> can also change output. The documentation simply states that radiances and
+irradiances are just converted to brightness temperatures.</p>
+<p>The keyword directive <code class="docutils literal"><span class="pre">zout</span></code> and it&#8217;s parameters will influence output format as well. In general the output
+is repeated for each given value of <code class="docutils literal"><span class="pre">zout</span></code> or <code class="docutils literal"><span class="pre">zout_sea</span></code>.</p>
+<p>The keyword directive <code class="docutils literal"><span class="pre">output</span></code> and its parameters will also have a major effect.</p>
+<p>The <code class="docutils literal"><span class="pre">output</span> <span class="pre">sum</span></code> keyword sums output data over the wavelength dimension. This in contrast to <code class="docutils literal"><span class="pre">output</span> <span class="pre">integrate</span></code>,
+which performs a spectral integral.</p>
+<p>The keyword directive <code class="docutils literal"><span class="pre">header</span></code> should not be used at all. This produces some header information in the output
+that will cause errors. A warning is issued of the <code class="docutils literal"><span class="pre">header</span></code> keyword is used in the input.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> &#8211; File from which to read the output. Defaults to name of input file, but with the .OUT</td>
+</tr>
+</tbody>
+</table>
+<p>extension.
+:return: None</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="librad.Case.run">
+<code class="descname">run</code><span class="sig-paren">(</span><em>stderr_to_file=False</em>, <em>write_input=True</em>, <em>read_output=True</em>, <em>block=True</em>, <em>purge=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/librad.html#Case.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#librad.Case.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run the libRadtran/uvspec case.</p>
+<p>This will run the libRadtran/uvspec Case instance provided. Some control is provided regarding the handling of
+the standard error output from uvspec. This function only returns when uvspec terminates.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>stderr_to_file</strong> &#8211; Controls whether standard error output goes to the screen or is written to a file
+having the same name as the input/output files, except with the extension .ERR.</li>
+<li><strong>write_input</strong> &#8211; Controls whether the input file is written out before execution. Default is True.</li>
+<li><strong>read_output</strong> &#8211; Controls whether the output file is read after execution. Default is True.</li>
+<li><strong>block</strong> &#8211; By default, this method waits until uvspec terminates. If set False, the uvspec process
+is released to background and read_output is set to False (regardless of user input).</li>
+<li><strong>purge</strong> &#8211; If set True, the input and output files from this run will be deleted after the run is complete
+and the outputs have been read. Will only be honoured if read_output is also True. Default is True.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The shell command string executed in order to run the case and the return status of the command.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="librad.Case.write">
+<code class="descname">write</code><span class="sig-paren">(</span><em>filename=''</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/librad.html#Case.write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#librad.Case.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write libRadtran/uvspec input to a file (.INP extension by default.
+If the filename input is given as &#8216;&#8217;, a file save dialog will be presented</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> &#8211; Filename to which to write the uvspec input</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="librad.RadEnv">
+<em class="property">class </em><code class="descclassname">librad.</code><code class="descname">RadEnv</code><span class="sig-paren">(</span><em>base_case</em>, <em>n_pol</em>, <em>n_azi</em>, <em>mxumu=48</em>, <em>mxphi=19</em>, <em>hemi=False</em>, <em>n_sza=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/librad.html#RadEnv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#librad.RadEnv" title="Permalink to this definition">¶</a></dt>
+<dd><p>RadEnv is a class to encapsulate a large number of uvspec runs to cover a large number of sightlines over the
+whole sphere. A radiance map over the complete sphere is called a radiant environment map. The uvspec utility can
+only handle a limited number of sighlines per run, determined by the maximum number of polar and azimuthal angles
+specified in the file /libsrc_f/DISORT.MXD. If these values are changed, DISORT and uvspec must be recompiled. If
+the values are set too large, the memory requirements could easily exceed your computer&#8217;s limit (there is
+currently no dynamic memory allocation in DISORT). The situation for the cdisort solver is less clear.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The <cite>polradtran</cite> radiative transfer (RT) solver does not produce direct irradiance outputs (<cite>edir</cite>),
+This presents a problem for calculation of path transmission (optical depth) between output atmospheric
+levels (e.g. as specified by the uvspec <cite>zout</cite> keyword). This solver only produces total fluxes (irradiances)
+for each of desired stokes parameters. Hence for calculation of polarised radiant environment maps (REMs), the only
+feasible option for <cite>MORTICIA</cite> is to use the <cite>mystic</cite> solver with the <cite>mc_polarisation</cite> option. Currently,
+the librad.Case uvspec output file reading functions do not cater for <cite>mystic</cite>.</p>
+</div>
+<p>Create a set of uvspec runs covering the whole sphere to calculate a full radiant environment map.
+Where the base_case is the uvspec case on which to base the environmental map, Name is the name to give the
+environmental map and n_pol and n_azi are the number of polar and azimuthal sightline angles to generate. The
+mxumu and mxphi are the maximum number of polar and azimuth angles to calculate in a single run of uvspec.
+The default values are mxumu = 48, and mxphi = 19. These values are taken from the standard libRadtran
+distribution (/libsrc_f/DISORT.MXD) maximum parameter file. If using the polradtran solver, the corresponding
+file is /libsrc_f/POLRADTRAN.MXD. Other solvers may have different restrictions. A warning will be issued if
+the solver is not in the DISORT/POLRADTRAN family.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>base_case</strong> &#8211; <p>librad.Case object providing the case on which the environment map is to be based. Note
+that not any basecase can be used. As a general guideline, the basecase should have standard irradiance
+outputs (i.e. should not use the <cite>output_user</cite> keyword). It should also not the use <cite>output_process</cite> or
+<cite>output_quantity</cite> keywords, which change the units and/or format of the libRadtran/uvspec output.</p>
+<blockquote>
+<div>Minimal validation of the basecase is performed. However, use with <cite>mol_abs_param</cite> such as <cite>kato</cite> and
+<cite>fu</cite> is important for <cite>MORTICIA</cite> and these are supported (k-distribution or <cite>correlated-k</cite>
+parametrizations).</div></blockquote>
+</li>
+<li><strong>n_pol</strong> &#8211; Number of polar angles (view/propagation zenith angles)</li>
+<li><strong>n_azi</strong> &#8211; Number of azimuthal angles.</li>
+<li><strong>mxumu</strong> &#8211; Maximum number of polar angles per case.</li>
+<li><strong>mxphi</strong> &#8211; Maximum number of azimuthal angles per case.</li>
+<li><strong>hemi</strong> &#8211; If set True, will generate only a single hemisphere being on one side of
+the solar principle plane. Default is False i.e. the environment map covers the full sphere.
+Note that if hemi=True, the number of REM samples in azimuth becomes n_azi <span class="math">\(\times\)</span> 2.
+This is the recommended mode (hemi=True) for MORTICIA purposes, since it reduces execution time.</li>
+<li><strong>n_sza</strong> &#8211; The number of solar zenith angles (SZA) at which to perform transmittance and path radiance
+computations. Each SZA will result in another run of the base case (no radiances)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>The solver cdisort may have dynamic memory allocation, so the warning is still issued because the situation
+is less clear.</p>
+<p>A note about radiative propagation angles and viewing angles, which are 180 deg opposite to each other.
+For radiance calculations define the cosine of the viewing zenith angle
+<cite>umu</cite> and the sensor azimuth <cite>phi</cite> and don&#8217;t forget to also specify the solar azimuth
+<cite>phi0</cite>. <cite>umu</cite> &gt; 0 means sensor looking downward (e.g. a satellite), <cite>umu</cite> &lt; 0 means looking
+upward. <cite>phi</cite> = <cite>phi0</cite> indicates that the sensor looks into the direction of the sun,
+<cite>phi</cite> - <cite>phi0</cite> = 180 means that the sun is in the back of the sensor.</p>
+<p><cite>phi</cite> is the propagation azimuth angle <cite>paz</cite>, except that <cite>paz</cite> is in radians and <cite>phi</cite> is in degrees.</p>
+<p><cite>pza</cite> is the propagation zenith angle in radians.</p>
+<p><cite>vaz</cite> is the view azimuth angle and is 180 <span class="math">\(^\circ\)</span> different from <cite>paz</cite>. <cite>vaz</cite> is expressed
+in degrees. <cite>vza</cite>, the view zenith angle is 180 <span class="math">\(^\circ\)</span> different from <cite>paz&#8217; and is expressed
+in degrees. In order to keep all azimuth angles in increasing order, &#8216;vaz&#8217; is in the range [-180, 180],
+while `phi</cite> is in the range [0, 360] and <cite>vaz</cite> = <cite>phi</cite> - 180.</p>
+<p>The value of <cite>umu</cite> is the cosine of the propagation zenith angle. The value of <cite>phi</cite> is the true azimuth of
+the propagation direction.</p>
+<p>For all one-dimensional solvers the absolute azimuth does not matter, but only the relative azimuth
+<cite>phi</cite> - <cite>phi0</cite>.</p>
+<p>For <cite>MORTICIA</cite> work, it is strongly recommended that the <cite>hemi</cite> flag be set True. This will automatically
+set the <cite>phi0</cite> keyword to zero in the RadEnv cases when running uvspec. This will essentially halve the
+execution time for radiant environment maps of the same effective spatial resolution.</p>
+<dl class="method">
+<dt id="librad.RadEnv.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>base_case</em>, <em>n_pol</em>, <em>n_azi</em>, <em>mxumu=48</em>, <em>mxphi=19</em>, <em>hemi=False</em>, <em>n_sza=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/librad.html#RadEnv.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#librad.RadEnv.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a set of uvspec runs covering the whole sphere to calculate a full radiant environment map.
+Where the base_case is the uvspec case on which to base the environmental map, Name is the name to give the
+environmental map and n_pol and n_azi are the number of polar and azimuthal sightline angles to generate. The
+mxumu and mxphi are the maximum number of polar and azimuth angles to calculate in a single run of uvspec.
+The default values are mxumu = 48, and mxphi = 19. These values are taken from the standard libRadtran
+distribution (/libsrc_f/DISORT.MXD) maximum parameter file. If using the polradtran solver, the corresponding
+file is /libsrc_f/POLRADTRAN.MXD. Other solvers may have different restrictions. A warning will be issued if
+the solver is not in the DISORT/POLRADTRAN family.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>base_case</strong> &#8211; <p>librad.Case object providing the case on which the environment map is to be based. Note
+that not any basecase can be used. As a general guideline, the basecase should have standard irradiance
+outputs (i.e. should not use the <cite>output_user</cite> keyword). It should also not the use <cite>output_process</cite> or
+<cite>output_quantity</cite> keywords, which change the units and/or format of the libRadtran/uvspec output.</p>
+<blockquote>
+<div>Minimal validation of the basecase is performed. However, use with <cite>mol_abs_param</cite> such as <cite>kato</cite> and
+<cite>fu</cite> is important for <cite>MORTICIA</cite> and these are supported (k-distribution or <cite>correlated-k</cite>
+parametrizations).</div></blockquote>
+</li>
+<li><strong>n_pol</strong> &#8211; Number of polar angles (view/propagation zenith angles)</li>
+<li><strong>n_azi</strong> &#8211; Number of azimuthal angles.</li>
+<li><strong>mxumu</strong> &#8211; Maximum number of polar angles per case.</li>
+<li><strong>mxphi</strong> &#8211; Maximum number of azimuthal angles per case.</li>
+<li><strong>hemi</strong> &#8211; If set True, will generate only a single hemisphere being on one side of
+the solar principle plane. Default is False i.e. the environment map covers the full sphere.
+Note that if hemi=True, the number of REM samples in azimuth becomes n_azi <span class="math">\(\times\)</span> 2.
+This is the recommended mode (hemi=True) for MORTICIA purposes, since it reduces execution time.</li>
+<li><strong>n_sza</strong> &#8211; The number of solar zenith angles (SZA) at which to perform transmittance and path radiance
+computations. Each SZA will result in another run of the base case (no radiances)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>The solver cdisort may have dynamic memory allocation, so the warning is still issued because the situation
+is less clear.</p>
+<p>A note about radiative propagation angles and viewing angles, which are 180 deg opposite to each other.
+For radiance calculations define the cosine of the viewing zenith angle
+<cite>umu</cite> and the sensor azimuth <cite>phi</cite> and don&#8217;t forget to also specify the solar azimuth
+<cite>phi0</cite>. <cite>umu</cite> &gt; 0 means sensor looking downward (e.g. a satellite), <cite>umu</cite> &lt; 0 means looking
+upward. <cite>phi</cite> = <cite>phi0</cite> indicates that the sensor looks into the direction of the sun,
+<cite>phi</cite> - <cite>phi0</cite> = 180 means that the sun is in the back of the sensor.</p>
+<p><cite>phi</cite> is the propagation azimuth angle <cite>paz</cite>, except that <cite>paz</cite> is in radians and <cite>phi</cite> is in degrees.</p>
+<p><cite>pza</cite> is the propagation zenith angle in radians.</p>
+<p><cite>vaz</cite> is the view azimuth angle and is 180 <span class="math">\(^\circ\)</span> different from <cite>paz</cite>. <cite>vaz</cite> is expressed
+in degrees. <cite>vza</cite>, the view zenith angle is 180 <span class="math">\(^\circ\)</span> different from <cite>paz&#8217; and is expressed
+in degrees. In order to keep all azimuth angles in increasing order, &#8216;vaz&#8217; is in the range [-180, 180],
+while `phi</cite> is in the range [0, 360] and <cite>vaz</cite> = <cite>phi</cite> - 180.</p>
+<p>The value of <cite>umu</cite> is the cosine of the propagation zenith angle. The value of <cite>phi</cite> is the true azimuth of
+the propagation direction.</p>
+<p>For all one-dimensional solvers the absolute azimuth does not matter, but only the relative azimuth
+<cite>phi</cite> - <cite>phi0</cite>.</p>
+<p>For <cite>MORTICIA</cite> work, it is strongly recommended that the <cite>hemi</cite> flag be set True. This will automatically
+set the <cite>phi0</cite> keyword to zero in the RadEnv cases when running uvspec. This will essentially halve the
+execution time for radiant environment maps of the same effective spatial resolution.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="librad.RadEnv.compute_path_radiance">
+<code class="descname">compute_path_radiance</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/librad.html#RadEnv.compute_path_radiance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#librad.RadEnv.compute_path_radiance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute path radiances for path segments between all altitudes in the REM.
+The path transmittances (optical depth) as well as the total radiances at each altitude are required to
+calculate path radiances. If <span class="math">\(L_{pi}^{\downarrow}\)</span> is the downwelling path radiance at level <span class="math">\(i\)</span>
+originating between level <span class="math">\(i\)</span> and level <span class="math">\(i+1\)</span> and <span class="math">\(L_{pi}^{\uparrow}\)</span> is the upwelling
+path radiance at level <span class="math">\(i\)</span> originating between level <span class="math">\(i\)</span> and level <span class="math">\(i-1\)</span>, then</p>
+<div class="math">
+\[L_{pi}^{\downarrow}=L_{i}^{\downarrow}-L_{i+1}^{\downarrow}\tau_{i+1}^{\downarrow},\]</div>
+<p>and</p>
+<div class="math">
+\[L_{pi}^{\uparrow}=L_{i}^{\uparrow}-L_{i-1}^{\uparrow}\tau_{i-1}^{\uparrow}.\]</div>
+<p><span class="math">\(L_{i}^{\uparrow}\)</span> is the lower hemisphere (upwelling hemisphere) of the REM and
+<span class="math">\(\tau_{i}^{\uparrow}\)</span> is the transmission between level <span class="math">\(i\)</span> and level <span class="math">\(i+1\)</span>.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">RadEnv.compute_path_transmittance()</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="librad.RadEnv.compute_path_transmittance">
+<code class="descname">compute_path_transmittance</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/librad.html#RadEnv.compute_path_transmittance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#librad.RadEnv.compute_path_transmittance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute path transmittances from the set of libRadtran/uvspec runs executed for solar zenith angles
+of 0 to near 90 degrees.</p>
+<p>This method computes optical depth (-log(transmittance)) of all paths from a particular level, both
+upward and downward. Paths that lie in the horizontal &#8220;blind zone&#8221; are assigned OD of 0.0. These should
+actually be assigned OD of np.nan or perhaps np.inf.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">RadEnv.setup_trans_cases()</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="librad.RadEnv.run_ipyparallel">
+<code class="descname">run_ipyparallel</code><span class="sig-paren">(</span><em>ipyparallel_view</em>, <em>stderr_to_file=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/librad.html#RadEnv.run_ipyparallel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#librad.RadEnv.run_ipyparallel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run a complete set of radiant environment map cases of libRadtran/uvspec using the <cite>ipyparallel</cite>
+Python package, which provides parallel computation from Jupyter notebooks and other Python launch
+modes.
+Typical code for setting up the view:</p>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">ipyparallel</span> <span class="kn">import</span> <span class="n">Client</span>
+<span class="n">paraclient</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="n">profile</span><span class="o">=</span><span class="s">&#39;mycluster&#39;</span><span class="p">,</span> <span class="n">sshserver</span><span class="o">=</span><span class="s">&#39;me@mycluster.info&#39;</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="s">&#39;mypassword&#39;</span><span class="p">)</span>
+<span class="n">paraclient</span><span class="p">[:]</span><span class="o">.</span><span class="n">use_dill</span><span class="p">()</span>  <span class="c"># Need dill as a pickle replacement for our purposes here</span>
+<span class="n">ipyparallel_view</span> <span class="o">=</span> <span class="n">paraclient</span><span class="o">.</span><span class="n">load_balanced_view</span><span class="p">()</span>
+<span class="n">ipyparallel_view</span><span class="o">.</span><span class="n">block</span> <span class="o">=</span> <span class="bp">True</span>  <span class="c"># Must wait for completion of all tasks on the cluster</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Note that if new ipengines are started, use_dill() must be executed again. The use_dill() call
+should be a routine before every function map to the cluster.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>ipyparallel_view</strong> &#8211; an ipyparallel view of a Python engine cluster (see ipyparallel documentation.)</li>
+<li><strong>stderr_to_file</strong> &#8211; If set to True, standard error output will be sent to a file. use only for debugging
+purposes.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="librad.RadEnv.run_parallel">
+<code class="descname">run_parallel</code><span class="sig-paren">(</span><em>n_nodes=4</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/librad.html#RadEnv.run_parallel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#librad.RadEnv.run_parallel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run the RadEnv in multiprocessing mode on the local host.</p>
+<p>This is not yet tested, but should work with the multiprocessing package on the local host to use all
+the available cores. Will only work if libRadtran is installed on the local host.</p>
+<p>In order to use dill instead of pickle, it is necessary to use the pathos multiprocessing module
+instead of the standard multiprocessing module</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>n_nodes</strong> &#8211; Number of compute nodes to use. Default is 4. Preferably set to number of cores you have
+available on the local host.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="librad.RadEnv.setup_trans_cases">
+<code class="descname">setup_trans_cases</code><span class="sig-paren">(</span><em>n_sza=32</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/librad.html#RadEnv.setup_trans_cases"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#librad.RadEnv.setup_trans_cases" title="Permalink to this definition">¶</a></dt>
+<dd><p>Setup a list of cases for computing the transmission matrices between every level defined in the
+REM (and at every wavelength and stokes parameter combination). The computation of  transmittance between
+levels is accomplished in <cite>MORTICIA</cite> using libRadtran/uvspec by computing the direct solar irradiance
+transmittance for multiple zenith angles.</p>
+<p>Note that if there is an optically thick cloud layer between two levels in the REM, the transmittance
+will compute as zero or very small. This will also result in the incorrect/noisy computation of path
+radiances between the two levels. This situation is unavoidable. The recommended approach is that
+REMS be computed with altitude levels that all lie between cloud layers (i.e. no levels in the REM
+span a cloud layer). The user, or the code which uses the REMs should see to this. Essentially it must
+be recognised that optical surveillance is not possible through optically thick cloud layers.</p>
+<p>The REM is provided with a cloud flag that indicates if the base case incorporates clouds. The approach to
+computing inter-level transmittance (optical depth is the stored parameter, since this scales more
+closely in a linear fashion with distance) in the presence of cloud is to vary the &#8216;cloudcover&#8217;
+keyword parameter (water and ice clouds independently). This is done for solar zenith angle of zero.
+The optical thickness from TOA to the level in question is then computed as a function of cloud cover
+fraction (CCF). The optical depth between levels (i.e the optical depth of a layer between two levels)
+is computed as the difference in optical depth to TOA of the lower level minus the optical depth to TOA
+of the upper level. If there is no difference in the layer optical depth when the CCF is varied from
+zero to some positive value (say 0.1, but not as high as 1), then the layer is free of cloud.</p>
+<p>A flag per layer is thus obtained which indicates if the layer contains cloud. If it does, the transmittance
+will compute as zero between the two levels in question. This means that the cloud base is not resolved
+to better than the level resolution in the REM. It is probably then quite important to ensure that
+cloud base altitude statistics are available in the theatre climatology.</p>
+<p>An upgrade to cloud handling could be to read the cloud profile files in order to obtain the exact vertical
+location of the cloud layers.</p>
+<p>Another inherent and unavoidable problem with computation of path optical depths and radiances using
+libRadtran/uvspec is that precisely horizontal paths cannot be dealt with using one-dimensional RT
+solvers. Therefore in this case, the maximum range that can be dealt with depends on the height difference
+between the REM levels and the maximum solar zenith angle (SZA) used for computation of optical depth.</p>
+<p>A further implication of the above point is that path transmittances and path radiances cannot be interpolated
+between the SZA nearest the horizon and the horizon proper. Some form of logarithmic extrapolation could be
+performed, but could result in large errors due to failure of Beer&#8217;s Law and other problems.</p>
+<p>Execution and attribution of transmittance cases will provide each level with transmittance to the level
+above that altitude level. Therefore the topmost level will have transmittances to TOA, but the
+bottom level will not have transmittances (optical depths) to BOA, unless the bottom level <em>is</em> BOA.
+It is recommended that all MORTICIA base cases for REM include BOA as an output level.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>n_sza</strong> &#8211; The number of solar zenith angles at which to compute path optical depth and radiances.
+the SZA values are computed equi-spaced in the cosine of the solar zenith angle rather that the
+SZA itself. This is to help with the problem that the slant range between levels increases
+in linear relation to the secant of the view zenith angle. The optical depths are later
+interpolated to the same</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="librad.RadEnv.sph_harm_fat">
+<code class="descname">sph_harm_fat</code><span class="sig-paren">(</span><em>degree</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/librad.html#RadEnv.sph_harm_fat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#librad.RadEnv.sph_harm_fat" title="Permalink to this definition">¶</a></dt>
+<dd><p>This code was used for debugging purposes - ignore
+:param degree:
+:return:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="librad.RadEnv.sph_harm_fit">
+<code class="descname">sph_harm_fit</code><span class="sig-paren">(</span><em>degree</em>, <em>method='trapz'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/librad.html#RadEnv.sph_harm_fit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#librad.RadEnv.sph_harm_fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit spherical harmonics to the radiant environment map (REM).
+One set of coefficients per wavelength or spectral channel will be fitted. The coefficients for each spectral
+bin/channel comprise one coefficient for order <span class="math">\(-m\)</span> to <span class="math">\(+m\)</span> for <span class="math">\(m = 0, 1, 2, ..., n\)</span>.
+The total number of coefficients is <span class="math">\((n+1)^2\)</span>.</p>
+<p>The convention used for the spherical harmonics is that of Sloan with the Ramamoorthi and Hanrahan
+normalization. This is a real-valued basis defined as follows:</p>
+<div class="math">
+\[\begin{split}y_{n}^{m}=\begin{cases}
+(-1)^{m}\sqrt{2}\Re(Y_{n}^{m}) &amp; m&gt;0\\
+(-1)^{m}\sqrt{2}\Im(Y_{n}^{m}) &amp; m&lt;0\\
+Y_{n}^{0} &amp; m=0
+\end{cases}=\begin{cases}
+(-1)^{m}\sqrt{2}\cos m\phi\,P_{n}^{m}(\cos\theta) &amp; m&gt;0\\
+(-1)^{m}\sqrt{2}\sin|m|\phi\,P_{n}^{|m|}(\cos\theta) &amp; m&lt;0\\
+K_{n}^{0}P_{n}^{0}(\cos\theta) &amp; m=0
+\end{cases},\end{split}\]</div>
+<p>where the complex basis functions <span class="math">\(Y^{m}_{n}\)</span> are defined as:</p>
+<div class="math">
+\[Y_{n}^{m}(\theta,\phi)=K_{n}^{m}e^{im\phi}P_{n}^{|m|}(\cos\theta),\,n\in\mathbf{N},\,-n\leq m\leq n,\]</div>
+<p>having the normalisation factor of:</p>
+<div class="math">
+\[K_{n}^{m}=\sqrt{\frac{(2n+1)(n-|m|)!}{4\pi(n+|m|)!}}.\]</div>
+<p>The definition of the complex basis functions is consistent with the
+<a class="reference external" href="http://docs.scipy.org/doc/scipy-0.16.0/reference/generated/scipy.special.sph_harm.html">scipy.special</a>
+definition of the spherical harmonics. Therefore, for fitting of the Sloan/Ramamoorthi/Hanrahan basis, the
+first definition is used above, that is <span class="math">\(y_{n}^{m}\)</span> can be calculated from the <cite>scipy.special</cite> function
+<span class="math">\(Y_{n}^{m}\)</span> as:</p>
+<div class="math">
+\[\begin{split}y_{n}^{m}=\begin{cases}
+(-1)^{m}\sqrt{2}\Re(Y_{n}^{m}) &amp; m&gt;0\\
+(-1)^{m}\sqrt{2}\Im(Y_{n}^{m}) &amp; m&lt;0\\
+Y_{n}^{0} &amp; m=0
+\end{cases}.\end{split}\]</div>
+<p>The fitted coefficients of the spherical harmonics are computed by multiplying the REM by each of the
+harmonics and performing double numerical integration over zenith and azimuth angle as:</p>
+<div class="math">
+\[L_{n}^{m}=\int_{\theta=0}^{\pi}\int_{\phi=0}^{2\pi}L(\theta,\phi)y_{n}^{m}(\theta,\phi)\sin\theta d\theta d\phi,\]</div>
+<p>where <span class="math">\(L_{n}^{m}\)</span> are the coefficients and <span class="math">\(L(\theta,\phi)\)</span> is the REM.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>degree</strong> &#8211; Spherical harmonics up to this degree <span class="math">\(n\)</span>, for all orders <span class="math">\(m\)</span> will be fitted.</li>
+<li><strong>method</strong> &#8211; Integration method by which the coefficients are computed. &#8216;trapz&#8217; for trapezoidal integration,
+&#8216;sum&#8217; for simple summation and &#8216;simpson&#8217; for Simpson&#8217;s Rule. The &#8216;trapz&#8217; method seems to be
+considerably more accurate than &#8216;sum&#8217; or &#8216;simpson&#8217;. Therefore &#8216;trapz&#8217; is the default.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, D Griffith, A Ramkilowan.
+    </p>
+  </div>
+
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

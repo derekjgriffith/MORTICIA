@@ -1,0 +1,844 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Sensor Package &mdash; MORTICIA 1.0 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Roboto+Slab:400,700|Inconsolata:400,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="MORTICIA 1.0 documentation" href="index.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+          <a href="index.html" class="fa fa-home"> MORTICIA</a>
+        
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="how_to_use.html">How to use MORTICIA</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="how_to_use.html#morticia-dependencies">MORTICIA Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="how_to_use.html#installation-and-requirements">Installation and Requirements</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="styleguide.html">The MORTICIA Style Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="styleguide.html#to-pep-8-or-not-to-pep-8">To PEP-8 or not to PEP-8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="styleguide.html#code-layout">Code Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="styleguide.html#import-statements">Import Statements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="styleguide.html#whitespace">Whitespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="styleguide.html#comments">Comments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="styleguide.html#documentation-strings-docstrings">Documentation Strings (docstrings)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="styleguide.html#naming-conventions">Naming Conventions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="styleguide.html#pep-257">PEP-257</a></li>
+<li class="toctree-l2"><a class="reference internal" href="styleguide.html#from-conventions-section"><em>From</em> Conventions Section</a></li>
+<li class="toctree-l2"><a class="reference internal" href="styleguide.html#general-terminology-and-conventions">General Terminology and Conventions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="for_developers.html">For the Developers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="for_developers.html#structure">Structure</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="packages.html">Packages</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="packages.html#sensor-package">Sensor Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="packages.html#radiometry-package">Radiometry Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="packages.html#scene-package">Scene Package</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ChapLibRadtranODandPathRadiance.html">Transmittance and Path Radiance in libRadtran</a></li>
+<li class="toctree-l1"><a class="reference internal" href="01a-SpectralChannelsAndFilters.html">IPython Notebook and Sphinx</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="01a-SpectralChannelsAndFilters.html#a-spectralchannelsandfilters-ipython-notebook">01a-SpectralChannelsAndFilters IPython Notebook</a></li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">MORTICIA</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>Sensor Package</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          <a href="_sources/sensorpack.txt" rel="nofollow"> View page source</a>
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <div class="section" id="sensor-package">
+<h1>Sensor Package<a class="headerlink" href="#sensor-package" title="Permalink to this headline">¶</a></h1>
+<p>The sensor package provides modelling of complete sensors, typically comprising an optical objective lens and
+a focal plane detector as a minimum (a camera). A sensor may also include a display and a human observer. The display
+and human observer are required in order to calculate ranges and probabilities of target detection, recognitions and
+identification (DRI).</p>
+<p>Capability is also provided to model direct view systems comprising a telescope or binocular and human observer, without
+any electronics in the sensor chain.</p>
+<div class="section" id="optics-module">
+<h2>Optics Module<a class="headerlink" href="#optics-module" title="Permalink to this headline">¶</a></h2>
+<p>The optics module provides modelling of basic objective lenses used by imaging systems. For the most part, these are
+optical systems that are near to diffraction-limited, with centred circular entrance pupils, possibly with a centred
+circular obscuration (as in a Cassegrain or Newtonian telescope).</p>
+<span class="target" id="module-optics"></span><dl class="class">
+<dt id="optics.Lens">
+<em class="property">class </em><code class="descclassname">optics.</code><code class="descname">Lens</code><span class="sig-paren">(</span><em>efl</em>, <em>fno</em>, <em>trn</em>, <em>wfe=None</em>, <em>obs=None</em>, <em>mtf=None</em>, <em>wvn_step=500.0</em>, <em>wfe_allowed=0.3</em>, <em>attrs=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/optics.html#Lens"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#optics.Lens" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Lens class encapsulates information and behaviour related to imaging lens systems.
+The chief characteristics of a lens are its spectral through-field, through-focus and
+through-frequency MTF, as well as the spectral transmission.
+In order to transform spatial frequencies in the image plane to angular spatial frequencies
+in object space, the effective focal length of the lens (efl) must also be known.
+The basic lens model is a near diffraction-limited system with a centred circular aperture
+having a centred circular obscuration (which may be absent), where the MTF is constant over
+the entire field of view (FOV). A lens with field-dependent MTF can be constructed by
+providing wavefront error input that varies with field.</p>
+<p>The most basic lens model implemented here, from which more complicated lens models could inherit
+their properties have the following attributes</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>efl</strong> &#8211; The effective focal length of the lens in mm</li>
+<li><strong>fno</strong> &#8211; The focal ratio of the lens</li>
+<li><strong>trn</strong> &#8211; The spectral transmission of the lens (zero to unity).</li>
+<li><strong>wfe</strong> &#8211; The wavefront error measured in waves. This can be a scalar, assumed the same for
+all wavelengths, or it can be provided as a function of wavelength and/or field position.</li>
+<li><strong>obs</strong> &#8211; The obscuration ratio, being the ratio of the circular obscuration diameter to the
+full circular aperture aperture diameter</li>
+<li><strong>mtf</strong> &#8211; The MTF of the lens. Either the MTF can be provided as a set of measurements or it can be
+computed from efl, fno, obs and wfe</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>The lens MTF is computed as a function of spatial frequency in the image, wavelength, defocus and field position.</p>
+<p>The total RMS wavefront error is computed as</p>
+<div class="math">
+\[W=\sqrt{W_{\Delta\!z}^{2}+W_{a}^{2}}=\sqrt{\left(\frac{\Delta\!z}{8\lambda F^{2}}\right)^{2}+W_{a}^{2}}\]</div>
+<p>where <span class="math">\(\Delta\!z\)</span> is the defocus expressed in the same units as the wavelength <span class="math">\(\lambda\)</span>, <span class="math">\(F\)</span> is
+the focal ratio and <span class="math">\(W_a\)</span> is the RMS waverfront error due to aberrations at best focus.</p>
+<p>Lens constructor.
+The lens is constructed using the focal length, focal ratio and spectral transmittance, and
+optionally also the obscuration ratio and wavefront error.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>efl</strong> &#8211; The effective focal length of the lens. The effective focal length must be a scalar value
+with units, e.g. [30, &#8216;mm&#8217;].</li>
+<li><strong>fno</strong> &#8211; The focal ratio (or f-number) which is th ratio of focal length to aperture diameter. This input
+must be a scalar value.</li>
+<li><strong>trn</strong> (<em>xray.DataArray</em>) &#8211; The spectral transmission function, typically a function of wavelength. The spectral
+transmittance function must be</li>
+<li><strong>wfe</strong> &#8211; The wavefront error must be expressed in waves (unitless). It can be a function of
+wavelength (wvl) and field position (flr) , but not focus (fldz). If no input is provided, the wfe
+will default to zero over the same spectral region as the lens transmission function.</li>
+<li><strong>obs</strong> &#8211; The obscuration ratio of the lens (scalar numeric) range 0.0 - 1.0, Default None (0.0)</li>
+<li><strong>mtf</strong> &#8211; A complete pre-computed or measured MTF, with axes of spf, wvl, fldz, flr, flo</li>
+<li><strong>wvn_step</strong> &#8211; Minimum spectral increment in wavenumbers (cm^-1) for MTF calculation. Default 500 cm^-1</li>
+<li><strong>wfe_allowed</strong> &#8211; Maximum allowed wfe when computing lens defocus wfe, Default 0.5 waves at mean wavelength
+of transmission function domain.</li>
+<li><strong>attrs</strong> &#8211; A dictionary of user-defined attributes and metadata. Consider including &#8216;name&#8217; and
+&#8216;long_name&#8217;, &#8216;title&#8217;, &#8216;summary&#8217; or other netCDF convention attributes.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="optics.Lens.mtf_obs_wfe">
+<code class="descname">mtf_obs_wfe</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/optics.html#Lens.mtf_obs_wfe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#optics.Lens.mtf_obs_wfe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the multidimensional MTF of a Lens class object</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<ul class="last">
+<li><dl class="first docutils">
+<dt>optics.atf which shows the method and formula by which the aberration/defocus MTF degradation is</dt>
+<dd><p class="first last">computed.</p>
+</dd>
+</dl>
+</li>
+<li><p class="first">optics.mtf_obs shows documents the typical calculation formulas for obscured MTF</p>
+</li>
+</ul>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="optics.atf">
+<code class="descclassname">optics.</code><code class="descname">atf</code><span class="sig-paren">(</span><em>spf</em>, <em>wvl</em>, <em>fno</em>, <em>rms_wavefront_error</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/optics.html#atf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#optics.atf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the MTF degradation factor for a lens operating at the given wavelengths and and with the given
+focal ratios, RMS wavefront errors at the the specified spatial frequencies in the image plane.
+ATF stands for Aberration Transfer Function.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>spf</strong> &#8211; Spatial frequencies in the image plane at which to compute the ATF. Spatial frequencies must be in
+reciprocal units to wavelengths i.e. if wavelengths are in mm, spatial frequencies must be in cycles per mm.</li>
+<li><strong>wvl</strong> &#8211; Wavelengths at which to compute the ATF</li>
+<li><strong>fno</strong> &#8211; Focal ratios at which to compute the ATF</li>
+<li><strong>rms_wavefront_error</strong> &#8211; RMS wavefront error magnitudes (in waves) at which to compute the ATF</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A numpy array with the aberration transfer function.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Reference : Shannon, R.R., Handbook of Optics, Volume 1, 2nd Edition, Chapter 35 - Optical
+Specifications. &#8220;This is an approximation, however, and it becomes progressively less accurate as
+the amount of the rms wavefront error exceeds about 0.18 wavelength.&#8221;</p>
+<p>The formula used for computing the aberration MTF due to RMS wavefront error of <span class="math">\(W\)</span> at spatial frequency
+<span class="math">\(f\)</span> is</p>
+<div class="math">
+\[M\!T\!F_{W}(f)=1-\left(\frac{W}{0.18}\right)^{2}\left[1-4\left(\frac{f}{f_{c}}-\frac{1}{2}\right)^{2}\right]\]</div>
+<p>where the diffraction cutoff (or &#8220;critical&#8221;) frequency is <span class="math">\(f_c\)</span>.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">optics.pmtf_obs_wfe</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="optics.autocorr_circle">
+<code class="descclassname">optics.</code><code class="descname">autocorr_circle</code><span class="sig-paren">(</span><em>circle_radius</em>, <em>shift</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/optics.html#autocorr_circle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#optics.autocorr_circle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute autocorrelation of a circular aperture of radius <strong>circle_radius</strong> with centre-to-centre sample
+displacements of <strong>shift</strong>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>circle_radius</strong> &#8211; Radius of circle</li>
+<li><strong>shift</strong> &#8211; Centre-to-centre displacements at which to compute the autocorrelation</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Autocorrelation magnitude</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">optics.crosscorr_circle</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="optics.crosscorr_circle">
+<code class="descclassname">optics.</code><code class="descname">crosscorr_circle</code><span class="sig-paren">(</span><em>circle_radius</em>, <em>shift</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/optics.html#crosscorr_circle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#optics.crosscorr_circle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cross correlation of unit circle with circle of radius <strong>circle_radius</strong>.
+Compute the cross-correlation of a circular aperture of unit radius at the origin,
+with a circular aperture of radius <strong>circle_radius</strong>, with centre-to-centre displacements of <strong>shift</strong>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>circle_radius</strong> &#8211; Radius of circle to cross-correlate with unit circle (scalar numeric)</li>
+<li><strong>shift</strong> &#8211; Centre-to-centre displacements at which to compute the cross-correlation</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Cross-correlation magnitude</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">optics.autocorr_circle</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="optics.ctf_eye">
+<code class="descclassname">optics.</code><code class="descname">ctf_eye</code><span class="sig-paren">(</span><em>spf</em>, <em>lum</em>, <em>w</em>, <em>num_eyes=2</em>, <em>formula=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/optics.html#ctf_eye"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#optics.ctf_eye" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the contrast transfer function of the human eye.
+By default, uses the condensed version of the Barten CTF.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>spf</strong> &#8211; spatial frequencies in eye-space in cycles per milliradian (scalar or vector numpy array input)</li>
+<li><strong>lum</strong> &#8211; mean luminance of the viewing area in <span class="math">\(cd/m^2\)</span> (scalar or vector numpy array input)</li>
+<li><strong>w</strong> &#8211; the angular width of the viewing area, or the square root of the angular viewing area in square degrees
+(scalar or vector numpy input).</li>
+<li><strong>num_eyes</strong> &#8211; The number of eyes used for viewing (2 for binocular viewing or 1 for monocular viewing). The
+default is num_eyes=2.</li>
+<li><strong>formula</strong> &#8211; The formula variant used for the computation. Defaults (formula=1) to the simple formula first
+published by Barten in SPIE 2003. Other options are formula=11 and formula=14, which are slight variations.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The CTF with respect to spf, lum and w (up to a 3D numpy array). Singular dimensions are squeezed out
+using numpy.squeeze().</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="optics.mtf">
+<code class="descclassname">optics.</code><code class="descname">mtf</code><span class="sig-paren">(</span><em>spf</em>, <em>wvl</em>, <em>fno</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/optics.html#mtf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#optics.mtf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the simple (optimally focussed) diffraction Modulation Transfer Function (MTF) of a prefect lens with an
+unobscured circular aperture.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>spf</strong> &#8211; Spatial frequencies in the image at which to compute the MTF</li>
+<li><strong>wvl</strong> &#8211; Wavelength in units consistent with the spatial frequencies f</li>
+<li><strong>fno</strong> &#8211; Focal ratio (working focal ratio) of the lens</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Modulation Transfer Function, with spatial frequency (spf) varying down columns and wavelength across rows
+If the frequencies are given in cycles per millimetre, the wavelengths must be in mm.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Any of the inputs can be a vector. The spatial frequencies are assigned to the rows of the output array, the
+wavelengths vary from column to column and Fno will vary in the third dimension, but singleton dimensions will
+be squeezed out.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">optics.pmtf, optics.pmtf_obs, optics.pmtf_obs_wfe</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="optics.mtf_obs">
+<code class="descclassname">optics.</code><code class="descname">mtf_obs</code><span class="sig-paren">(</span><em>spf</em>, <em>wvl</em>, <em>fno</em>, <em>obs=0.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/optics.html#mtf_obs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#optics.mtf_obs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the optimally focussed diffraction Modulation Transfer Function of a perfect lens with an
+circular aperture having a centred circular obscuration. This is the monochromatic MTF computed at
+a number of discrete given wavelengths.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>spf</strong> &#8211; Spatial frequencies in the image at which to compute the MTF (numpy vector).</li>
+<li><strong>wvl</strong> &#8211; Wavelength in units consistent with the spatial frequencies <strong>spf</strong> (numpy vector)</li>
+<li><strong>fno</strong> &#8211; Focal ratio (working focal ratio) of the lens (numpy vector).</li>
+<li><strong>obs</strong> &#8211; The obscuration ratio (ratio of obscuration diameter to total aperture diameter).
+The obs input must be a scalar numeric.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">MTF with respect to spatial frequency, wavelength, focal ratio and obscuration ratio.
+Singleton dimensions are squeezed out.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="optics.n_air">
+<code class="descclassname">optics.</code><code class="descname">n_air</code><span class="sig-paren">(</span><em>wvl</em>, <em>temperature</em>, <em>pressure</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/optics.html#n_air"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#optics.n_air" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the refractive index of air computed using the same formula used by ZEMAX
+See the section on Index of Refraction Computation in the Thermal Analysis chapter of the ZEMAX manual.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>wvl</strong> &#8211; Wavelength(s) in microns. If all values of wvl exceed 100, then wavelengths are assumed to be in nm</li>
+<li><strong>temperature</strong> &#8211; Temperature in Celsius.</li>
+<li><strong>pressure</strong> &#8211; Relative air pressure (atmospheres, with 1 atm = 101 325 Pa).</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">This function returns a matrix with wvl varying from row to row, temperature varying from column to column
+and pressure varying in the depth dimension. The returned matrix is subject to np.squeeze() to remove any
+singleton dimensions.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Reference :
+F. Kohlrausch, Praktische Physik, 1968, Vol 1, page 408</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="optics.patf">
+<code class="descclassname">optics.</code><code class="descname">patf</code><span class="sig-paren">(</span><em>spf</em>, <em>wvl</em>, <em>fno</em>, <em>rms_wavefront_error</em>, <em>wvl_weights</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/optics.html#patf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#optics.patf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the polychromatic aberration transfer function.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>spf</strong> &#8211; Spatial frequencies in the image plane at which to compute the ATF. Spatial frequencies must be in
+reciprocal units to wavelengths i.e. if wavelengths are in mm, spatial frequencies must be in cycles per mm.</li>
+<li><strong>wvl</strong> &#8211; Wavelengths at which to compute the ATF</li>
+<li><strong>fno</strong> &#8211; Focal ratios at which to compute the ATF</li>
+<li><strong>rms_wavefront_error</strong> &#8211; RMS wavefront error magnitudes (in waves) at which to compute the ATF</li>
+<li><strong>wvl_weights</strong> &#8211; A numpy vector having the same length as the wvl vector, providing the relative weights of each
+of the wavelengths.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Polychromatic Aberration Transfer Function in a numpy array.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">optics.atf</p>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="optics.pmtf">
+<code class="descclassname">optics.</code><code class="descname">pmtf</code><span class="sig-paren">(</span><em>spf</em>, <em>wvl</em>, <em>fno</em>, <em>wvl_weights</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/optics.html#pmtf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#optics.pmtf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute polychromatic MTF of lens at given spatial frequencies (in the image plane) for specified wavelengths
+and wavelength weighting factors.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>spf</strong> &#8211; Spatial frequencies in the image at which to compute the polychromatic MTF (numpy vector).</li>
+<li><strong>wvl</strong> &#8211; Wavelength in units consistent with the spatial frequencies <strong>spf</strong> (numpy vector)</li>
+<li><strong>fno</strong> &#8211; Focal ratio (working focal ratio) of the lens (numpy vector).</li>
+<li><strong>wvl_weights</strong> &#8211; A numpy vector having the same length as the wvl vector, providing the relative weights of each
+of the wavelengths.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Polychromatic MTF with respect to spatial frequency, wavelength and focal ratio.
+Singleton dimensions are squeezed out of the returned numpy array.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="optics.pmtf_obs">
+<code class="descclassname">optics.</code><code class="descname">pmtf_obs</code><span class="sig-paren">(</span><em>spf</em>, <em>wvl</em>, <em>fno</em>, <em>wvl_weights</em>, <em>obs=0.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/optics.html#pmtf_obs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#optics.pmtf_obs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute polychromatic MTF of obscured lens at given spatial frequencies (in the image plane) for specified
+wavelengths and wavelength weighting factors. The lens may have a circular obcuration of specific ratio.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>spf</strong> &#8211; Spatial frequencies in the image at which to compute the polychromatic MTF (numpy vector).</li>
+<li><strong>wvl</strong> &#8211; Wavelength in units consistent with the spatial frequencies <strong>spf</strong> (numpy vector)</li>
+<li><strong>fno</strong> &#8211; Focal ratio (working focal ratio) of the lens (numpy vector).</li>
+<li><strong>wvl_weights</strong> &#8211; A numpy vector having the same length as the wvl vector, providing the relative weights of each
+of the wavelengths.</li>
+<li><strong>obs</strong> &#8211; Obscuration ratio</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Polychromatic obscured MTF with respect to spatial frequency, wavelength and focal ratio.
+Singleton dimensions are squeezed out of the returned numpy array.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="optics.pmtf_obs_wfe">
+<code class="descclassname">optics.</code><code class="descname">pmtf_obs_wfe</code><span class="sig-paren">(</span><em>spf</em>, <em>wvl</em>, <em>fno</em>, <em>rms_wavefront_error</em>, <em>wvl_weights</em>, <em>obs=0.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/optics.html#pmtf_obs_wfe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#optics.pmtf_obs_wfe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute polychromatic modulation transfer function for lens having circular pupil with centred circular
+obscuration and with aberrations expressed in terms of RMS wavefront error.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>spf</strong> &#8211; Spatial frequencies in the image at which to compute the polychromatic MTF (numpy vector).</li>
+<li><strong>wvl</strong> &#8211; Wavelength in units consistent with the spatial frequencies <strong>spf</strong> (numpy vector)</li>
+<li><strong>fno</strong> &#8211; Focal ratio (working focal ratio) of the lens (numpy vector).</li>
+<li><strong>rms_wavefront_error</strong> &#8211; Numpy vector of RMS wavefront error values</li>
+<li><strong>wvl_weights</strong> &#8211; A numpy vector having the same length as the wvl vector, providing the relative weights of each
+of the wavelengths.</li>
+<li><strong>obs</strong> &#8211; Obscuration ratio (centred circular obscuration in circular pupil), ratio of obscuration diameter to
+aperture diameter.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Numpy array with polychromatic modulation transfer function.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">optics.atf, optics.pmtf_obs, optics.pmtf</p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="electronics-module">
+<h2>Electronics Module<a class="headerlink" href="#electronics-module" title="Permalink to this headline">¶</a></h2>
+<p>The electronics module provides modelling of all electronic componenents in the imaging chain. Inclusion
+of any electronic component into a sensor results in an &#8220;electro-optical&#8221; sensor. Electronic components include</p>
+<ul class="simple">
+<li>Solid state electro-optical detectors, including focal plane array (FPA) detectors</li>
+<li>Image intensifier tubes</li>
+<li>Image processing components</li>
+<li>Display systems</li>
+</ul>
+<span class="target" id="module-electro"></span><dl class="class">
+<dt id="electro.Camera">
+<em class="property">class </em><code class="descclassname">electro.</code><code class="descname">Camera</code><span class="sig-paren">(</span><em>fpa</em>, <em>ad_bit_depth</em>, <em>digital_gain=None</em>, <em>digital_offset=(0.0</em>, <em>'count')</em>, <em>noise=(0.0</em>, <em>'count')</em>, <em>sitf=None</em>, <em>exp_time_min=(1e-05</em>, <em>'s')</em>, <em>exp_time_max=(inf</em>, <em>'s')</em>, <em>attrs=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/electro.html#Camera"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#electro.Camera" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Camera class composes a FocalPlaneArray (FPA) together with a gain stage (signal transfer function),
+an analogue-to-digital converter of specific bit depth and an additional amplifier noise. The Camera
+converts photoelectrons to digital output data.
+NB : A Camera object in MORTICIA does <em>not</em> include the Lens. The most basic sensor object that includes a lens
+is an Imager object which includes a lens and a camera.</p>
+<p>Camera constructor. This class if for representation of a Camera, which incorporates
+a FocalPlaneArray and a converter stage which converts photoelectrons into digital levels (also called
+digital numbers - DN and in MORTICIA, the pint unit &#8216;count&#8217; is used).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>fpa</strong> &#8211; The FocalPlaneArray incorporated into the Camera</li>
+<li><strong>ad_bit_depth</strong> &#8211; Number of bits in the Analogue-to-Digital A/D converter. Must be provided in MORTICIA
+scalar format as e.g. [16, &#8216;bit&#8217;]</li>
+<li><strong>digital_gain</strong> &#8211; The number of photoelectrons required to raise the output by 1 digital level (DN)
+Must be provided in MORTICIA scalar format as e.g. [2.2, &#8216;e/count&#8217;].</li>
+<li><strong>digital_offset</strong> &#8211; The digital level (DN) output of the camera for zero photoelectrons. This is not
+the &#8220;black level&#8221;, which typically includes additional dark signal. Must be provided in MORTICIA
+scalar format as e.g. [10.0, &#8216;count&#8217;].</li>
+<li><strong>noise</strong> &#8211; An optional additional noise component to add to the signal. Must be provided as a
+MORTICIA scalar in either electrons or counts e.g. [2, &#8216;e&#8217;]. This is an RMS noise component,
+which is equivalent to a standard deviation.</li>
+<li><strong>sitf</strong> &#8211; Signal transfer function (SiTF). As an alternative to providing the digital_gain and
+digital_offset, (particularly should the camera have essentially non-linear response) the SiTF
+can be provided as an xray.DataArray, with the input axis in units of electrons (&#8216;e&#8217;) and
+the data in units of digital level (&#8216;count&#8217;). If digital_gain and digital_offset are provided,
+the SiTF is calculated and stored internally as an xray.DataArray.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>:param
+:param attrs: A user-defined dictionary of other information about this Camera object. Could include</p>
+<blockquote>
+<div>items such as &#8216;model&#8217;, &#8216;manufacturer&#8217; etc. A &#8216;title&#8217; and &#8216;long_name&#8217; are recommended attributes.</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="electro.FocalPlaneArray">
+<em class="property">class </em><code class="descclassname">electro.</code><code class="descname">FocalPlaneArray</code><span class="sig-paren">(</span><em>pitch</em>, <em>aperture</em>, <em>pixels</em>, <em>wellcapacity</em>, <em>readnoise</em>, <em>darkcurrent</em>, <em>dsnu</em>, <em>prnu</em>, <em>sqe=None</em>, <em>asr=None</em>, <em>t_ref=(25.0</em>, <em>'degC')</em>, <em>darkcurrent_delta_t=(7.0</em>, <em>'delta_degC')</em>, <em>temperature=(25.0</em>, <em>'degC')</em>, <em>attrs=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/electro.html#FocalPlaneArray"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#electro.FocalPlaneArray" title="Permalink to this definition">¶</a></dt>
+<dd><p>Focal plane array detector. This implementation is typically at the chip level. That is, all or most of the
+information for building an FPA object can be found in the chip-level datasheet. The FPAs in question here
+are usually CCD, CMOS, scientific CMOS or electron-multiplying CCD (EMCCD).</p>
+<p>The FPA class can be combined with an image intensifier tube (IIT) to produce an ICCD device.</p>
+<p>This class does not model Time-Delay and Integration (TDI), which is a dynamic imaging process.</p>
+<p>The class does allow for setting of FPA operating temperature and recalculation of dark current
+based on the dark current doubling delta temperature.</p>
+<p>The FPA is a component of a Camera class object and has the basic function of converting photons to
+photoelectrons. FPA object can have multiple spectral channels as with a colour camera. The colour sampling
+spatial pattern can be as for a Bayer filter or a 3-CCD camera.</p>
+<p>Constructor for FocalPlaneAArray objects</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>pitch</strong> &#8211; The centre-to-centre spacing of the FPA detector elements. This must be a list where the
+first element is the centre-to-centre spacing in the x-direction (or both x and y), the second element is
+the spacing in the y-direction (if different from the x-direction) and the last element is the units
+in which the pitch is provided (string). The units must be pint-recognizable.</li>
+<li><strong>aperture</strong> &#8211; The effective pixel aperture of the FPA detector elements. This must also be a list, providing
+the x-aperture of the pixel, y-aperture (if different from x) and the units (string).</li>
+<li><strong>pixels</strong> &#8211; A list of number of pixels in the x and y directions respectively</li>
+<li><strong>wellcapacity</strong> &#8211; The well capacity of the pixel in number of electrons</li>
+<li><strong>readnoise</strong> &#8211; The RMS read noise in electrons.</li>
+<li><strong>darkcurrent</strong> &#8211; The dark current as a list, giving nagnitude and units. Units can be electrons per pixel
+per second (e/s), or in an amperage per pixel (A/s) or an amperage per unit area of the FPA (e.g. A/cm^2)</li>
+<li><strong>dsnu</strong> &#8211; The dark signal non uniformity provided as a list giving the magnitude in the first element
+and units in the second element. The units can also be e/s, A or A/area. This is the standard deviation.
+The DSNU can also be specified as 0.0 or None.</li>
+<li><strong>prnu</strong> &#8211; The photo-response non-uniformity. This is also a standard deviation and must be provided in units
+of &#8216;%&#8217;. That is, the prnu input is a list with the magnitude in the first position and the obligatory
+string &#8216;%&#8217; in the second position.</li>
+<li><strong>sqe</strong> &#8211; This is a xray.DataArray object providing the Spectral Quantum Efficiency of the FPA. SQE must be
+provided with a single axis of wavelength values. The attribute sqe_units must be provided in the
+DataArray attributes and it must be dimensionless (the literal empty string &#8216;&#8217;). If any of the values
+exceeds unity, the SQE is assumed to be provided in percent. Alternatively, the asr input can be provided,
+but either the sqe or the asr input must be provided and not both, since they can be converted one from
+the other. SQE outside the spectral domain provided is assumed to be zero.</li>
+<li><strong>asr</strong> &#8211; This is a xray.DataArray object providing the Absolute Spectral Response of the FPA. It can be
+provided as an alternative to the SQE. It must have the single axis of wavelength. Units are equivalent
+to A/W (photoelectron current per unit optical flux).</li>
+<li><strong>t_ref</strong> &#8211; The reference temperature at which the dark current and other parameters are specified.
+To be provided as a [value, &#8216;units&#8217;] list. Default is [25.0, &#8216;degC&#8217;].</li>
+<li><strong>darkcurrent_delta_t</strong> &#8211; The increase in temperature that causes doubling of the dark current.
+Default is [7.0, &#8216;delta_degC&#8217;].</li>
+<li><strong>temperature</strong> &#8211; The operating temperature of the FocalPlaneArray. Default [25.0, &#8216;degC&#8217;]</li>
+<li><strong>attrs</strong> &#8211; Dictionary of attributes and metadata. Entries with &#8216;name&#8217;, &#8216;long_name&#8217;, &#8216;title&#8217;,
+&#8216;summary&#8217; or others, especially as per netCDF attribute conventions.
+The &#8216;manufacturer&#8217; should possibly also be provided.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="electro.FocalPlaneArray.compute_mtf">
+<code class="descname">compute_mtf</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/electro.html#FocalPlaneArray.compute_mtf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#electro.FocalPlaneArray.compute_mtf" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Compute the MTF of a FocalPlaneArray. In this model, the FPA is assumed to be a rectangular array</dt>
+<dd>having pixels with rectangular aperture.</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="electro.FocalPlaneArray.set_dark_current">
+<code class="descname">set_dark_current</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/electro.html#FocalPlaneArray.set_dark_current"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#electro.FocalPlaneArray.set_dark_current" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the dark current of the FocalPlaneArray (FPA) according to the dark current reference temperature and
+the current operating temperature of the FPA.
+:return:</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="electro.Imager">
+<em class="property">class </em><code class="descclassname">electro.</code><code class="descname">Imager</code><span class="sig-paren">(</span><em>lens</em>, <em>camera</em>, <em>attrs=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/electro.html#Imager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#electro.Imager" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Imager class encapsulates a complete imaging system with an optics.Lens and an electro.Camera.
+The Imager class can provide the digital outputs of the Lens+Camera when looking into a scene that provides the
+at-aperture (or at-sensor) radiance (the radiance apparent at the aperture of the Lens).</p>
+<p>Constructor for Imager class.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>lens</strong> &#8211; The optics.Lens for the Imager.</li>
+<li><strong>camera</strong> &#8211; The electro.Camera for the Imager.</li>
+<li><strong>attrs</strong> &#8211; User-defined dictionary of additional attributes, such as &#8216;title&#8217;, &#8216;summary&#8217;, &#8216;long_name&#8217;,
+&#8216;manufacturer&#8217;, especially those recommended for the netCDF conventions.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">an Imager object</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="electro.xd_asr2sqe">
+<code class="descclassname">electro.</code><code class="descname">xd_asr2sqe</code><span class="sig-paren">(</span><em>asr</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/electro.html#xd_asr2sqe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#electro.xd_asr2sqe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert absolute spectral response (ASR) to spectral quantum efficiency (SQE).</p>
+<blockquote>
+<div><p>The conversion is performed through the Planck relationship</p>
+<div class="math">
+\[E=h\nu\]</div>
+<p>where <span class="math">\(E\)</span> is the photon energy, <span class="math">\(h\)</span> is the planck constant and <span class="math">\(\nu\)</span> is the optical
+frequency.
+In terms of optical wavelength in a vacuum, the planck relation is</p>
+<div class="math">
+\[E=\frac{hc}{\lambda}\]</div>
+<p>where <span class="math">\(c\)</span> is the speed of light and <span class="math">\(\lambda\)</span> is the wavelength.</p>
+</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>asr</strong> &#8211; An xray.DataArray object providing the absolute spectral response (ASR). The DataArray must have a single
+axis providing the wavelength points, together with the standard attribute &#8216;units&#8217; for the wavelength axis.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Spectral Quantum Efficiency as an xray.DataArray object. Returned wavelengths will be &#8216;nm&#8217; in
+the wavelength (&#8216;wvl&#8217;) axis.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="electro.xd_sqe2asr">
+<code class="descclassname">electro.</code><code class="descname">xd_sqe2asr</code><span class="sig-paren">(</span><em>sqe</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/electro.html#xd_sqe2asr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#electro.xd_sqe2asr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert spectral quantum efficiency (SQE) to absolute spectral response.
+This is the reverse conversion of that provided by electro.xd_asr2sqe.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>sqe</strong> &#8211; The spectral quantum efficiency (SQE), provided as a xray.DataArray object in which SQE is
+provided as a function of wavelength. The wavelength axis must provide the &#8216;units&#8217; attribute.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Absolute spectral response (ASR) as an xray.DataArray object, havin a single axis of wavelength
+coordinates (&#8216;wvl&#8217;). Returned units for the wavelength axis will be &#8216;nm&#8217;.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, D Griffith, A Ramkilowan.
+    </p>
+  </div>
+
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

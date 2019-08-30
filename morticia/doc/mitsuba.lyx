@@ -1,0 +1,1338 @@
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\use_default_options false
+\maintain_unincluded_children false
+\language english
+\language_package none
+\inputencoding auto
+\fontencoding default
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_package amsmath 1
+\use_package amssymb 0
+\use_package cancel 0
+\use_package esint 1
+\use_package mathdots 0
+\use_package mathtools 0
+\use_package mhchem 0
+\use_package stackrel 0
+\use_package stmaryrd 0
+\use_package undertilde 0
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Section
+The Mitsuba Rendering System
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset label
+LatexCommand label
+name "chap:the-mitsuba-rendering-system"
+
+\end_inset
+
+ an
+\end_layout
+
+\begin_layout Standard
+open-source, research grade, physically-based rendering system in
+\end_layout
+
+\begin_layout Standard
+the spirit of 
+\begin_inset CommandInset href
+LatexCommand href
+name "PBRT"
+target "http://www.pbrt.org/"
+
+\end_inset
+
+.
+ Mitsuba meets most of the needs of 
+\family typewriter
+MORTICIA
+\family default
+, specifically - Capable of spectral radiometric rendering with an arbitrary
+ number of spectral bins (recompilation of Mitsuba is required when altering
+ the number of spectral bins).
+ - Capable of using spectral radiant environment maps with any number of
+ spectral bins in the lat/long format.
+ These environment maps can be generated using the libRadtran/MORTICIA integrati
+on and written to OpenEXR files using the morticia.rad.librad.RadEnv class.
+ - Option to output linear and unprocessed radiometric quantities.
+ That is, if the input quantities are absolute radiometric quantities, then
+ the output radiances are physically correctly scaled.
+ - Capable of making any object an emitter with a specific spectral radiance.
+ This is required when creating renderings in the thermal spectrum.
+ A current weakness in this area is that Mitsuba cannot model the effect
+ of 
+\begin_inset Quotes eld
+\end_inset
+
+angular emissivity
+\begin_inset Quotes erd
+\end_inset
+
+, where the emissivity of a material varies with viewing angle.
+ This can result in very 
+\begin_inset Quotes eld
+\end_inset
+
+flat
+\begin_inset Quotes erd
+\end_inset
+
+ renderings of curved objects in the thermal spectrum.
+ - Large variety of physically-based surface BSDF models.
+ - Highly modular source code structure, making it possible to add integrators,
+ BSDF models, emitters etc.
+ in a relatively simple manner.
+ For example, an emitter having radiance that depends on viewing angle could
+ be implemented in order to simulate angular emissivity effects.
+ - Scene file format is XML, allowing for simple generation and pre-processing
+ of scene files with a variety of 
+\end_layout
+
+\begin_layout Description
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+XML tools.
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+itemsep
+\end_layout
+
+\end_inset
+
+1pt
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+parskip
+\end_layout
+
+\end_inset
+
+0pt
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+parsep
+\end_layout
+
+\end_inset
+
+0pt 
+\end_layout
+
+\begin_layout Itemize
+Python interface for scene generation and full control of the rendering
+ process.
+ 
+\end_layout
+
+\begin_layout Standard
+- Mitsuba has fully-integrated and scalable parallel computing capability
+ that can harness compute cores across a private network.
+ - Mitsuba has a GUI (
+\family typewriter
+mtsgui
+\family default
+) which is very useful for a number of visualisation purposes.
+ 
+\end_layout
+
+\end_deeper
+\begin_layout Subsection
+Spectral Rendering
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:spectral-rendering"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Mitsuba must be compiled in the spectral mode with the number of spectral
+ bins set to 4 or more.
+ The optimal number of bins depends on numerous factors, such as - If Mitsuba
+ is to be run in parallel mode across a number of network compute resources
+ - The complexity of the scenes to be rendered - The number of spectral
+ bins that are actually required for the problem at hand
+\end_layout
+
+\begin_layout Standard
+Note that Mitsuba assumes that all spectral samples lie in the range of
+ 360 nm to 830 nm (this will be called the 
+\begin_inset Quotes eld
+\end_inset
+
+visible spectrum
+\begin_inset Quotes erd
+\end_inset
+
+ assumption).
+ Certain features of Mitsuba rely on this assumption.
+ However, for 
+\family typewriter
+MORTICIA
+\family default
+ the need to to cover any spectral region in the optical domain.
+ For example, the black body models in Mitsuba rely on the visible spectrum
+ assumption.
+ Any files written using Mitsuba film models that output RGB, sRGB, XYZ
+ color spaces also rely on the visible spectrum assumption.
+ The Mitsuba black body models are avoided in MORTICIA and spectra are given
+ without wavelengths in Mitsuba scene descriptions.
+ 
+\family typewriter
+MORTICIA
+\family default
+ keeps track of the actual wavelengths represented by the Mitusba spectral
+ bins.
+ Output of tonemapped data in a tristimulus color space such as RGB or XYZ
+ can still be useful for visualisation purposes.
+ These are essentially 
+\begin_inset Quotes eld
+\end_inset
+
+false color
+\begin_inset Quotes erd
+\end_inset
+
+ images when the MORTICIA scene violates the visible spectrum assumption.
+ The high dynamic range film (
+\family typewriter
+hdrfilm
+\family default
+) with XYZ tristimulus outputs is the recommened method of creating false
+ color images from Mitsuba.
+ Since this will generate color information that could be 
+\begin_inset Quotes eld
+\end_inset
+
+out-of-gamut
+\begin_inset Quotes erd
+\end_inset
+
+ for typical display systems, intelligent conversion to sRGB or RGB would
+ still be required.
+ Alternatively, simply write directly to an RGB false color image using
+ the 
+\family typewriter
+hdrfilm
+\family default
+ or 
+\family typewriter
+ldrfilm
+\family default
+ Mitsuba output plugins.
+\end_layout
+
+\begin_layout Standard
+The implications of the need to recompile Mitsuba for a specific number
+ of spectral bins are as follows: - Renderings for scenes having more spectral
+ bins than in the current compilation of Mitsuba will require a batch of
+ Mitsuba runs, with each run dealing with a subset of spectral bins.
+ Parallel runs of Mitsuba are possible, so this is not necessarily a disadvantag
+e, but scene processing overhead and memory utilisation is increased over
+ a compilation of Mitsuba with more spectral bins.
+ - When writing REMs to OpenEXR files for Mitsuba to use as environment
+ maps, each EXR file must have the correct number of channels (spectral
+ bins).
+ - It does not appear to be possible to run multiple copies of Mitsuba with
+ different numbers of spectral bins on a single compute platform.
+ This is mainly because all plugins, which are implemented as shared libraries
+ (DLLs on Windows), must be compiled with the same number of spectral bins.
+ - For a specific installation of 
+\family typewriter
+MORTICIA
+\family default
+, the least confusing approach is to have all instances of Mitsuba across
+ all harnessed compute platforms compiled with the same number of spectral
+ bins.
+ - Note that if depth maps are required from Mitsuba, then it must be compiled
+ in the standard RGB mode.
+ Hence it can be useful to have a 3-channel Mitsuba compilation available
+ on one of the available compute servers, strictly for the purpose of computing
+ depth maps for a scene.
+ Depth maps are useful for rendering purposes when the scene contains objects
+ at a variety of distances (say an aircraft and a ground plane).
+\end_layout
+
+\begin_layout Standard
+It is possible to establish how many spectral bins a particular installation
+ of Mitsuba has been compiled for within the mtsgui GUI utility.
+ Go to Help-
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+textgreater
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{}
+\end_layout
+
+\end_inset
+
+About and look for the compilation flag SPECTRUM_SAMPLES.
+\end_layout
+
+\begin_layout Subsection
+Setting up Mitsuba
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset label
+LatexCommand label
+name "setting-up-mitsuba"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Refer to the Mitsuba manual for configuration and compilation.
+ Having selected and copied a configuration file to the file config.py in
+ the root Mitsuba directory, edit this file and look in the CXXFLAGS parameter
+ for `-DSPECTRUM_SAMPLES=3' and change the number of spectrum samples to
+ 4 or higher.
+ The number of samples (bins) to use depends on the factors listed in the
+ previous section.
+ If no other configuration is required, Mitsuba is then compiled using scons
+ as specified in the manual.
+ For general multispectral work (e.g.
+ using the Kato parametrization), consider using 8 spectral bins.
+ A full Kato run (all wavelengths) has 32 bins.
+ This would require 4 runs of Mitsuba if compiled with 8 bins.
+ A Kato run over the VNIR spectrum is 16 bins, which would require 2 runs.
+\end_layout
+
+\begin_layout Standard
+On Linux, suppose the root folder for Mitsuba is ~/Mitsuba/mitsuba and the
+ bash shell is being used.
+ Add the following lines to the .bashrc file in the home directory:
+\end_layout
+
+\begin_layout Standard
+# Set up Mitsuba export MITSUBA_PYVER=2.7 source Mitsuba/mitsuba/setpath.sh
+\end_layout
+
+\begin_layout Standard
+This should give access to mtsgui and the mitsuba render command from any
+ non-login shell.
+\end_layout
+
+\begin_layout Subsection
+Emitters in Mitsuba
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset label
+LatexCommand label
+name "emitters-in-mitsuba"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The sky, sun and sunsky emitters within Mitsuba scenes are only used in
+ the MORTICIA context for creating presentation images.
+ These emitter types must be avoided for quantitative work.
+ Instead a REM from libRadtran is used within an envmap emitter type for
+ the diffuse component and a directional emitter for the direct solar component.
+\end_layout
+
+\begin_layout Quote
+In the thermal spectrum, the directional emitter falls away and only the
+ source thermal environment map is used.
+ 
+\end_layout
+
+\begin_layout Subsection
+Coordinate System in Mitsuba
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset label
+LatexCommand label
+name "coordinate-system-in-mitsuba"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The environment maps (
+\family typewriter
+envmap
+\family default
+ emitter) in Mitsuba is the only place in the documentation where the coordinate
+ system is mentioned in absolute terms.
+ This coordinate system has +Y towards the zenith and -Y to nadir.
+ The +X direction is towards the left when viewing with +Y upwards.
+ The natural (topocentric) coordinate system for 
+\family typewriter
+MORTICIA
+\family default
+ is with +Z towards the zenith and -Z at nadir.
+ +X is towards the east and +Y towards the north, giving a right-handed
+ coordinate system.
+ In the broader context, the earth-centered, earth-fixed (ECEF) system also
+ known as the earth-centered rotational (ECR) coordinate system is also
+ right-handed with +Z towards the north pole, +X through the prime meridian
+ (Greenwich) and +Y through 90 degrees longitude measured positive east
+ from the prime merdian.
+\end_layout
+
+\begin_layout Quote
+A ccordinate transform is therefore required whe moving from 
+\family typewriter
+MORTICIA
+\family default
+ coordinates to Mitsuba world coordinates.
+ The recommended method is to transform the REM coordinates in Mitsuba so
+ that the +Z axis is upward.
+ This is typically as follows: 
+\end_layout
+
+\begin_layout Description
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+textless{}emitter type=``envmap'' 
+\backslash
+textgreater{}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+textless
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{}
+\end_layout
+
+\end_inset
+
+string name=
+\begin_inset Quotes eld
+\end_inset
+
+filename
+\begin_inset Quotes erd
+\end_inset
+
+ value=
+\begin_inset Quotes eld
+\end_inset
+
+REMfromMORTICIA.exr
+\begin_inset Quotes erd
+\end_inset
+
+/
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+textgreater
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+textless
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{}
+\end_layout
+
+\end_inset
+
+transform name=
+\begin_inset Quotes eld
+\end_inset
+
+toWorld
+\begin_inset Quotes erd
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+textgreater
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+textless
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{}
+\end_layout
+
+\end_inset
+
+rotate x=
+\begin_inset Quotes eld
+\end_inset
+
+1
+\begin_inset Quotes erd
+\end_inset
+
+ angle=
+\begin_inset Quotes eld
+\end_inset
+
+90
+\begin_inset Quotes erd
+\end_inset
+
+/
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+textgreater
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{}
+\end_layout
+
+\end_inset
+
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+textless
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{}
+\end_layout
+
+\end_inset
+
+/transform
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+textgreater
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{}
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+textless
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{}
+\end_layout
+
+\end_inset
+
+/emitter
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+textgreater
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Mitsuba Integrators ——————
+\end_layout
+
+\begin_layout Standard
+Mitsuba has a number of 
+\begin_inset Quotes eld
+\end_inset
+
+integrators
+\begin_inset Quotes erd
+\end_inset
+
+, being the plugins that actually implement different rendering schemes.
+ The path tracer (
+\family typewriter
+path
+\family default
+) is the integrator to be selected for general purposes, where there is
+ direct and indirect illumination of the scene.
+ For faster renders, the direct illumination integrator (
+\family typewriter
+direct
+\family default
+) provides good quality renders without indirect illumination components.
+ For the path tracer, the Hammersley QMC or Halton sampler is preferred,
+ with as many as 256 samples per pixel or more to reduce monte carlo noise.
+\end_layout
+
+\begin_layout Standard
+If volumetric (participating) media such as smoke or fog are involved, the
+ extended volumetric path tracer (
+\family typewriter
+volpath
+\family default
+) should be considered.
+\end_layout
+
+\begin_layout Subsection
+Mitsuba and Atmospheric Effects
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset label
+LatexCommand label
+name "mitsuba-and-atmospheric-effects"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Description
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+Mitsuba does not compute the effects of atmospheric scattering and
+\end_layout
+
+\begin_layout Plain Layout
+
+absorption in the scene (``participating media'') by
+\end_layout
+
+\end_inset
+
+ default.
+ While it is possible to define such media and use a Mitsuba integrator
+ (e.g.
+ volumetric integrator) that takes such effects into account, it would be
+ a very difficult approach to use in this case.
+ The model would somehow have to be harmonised with the atmospheric model
+ using in the RT code (libRadtran in the case of 
+\family typewriter
+MORTICIA
+\family default
+).
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+Mitsuba is used in the most simple cases for rendering 
+\begin_inset Quotes eld
+\end_inset
+
+at-target
+\begin_inset Quotes erd
+\end_inset
+
+ radiance of a relatively small target (aircraft, vehicle or man) inserted
+ into a radiant environment computed with libRadtran.
+ If the scene contains objects at multiple distances from the sensor or
+ if scene elements are very large (a ground plane for example) then special
+ measures must be taken to model the at-sensor radiance correctly.
+ When the sensor is at sufficient distance from the target element, then
+ the effects of atmospheric path radiance and absorption must be modelled.
+ 
+\end_layout
+
+\end_deeper
+\begin_layout Section
+Ground Planes and Terrain
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset label
+LatexCommand label
+name "ground-planes-and-terrain"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Rather than insert the ground plane into the Mitsuba scene, the best approach
+ for uniform ground is simply to allow the environment map (REM computed
+ using libRadtran) to do the work.
+ However, in more realistic simulations, the ground plane will have spatial
+ variations of reflectance and/or temperature.
+ The first order approximation for handling such scenes is to the use the
+ so-called Independent Pixel Approximation (IPA).
+ In this approach, the REMs are computed for a range of ground reflectance
+ and/or temperature values.
+ REMs for any spectral surface reflectance or temperature can then be interpolat
+ed from the REM data.
+ Surface reflectance or temperature does not directly influence path transmittan
+ce, so transmittance calculations are not repeated for each reflectance
+ (
+\begin_inset Quotes eld
+\end_inset
+
+albedo
+\begin_inset Quotes erd
+\end_inset
+
+ in libRadtran).
+ This method only deals with lambertian surfaces.
+ Introduction of surface BRDF complicates matters greatly.
+\end_layout
+
+\begin_layout Standard
+The IPA can be used for flat ground planes to perform first order approximate
+ renderings for scenes having a flat lambertion ground surface that is spatially
+ non-uniform in terms of diffuse reflectance (spectral and spatial non-uniformit
+y).
+\end_layout
+
+\begin_layout Standard
+Terrain can also be accommodated in the first-order IPA approach using a
+ depth map to the terrain from the sensor.
+ Mitsuba can be used to compute this depth map, provided that it has been
+ compiled in the RGB (non-spectral) mode.
+ Mitsuba does have a height map geometry shape that can be used for modelling
+ terrain.
+\end_layout
+
+\begin_layout Standard
+When compiling REMs for the solar spectrum it is recommened to compute using
+ at least 3 albedo values (0, 0.5 and 1 .0), since path radiances are not
+ exactly linear with surface reflectance.
+ REMs for any surface reflectance in any spectral bin is computed using
+ multi-dimensional linear interpolation from this REM dataset.
+\end_layout
+
+\begin_layout Standard
+In the thermal spectrum, since radiance is not not linear with temperature,
+ it may be necessary to compute the environment map with a significant number
+ of surface temperatures.
+ Alternatively, since radiance is generally porportional to the fourth power
+ of the temperature, a 4th order polynomial interpolation scheme could be
+ used with fewer temperatures.
+ However, since thermal REMs have no azimuthal dependence, it is much less
+ costly to compute them in the first instance compared to solar spectrum
+ REMs, so increasing the number of temperatures is not that costly.
+\end_layout
+
+\begin_layout Subsection
+General Notes on Mitsuba
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset label
+LatexCommand label
+name "general-notes-on-mitsuba"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+As with libRadtran, Mitsuba is not provided with 
+\family typewriter
+MORTICIA
+\family default
+.
+ Those wishing to use the capabilities of libRadtran or Mitsuba will have
+ to download, compile and install those packages on any required compute
+ platforms and set up supporting libraries.
+ Correct usage of libRadtran and Mitsuba require significant insight into
+ the relevant knowledge domains.
+ An effort is made to provide reasonable defaults for the many inputs that
+ these packages require.
+\end_layout
+
+\begin_layout Standard
+The Mitsuba GUI (mtsgui) can only read OpenEXR files with more than 3 channels
+ if compiled with the SPECTRAL_SAMPLES flag set higher than 3.
+\end_layout
+
+\begin_layout Section
+Mitsuba Workflows
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset label
+LatexCommand label
+name "mitsuba-workflows"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The organisation of a scene in Mitsuba follows the general practice within
+ PBRT-like rendering systems.
+ The Mitsuba scene definition file is eXtensible Markup Language (XML) and
+ the manual provides details on how to define the various elements of a
+ scene.
+ One of the fastest ways to load geometry is to convert all shapes into
+ one or more Mitsuba serialized geometry files (extension .serialized).
+ The .xml scene file then accesses any number of shapes from these binary
+ files.
+ Geometry can be created using a large variety of tools or converted from
+ .obj or .dae (Collada) format.
+ The Blender application can also be used to both create and convert geometry
+ elements to either of these formats, which can then be converted to Mitsuba
+ format using the mtsgui tool provided with Mitsuba.
+\end_layout
+
+\begin_layout Standard
+The very simple .stl format can be used for plain geometry creation and import
+ into Blender.
+ Many CAD applications such as DesignSpark Mechanical can export .stl format
+ files.
+\end_layout
+
+\begin_layout Standard
+Once a collection of indexed shapes are available in a .serialized file,
+ the contents of the .xml scene file will reference the shapes by index and
+ apply BSDFs, textures, radiance and other properties to the shapes.
+ Some properties (e.g.
+ texture) can be varied within a shape by using UV coordinate mapping.
+ Simnple shape geometry (spheres, cubes, cylinders etc.) can be created within
+ the .xml scene file, but complex geometry is best contained in the native
+ Mitsuba .serialized format.
+\end_layout
+
+\begin_layout Subsection
+Blender
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset label
+LatexCommand label
+name "blender"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The 
+\begin_inset CommandInset href
+LatexCommand href
+name "Blender"
+target "https://www.blender.org/"
+
+\end_inset
+
+application can be used for 3D model imports, editing, texturing and exporting
+ to Collada (.dae) or .obj file formats which can then be imported into Mitsuba.
+ Blender is a very capable environment for these purposes, but has a complex
+ and unique user interface together with a steep learning curve.
+ Background knowledge with respect to meshes, UV-mapping and texturing are
+ generally required.
+\end_layout
+
+\begin_layout Standard
+Restructuring of 3D models or renaming of model components is best done
+ in Blender, or in the originating CAD software.
+\end_layout
+
+\begin_layout Description
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+The Collada (.dae) exporter may still have a number of bugs.
+\end_layout
+
+\begin_layout Plain Layout
+
+Missing or displaced components can occur, especially
+\end_layout
+
+\end_inset
+
+ in the case of animation components.
+ Joining components into single parts based on BSDFs can reduce the amount
+ of editing required on the imported Mitsuba model.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset href
+LatexCommand href
+name "Blend Swap"
+target "http://www.blendswap.com/"
+
+\end_inset
+
+can be a useful source of Creative Commons 3D models.
+\end_layout
+
+\begin_layout Standard
+Another useful tool for mesh visualisation, texturing, analysis, repair
+ and format conversion is 
+\begin_inset CommandInset href
+LatexCommand href
+name "MeshLab"
+target "http://www.meshlab.net/"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection
+Sourcing of Models
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset label
+LatexCommand label
+name "sourcing-of-models"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Models can be obtained from a variety of online sources.
+ There is large variance in the quality and organisation of these models.
+ Many free and commercial models are available (e.g.
+ search 
+\begin_inset CommandInset href
+LatexCommand href
+name "Yobi3D"
+target "http://www.yobi3d.com/"
+
+\end_inset
+
+).
+ The licencing of the models must be carefully observed.
+ Commercial models may not be distributed.
+ Many models are available under Creative Commons licencing, which has various
+ levels of usage restriction.
+\end_layout
+
+\begin_layout Standard
+A large repository of mainly commercial models can be found at 
+\begin_inset CommandInset href
+LatexCommand href
+name "TurboSquid"
+target "https://www.turbosquid.com/"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+MORTICIA Interaction with Mitsuba
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset label
+LatexCommand label
+name "morticia-interaction-with-mitsuba"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Mitsuba provides a powerful Python API which exposes most of the functionality
+ of the C++ API.
+ Documentation can be found at the 
+\begin_inset CommandInset href
+LatexCommand href
+name "Mitsuba Python bindings"
+target "http://www.mitsuba-renderer.org/api/group__libpython.html"
+
+\end_inset
+
+web page.
+ This is the primary way in which MORTICIA interacts with Mitsuba.
+ An alternative method is to interact via Mitsuba .xml scene files using
+ the lxml package.
+ The Jupyter notebook examples will show interaction via the Python API.
+\end_layout
+
+\begin_layout Subsection
+Transforming Mitsuba Scene Files
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset label
+LatexCommand label
+name "transforming-mitsuba-scene-files"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Mitsuba scene files can be transformed using XSLT and queried using XQuery.
+ The Python package lxml can perform XSLT transformations.
+ Microsoft Visual Studio Code is a free and powerful editor system and there
+ is an extension called XML Tools by Josh Johnson, which allows experimentation
+ with XQuery and XPath.
+ The BaseX XML database system can also be used to manage XML documents
+ and execute XQuery queries.
+\end_layout
+
+\begin_layout Subsection
+Viewing Mitsuba Outputs
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset label
+LatexCommand label
+name "viewing-mitsuba-outputs"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In full, High Dynamic Range (HDR) spectral radiometric mode, Mitsuba output
+ radiances to an OpenEXR file with multiple (
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+textgreater
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{}
+\end_layout
+
+\end_inset
+
+4) spectral channels.
+ These files can be viewed in mtsgui, but only if the OpenEXR file has exactly
+ the number of channels for which Mitsuba (and therefore mtsgui) has been
+ compiled.
+ A more general OpenEXR viewer, which allows channel selection as well gain
+ and gamma adjustments for easier viewing, is 
+\begin_inset CommandInset href
+LatexCommand href
+name "mrViewer"
+target "http://mrviewer.sourceforge.net/"
+
+\end_inset
+
+.
+ While IrfanView 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+textless
+\end_layout
+
+\end_inset
+
+
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+{}
+\end_layout
+
+\end_inset
+
+http://mrviewer.sourceforge.net/_ is a popular and useful general image viewer,
+ it cannot deal with HDR OpenEXR files from Mitsuba.
+\end_layout
+
+\begin_layout Standard
+The recommended OpenEXR viewer for use in conjunction with MORTICIA and
+ Mitsuba is therefore 
+\begin_inset CommandInset href
+LatexCommand href
+name "mrViewer"
+target "http://mrviewer.sourceforge.net/"
+
+\end_inset
+
+.
+ It can also be used to view Radiant Environment Maps (REM) calculated by
+ libRadtran/MORTICIA.
+ 
+\end_layout
+
+\end_body
+\end_document

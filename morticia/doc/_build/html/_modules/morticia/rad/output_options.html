@@ -1,0 +1,1078 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>morticia.rad.output_options &mdash; MORTICIA 1.0 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Roboto+Slab:400,700|Inconsolata:400,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="MORTICIA 1.0 documentation" href="../../../index.html"/>
+        <link rel="up" title="morticia" href="../../morticia.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+          <a href="../../../index.html" class="fa fa-home"> MORTICIA</a>
+        
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../how_to_use.html">How to use MORTICIA</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../how_to_use.html#morticia-dependencies">MORTICIA Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../how_to_use.html#installation-and-requirements">Installation and Requirements</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../styleguide.html">The MORTICIA Style Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#to-pep-8-or-not-to-pep-8">To PEP-8 or not to PEP-8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#code-layout">Code Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#import-statements">Import Statements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#whitespace">Whitespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#comments">Comments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#documentation-strings-docstrings">Documentation Strings (docstrings)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#naming-conventions">Naming Conventions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#pep-257">PEP-257</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#from-conventions-section"><em>From</em> Conventions Section</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#general-terminology-and-conventions">General Terminology and Conventions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../for_developers.html">For the Developers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../for_developers.html#structure">Structure</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../packages.html">Packages</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../packages.html#sensor-package">Sensor Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../packages.html#radiometry-package">Radiometry Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../packages.html#scene-package">Scene Package</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ChapLibRadtranODandPathRadiance.html">Transmittance and Path Radiance in libRadtran</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../01a-SpectralChannelsAndFilters.html">IPython Notebook and Sphinx</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../01a-SpectralChannelsAndFilters.html#a-spectralchannelsandfilters-ipython-notebook">01a-SpectralChannelsAndFilters IPython Notebook</a></li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../../index.html">MORTICIA</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      
+          <li><a href="../../morticia.html">morticia</a> &raquo;</li>
+      
+    <li>morticia.rad.output_options</li>
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <h1>Source code for morticia.rad.output_options</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;--------------------------------------------------------------------</span>
+<span class="sd"> * $Id: output_options.py 3125 2015-06-09 15:52:38Z Claudia.Emde $</span>
+<span class="sd"> * </span>
+<span class="sd"> * This file is part of libRadtran.</span>
+<span class="sd"> * Copyright (c) 1997-2012 by Arve Kylling, Bernhard Mayer,</span>
+<span class="sd"> *                            Claudia Emde, Robert Buras</span>
+<span class="sd"> *</span>
+<span class="sd"> * ######### Contact info: http://www.libradtran.org #########</span>
+<span class="sd"> *</span>
+<span class="sd"> * This program is free software; you can redistribute it and/or </span>
+<span class="sd"> * modify it under the terms of the GNU General Public License   </span>
+<span class="sd"> * as published by the Free Software Foundation; either version 2</span>
+<span class="sd"> * of the License, or (at your option) any later version.        </span>
+<span class="sd"> * </span>
+<span class="sd"> * This program is distributed in the hope that it will be useful, </span>
+<span class="sd"> * but WITHOUT ANY WARRANTY; without even the implied warranty of  </span>
+<span class="sd"> * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the   </span>
+<span class="sd"> * GNU General Public License for more details.                    </span>
+<span class="sd"> * </span>
+<span class="sd"> * You should have received a copy of the GNU General Public License          </span>
+<span class="sd"> * along with this program; if not, write to the Free Software                </span>
+<span class="sd"> * Foundation, Inc., 59 Temple Place - Suite 330, </span>
+<span class="sd"> * Boston, MA 02111-1307, USA.</span>
+<span class="sd"> *--------------------------------------------------------------------&quot;&quot;&quot;</span>
+
+
+<span class="kn">from</span> <span class="nn">option_definition</span> <span class="kn">import</span> <span class="o">*</span>
+
+<div class="viewcode-block" id="setup_output_group"><a class="viewcode-back" href="../../../mortapi/morticia.rad.html#morticia.rad.output_options.setup_output_group">[docs]</a><span class="k">class</span> <span class="nc">setup_output_group</span><span class="p">():</span>
+
+	<span class="n">group_name</span> <span class="o">=</span> <span class="s">&#39;Output and misc.&#39;</span>
+
+<div class="viewcode-block" id="setup_output_group.__init__"><a class="viewcode-back" href="../../../mortapi/morticia.rad.html#morticia.rad.output_options.setup_output_group.__init__">[docs]</a>	<span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="n">documentation</span> <span class="o">=</span> <span class="n">get_output_documentation</span><span class="p">()</span>
+
+		<span class="n">include</span> <span class="o">=</span> <span class="n">not_yet_lex2py_option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;include&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;output&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Include a file into uvspec input.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;include&#39;</span><span class="p">],</span>
+			<span class="n">gui_inputs</span><span class="o">=</span><span class="p">(</span><span class="n">FileInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;filename&#39;</span><span class="p">),),</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+			<span class="n">showInGui</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+		<span class="p">)</span>
+
+		<span class="n">quiet</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;quiet&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;output&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;If specified, informative messages are turned off. See also \code{verbose}.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;quiet&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.quiet&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+			<span class="n">non_parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;verbose&#39;</span><span class="p">],</span>
+		<span class="p">)</span>
+
+		<span class="n">verbose</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;verbose&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;output&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;If specified abundances of informative messages are output to stderr.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;verbose&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.verbose&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+			<span class="n">non_parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;quiet&#39;</span><span class="p">],</span>
+		<span class="p">)</span>
+
+		<span class="n">write_ext_to_file</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;write_ext_to_file&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;output&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;If specified abundances of informative messages are output to stderr.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;write_ext_to_file&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.write_ext_to_file&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+			<span class="n">islidar</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+		<span class="p">)</span>
+
+		<span class="n">test_optical_properties</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;test_optical_properties&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;output&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Write optical properties to file without solving RTE.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;test_optical_properties&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.test_optical_properties&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+			<span class="n">developer</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+		<span class="p">)</span>
+
+		<span class="n">print_disort_info</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;print_disort_info&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;output&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Print various disort output. See disort.doc&#39;</span><span class="p">,</span> 
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;print_disort_info&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="p">[</span><span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&quot;Input.rte.prndis&quot;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="n">Integers</span><span class="p">),</span>
+				<span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.nprndis&#39;</span><span class="p">,</span><span class="n">setting</span><span class="o">=</span><span class="s">&#39;ntokens&#39;</span><span class="p">)</span> <span class="p">],</span>
+		<span class="p">)</span>
+
+		<span class="n">data_files_path</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;data_files_path&#39;</span><span class="p">,</span> 
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;output&#39;</span><span class="p">,</span> 
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;data_files_path&#39;</span><span class="p">],</span>	
+			<span class="n">gui_inputs</span><span class="o">=</span><span class="p">(</span><span class="n">FileInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.filename[FN_PATH]&#39;</span><span class="p">),),</span>
+			<span class="n">tokens</span> <span class="o">=</span> <span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.filename[FN_PATH]&#39;</span> <span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">file</span><span class="p">),</span>	
+		<span class="p">)</span>
+
+		<span class="n">output_process</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;output_process&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;output&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Decide how the output from \code{uvspec} is processed.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;output_process&#39;</span><span class="p">],</span>
+			<span class="n">gui_inputs</span><span class="o">=</span><span class="p">(</span><span class="n">ListInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.output_unit_processing&#39;</span><span class="p">,</span> <span class="n">valid_range</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;integrate&#39;</span><span class="p">,</span> <span class="s">&#39;sum&#39;</span><span class="p">,</span> <span class="s">&#39;rgbnorm&#39;</span><span class="p">,</span> <span class="s">&#39;rgb_norm&#39;</span><span class="p">,</span> <span class="s">&#39;rgb&#39;</span><span class="p">,</span> <span class="s">&#39;per_nm&#39;</span><span class="p">,</span> <span class="s">&#39;per_cm-1&#39;</span><span class="p">,</span> <span class="s">&#39;per_band&#39;</span><span class="p">],</span> <span class="n">optional</span><span class="o">=</span><span class="bp">False</span><span class="p">),),</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.output_unit_processing&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">valid_range</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;integrate&#39;</span><span class="p">,</span><span class="s">&#39;sum&#39;</span><span class="p">,</span><span class="s">&#39;rgbnorm&#39;</span><span class="p">,</span><span class="s">&#39;rgb_norm&#39;</span><span class="p">,</span><span class="s">&#39;rgb&#39;</span><span class="p">,</span>
+										   <span class="s">&#39;per_nm&#39;</span><span class="p">,</span><span class="s">&#39;per_cm-1&#39;</span><span class="p">,</span><span class="s">&#39;per_band&#39;</span><span class="p">]</span> <span class="p">),</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+		<span class="p">)</span>
+
+		<span class="n">output_file</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;output_file&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;output&#39;</span><span class="p">,</span> 
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Location of the output file&#39;</span><span class="p">,</span> 
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;output_file&#39;</span><span class="p">],</span> 
+			<span class="n">gui_inputs</span><span class="o">=</span><span class="p">(</span><span class="n">TextInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.filename[FN_OUTFILE]&#39;</span><span class="p">),),</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.filename[FN_OUTFILE]&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">str</span><span class="p">),</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+		<span class="p">)</span>
+
+		<span class="n">output_format</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;output_format&#39;</span><span class="p">,</span> 
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;output&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Output format&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;output_format&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="n">addLogical</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.output_format&#39;</span><span class="p">,</span> <span class="n">logicals</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;ascii&#39;</span><span class="p">,</span><span class="s">&#39;flexstor&#39;</span><span class="p">,</span><span class="s">&#39;netCDF&#39;</span><span class="p">,</span><span class="s">&#39;sat_picture&#39;</span><span class="p">],</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;OUTPUT_FORMAT_&#39;</span><span class="p">),</span> 
+		<span class="p">)</span>
+
+		<span class="n">output_user</span> <span class="o">=</span> <span class="n">not_yet_lex2py_option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;output_user&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;output&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;User defined output&#39;</span><span class="p">,</span> 
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;output_user&#39;</span><span class="p">],</span>
+			<span class="n">gui_inputs</span><span class="o">=</span><span class="p">(</span><span class="n">TextInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">),),</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">str</span><span class="p">),</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+		<span class="p">)</span>
+
+		<span class="n">output_quantity</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;output_quantity&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;output&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Define output quantity to calculate instead of absolute quantities.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;output_quantity&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="n">addLogical</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.calibration&#39;</span><span class="p">,</span> <span class="n">logicals</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;reflectivity&#39;</span><span class="p">,</span><span class="s">&#39;transmittance&#39;</span><span class="p">,</span><span class="s">&#39;brightness&#39;</span><span class="p">],</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;OUTCAL_&#39;</span> <span class="p">),</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+		<span class="p">)</span>
+
+		<span class="n">heating_rate</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;heating_rate&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;output&#39;</span><span class="p">,</span>	
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Calculation of heating rates.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;heating_rate&#39;</span><span class="p">],</span>
+			<span class="n">gui_inputs</span><span class="o">=</span><span class="p">(</span><span class="n">ListInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.heating&#39;</span><span class="p">,</span> <span class="n">valid_range</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;none&#39;</span><span class="p">,</span> <span class="s">&#39;local&#39;</span><span class="p">,</span> <span class="s">&#39;layer_fd&#39;</span><span class="p">,</span> <span class="s">&#39;layer_cd&#39;</span><span class="p">],</span> <span class="n">optional</span><span class="o">=</span><span class="bp">True</span><span class="p">),),</span>
+			<span class="n">tokens</span> <span class="o">=</span> <span class="p">[</span> <span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.heating&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;HEAT_LAYER_CD&#39;</span><span class="p">),</span>
+				   <span class="n">addLogical</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.heating&#39;</span><span class="p">,</span> <span class="n">logicals</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;none&#39;</span><span class="p">,</span><span class="s">&#39;local&#39;</span><span class="p">,</span><span class="s">&#39;layer_fd&#39;</span><span class="p">,</span><span class="s">&#39;layer_cd&#39;</span><span class="p">],</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;HEAT_&#39;</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> <span class="p">]</span> <span class="p">,</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+		<span class="p">)</span>
+
+		<span class="n">write_output_as_netcdf</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;write_output_as_netcdf&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;output&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Output is written into netcdf file.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;write_output_as_netcdf&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.write_output_as_netcdf&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+			<span class="n">islidar</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+			<span class="n">showInGui</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+		<span class="p">)</span>
+
+		<span class="n">slit_function_file</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;slit_function_file&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;output&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;If specified, the calculated spectrum is convolved with the function found in the slit_function_file.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;slit_function_file&#39;</span><span class="p">],</span>
+			<span class="n">gui_inputs</span><span class="o">=</span><span class="p">(</span><span class="n">FileInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.filename[FN_SLITFUNCTION]&#39;</span><span class="p">),),</span>
+			<span class="n">tokens</span> <span class="o">=</span> <span class="p">[</span> <span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.filename[FN_SLITFUNCTION]&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">file</span><span class="p">),</span>
+				<span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.convolve&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="p">],</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+			<span class="n">non_parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;filter_function_file&#39;</span><span class="p">,</span><span class="s">&#39;thermal_bands_file&#39;</span><span class="p">],</span>
+			<span class="n">plot</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;plot_type&#39;</span><span class="p">:</span> <span class="s">&#39;2D&#39;</span><span class="p">,</span>
+				<span class="s">&#39;optional_args&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;column_names&#39;</span><span class="p">:</span> <span class="p">(</span>
+						<span class="s">&quot;wavelength&quot;</span><span class="p">,</span>
+						<span class="s">&quot;slit function&quot;</span><span class="p">,)</span>
+						  <span class="p">}</span>
+				<span class="p">}</span>
+		<span class="p">)</span>
+
+		<span class="n">spline</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;spline&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;output&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Spline interpolate the calculated spectrum.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;spline&#39;</span><span class="p">],</span>
+			<span class="n">gui_inputs</span><span class="o">=</span><span class="p">(</span><span class="n">FloatInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.spline_lambda_0&#39;</span><span class="p">,</span> <span class="n">valid_range</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1000000.0</span><span class="p">]),</span> <span class="n">FloatInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.spline_lambda_1&#39;</span><span class="p">,</span> <span class="n">valid_range</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1000000.0</span><span class="p">]),</span> <span class="n">FloatInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.spline_lambda_step&#39;</span><span class="p">,</span> <span class="n">valid_range</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1000000.0</span><span class="p">]),),</span>
+			<span class="n">tokens</span> <span class="o">=</span> <span class="p">[</span> <span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.spline_lambda_0&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">valid_range</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mf">1e6</span><span class="p">]</span> <span class="p">),</span> <span class="c">#TODO:Valid_range from option wavelength.</span>
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.spline_lambda_1&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">valid_range</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mf">1e6</span><span class="p">]</span> <span class="p">),</span>
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.spline_lambda_step&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">valid_range</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mf">1e6</span><span class="p">]),</span>
+				<span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.spline&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="p">],</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+			<span class="n">non_parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;spline_file&#39;</span><span class="p">],</span>
+		<span class="p">)</span>
+
+		<span class="n">spline_file</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;spline_file&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;output&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Spline interpolate to arbitrary wavelengths, in nm, given as a single column in file.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;spline_file&#39;</span><span class="p">],</span>
+			<span class="n">gui_inputs</span><span class="o">=</span><span class="p">(</span><span class="n">FileInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.filename[FN_SPLINE]&#39;</span><span class="p">),),</span>
+			<span class="n">tokens</span> <span class="o">=</span> <span class="p">[</span> <span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.filename[FN_SPLINE]&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">file</span><span class="p">),</span>
+				<span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.spline&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="p">]</span> <span class="p">,</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+			<span class="n">non_parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;spline&#39;</span><span class="p">],</span>
+		<span class="p">)</span>
+
+		<span class="n">filter_function_file</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;filter_function_file&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;output&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;If specified, the calculated spectrum is multiplied with a filter function defined in file.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;filter_function_file&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="p">[</span><span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.filename[FN_FILTERFUNCTION]&#39;</span><span class="p">,</span><span class="n">datatype</span><span class="o">=</span><span class="nb">file</span><span class="p">),</span>
+				<span class="n">addLogical</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.filter_function_normalize&#39;</span><span class="p">,</span> <span class="n">logicals</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;normalize&#39;</span><span class="p">],</span> <span class="n">optional</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> <span class="p">],</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+			<span class="n">non_parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;slit_function_file&#39;</span><span class="p">,</span><span class="s">&#39;thermal_bands_file&#39;</span><span class="p">],</span>
+			<span class="n">plot</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;plot_type&#39;</span><span class="p">:</span> <span class="s">&#39;2D&#39;</span><span class="p">,</span>
+				<span class="s">&#39;optional_args&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;column_names&#39;</span><span class="p">:</span> <span class="p">(</span>
+						<span class="s">&quot;wavelength&quot;</span><span class="p">,</span>
+						<span class="s">&quot;filter function&quot;</span><span class="p">,)</span>
+						  <span class="p">}</span>
+				<span class="p">}</span>
+		<span class="p">)</span>
+
+		<span class="n">pressure_out</span> <span class="o">=</span> <span class="n">not_yet_lex2py_option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;pressure_out&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;output&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Specify the output levels in pressure coordinates.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;pressure_out&#39;</span><span class="p">],</span>
+			<span class="n">gui_inputs</span><span class="o">=</span><span class="p">(</span><span class="n">TextInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">),),</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+			<span class="n">non_parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;zout&#39;</span><span class="p">,</span><span class="s">&#39;zout_sea&#39;</span><span class="p">],</span>
+		<span class="p">)</span>
+
+		<span class="n">zout</span> <span class="o">=</span> <span class="n">not_yet_lex2py_option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;zout&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;output&#39;</span><span class="p">,</span>	
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Output altitude(s).&#39;</span><span class="p">,</span> 
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;zout&#39;</span><span class="p">],</span>
+			<span class="n">gui_inputs</span><span class="o">=</span><span class="p">(</span><span class="n">TextInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">),),</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">str</span><span class="p">),</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+			<span class="n">non_parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;zout_sea&#39;</span><span class="p">,</span><span class="s">&#39;pressure_out&#39;</span><span class="p">],</span>
+		<span class="p">)</span>
+
+		<span class="n">zout_sea</span> <span class="o">=</span> <span class="n">not_yet_lex2py_option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;zout_sea&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;output&#39;</span><span class="p">,</span>	
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Output altitude(s) above sea surface.&#39;</span><span class="p">,</span> 
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;zout_sea&#39;</span><span class="p">],</span>
+			<span class="n">gui_inputs</span><span class="o">=</span><span class="p">(</span><span class="n">TextInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">),),</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">str</span><span class="p">),</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+			<span class="n">non_parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;zout&#39;</span><span class="p">,</span><span class="s">&#39;pressure_out&#39;</span><span class="p">],</span>
+		<span class="p">)</span>
+
+		<span class="n">mc_backward_output</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;mc_backward_output&#39;</span><span class="p">,</span> 
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;output&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Specify quantity to be calculated using backward Monte Carlo.&#39;</span><span class="p">,</span> 
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;mc_backward_output&#39;</span><span class="p">],</span> 
+			<span class="n">tokens</span><span class="o">=</span><span class="p">[</span> <span class="n">addLogical</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.backward.output&#39;</span><span class="p">,</span> <span class="n">logicals</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;edir&#39;</span><span class="p">,</span><span class="s">&#39;edn&#39;</span><span class="p">,</span><span class="s">&#39;eup&#39;</span><span class="p">,</span><span class="s">&#39;fdir&#39;</span><span class="p">,</span><span class="s">&#39;fdn&#39;</span><span class="p">,</span><span class="s">&#39;fup&#39;</span><span class="p">,</span><span class="s">&#39;act&#39;</span><span class="p">,</span><span class="s">&#39;abs&#39;</span><span class="p">,</span><span class="s">&#39;emis&#39;</span><span class="p">,</span><span class="s">&#39;heat&#39;</span><span class="p">],</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;MCBACKWARD_&#39;</span><span class="p">,</span> <span class="n">gui_name</span><span class="o">=</span><span class="s">&#39;output&#39;</span> <span class="p">),</span>	
+				 <span class="n">addLogical</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.abs_unit&#39;</span><span class="p">,</span> <span class="n">logicals</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;W_per_m2_and_dz&#39;</span><span class="p">,</span> <span class="s">&#39;W_per_m3&#39;</span><span class="p">,</span> <span class="s">&#39;K_per_day&#39;</span><span class="p">],</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;MCABS_UNIT_&#39;</span> <span class="p">,</span> <span class="n">optional</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span> <span class="n">gui_name</span><span class="o">=</span><span class="s">&#39;unit&#39;</span> <span class="p">)</span> <span class="p">],</span> 
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;mc_backward&#39;</span><span class="p">],</span> 
+			<span class="n">speaker</span><span class="o">=</span><span class="s">&#39;rte_solver&#39;</span><span class="p">,</span>
+			<span class="n">enable_values</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;mystic&quot;</span><span class="p">,</span><span class="s">&quot;montecarlo&quot;</span><span class="p">),</span>
+			<span class="n">mystic</span> <span class="o">=</span><span class="bp">True</span>
+		<span class="p">)</span>
+
+		<span class="n">mc_forward_output</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;mc_forward_output&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;output&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Specify quantity to be calculated using forward Monte Carlo.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;mc_forward_output&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span> <span class="o">=</span> <span class="p">[</span> <span class="n">addLogical</span><span class="p">(</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.absorption&#39;</span><span class="p">,</span> <span class="n">logicals</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;absorption&#39;</span><span class="p">,</span><span class="s">&#39;actinic&#39;</span><span class="p">,</span><span class="s">&#39;emission&#39;</span><span class="p">,</span><span class="s">&#39;heating&#39;</span><span class="p">],</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;MCFORWARD_ABS_&#39;</span><span class="p">,</span> <span class="n">gui_name</span><span class="o">=</span><span class="s">&#39;output&#39;</span> <span class="p">),</span> 
+				<span class="n">addLogical</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.abs_unit&#39;</span><span class="p">,</span> <span class="n">logicals</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;W_per_m2_and_dz&#39;</span><span class="p">,</span> <span class="s">&#39;W_per_m3&#39;</span><span class="p">,</span> <span class="s">&#39;K_per_day&#39;</span><span class="p">]</span> <span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;MCABS_UNIT_&#39;</span><span class="p">,</span>  <span class="n">optional</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span> <span class="n">gui_name</span><span class="o">=</span><span class="s">&#39;unit&#39;</span> <span class="p">)</span> <span class="p">],</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span> 
+			<span class="n">non_parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;mc_backward&#39;</span><span class="p">],</span>
+			<span class="n">speaker</span><span class="o">=</span><span class="s">&#39;rte_solver&#39;</span><span class="p">,</span>
+			<span class="n">enable_values</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;mystic&quot;</span><span class="p">,</span><span class="s">&quot;montecarlo&quot;</span><span class="p">),</span>
+			<span class="n">threedmystic</span> <span class="o">=</span><span class="bp">True</span>
+		<span class="p">)</span>
+
+		<span class="n">mc_basename</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;mc_basename&#39;</span><span class="p">,</span> 
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;output&#39;</span><span class="p">,</span> 
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Filename for MYSTIC 3D output.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;mc_basename&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.filename[FN_MC_BASENAME]&#39;</span><span class="p">,</span><span class="n">datatype</span><span class="o">=</span><span class="nb">file</span><span class="p">),</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span> 
+			<span class="n">speaker</span><span class="o">=</span><span class="s">&#39;rte_solver&#39;</span><span class="p">,</span>
+			<span class="n">enable_values</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;mystic&quot;</span><span class="p">,</span><span class="s">&quot;montecarlo&quot;</span><span class="p">),</span>
+			<span class="n">mystic</span> <span class="o">=</span><span class="bp">True</span>
+		<span class="p">)</span>
+
+		<span class="n">mc_backward_writeallpixels</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;mc_backward_writeallpixels&#39;</span><span class="p">,</span> 
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;output&#39;</span><span class="p">,</span> 
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Write all pixels to the output files&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;mc_backward_writeallpixels&#39;</span><span class="p">],</span>	
+			<span class="n">tokens</span><span class="o">=</span><span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.backward.writeallpixels&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>	
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;mc_backward&#39;</span><span class="p">],</span> 
+			<span class="n">speaker</span><span class="o">=</span><span class="s">&#39;rte_solver&#39;</span><span class="p">,</span>
+			<span class="n">enable_values</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;mystic&quot;</span><span class="p">,</span><span class="s">&quot;montecarlo&quot;</span><span class="p">),</span>
+			<span class="n">threedmystic</span> <span class="o">=</span><span class="bp">True</span>
+		<span class="p">)</span>
+
+		<span class="n">mc_std</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;mc_std&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;output&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Calculate MYSTIC standard deviation.&#39;</span><span class="p">,</span> 
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;mc_std&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.std&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> 
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span> 
+			<span class="n">speaker</span><span class="o">=</span><span class="s">&#39;rte_solver&#39;</span><span class="p">,</span>
+			<span class="n">enable_values</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;mystic&quot;</span><span class="p">,</span><span class="s">&quot;montecarlo&quot;</span><span class="p">),</span>
+			<span class="n">threedmystic</span> <span class="o">=</span><span class="bp">True</span>
+		<span class="p">)</span>
+
+		<span class="n">mc_surfaceparallel</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;mc_surfaceparallel&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;output&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Calculate irradiance parallel to the surface.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;mc_surfaceparallel&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.surfaceparallel&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+			<span class="n">speaker</span><span class="o">=</span><span class="s">&#39;rte_solver&#39;</span><span class="p">,</span>
+			<span class="n">enable_values</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;mystic&quot;</span><span class="p">,</span><span class="s">&quot;montecarlo&quot;</span><span class="p">),</span>
+			<span class="n">threedmystic</span> <span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+			<span class="n">showInGui</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+		<span class="p">)</span>
+
+		<span class="n">mc_jacobian</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;mc_jacobian&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;output&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Calculate jacobi matrix.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;mc_jacobian&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.jacobian&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+			<span class="n">childs</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;mc_jacobian_std&#39;</span><span class="p">],</span>
+			<span class="n">speaker</span><span class="o">=</span><span class="s">&#39;rte_solver&#39;</span><span class="p">,</span>
+			<span class="n">enable_values</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;mystic&quot;</span><span class="p">,</span><span class="s">&quot;montecarlo&quot;</span><span class="p">),</span>
+			<span class="n">threedmystic</span> <span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+			<span class="n">islidar</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+			<span class="n">showInGui</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+		<span class="p">)</span>
+
+		<span class="n">mc_jacobian_std</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;mc_jacobian_std&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;output&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Calculate jacobi matrix standard deviation.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;mc_jacobian_std&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.jacobian_std&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;mc_jacobian&#39;</span><span class="p">],</span>
+			<span class="n">speaker</span><span class="o">=</span><span class="s">&#39;rte_solver&#39;</span><span class="p">,</span>
+			<span class="n">enable_values</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;mystic&quot;</span><span class="p">,</span><span class="s">&quot;montecarlo&quot;</span><span class="p">),</span>
+			<span class="n">threedmystic</span> <span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+			<span class="n">islidar</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+			<span class="n">showInGui</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+		<span class="p">)</span>
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">options</span> <span class="o">=</span> <span class="p">[</span><span class="n">include</span><span class="p">,</span>
+			        <span class="n">quiet</span><span class="p">,</span> <span class="n">verbose</span><span class="p">,</span> <span class="n">write_ext_to_file</span><span class="p">,</span> <span class="n">test_optical_properties</span><span class="p">,</span>
+				<span class="n">print_disort_info</span><span class="p">,</span>
+				<span class="n">data_files_path</span><span class="p">,</span>
+				<span class="n">output_process</span><span class="p">,</span>
+				<span class="n">output_file</span><span class="p">,</span> <span class="n">output_format</span><span class="p">,</span> <span class="n">output_user</span><span class="p">,</span>
+				<span class="n">output_quantity</span><span class="p">,</span>
+				<span class="n">heating_rate</span><span class="p">,</span>
+				<span class="n">write_output_as_netcdf</span><span class="p">,</span>
+				<span class="n">slit_function_file</span><span class="p">,</span> <span class="n">spline</span><span class="p">,</span> <span class="n">spline_file</span><span class="p">,</span>
+				<span class="n">filter_function_file</span><span class="p">,</span>  
+				<span class="n">pressure_out</span><span class="p">,</span>
+				<span class="n">zout</span><span class="p">,</span> <span class="n">zout_sea</span><span class="p">,</span>  
+				<span class="n">mc_backward_output</span><span class="p">,</span>
+				<span class="n">mc_forward_output</span><span class="p">,</span> 
+				<span class="n">mc_basename</span><span class="p">,</span> 
+				<span class="n">mc_backward_writeallpixels</span><span class="p">,</span>
+				<span class="n">mc_std</span><span class="p">,</span>
+				<span class="n">mc_surfaceparallel</span><span class="p">,</span> <span class="n">mc_jacobian</span><span class="p">,</span> <span class="n">mc_jacobian_std</span><span class="p">,</span>
+				<span class="p">]</span>
+</div>
+	<span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="get_output_documentation"><a class="viewcode-back" href="../../../mortapi/morticia.rad.html#morticia.rad.output_options.get_output_documentation">[docs]</a><span class="k">def</span> <span class="nf">get_output_documentation</span><span class="p">():</span>
+	<span class="k">return</span> <span class="p">{</span>
+		<span class="s">&#39;data_files_path&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	The path to the directory where all \code{uvspec} internal data files live, e.g.</span>
+<span class="s">	the files that are in the subdirectories of the \file{data} directory</span>
+<span class="s">	that comes with the \code{uvspec} distribution. </span>
+<span class="s">	\fcode{</span>
+<span class="s">	data\_files\_path path</span>
+<span class="s">	}</span>
+<span class="s">	The default for \code{path} is \code{../data/}.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;include&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Include a file into the \code{uvspec} input.  </span>
+<span class="s">	\fcode{ </span>
+<span class="s">	include file </span>
+<span class="s">	} </span>
+<span class="s">	Works exactly like the C \code{\#include} or  </span>
+<span class="s">	the Fortran \code{INCLUDE} statements. </span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;mc_backward_writeallpixels&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	If set, write all pixels to the output files; otherwise, only those are written </span>
+<span class="s">	which are actually calculated.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;mc_backward_output&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Specify quantity to be calculated using backward Monte Carlo. </span>
+<span class="s">	\fcode{</span>
+<span class="s">	mc\_backward\_output output [unit]</span>
+<span class="s">	}</span>
+<span class="s">	So far the</span>
+<span class="s">	following \code{output} options have been implemented: </span>
+<span class="s">	\begin{description}</span>
+<span class="s">	\parameter{edir} </span>
+<span class="s">	  direct horizontal irradiance</span>
+<span class="s">	\parameter{edn} </span>
+<span class="s">	  diffuse downward irradiance (default)</span>
+<span class="s">	\parameter{eup} </span>
+<span class="s">	  diffuse upward irradiance</span>
+<span class="s">	\parameter{act} </span>
+<span class="s">	  actinic flux</span>
+<span class="s">	\parameter{abs} </span>
+<span class="s">	  absorption</span>
+<span class="s">	\parameter{emis} </span>
+<span class="s">	  emission</span>
+<span class="s">	\parameter{heat} </span>
+<span class="s">	  heating rates, that is absorption + emission</span>
+<span class="s">	\end{description}</span>
+<span class="s">	For \code{abs}, \code{emis}, \code{heat} an optional argument \code{W\_per\_m2\_and\_dz} (default), </span>
+<span class="s">	\code{W\_per\_m3}, or \code{K\_per\_day} may be specified which converts the result e.g. to heating rates. </span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;mc_forward_output&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Specify quantity to be calculated using forward Monte Carlo.</span>
+<span class="s">	Forward output is calculated for each grid box; may need a considerable amount of memory,</span>
+<span class="s">        depending on the 3D cloud grid. Only meaningful with \code{rte\_solver mystic}.</span>
+<span class="s">	This option is only available for forward calculations. </span>
+<span class="s">	For backward please use \code{mc\_backward\_output}.</span>
+<span class="s">	\fcode{</span>
+<span class="s">	mc\_forward\_output quantity [unit]</span>
+<span class="s">	}</span>
+<span class="s">	\code{quantity} can be one of the following:</span>
+<span class="s">	\begin{description}</span>
+<span class="s">	\parameter{absorption}</span>
+<span class="s">	Calculate MYSTIC absorption and write it to file \code{mc\_basename}.abs.spc </span>
+<span class="s">        in the following format:</span>
+<span class="s">        \fcode{</span>
+<span class="s">        lambda ix iy iz absorption</span>
+<span class="s">        }</span>
+<span class="s">	For backward please use \code{mc\_backward\_output abs}.</span>
+<span class="s">	\parameter{actinic}</span>
+<span class="s">	Calculate MYSTIC actinic flux by dividing the absorbed energy by the </span>
+<span class="s">        absorption coeffcient; this method is much better than the traditional photon counting </span>
+<span class="s">        which usually comprises spikes (because in the latter method each photon is weighted with </span>
+<span class="s">        $1/\cos(\theta)$ which may be a very large number);  </span>
+<span class="s">        For backward please use \code{mc\_backward\_output act}. </span>
+<span class="s">	\parameter{emission}</span>
+<span class="s">	Calculate MYSTIC emission. Note that emission is calculated directly without tracing </span>
+<span class="s">        any photons which makes this option very fast. Changing \code{mc\_photons} will therefore </span>
+<span class="s">        not affect the result. Only meaningful with \code{source thermal}. </span>
+<span class="s">	For backward please use \code{mc\_backward\_output emis}.</span>
+<span class="s">	\parameter{heating}</span>
+<span class="s">	Calculate MYSTIC heating rates. This is identical to \code{absorption} for \code{source solar}. </span>
+<span class="s">	For \code{source thermal}, however, the emission of a photon in a grid box is counted as cooling. </span>
+<span class="s">	For backward please use \code{mc\_backward\_output heat}.</span>
+<span class="s">	\end{description}</span>
+<span class="s">        The optional argument \code{unit} may be one of \code{W\_per\_m2\_and\_dz} (default), \code{W\_per\_m3}, or \code{K\_per\_day}.</span>
+<span class="s">	\code{unit} may be specified to convert the result e.g. to heating rates. </span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;mc_basename&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Filename for MYSTIC 3D output (default: mc).</span>
+<span class="s">	\fcode{</span>
+<span class="s">	mc\_basename basename</span>
+<span class="s">	}</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+	<span class="s">&#39;mc_jacobian&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Calculate jacobi matrix. Only meaningful with \code{rte\_solver </span>
+<span class="s">	montecarlo}. </span>
+<span class="s"> </span>
+<span class="s">	This option works with \code{mc\_lidar}, or with \code{mc\_backward}. In </span>
+<span class="s">	the first case, it delivers the jacobi matrix for an elastic or HSRL </span>
+<span class="s">	lidar. In the latter case, it delivers the jacobi matrix for height </span>
+<span class="s">	resolved changes in molecular absorption and scattering coefficients. </span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+	<span class="s">&#39;mc_jacobian_std&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Calculate jacobi matrix standard deviation. Only meaningful with </span>
+<span class="s">	\code{mc\_jacobian}. </span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;mc_std&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Calculate standard deviation of the average.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;mc_surfaceparallel&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Calculate irradiance parallel to the surface instead of horizonal irradiance. This</span>
+<span class="s">	option is obviously only interesting for topograpy and only for calculations at</span>
+<span class="s">	the surface. For other levels the option is ignored. </span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;filter_function_file&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	If specified, the calculated spectrum is multiplied with a filter function </span>
+<span class="s">	defined in file.</span>
+<span class="s">	\fcode{</span>
+<span class="s">	filter\_function\_file file [normalize]</span>
+<span class="s">	}</span>
+<span class="s">	The file must contain two columns. </span>
+<span class="s">	Column 1 is the wavelength, in nm. Column 2 is the corresponding filter </span>
+<span class="s">	function value. Comments start with \code{\#}. Empty lines are ignored.</span>
+<span class="s">	In combination with \code{output\_process sum} or \code{output\_process integrate} this option </span>
+<span class="s">	is useful e.g. to calculate weighted irradiances or actinic fluxes or </span>
+<span class="s">	to simulate broadband or satellite observations.</span>
+
+<span class="s">	If the optional second argument \code{normalize} is specified, </span>
+<span class="s">	the integral of the filter function over wavelength is normalized such</span>
+<span class="s">	that \code{output\_process integrate} gives radiative properties per wavelength, averaged over</span>
+<span class="s">	the filter function.</span>
+<span class="s">			&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;slit_function_file&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	If specified, the calculated spectrum is convolved with the function found</span>
+<span class="s">	in the \file{slit\_function\_file}. </span>
+<span class="s">	\fcode{</span>
+<span class="s">	slit\_function\_file file </span>
+<span class="s">	}</span>
+<span class="s">	The file must contain two columns. Column 1 is the wavelength, in nm, and relative to the</span>
+<span class="s">	center wavelength. Column 2 is the corresponding slit function value. It must</span>
+<span class="s">	be unity at the maximum. The wavelength steps in the slit function file must</span>
+<span class="s">	be equidistant. Comments start with \code{\#}. Empty lines are ignored. Please </span>
+<span class="s">	note that prior to convolution the spectrum is interpolated to the wavelength</span>
+<span class="s">	steps of the slit function. For this reason, make sure that the resolution</span>
+<span class="s">	of the slit function is high enough even if the slit function is e.g. a </span>
+<span class="s">	simple triangle which could in principle be described with 3 grid points. For an </span>
+<span class="s">	example see \file{examples/TRI\_SLIT.DAT} and the \code{make\_slitfunction} tool.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;spline&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	\fcode{</span>
+<span class="s">	spline lambda\_0 lambda\_1 lambda\_step</span>
+<span class="s">	}</span>
+<span class="s">	Spline interpolate the calculated spectrum between wavelengths \code{lambda\_0} </span>
+<span class="s">	and \code{lambda\_1} in steps of \code{lambda\_step},</span>
+<span class="s">	in nm. Specified as e.g.</span>
+<span class="s">	\fcode{</span>
+<span class="s">	spline 290. 365. 0.5</span>
+<span class="s">	}</span>
+<span class="s">	Here, the calculated spectrum is interpolated to wavelengths 290.0, 290.5, 291.0, </span>
+<span class="s">	..., 364.5, 365.0. For interpolation to arbitrary wavelengths use \code{spline\_file}.</span>
+<span class="s">	The specified wavelength interval must be within the one specified by \code{wavelength}.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;spline_file&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Spline interpolate to arbitrary wavelengths, in nm, given as a single column in file </span>
+<span class="s">	\file{spline\_file}. </span>
+<span class="s">	\fcode{</span>
+<span class="s">	spline\_file file</span>
+<span class="s">	}</span>
+<span class="s">	The specified wavelengths must be within the range specified </span>
+<span class="s">	by \code{wavelength}. Comments start with \code{\#}. Empty lines are ignored.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;test_optical_properties&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Write optical properties to file. This is made for test suite. </span>
+<span class="s">	rte_solver will be switched to null_solver.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;output_quantity&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Convert radiances / irradiances to equivalent output quantity.</span>
+<span class="s">	\fcode{</span>
+<span class="s">	output\_quantity quantity</span>
+<span class="s">	}</span>
+<span class="s">	where \code{quantity} can be one of the following:</span>
+<span class="s">	\begin{description}</span>
+<span class="s">	\parameter{brightness}</span>
+<span class="s">	Convert radiances / irradiances to equivalent brightness temperatures.</span>
+<span class="s">	\parameter{reflectivity}</span>
+<span class="s">	Calculate transmission / reflectivity instead of absolute quantities. </span>
+<span class="s">	For irradiances / actinic fluxes the transmission T is defined as </span>
+<span class="s">	\begin{equation}</span>
+<span class="s">	   T = {{E}\over{E_0 \cos{\theta}}}</span>
+<span class="s">	\end{equation}</span>
+<span class="s">	  where $E$ is the irradiance / actinic flux, $E_0$ is the extraterrestrial flux,</span>
+<span class="s">	  and $\theta$ is the solar zenith angle.</span>
+<span class="s">	The reflectivity R is defined as </span>
+<span class="s">	\begin{equation}</span>
+<span class="s">	   R = {{\pi \cdot L}\over{E_0 \cos{\theta}}}</span>
+<span class="s">	\end{equation}</span>
+<span class="s">	 where $L$ is the radiance, $E_0$ is the extraterrestrial flux,</span>
+<span class="s">	 and $\theta$ is the solar zenith angle.</span>
+<span class="s">	Obviously, reflectivities do not depend on Sun-Earth distance. Please </span>
+<span class="s">	note the difference to \code{transmittance}.</span>
+<span class="s">	\parameter{transmittance}</span>
+<span class="s">	Calculate transmittance / reflectance instead of absolute quantities. </span>
+<span class="s">	That is, set the extraterrestrial irradiance to 1 and do not correct for Sun-Earth distance:</span>
+<span class="s">	\begin{equation}</span>
+<span class="s">	   T = \frac{E}{E_0}</span>
+<span class="s">	\end{equation}</span>
+<span class="s">	  where $E$ is the irradiance / actinic flux / radiance and $E_0$ is the extraterrestrial flux.</span>
+<span class="s">	Please note the difference to \code{reflectivity}.</span>
+<span class="s">        \end{description}</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;output_user&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	User defined output. </span>
+<span class="s">	%This option is case sensitive.</span>
+<span class="s">	Here the user may specify the columns desired for output. </span>
+<span class="s">	\fcode{</span>
+<span class="s">	output\_user format</span>
+<span class="s">	}</span>
+<span class="s">	where \code{format} is one or more of the following.</span>
+<span class="s">	\begin{description}</span>
+<span class="s">	\parameter{lambda} </span>
+<span class="s">	Wavelength in nm.</span>
+<span class="s">	\parameter{wavenumber} </span>
+<span class="s">	Wave number in cm$^{-1}$.</span>
+<span class="s">	\parameter{sza} </span>
+<span class="s">	solar zenith angle</span>
+<span class="s">	\parameter{zout} </span>
+<span class="s">	Output altitude in km.</span>
+<span class="s">	\parameter{edir, eglo, edn, eup, enet, esum}</span>
+<span class="s">	The direct, global, diffuse downward, and diffuse upward irradiance.</span>
+<span class="s">	Net is global - upward, sum is global + upward. </span>
+<span class="s">	\parameter{uu} </span>
+<span class="s">	Radiances:  uu(umu(0),phi(0)) ... uu(umu(0),phi(m)) ... uu(umu(n),phi(0)) ... uu(umu(n),phi(m))</span>
+<span class="s">	\parameter{fdir, fglo, fdn, fup, f}</span>
+<span class="s">	The direct, global, diffuse downward, diffuse upward, and total actinic flux.</span>
+<span class="s">	\parameter{uavgdir, uavgglo, uavgdn, uavgup, uavg} </span>
+<span class="s">	The Direct, global, diffuse downward, diffuse upward, and total diffuse </span>
+<span class="s">	mean intensity (= actinic flux / 4$\pi$).</span>
+<span class="s">	\parameter{spher\_alb}</span>
+<span class="s">	Spherical albedo of the complete atmosphere.</span>
+<span class="s">	\parameter{albedo} </span>
+<span class="s">	Albedo.</span>
+<span class="s">	\parameter{heat} </span>
+<span class="s">	Heating rate in K/day.</span>
+<span class="s">	\end{description}</span>
+
+<span class="s">	It is also possible to gain some information about the atmosphere and the clouds:</span>
+<span class="s">	\begin{description}</span>
+<span class="s">	\parameter{p} </span>
+<span class="s">	pressure [hPa], ,</span>
+<span class="s">	\parameter{T, T\_d}</span>
+<span class="s">	temperature [K], dewpoint temperature [K]</span>
+<span class="s">	\parameter{T\_sur} </span>
+<span class="s">	surface temperature [K]</span>
+<span class="s">	\parameter{theta } </span>
+<span class="s">	potential temperature [K]</span>
+<span class="s">	\parameter{theta\_e} </span>
+<span class="s">	equivalent potential temperature [K]</span>
+<span class="s">	\parameter{n\_xxx} </span>
+<span class="s">	number density of the gas xxx [cm$^{-3}$]</span>
+<span class="s">	\parameter{rho\_xxx} </span>
+<span class="s">	mass density of the gas xxx [kg/m$^3$]</span>
+<span class="s">	\parameter{mmr\_xxx} </span>
+<span class="s">	mass mixing ratio of the gas xxx [kg/kg]</span>
+<span class="s">	\parameter{vmr\_xxx} </span>
+<span class="s">	volume mixing ratio of the gas xxx [m$^3$/m$^3$]</span>
+<span class="s">	\parameter{rh} </span>
+<span class="s">	relative humidity over water [percent]</span>
+<span class="s">	\parameter{rh\_ice} </span>
+<span class="s">	relative humidity over ice   [percent]</span>
+<span class="s">	\parameter{c\_p} </span>
+<span class="s">	specific heat capacity of the air (humidity and temperature dependent)</span>
+<span class="s">	\parameter{CLWC} </span>
+<span class="s">	cloud liquid water content   [kg/kg]</span>
+<span class="s">	\parameter{CLWD} </span>
+<span class="s">	cloud liquid water density   [g/m$^3$]</span>
+<span class="s">	\parameter{CIWC} </span>
+<span class="s">	cloud ice water content      [kg/kg]</span>
+<span class="s">	\parameter{CIWD} </span>
+<span class="s">	cloud ice water density      [g/m$^3$]</span>
+<span class="s">	\parameter{TCC} </span>
+<span class="s">	total cloud cover            [0-1]</span>
+<span class="s">	\end{description}</span>
+<span class="s">	where \code{xxx} is one of </span>
+<span class="s">	AIR, O3, O2, H2O, CO2, NO2, BRO, OCLO, HCHO, or O4.</span>
+
+<span class="s">	Default output is  </span>
+<span class="s">	\fcode{</span>
+<span class="s">	output\_user lambda lambda, edir, edn, eup, uavgdir, uavgdn, uavgup </span>
+<span class="s">	}</span>
+<span class="s">	for \code{fdisort1}, \code{sdisort}, and \code{spsdisort}, whereas the default for </span>
+<span class="s">	\code{twostr} is </span>
+<span class="s">	\fcode{</span>
+<span class="s">	output\_user lambda, edir, edn, eup, uavg.</span>
+<span class="s">	}</span>
+<span class="s">	The lines containing radiances and the output of \code{rte\_solver polradtran} are not affected. </span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;pressure_out&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39; </span>
+<span class="s">	Specify the output levels in pressure coordinates. The syntax is   </span>
+<span class="s">	\fcode{ </span>
+<span class="s">	pressure\_out p1 p2 ... </span>
+<span class="s">	}</span>
+<span class="s">	where &#39;\code{p1 p2 ...}&#39; are the output levels in hPa.  </span>
+<span class="s">	The pressure output levels must be sorted in decreasing order.  </span>
+<span class="s">	Output pressure levels must be within the range defined in the </span>
+<span class="s">	\code{atmosphere\_file}. You can also use \code{toa} for  </span>
+<span class="s">	\code{top of atmosphere} and \code{sur} for \code{surface altitude} and \code{cpt}  </span>
+<span class="s">	for \code{cold point tropopause}. </span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;print_disort_info&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Specify one or more integers between 1 and 7.</span>
+<span class="s">	\fcode{</span>
+<span class="s">	print\_disort\_info  value</span>
+<span class="s">	}</span>
+<span class="s">	Print various disort input and output in disorts own format. See </span>
+<span class="s">	\file{libsrc\_f/DISORT2.doc} for more information.</span>
+<span class="s">	\strong{Warning:} Produces a lot of output. </span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;heating_rate&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Calculation of heating rates. Output is only provided at altitudes specified by \code{zout}.</span>
+<span class="s">	To get heating rate profiles a number of altitudes must thus be specified by \code{zout}.</span>
+<span class="s">	Heating rates is the change of temperature with time in units of K/day.</span>
+<span class="s">	For spectral calculations the default output is a matrix: </span>
+<span class="s">	\begin{Verbatim}</span>
+<span class="s">		0.0        zout1          zout2 ...</span>
+<span class="s">		lambda1    heating\_rates  ...</span>
+<span class="s">		lambda2      .</span>
+<span class="s">		   .         .</span>
+<span class="s">		   .         .</span>
+<span class="s">	\end{Verbatim}</span>
+<span class="s">	For integrated calculations (\code{output\_process sum} or \code{output\_process integrate}) the default output </span>
+<span class="s">	is in two columns with column 1 being the altitude and column 2 the heating rates.</span>
+<span class="s">	The output of \code{heating\_rate} can also be specified with the \code{output\_user} option.</span>
+<span class="s">	Note that heating rates are only well-behaved up to altitudes</span>
+<span class="s">	for which the respective correlated-k options are valid. E.g. about 60 km for </span>
+<span class="s">	\code{fu} and about 80 km for \code{kato}, \code{kato2}, \code{kato2.96}, and \code{lowtran}.</span>
+<span class="s">	Attention: For spectral calculations, the extraterrestrial spectrum is assumed to be in </span>
+<span class="s">	mW/(m2 nm).</span>
+
+<span class="s">	Three different methods are implemented to calculate the heating rate, which can be selected</span>
+<span class="s">	with an optional keyword:</span>
+<span class="s">	\fcode{</span>
+<span class="s">	heating\_rate [method]</span>
+<span class="s">	}</span>
+<span class="s">	where \code{method} may be either \code{layer\_cd} (heating rates are derived from centered </span>
+<span class="s">	differences of the flux (the default method), \code{local} (heating rates are derived </span>
+<span class="s">	from the actinic flux), or \code{layer\_fd} (heating rates are derived from forward differences of the flux </span>
+<span class="s">        over one layer. Attention: \code{heating\_rate local} introduces new levels into the profile which  </span>
+<span class="s">	slightly affects the model output.</span>
+<span class="s">	With \code{layer\_fd}, the output is </span>
+<span class="s">	not representative for a \emph{level}, but for the \emph{layer} from the z-level of the line in the output file, </span>
+<span class="s">	where it is written, up to next \emph{output level} above!</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;output_process&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Decide how the output from \code{uvspec} is processed:</span>
+<span class="s">	\fcode{</span>
+<span class="s">	output\_process type</span>
+<span class="s">	}</span>
+<span class="s">	where type is one of</span>
+<span class="s">	\begin{description}</span>
+<span class="s">	\parameter{sum} </span>
+<span class="s">	Sum output over wavelength. Useful in combination with the </span>
+<span class="s">	\code{mol\_abs\_param} option (\code{kato}, \code{kato2}, \code{kato2.96}, </span>
+<span class="s">	\code{Fu}, \code{avhrr\_kratz}, \code{reptran}).</span>
+<span class="s">        In case of \code{mol\_abs\_param reptran}, the units are automatically converted to \code{per\_band} before summation. </span>
+<span class="s">	\parameter{integrate} </span>
+<span class="s">	Integrate output over wavelength for solar and over wavenumber for thermal simulations. </span>
+<span class="s">	Useful for spectral calculations and \code{mol\_abs\_param lowtran}.</span>
+<span class="s">        In case of \code{mol\_abs\_param reptran} the spectral range of the integration may slightly deviate </span>
+<span class="s">        from the spectral range specified by the \code{wavelength} option.</span>
+<span class="s">	\parameter{per\_nm } </span>
+<span class="s">	Output is given in W/(m$^2$ nm) or mW/(m$^2$ nm) (W or mW is determined by the extraterrestrial spectrum.)</span>
+<span class="s">	\parameter{per\_cm-1 } </span>
+<span class="s">	Output is given in W/(m$^2$ cm$^{-1})$ or mW/(m$^2$ cm$^{-1}$).</span>
+<span class="s">	\parameter{per\_band } </span>
+<span class="s">	Output is given in W/m$^2$ or mW/m$^2$ per correlated-k or reptran band. (This option can not be used for </span>
+<span class="s">	spectral calculations and \code{mol\_abs\_param} LOWTRAN in the solar range.)</span>
+<span class="s">	\parameter{none} </span>
+<span class="s">	No processing - output spectral information (default).</span>
+<span class="s">	\end{description}</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;quiet&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	If specified, informative messages are turned off. See also \code{verbose}.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;verbose&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	If specified abundances of informative messages are output to stderr. To make</span>
+<span class="s">	use of this information, you may want to write the standard \code{uvspec} output to </span>
+<span class="s">	one file and the diagnostic messages to another. To do so, try</span>
+<span class="s">	\code{(./uvspec &lt; uvspec.inp &gt; uvspec.out) &gt;\&amp; verbose.txt} (depending on your shell you </span>
+<span class="s">	might need a slightly different syntax). The irradiances </span>
+<span class="s">	and radiances will be written to \file{uvspec.out} while all </span>
+<span class="s">	diagnostic messages go into \file{verbose.txt}. See also \code{quiet}.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;output_file&#39;</span>	<span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	\fcode {             </span>
+<span class="s">	    output\_file filename</span>
+<span class="s">	}</span>
+<span class="s">	uvspec output will be written to \code{filename}. The format can be set by the option </span>
+<span class="s">	\code{output\_format} (default is ascii).  </span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;write_output_as_netcdf&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	 Option only works with </span>
+<span class="s">	\code{mc\_lidar} and \code{mc\_radar}. Output is written into netcdf file rather than dozens </span>
+<span class="s">	of ASCII files. Saves disk space. </span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;zout&#39;</span>	<span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	This option is used to specify the output altitudes in km \emph{above surface altitude}. </span>
+<span class="s">	One or more altitudes may be specified in increasing magnitude. </span>
+<span class="s">	\fcode{</span>
+<span class="s">	zout 0 1 2 3 4 5 ...</span>
+<span class="s">	}</span>
+<span class="s">	Output altitudes must be within the range defined in the</span>
+<span class="s">	\code{atmosphere\_file}. Note that \code{zout} does not restructure the</span>
+<span class="s">	atmosphere model. Hence, if you specify \code{zout 0.730} and have your</span>
+<span class="s">	atmosphere model in \code{atmosphere\_file} go all the way down to </span>
+<span class="s">	sea level, i.e. 0.0km., output is presented at 0.730km and calculations</span>
+<span class="s">	performed with an atmosphere between 0.0 and 0.730 km (and above of course). </span>
+<span class="s">	If you want calculations done for e.g. an elevated site you have to restructure</span>
+<span class="s">	the atmosphere model and make sure it stops at the appropriate altitude.</span>
+<span class="s">	This you may either due by editing the atmosphere file or by using </span>
+<span class="s">	\code{altitude}. Note that for \code{rte\_solver polradtran} the atmosphere file must </span>
+<span class="s">	contain the altitudes specified by \code{zout}. You can also use \code{toa} for </span>
+<span class="s">	\code{top of atmosphere} and \code{sur} for \code{surface altitude} and \code{cpt} </span>
+<span class="s">	for \code{cold point tropopause}.</span>
+
+<span class="s">	Instead of specifying the altitudes in km, it is also possible to use keywords as </span>
+<span class="s">	argument for this option. Possible keywords are \code{atm\_levels}, </span>
+<span class="s">	\code{all\_levels}, \code{model\_levels}, \code{model\_layers}, and \code{model\_levels\_and\_layers}. </span>
+<span class="s">	For \code{atm\_levels}, all levels from the \code{atmosphere\_file} are used as output levels.  </span>
+<span class="s">	For \code{all\_levels}, all levels (including levels from \code{atmosphere\_file}, </span>
+<span class="s">	\code{mol\_file}, cloud files, \code{altitude} options) are used as output levels. </span>
+<span class="s">	For \code{model\_levels}, \code{model\_layers}, \code{model\_levels\_and\_layers} </span>
+<span class="s">	the levels, layers, or both from the \code{ECMWF\_atmosphere\_file} are used as output level.</span>
+<span class="s">	Usage e.g.:</span>
+<span class="s">	\fcode{</span>
+<span class="s">	zout model\_levels [nlev\_max]</span>
+<span class="s">	}</span>
+<span class="s">	With the optional argument \code{nlev\_max} the user may specify the number of zout layers </span>
+<span class="s">	from the ground.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;zout_sea&#39;</span>	<span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	like zout, but \emph{above sea surface}</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;output_format&#39;</span>    <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	\fcode {</span>
+<span class="s">	    output\_format format</span>
+<span class="s">	}</span>
+<span class="s">	where \code{format} is either \code{ascii} (default) or \code{flexstor}. </span>
+<span class="s">	Note that \code{flexstor} does not currently work when \code{umu} and/or \code{phi} is specified.</span>
+<span class="s">	There is also the</span>
+<span class="s">	possibility to write uvspec simulation results to an existing netCDF file. For</span>
+<span class="s">	that \code{format} must be \code{netCDF} and the option \code{output\_file} must be given</span>
+<span class="s">	and point to a file that contains a lat/lon/time grid.</span>
+<span class="s">	If \code{format} is set to \code{sat picture} then \code{output\_file} must be given and point</span>
+<span class="s">	to a NetCDF-File that contains a pixel x/pixel y/time grid.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;write_ext_to_file&#39;</span>	<span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Option needed by ARLEM when calling uvspec. Writes extinction</span>
+<span class="s">	information to file instead of to output.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+	<span class="p">}</span></div>
+</pre></div>
+
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, D Griffith, A Ramkilowan.
+    </p>
+  </div>
+
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

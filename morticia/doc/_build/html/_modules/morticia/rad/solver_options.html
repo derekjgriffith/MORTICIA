@@ -1,0 +1,986 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>morticia.rad.solver_options &mdash; MORTICIA 1.0 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Roboto+Slab:400,700|Inconsolata:400,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="MORTICIA 1.0 documentation" href="../../../index.html"/>
+        <link rel="up" title="morticia" href="../../morticia.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+          <a href="../../../index.html" class="fa fa-home"> MORTICIA</a>
+        
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../how_to_use.html">How to use MORTICIA</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../how_to_use.html#morticia-dependencies">MORTICIA Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../how_to_use.html#installation-and-requirements">Installation and Requirements</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../styleguide.html">The MORTICIA Style Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#to-pep-8-or-not-to-pep-8">To PEP-8 or not to PEP-8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#code-layout">Code Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#import-statements">Import Statements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#whitespace">Whitespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#comments">Comments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#documentation-strings-docstrings">Documentation Strings (docstrings)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#naming-conventions">Naming Conventions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#pep-257">PEP-257</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#from-conventions-section"><em>From</em> Conventions Section</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#general-terminology-and-conventions">General Terminology and Conventions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../for_developers.html">For the Developers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../for_developers.html#structure">Structure</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../packages.html">Packages</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../packages.html#sensor-package">Sensor Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../packages.html#radiometry-package">Radiometry Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../packages.html#scene-package">Scene Package</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ChapLibRadtranODandPathRadiance.html">Transmittance and Path Radiance in libRadtran</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../01a-SpectralChannelsAndFilters.html">IPython Notebook and Sphinx</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../01a-SpectralChannelsAndFilters.html#a-spectralchannelsandfilters-ipython-notebook">01a-SpectralChannelsAndFilters IPython Notebook</a></li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../../index.html">MORTICIA</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      
+          <li><a href="../../morticia.html">morticia</a> &raquo;</li>
+      
+    <li>morticia.rad.solver_options</li>
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <h1>Source code for morticia.rad.solver_options</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;--------------------------------------------------------------------</span>
+<span class="sd"> * $Id: solver_options.py 3166 2015-08-20 13:51:47Z Claudia.Emde $</span>
+<span class="sd"> * </span>
+<span class="sd"> * This file is part of libRadtran.</span>
+<span class="sd"> * Copyright (c) 1997-2012 by Arve Kylling, Bernhard Mayer,</span>
+<span class="sd"> *                            Claudia Emde, Robert Buras</span>
+<span class="sd"> *</span>
+<span class="sd"> * ######### Contact info: http://www.libradtran.org #########</span>
+<span class="sd"> *</span>
+<span class="sd"> * This program is free software; you can redistribute it and/or </span>
+<span class="sd"> * modify it under the terms of the GNU General Public License   </span>
+<span class="sd"> * as published by the Free Software Foundation; either version 2</span>
+<span class="sd"> * of the License, or (at your option) any later version.        </span>
+<span class="sd"> * </span>
+<span class="sd"> * This program is distributed in the hope that it will be useful, </span>
+<span class="sd"> * but WITHOUT ANY WARRANTY; without even the implied warranty of  </span>
+<span class="sd"> * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the   </span>
+<span class="sd"> * GNU General Public License for more details.                    </span>
+<span class="sd"> * </span>
+<span class="sd"> * You should have received a copy of the GNU General Public License          </span>
+<span class="sd"> * along with this program; if not, write to the Free Software                </span>
+<span class="sd"> * Foundation, Inc., 59 Temple Place - Suite 330, </span>
+<span class="sd"> * Boston, MA 02111-1307, USA.</span>
+<span class="sd"> *--------------------------------------------------------------------&quot;&quot;&quot;</span>
+
+
+<span class="kn">from</span> <span class="nn">option_definition</span> <span class="kn">import</span> <span class="o">*</span>
+
+
+<div class="viewcode-block" id="setup_solver_group"><a class="viewcode-back" href="../../../mortapi/morticia.rad.html#morticia.rad.solver_options.setup_solver_group">[docs]</a><span class="k">class</span> <span class="nc">setup_solver_group</span><span class="p">():</span>
+	
+	<span class="n">group_name</span> <span class="o">=</span> <span class="s">&#39;Solver&#39;</span>
+
+<div class="viewcode-block" id="setup_solver_group.__init__"><a class="viewcode-back" href="../../../mortapi/morticia.rad.html#morticia.rad.solver_options.setup_solver_group.__init__">[docs]</a>	<span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="n">documentation</span> <span class="o">=</span> <span class="n">get_solver_documentation</span><span class="p">()</span>
+
+		<span class="n">rte_solver</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;rte_solver&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;solver&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Radiative transfer equation solver.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;rte_solver&#39;</span><span class="p">],</span>
+			<span class="n">gui_inputs</span><span class="o">=</span><span class="p">(</span><span class="n">ListInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;solver&#39;</span><span class="p">,</span> <span class="n">valid_range</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;disort&#39;</span><span class="p">,</span> <span class="s">&#39;twostr&#39;</span><span class="p">,</span> <span class="s">&#39;mystic&#39;</span><span class="p">,</span> <span class="s">&#39;rodents&#39;</span><span class="p">,</span> <span class="s">&#39;sslidar&#39;</span><span class="p">,</span> <span class="s">&#39;null&#39;</span><span class="p">],</span> <span class="n">optional</span><span class="o">=</span><span class="bp">False</span><span class="p">),),</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="n">addLogical</span><span class="p">(</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.solver&#39;</span><span class="p">,</span> 
+						<span class="n">logicals</span> <span class="o">=</span> <span class="p">[</span> <span class="s">&#39;disort&#39;</span><span class="p">,</span> <span class="s">&#39;twostr&#39;</span><span class="p">,</span> <span class="s">&#39;mystic&#39;</span><span class="p">,</span> <span class="s">&#39;rodents&#39;</span><span class="p">,</span> <span class="s">&#39;sslidar&#39;</span><span class="p">,</span> <span class="s">&#39;null&#39;</span><span class="p">,</span>
+							<span class="s">&#39;sdisort&#39;</span><span class="p">,</span> <span class="s">&#39;spsdisort&#39;</span><span class="p">,</span> <span class="s">&#39;fdisort1&#39;</span><span class="p">,</span> <span class="s">&#39;fdisort2&#39;</span><span class="p">,</span> <span class="s">&#39;sos&#39;</span><span class="p">,</span> <span class="s">&#39;polradtran&#39;</span><span class="p">,</span> <span class="s">&#39;ftwostr&#39;</span><span class="p">,</span> <span class="s">&#39;montecarlo&#39;</span><span class="p">,</span> <span class="s">&#39;tzs&#39;</span><span class="p">,</span> <span class="s">&#39;sssi&#39;</span><span class="p">,</span> <span class="s">&#39;sss&#39;</span><span class="p">,</span> <span class="s">&#39;twostrebe&#39;</span> <span class="p">],</span>
+						<span class="n">setting</span><span class="o">=</span><span class="s">&#39;SOLVER_&#39;</span> <span class="p">),</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+			<span class="n">childs</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;polradtran_quad_type&#39;</span><span class="p">,</span><span class="s">&#39;polradtran&#39;</span><span class="p">,</span><span class="s">&#39;polradtran_max_delta_tau&#39;</span><span class="p">,</span>
+			 <span class="s">&#39;pseudospherical&#39;</span><span class="p">,</span> <span class="s">&#39;disort_spherical_albedo&#39;</span><span class="p">,</span>
+			 <span class="s">&#39;disort_intcor&#39;</span><span class="p">,</span>
+                         <span class="s">&#39;isotropic_source_toa&#39;</span><span class="p">,</span><span class="s">&#39;raman&#39;</span><span class="p">,</span>
+			 <span class="s">&#39;number_of_streams&#39;</span><span class="p">,</span><span class="s">&#39;deltam&#39;</span><span class="p">,</span><span class="s">&#39;nrefrac&#39;</span><span class="p">,</span><span class="s">&#39;brdf_cam&#39;</span><span class="p">,</span><span class="s">&#39;brdf_cam_solar_wind&#39;</span><span class="p">,</span>
+			 <span class="c"># Mystic options are not enabled unless solver is mystic of monte carlo, see mc_options.py</span>
+			 <span class="s">&#39;mc_escape&#39;</span><span class="p">,</span><span class="s">&#39;mc_vroom&#39;</span><span class="p">,</span><span class="s">&#39;mc_backward&#39;</span><span class="p">,</span><span class="s">&#39;mc_spectral_is&#39;</span><span class="p">,</span>
+			 <span class="s">&#39;mc_spectral_is_wvl&#39;</span><span class="p">,</span><span class="s">&#39;mc_forward_output&#39;</span><span class="p">,</span>
+			 <span class="s">&#39;mc_albedo_file&#39;</span><span class="p">,</span><span class="s">&#39;mc_albedo_spectral_file&#39;</span><span class="p">,</span><span class="s">&#39;mc_albedo_type&#39;</span><span class="p">,</span><span class="s">&#39;mc_rossli_file&#39;</span><span class="p">,</span>
+			 <span class="s">&#39;mc_backward_output&#39;</span><span class="p">,</span> <span class="s">&#39;mc_backward_writeallpixels&#39;</span><span class="p">,</span> 
+			 <span class="s">&#39;mc_basename&#39;</span><span class="p">,</span>
+			 <span class="s">&#39;mc_delta_scaling&#39;</span><span class="p">,</span> <span class="s">&#39;mc_elevation_file&#39;</span><span class="p">,</span> 
+                         <span class="s">&#39;mc_tenstream&#39;</span><span class="p">,</span>
+			 <span class="s">&#39;mc_ipa&#39;</span><span class="p">,</span><span class="s">&#39;mc_tipa&#39;</span><span class="p">,</span><span class="s">&#39;ipa_3d&#39;</span><span class="p">,</span><span class="s">&#39;tipa&#39;</span><span class="p">,</span>
+			 <span class="s">&#39;mc_maxscatters&#39;</span><span class="p">,</span><span class="s">&#39;mc_minscatters&#39;</span><span class="p">,</span><span class="s">&#39;mc_minphotons&#39;</span><span class="p">,</span><span class="s">&#39;mc_photons&#39;</span><span class="p">,</span> 
+			 <span class="s">&#39;mc_photons_file&#39;</span><span class="p">,</span><span class="s">&#39;mc_polarisation&#39;</span><span class="p">,</span>
+			 <span class="s">&#39;mc_wcloud_file&#39;</span><span class="p">,</span><span class="s">&#39;mc_icloud_file&#39;</span><span class="p">,</span>
+			 <span class="s">&#39;mc_randomseed&#39;</span><span class="p">,</span> <span class="s">&#39;mc_rpv_file&#39;</span><span class="p">,</span><span class="s">&#39;mc_rpv_type&#39;</span><span class="p">,</span><span class="s">&#39;mc_spherical&#39;</span><span class="p">,</span><span class="s">&#39;mc_std&#39;</span><span class="p">,</span>
+			 <span class="s">&#39;sur_temperature_file&#39;</span><span class="p">,</span><span class="s">&#39;mc_sample_grid&#39;</span><span class="p">,</span><span class="s">&#39;mc_sensordirection&#39;</span><span class="p">,</span><span class="s">&#39;mc_sensorposition&#39;</span><span class="p">,</span>
+			 <span class="s">&#39;mc_reference_to_nn&#39;</span><span class="p">,</span><span class="s">&#39;mc_bw_umu_file&#39;</span><span class="p">,</span><span class="s">&#39;mc_truncate&#39;</span><span class="p">,</span><span class="s">&#39;mc_bcond&#39;</span><span class="p">,</span><span class="s">&#39;mc_coherent_backscatter&#39;</span><span class="p">,</span>
+			 <span class="s">&#39;mc_surface_reflectalways&#39;</span><span class="p">,</span><span class="s">&#39;mc_refraction&#39;</span><span class="p">,</span><span class="s">&#39;mc_visualize&#39;</span><span class="p">,</span><span class="s">&#39;mc_hiddenline&#39;</span><span class="p">,</span> 
+			 <span class="s">&#39;mc_surfaceparallel&#39;</span><span class="p">,</span> <span class="s">&#39;mc_jacobian&#39;</span><span class="p">,</span> <span class="s">&#39;mc_jacobian_std&#39;</span><span class="p">,</span>
+                         <span class="s">&#39;sslidar&#39;</span><span class="p">,</span><span class="s">&#39;sslidar_nranges&#39;</span><span class="p">,</span><span class="s">&#39;sslidar_polarisation&#39;</span><span class="p">,</span>
+                         <span class="s">&#39;tzs_cloud_top_height&#39;</span>       
+                        <span class="p">],</span>
+			<span class="n">continious_update</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+		<span class="p">)</span>
+
+		<span class="n">pseudospherical</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;pseudospherical&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;solver&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Invokes pseudospherical geometry for disort/twostr solver.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;pseudospherical&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.pseudospherical&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;rte_solver&#39;</span><span class="p">],</span>
+			<span class="n">speaker</span><span class="o">=</span><span class="s">&#39;rte_solver&#39;</span><span class="p">,</span>
+			<span class="n">enable_values</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;disort&quot;</span><span class="p">,</span><span class="s">&quot;twostr&quot;</span><span class="p">,)</span>
+		<span class="p">)</span>
+
+		<span class="n">disort_spherical_albedo</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;disort_spherical_albedo&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;solver&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Calculate spherical albedo.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;disort_spherical_albedo&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="p">[</span><span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.ibcnd&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+				  <span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.nphi&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="mi">0</span><span class="p">)],</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;rte_solver&#39;</span><span class="p">],</span>
+			<span class="n">speaker</span><span class="o">=</span><span class="s">&#39;rte_solver&#39;</span><span class="p">,</span>
+			<span class="n">enable_values</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;disort&quot;</span><span class="p">,),</span>
+                        <span class="n">developer</span><span class="o">=</span><span class="bp">True</span>
+		<span class="p">)</span>
+
+		<span class="n">disort_intcor</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;disort_intcor&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;solver&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Intensity correction method&#39;</span><span class="p">,</span> 
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;disort_intcor&#39;</span><span class="p">],</span>
+			<span class="n">gui_inputs</span><span class="o">=</span><span class="p">(</span><span class="n">ListInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;disort_intcor&#39;</span><span class="p">,</span> <span class="n">valid_range</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;phase&#39;</span><span class="p">,</span> <span class="s">&#39;moments&#39;</span><span class="p">,</span> <span class="s">&#39;off&#39;</span><span class="p">]),),</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="n">addLogical</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&quot;Input.rte.disort_icm&quot;</span><span class="p">,</span> <span class="n">logicals</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;phase&#39;</span><span class="p">,</span> <span class="s">&#39;moments&#39;</span><span class="p">,</span> <span class="s">&#39;off&#39;</span><span class="p">],</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;DISORT_ICM_&#39;</span><span class="p">),</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;rte_solver&#39;</span><span class="p">],</span>
+			<span class="n">speaker</span><span class="o">=</span><span class="s">&#39;rte_solver&#39;</span><span class="p">,</span>
+			<span class="n">enable_values</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;disort&quot;</span><span class="p">,)</span>
+		<span class="p">)</span>
+
+		<span class="n">isotropic_source_toa</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;isotropic_source_toa&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;solver&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Specifies that isotropic &#39;</span>
+			<span class="s">&#39;illumination is included at top-boundary.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;isotropic_source_toa&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.fisot&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+			<span class="n">gui_inputs</span><span class="o">=</span><span class="p">(</span><span class="n">FloatInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;isotropic_source_toa&#39;</span><span class="p">),),</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;rte_solver&#39;</span><span class="p">],</span>
+			<span class="n">speaker</span><span class="o">=</span><span class="s">&#39;rte_solver&#39;</span><span class="p">,</span>
+			<span class="n">enable_values</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;disort&quot;</span><span class="p">,</span>
+				      <span class="s">&quot;twostr&quot;</span><span class="p">,)</span>
+		<span class="p">)</span>
+
+		<span class="n">raman</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;raman&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;solver&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Include first order rotational Raman scattering.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;raman&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="p">[</span><span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.raman&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;RAMAN_CALC&#39;</span><span class="p">),</span>
+				<span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.ck_scheme&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;CK_RAMAN&#39;</span><span class="p">),</span>
+				<span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.solver&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;SOLVER_DISORT&#39;</span><span class="p">),</span>
+				<span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.processing&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;PROCESS_RAMAN&#39;</span><span class="p">),</span>
+				<span class="n">addLogical</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.raman_original&#39;</span><span class="p">,</span><span class="n">logicals</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;original&#39;</span><span class="p">],</span><span class="n">optional</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> <span class="p">],</span>
+			<span class="n">gui_inputs</span><span class="o">=</span><span class="p">(</span><span class="n">ListInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;raman_original&#39;</span><span class="p">,</span><span class="n">valid_range</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;original&#39;</span><span class="p">],</span><span class="n">optional</span><span class="o">=</span><span class="bp">True</span><span class="p">),),</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;rte_solver&#39;</span><span class="p">],</span>
+			<span class="n">speaker</span><span class="o">=</span><span class="s">&#39;rte_solver&#39;</span><span class="p">,</span>
+			<span class="n">enable_values</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;disort&quot;</span><span class="p">,),</span>
+		<span class="p">)</span>
+
+		<span class="n">number_of_streams</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;number_of_streams&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;solver&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Number of streams.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;number_of_streams&#39;</span><span class="p">],</span>
+			<span class="n">gui_inputs</span><span class="o">=</span><span class="p">(</span><span class="n">IntegerInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;number_of_streams&#39;</span><span class="p">),),</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.nstr&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">6</span><span class="p">),</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;rte_solver&#39;</span><span class="p">],</span>
+			<span class="n">speaker</span><span class="o">=</span><span class="s">&#39;rte_solver&#39;</span><span class="p">,</span>
+			<span class="n">enable_values</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;disort&quot;</span><span class="p">,</span><span class="s">&quot;polradtran&quot;</span><span class="p">,),</span>
+		<span class="p">)</span>
+
+		<span class="n">polradtran</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;polradtran&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;solver&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Set values for rte_solver polradtran.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;polradtran&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="p">[</span><span class="n">addLogical</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;id&#39;</span><span class="p">,</span> <span class="n">logicals</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;aziorder&#39;</span><span class="p">,</span><span class="s">&#39;nstokes&#39;</span><span class="p">,</span><span class="s">&#39;src_code&#39;</span><span class="p">],</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;POLRADTRAN_&#39;</span><span class="p">),</span>
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.polradtran[id]&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span> <span class="p">],</span>
+			<span class="n">speaker</span><span class="o">=</span><span class="s">&#39;rte_solver&#39;</span><span class="p">,</span>
+			<span class="n">enable_values</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;polradtran&#39;</span><span class="p">,),</span>
+			<span class="n">showInGui</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+			<span class="n">non_unique</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+		<span class="p">)</span>
+
+		<span class="n">polradtran_quad_type</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;polradtran_quad_type&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;solver&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Type of quadrature used&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;polradtran_quad_type&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.pol_quad_type&#39;</span><span class="p">,</span> <span class="n">valid_range</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;G&#39;</span><span class="p">,</span> <span class="s">&#39;D&#39;</span><span class="p">,</span> <span class="s">&#39;L&#39;</span><span class="p">,</span> <span class="s">&#39;E&#39;</span><span class="p">],</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">str</span><span class="p">),</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;rte_solver&#39;</span><span class="p">],</span>
+			<span class="n">speaker</span><span class="o">=</span><span class="s">&quot;rte_solver&quot;</span><span class="p">,</span>
+			<span class="n">enable_values</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;polradtran&quot;</span><span class="p">,),</span>
+			<span class="n">showInGui</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+		<span class="p">)</span>
+
+		<span class="n">polradtran_max_delta_tau</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;polradtran_max_delta_tau&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;solver&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Initial layer thickness for doubling.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;polradtran_max_delta_tau&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.pol_max_delta_tau&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="n">Double</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mf">1e-5</span> <span class="p">),</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;rte_solver&#39;</span><span class="p">],</span>
+			<span class="n">speaker</span><span class="o">=</span><span class="s">&quot;rte_solver&quot;</span><span class="p">,</span>
+			<span class="n">enable_values</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;polradtran&quot;</span><span class="p">,),</span>
+			<span class="n">showInGui</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+		<span class="p">)</span>
+
+
+<span class="c">#no_sdisort		nrefrac = conditional_enable_option(</span>
+<span class="c">#no_sdisort			name=&#39;nrefrac&#39;,</span>
+<span class="c">#no_sdisort			group=&#39;solver&#39;,</span>
+<span class="c">#no_sdisort			helpstr=&#39;Refraction for rte_solver sdisort.&#39;,</span>
+<span class="c">#no_sdisort			documentation=documentation[&#39;nrefrac&#39;],</span>
+<span class="c">#no_sdisort			gui_inputs=(IntegerListInput(name=&#39;Input.rte.nrefrac&#39;, default=0, valid_range=[0, 1, 2], optional=False),),</span>
+<span class="c">#no_sdisort			tokens=addToken(&#39;Input.rte.nrefrac&#39;, int, default=0, valid_range=[0,1,2]),</span>
+<span class="c">#no_sdisort			parents=[&#39;rte_solver&#39;],</span>
+<span class="c">#no_sdisort			speaker=&quot;rte_solver&quot;,</span>
+<span class="c">#no_sdisort			enable_values=(&quot;sdisort&quot;,)</span>
+<span class="c">#no_sdisort		)</span>
+
+<span class="c">#no_sdisort		nscat = option(</span>
+<span class="c">#no_sdisort			name=&#39;nscat&#39;,</span>
+<span class="c">#no_sdisort			group=&#39;solver&#39;,</span>
+<span class="c">#no_sdisort			helpstr=&#39;Order of scattering.&#39;,	</span>
+<span class="c">#no_sdisort			documentation=documentation[&#39;nscat&#39;],</span>
+<span class="c">#no_sdisort			gui_inputs=(IntegerInput(name=&#39;Input.rte.nscat&#39;),),</span>
+<span class="c">#no_sdisort			tokens=addToken(&#39;Input.rte.nscat&#39;, int, default=20),</span>
+<span class="c">#no_sdisort			parents=[&#39;rte_solver&#39;],</span>
+<span class="c">#no_sdisort			speaker=&quot;rte_solver&quot;,</span>
+<span class="c">#no_sdisort			enable_values=(&quot;sdisort&quot;,)</span>
+<span class="c">#no_sdisort		)</span>
+
+		<span class="n">sdisort</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;sdisort&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;solver&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Set values for rte_solver sdisort.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;sdisort&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="p">[</span><span class="n">addLogical</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;id&#39;</span><span class="p">,</span> <span class="n">logicals</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;ichapman&#39;</span><span class="p">,</span><span class="s">&#39;nscat&#39;</span><span class="p">,</span><span class="s">&#39;nrefrac&#39;</span><span class="p">],</span><span class="n">setting</span><span class="o">=</span><span class="s">&#39;SDISORT_&#39;</span><span class="p">),</span>
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.sdisort[id]&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span> <span class="p">],</span>
+			<span class="n">speaker</span><span class="o">=</span><span class="s">&#39;rte_solver&#39;</span><span class="p">,</span>
+			<span class="n">enable_values</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;sdisort&#39;</span><span class="p">,),</span>
+			<span class="n">showInGui</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+			<span class="n">non_unique</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+		<span class="p">)</span>
+
+		<span class="n">sos_nscat</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;sos_nscat&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;solver&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Set order of scattering moments for rte_solver sos.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;sos_nscat&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span><span class="o">=</span>	<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.sos_nscat&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span> <span class="p">,</span>
+			<span class="n">speaker</span><span class="o">=</span><span class="s">&#39;rte_solver&#39;</span><span class="p">,</span>
+			<span class="n">enable_values</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;sos&#39;</span><span class="p">,),</span>
+			<span class="n">showInGui</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                        <span class="n">developer</span><span class="o">=</span><span class="bp">True</span>
+		<span class="p">)</span>
+
+		<span class="n">deltam</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;deltam&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;solver&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Turn delta-M scaling on/off.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;deltam&#39;</span><span class="p">],</span>
+			<span class="n">gui_inputs</span><span class="o">=</span><span class="p">(</span><span class="n">ListInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.deltam&#39;</span><span class="p">,</span> <span class="n">valid_range</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;on&#39;</span><span class="p">,</span> <span class="s">&#39;off&#39;</span><span class="p">],</span> <span class="n">optional</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s">&#39;on&#39;</span><span class="p">),),</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="n">addLogical</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.deltam&#39;</span><span class="p">,</span> <span class="n">logicals</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;on&#39;</span><span class="p">,</span><span class="s">&#39;off&#39;</span><span class="p">],</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;SWITCH_&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s">&#39;SWITCH_ON&#39;</span><span class="p">),</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;rte_solver&#39;</span><span class="p">],</span>
+			<span class="n">speaker</span><span class="o">=</span><span class="s">&quot;rte_solver&quot;</span><span class="p">,</span>
+			<span class="n">enable_values</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;disort&quot;</span><span class="p">,</span> <span class="s">&quot;twostr&quot;</span><span class="p">,)</span>
+		<span class="p">)</span>
+		
+		<span class="n">ipa_3d</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;ipa_3d&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;solver&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;ipa_3d&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.ipa3d&#39;</span><span class="p">,</span><span class="n">setting</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+			<span class="n">threedmystic</span> <span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+			<span class="n">non_parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;tipa&#39;</span><span class="p">,],</span>
+			<span class="n">speaker</span><span class="o">=</span><span class="s">&#39;rte_solver&#39;</span><span class="p">,</span>
+			<span class="n">enable_values</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;disort&quot;</span><span class="p">,</span><span class="s">&quot;twostr&quot;</span><span class="p">,</span><span class="s">&quot;rodents&quot;</span><span class="p">,),</span>
+		<span class="p">)</span>
+
+		<span class="n">mc_tenstream</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;mc_tenstream&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;solver&#39;</span><span class="p">,</span> 
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Run Tenstream approximation solver instead of Photon Tracing.&#39;</span><span class="p">,</span> 
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;mc_tenstream&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.tenstream&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+			<span class="n">speaker</span><span class="o">=</span><span class="s">&#39;rte_solver&#39;</span><span class="p">,</span>
+			<span class="n">enable_values</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;mystic&quot;</span><span class="p">,),</span>
+			<span class="n">threedmystic</span> <span class="o">=</span><span class="bp">True</span>
+		<span class="p">)</span>
+
+		<span class="n">mc_ipa</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;mc_ipa&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;solver&#39;</span><span class="p">,</span> 
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Run MYSTIC in independent pixel mode.&#39;</span><span class="p">,</span> 
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;mc_ipa&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.ipa&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+			<span class="n">non_parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;mc_tipa&#39;</span><span class="p">,],</span>
+			<span class="n">speaker</span><span class="o">=</span><span class="s">&#39;rte_solver&#39;</span><span class="p">,</span>
+			<span class="n">enable_values</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;mystic&quot;</span><span class="p">,),</span>
+			<span class="n">threedmystic</span> <span class="o">=</span><span class="bp">True</span>
+		<span class="p">)</span>
+
+		<span class="n">mc_tipa</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;mc_tipa&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;solver&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Run MYSTIC in tilted independent pixel mode.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;mc_tipa&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="p">[</span><span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.ipa&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+				<span class="n">addLogical</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.tipa&#39;</span><span class="p">,</span> <span class="n">logicals</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;dirdiff&#39;</span><span class="p">,</span><span class="s">&#39;dir3d&#39;</span><span class="p">],</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;TIPA_&#39;</span><span class="p">)</span> <span class="p">],</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+			<span class="n">non_parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;mc_ipa&#39;</span><span class="p">,],</span>
+			<span class="n">speaker</span><span class="o">=</span><span class="s">&#39;rte_solver&#39;</span><span class="p">,</span>
+			<span class="n">enable_values</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;mystic&quot;</span><span class="p">,),</span>
+			<span class="n">developer</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+		<span class="p">)</span>
+
+		<span class="n">tipa</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;tipa&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;solver&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Use the tilted independent pixel approximation.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;tipa&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="n">addLogical</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.tipa&#39;</span><span class="p">,</span><span class="n">logicals</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;dirdiff&#39;</span><span class="p">,</span><span class="s">&#39;dir&#39;</span><span class="p">],</span><span class="n">setting</span><span class="o">=</span><span class="s">&#39;TIPA_&#39;</span><span class="p">),</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+			<span class="n">non_parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;ipa_3d&#39;</span><span class="p">,],</span>
+			<span class="n">speaker</span><span class="o">=</span><span class="s">&#39;rte_solver&#39;</span><span class="p">,</span>
+			<span class="n">enable_values</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;rodents&quot;</span><span class="p">,</span><span class="s">&#39;disort&#39;</span><span class="p">,</span><span class="s">&#39;twostr&#39;</span><span class="p">,),</span>
+			<span class="n">developer</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+		<span class="p">)</span>
+
+		<span class="n">sslidar</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;sslidar&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;solver&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Set single scattering lidar parameters.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;sslidar&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span><span class="o">=</span> <span class="p">[</span> <span class="n">addLogical</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;id&#39;</span><span class="p">,</span><span class="n">logicals</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;area&#39;</span><span class="p">,</span><span class="s">&#39;E0&#39;</span><span class="p">,</span><span class="s">&#39;eff&#39;</span><span class="p">,</span><span class="s">&#39;position&#39;</span><span class="p">,</span><span class="s">&#39;range&#39;</span><span class="p">],</span><span class="n">setting</span><span class="o">=</span><span class="s">&#39;SSLIDAR_&#39;</span><span class="p">),</span>
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.sslidar[id]&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span> <span class="p">],</span>
+			<span class="n">gui_inputs</span><span class="o">=</span> <span class="p">(</span><span class="n">ListInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;id&#39;</span><span class="p">,</span> <span class="n">valid_range</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;area&#39;</span><span class="p">,</span><span class="s">&#39;e0&#39;</span><span class="p">,</span><span class="s">&#39;eff&#39;</span><span class="p">,</span><span class="s">&#39;position&#39;</span><span class="p">,</span><span class="s">&#39;range&#39;</span><span class="p">]),</span><span class="n">FloatInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.sslidar[id]&#39;</span><span class="p">),),</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+			<span class="n">speaker</span><span class="o">=</span><span class="s">&#39;rte_solver&#39;</span><span class="p">,</span>
+			<span class="n">enable_values</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;sslidar&quot;</span><span class="p">,),</span>
+			<span class="n">non_unique</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+		<span class="p">)</span>
+
+		<span class="n">sslidar_nranges</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;sslidar_nranges&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;solver&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Set number fo range bins for single scattering lidar.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;sslidar_nranges&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span><span class="o">=</span> <span class="p">[</span> <span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.sslidar_nranges&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span> <span class="p">],</span>
+			<span class="n">gui_inputs</span><span class="o">=</span> <span class="p">(</span><span class="n">IntegerInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.sslidar_nranges&#39;</span><span class="p">),),</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+			<span class="n">speaker</span><span class="o">=</span><span class="s">&#39;rte_solver&#39;</span><span class="p">,</span>
+			<span class="n">enable_values</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;sslidar&quot;</span><span class="p">,),</span>
+		<span class="p">)</span>
+
+		<span class="n">sslidar_polarisation</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;sslidar_polarisation&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;solver&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Turn on polarisation measurement for lidar.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;sslidar_polarisation&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span><span class="o">=</span> <span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.sslidar_polarisation&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+			<span class="n">speaker</span><span class="o">=</span><span class="s">&#39;rte_solver&#39;</span><span class="p">,</span>
+			<span class="n">enable_values</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;sslidar&quot;</span><span class="p">,),</span>
+		<span class="p">)</span>
+
+                <span class="n">tzs_cloud_top_height</span> <span class="o">=</span> <span class="n">not_yet_lex2py_option</span><span class="p">(</span>
+                        <span class="n">name</span><span class="o">=</span><span class="s">&#39;tzs_cloud_top_height&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;solver&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Cloud top height[s] of blackbody clouds&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;tzs_cloud_top_height&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">str</span><span class="p">),</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+			<span class="n">speaker</span><span class="o">=</span><span class="s">&#39;rte_solver&#39;</span><span class="p">,</span>
+			<span class="n">enable_values</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;tzs&#39;</span><span class="p">,),</span>
+		<span class="p">)</span>
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">options</span> <span class="o">=</span> <span class="p">[</span><span class="n">rte_solver</span><span class="p">,</span> <span class="n">pseudospherical</span><span class="p">,</span> <span class="n">disort_spherical_albedo</span><span class="p">,</span>
+				<span class="n">deltam</span><span class="p">,</span> 
+				<span class="n">isotropic_source_toa</span><span class="p">,</span> <span class="n">raman</span><span class="p">,</span> 
+                                <span class="n">mc_tenstream</span><span class="p">,</span>
+				<span class="n">mc_ipa</span><span class="p">,</span> <span class="n">ipa_3d</span><span class="p">,</span> <span class="n">mc_tipa</span><span class="p">,</span> <span class="n">tipa</span><span class="p">,</span>
+				<span class="n">number_of_streams</span><span class="p">,</span> 				
+				<span class="n">disort_intcor</span><span class="p">,</span> 
+				<span class="n">polradtran</span><span class="p">,</span> 
+				<span class="n">polradtran_quad_type</span><span class="p">,</span> <span class="n">polradtran_max_delta_tau</span><span class="p">,</span> 
+				<span class="n">sslidar</span><span class="p">,</span> <span class="n">sslidar_polarisation</span><span class="p">,</span> <span class="n">sslidar_nranges</span><span class="p">,</span> 
+				<span class="n">sdisort</span><span class="p">,</span> <span class="n">sos_nscat</span><span class="p">,</span> <span class="n">tzs_cloud_top_height</span> <span class="p">]</span>
+</div>
+	<span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="get_solver_documentation"><a class="viewcode-back" href="../../../mortapi/morticia.rad.html#morticia.rad.solver_options.get_solver_documentation">[docs]</a><span class="k">def</span> <span class="nf">get_solver_documentation</span><span class="p">():</span>
+	<span class="k">return</span> <span class="p">{</span>
+		<span class="s">&#39;sslidar&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Set single scattering lidar parameters (\code{rte_solver sslidar}).</span>
+<span class="s">	\fcode{</span>
+<span class="s">	sslidar variable value</span>
+<span class="s">	}</span>
+<span class="s">	\code{variable} can be one of the following:</span>
+<span class="s">	\begin{description}</span>
+<span class="s">	\item[area] Set area of single scattering lidar in units of square meters (default: 1.0)</span>
+<span class="s">	\item[E0] Set Laser pulse energy for single scattering lidar in units of (default: 0.1)</span>
+<span class="s">	Joule (You can also use a \code{source solar file}</span>
+<span class="s">	instead... not yet implemented.)</span>
+<span class="s">	\item[eff] Set lidar efficiency for single scattering lidar (default: 0.5)</span>
+<span class="s">	\item[position] Set lidar position for single scattering lidar in units of km (default: 0.0)</span>
+<span class="s">	\item[range] Set lidar range bin width for single scattering lidar in units of km (default: 0.1)</span>
+<span class="s">	\end{description}</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+		<span class="s">&#39;sslidar_nranges&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Set number of range bins for single scattering lidar (solver</span>
+<span class="s">	\code{sslidar}). Default is 100.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+		<span class="s">&#39;sslidar_polarisation&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Turn on polarisation measurement for lidar (solver \code{sslidar}). Default is without polarisation.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;ipa_3d&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	This option can be used to carry out a 3D calculation with a 1D-solver, where a </span>
+<span class="s">	3D-cloud file as used for MYSTIC (flag 3) serves as an input file. Further, a sample grid needs to be specified</span>
+<span class="s">	via \code{mc_sample_grid}, where the grid and the resolution has to be the same as in the 3D-cloud file</span>
+<span class="s">	(Nx, Ny, dx, dy). To calculate heating rates, \code{mc_backward_output heat K_per_day} must stand in the input</span>
+<span class="s">	file. </span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;mc_tenstream&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">        The tenstream solver is a mpi-parallelized finite volume method.</span>
+
+<span class="s">        First build libtenstream:\\</span>
+<span class="s">        Either run \\</span>
+<span class="s">        \code{ ./configure --with-download-tenstream } \\</span>
+<span class="s">        or do the checkout yourself: \\</span>
+<span class="s">          \code{svn co https://svn.physik.uni-muenchen.de/repos/hdcp2-rt/tenstream}\\</span>
+<span class="s">        Then follow the instructions to compile the tenstream lib in \\</span>
+<span class="s">        \code{tenstream/README} \\</span>
+<span class="s">        If it was successful, there should be the file \\ </span>
+<span class="s">        \code{tenstream/build/lib/libtenstream.a}.</span>
+
+<span class="s">        Now configure libRadtran and it should hopefully find the tenstream-lib:\\</span>
+<span class="s">          \code{ ./configure  }\\</span>
+<span class="s">        It should say \\</span>
+<span class="s">          \code{ TENSTREAM solver:     yes }\\</span>
+
+<span class="s">        Input files are the same as for MYSTIC calculations with the additional </span>
+<span class="s">        option mc\_tenstream.</span>
+<span class="s">        You can call the MPI version with:\\</span>
+<span class="s">        \code{mpirun -np 2 bin/uvspec_mpi &lt;inputfile&gt;  &lt;PETSc options&gt; }.</span>
+
+<span class="s">        If you are serious about solving bigger systems we highly recommend that you make yourself familiar with PETSc&#39;s options.\\</span>
+<span class="s">        As a start you could try:</span>
+
+<span class="s">          Solve the direct radiation with direct LU method\,(Only very small problems, 1 process)\\</span>
+<span class="s">              \code{-dir\_ksp\_type richardson -dir\_pc\_type lu}\\</span>
+<span class="s">          Solve diffuse radiation with parallel LU\\</span>
+<span class="s">              \code{-diff\_ksp\_type richardson -diff\_pc\_type lu -diff\_pc\_factor\_mat\_solver\_package mumps}\\</span>
+<span class="s">          Monitor convergence\,(recommended)\\</span>
+<span class="s">              \code{-dir\_ksp\_monitor -dir\_ksp\_view -dir\_ksp\_converged\_reason} \\</span>
+<span class="s">              \code{-diff\_ksp\_monitor -diff\_ksp\_view -diff\_ksp\_converged\_reason}\\</span>
+<span class="s">          Solve diffuse radiation with bi-conjugate-gradient-stabilized with incomplete LU with 2 levels of fill for each node.\,(for middle sized problems)\\</span>
+<span class="s">              \code{-diff\_ksp\_type bcgs -diff\_pc\_type bjacobi -diff\_sub\_pc\_factor\_levels 2} \\</span>
+<span class="s">          Algebraic Geometric Multigrid Preconditioner\,(for big problems)\\</span>
+<span class="s">              \code{-diff\_pc\_type ml} \\</span>
+<span class="s">        Options may also be written to \\~/.petscrc.\\</span>
+
+<span class="s">                &#39;&#39;&#39;</span><span class="p">,</span>
+
+                <span class="s">&#39;mc_ipa&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Run MYSTIC in independent pixel mode. Only meaningful with \code{rte_solver montecarlo}.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+		<span class="s">&#39;polradtran_max_delta_tau&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Initial layer thickness for doubling; governs accuracy, 10E-5 should be</span>
+<span class="s">	adequate. Do not go beyond half the real precision, i.e. 10e-8 for REAL*8.</span>
+<span class="s">	Default 1.e-05.</span>
+<span class="s">	\fcode{</span>
+<span class="s">	polradtran_max_delta_tau value</span>
+<span class="s">	}</span>
+<span class="s">	This option is only relevant for \code{rte_solver polradtran}.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+		<span class="s">&#39;mc_tipa&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Run MYSTIC in tilted independent pixel mode. Only meaningful with \code{rte_solver</span>
+<span class="s">	montecarlo}. Choose either \code{mc_tipa dir3d} or \code{mc_tipa</span>
+<span class="s">	dirdiff}. The latter is the analogon to \code{tipa dirdiff}, where the</span>
+<span class="s">	3d-cloud-matrix is tilted according to the solar zenith angle and is</span>
+<span class="s">	then used as input for all the following calculations. </span>
+<span class="s">	In \code{mc_tipa dir3d}, photons are propagated in 3d until the first</span>
+<span class="s">        scattering occurs, after that the photon is captured within the current</span>
+<span class="s">        column.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;tipa&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	With the option \code{tipa dirdiff}, the tilted independent</span>
+<span class="s">	pixel (column) approximation (TIPA, the same as TICA) is carried out,</span>
+<span class="s">	where a 3D-cloud file serves as input and the columns are tilted</span>
+<span class="s">	towards the sun (see, e.g., Wapler and Mayer, 2008).  \code{tipa</span>
+<span class="s">	dirdiff} works with all 1D-rte-solvers.  When choosing</span>
+<span class="s">	tipa (\code{tipa dir}), from the &quot;tilted clouds&quot; only the optical</span>
+<span class="s">	depth for the calculation of the direct radiation is derived and used</span>
+<span class="s">	later to calculate the diffuse radiation. To calculate the diffuse</span>
+<span class="s">	radiation, the original cloud-matrix is still necessary /</span>
+<span class="s">	maintained. \code{tipa dir} works only with Roberts (Buras)</span>
+<span class="s">	delta--Eddington two--stream model \code{rodents}.  For both tipa</span>
+<span class="s">	options, a \code{mc_sample_grid} has to be specified as Nx Ny dx dy. A</span>
+<span class="s">	3d-cloud-file (with flag 3) serves as input (see</span>
+<span class="s">	\code{wc_file 3D}). The output is written into mc.flx(.spc),</span>
+<span class="s">	however, a basename via \code{mc_basename} can be given.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;rte_solver&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Set the radiative transfer equation solver to be used. </span>
+<span class="s">	\fcode{</span>
+<span class="s">	rte_solver type</span>
+<span class="s">	}</span>
+<span class="s">	If not specified the default \code{rte_solver} is \code{disort}.</span>
+<span class="s">	Choices for \code{type} are</span>
+<span class="s">	\begin{description}</span>
+
+<span class="s">	\parameter{disort}</span>
+<span class="s">	C-version of the disort algorithm, translated from Fortran by Tim Dowling. </span>
+<span class="s">	This is the recommended discrete ordinate code in {\sl libRadtran}.</span>
+<span class="s">	For documentation see \file{src\_f/DISORT2.doc} as well as the papers and</span>
+<span class="s">	the DISORT report at</span>
+<span class="s">	ftp://climate1.gsfc.nasa.gov/wiscombe/Multiple\_Scatt/.  The intensity</span>
+<span class="s">	correction can be performed according to \citet{nakajima1988} using</span>
+<span class="s">	\code{disort_intcor moments} (like in the original code), or with the </span>
+<span class="s">	improvements described in (Buras, Dowling, Emde, in preparation; default). Can be run in  </span>
+<span class="s">	plane-parallel geometry (default) or in pseudo-spherical geometry </span>
+<span class="s">	(using \code{pseudospherical}).</span>
+
+<span class="s">	\parameter{twostr}</span>
+<span class="s">	C-version of the two--stream radiative transfer solver described by</span>
+<span class="s">	\citet{Kylling1995}. Can be run in plane-parallel geometry (default)</span>
+<span class="s">	or in pseudo-spherical geometry (using \code{pseudospherical}</span>
+<span class="s">	).</span>
+
+<span class="s">	\parameter{fdisort1}</span>
+<span class="s">	The standard plane--parallel disort algorithm by \citet{Stamnes1988c},</span>
+<span class="s">	version 1.3 -- provided for compatibility reasons. Use only if you have troubles with the default			         </span>
+<span class="s">        \code{disort} or for historical reasons. For documentation see \file{src\_f/DISORT.doc} as well </span>
+<span class="s">	as the papers and the DISORT report at</span>
+<span class="s">	ftp://climate1.gsfc.nasa.gov/wiscombe/Multiple\_Scatt/. To optimize</span>
+<span class="s">	for computational time and memory, please adjust the parameters in</span>
+<span class="s">	\file{src\_f/DISORT.MXD} for your application and re-compile. For your</span>
+<span class="s">	application please use \code{rte_solver fdisort2} which is the advanced</span>
+<span class="s">	version, unless you e.g. want to explore how a specific feature of</span>
+<span class="s">	\code{fdisort2} (e.g. the \citet{nakajima1988} intensity correction)</span>
+<span class="s">	improves the \code{fdisort1} result.</span>
+
+<span class="s">	\parameter{fdisort2}</span>
+<span class="s">	Version 2 of the Fortran algorithm disort -- provided for compatibility reasons.</span>
+<span class="s">	Use only if you have troubles with the default \code{disort} or for historical reasons. For documentation see</span>
+<span class="s">	\file{src\_f/DISORT2.doc} as well as the papers and the DISORT report</span>
+<span class="s">	at ftp://climate1.gsfc.nasa.gov/wiscombe/Multiple\_Scatt/</span>
+<span class="s">	\code{fdisort2} has several improvements compared to its &#39;ancestor&#39;</span>
+<span class="s">	\code{fdisort1} (version 1.3). To optimize for computational time and</span>
+<span class="s">	memory, please adjust the parameters in \code{src_f/DISORT.MXD} for</span>
+<span class="s">	your application and re-compile.</span>
+<span class="s">	Note! \code{fdisort2} is a new version of the original disort code</span>
+<span class="s">	which was implemented in summer 2009. It uses phase functions to</span>
+<span class="s">	calculate the intensity corrections by \citet{nakajima1988} instead of</span>
+<span class="s">	Legendre moments. Hence it needs cloud properties files which contain</span>
+<span class="s">	the phase functions. It is still possible to use the old version of</span>
+<span class="s">	disort, you need to specify \code{disort_intcor moments}.</span>
+
+<span class="s">	\parameter{sdisort}</span>
+<span class="s">	Pseudospherical disort as described by \citet{Dahlback1991}. Double</span>
+<span class="s">	precision version. To optimize for computational time and memory,</span>
+<span class="s">	please adjust the parameters in \file{src\_f/DISORT.MXD} for your</span>
+<span class="s">	application and re-compile.  </span>
+
+<span class="s">	\parameter{spsdisort} Pseudospherical</span>
+<span class="s">	disort as described by \citet{Dahlback1991}, single precision</span>
+<span class="s">	version. \strong{Warning:} it is not recommended to use</span>
+<span class="s">	\code{spsdisort} for really large solar zenith angles nor for cloudy</span>
+<span class="s">	conditions. For large optical thickness it is numerically unstable and</span>
+<span class="s">	may produce wrong results. To optimize for computational time and</span>
+<span class="s">	memory, please adjust the parameters in \file{src_f/DISORT.MXD} for</span>
+<span class="s">	your application and re-compile.  </span>
+
+<span class="s">	\parameter{polradtran} The plane-parallel radiative transfer solver of \citet{Evans1991}.</span>
+<span class="s">	Includes polarization. The full implementation of the polRadtran</span>
+<span class="s">	solver in \code{uvspec} is quite new (version 1.4). If you find</span>
+<span class="s">	unusual behaviour, please contact the {\sl libRadtran} authors.</span>
+
+<span class="s">	\parameter{ftwostr}</span>
+<span class="s">	Original Fortran-version of the two--stream radiative transfer solver described by</span>
+<span class="s">	\citet{Kylling1995}, in pseudo-spherical geometry.</span>
+
+<span class="s">	\parameter{rodents}</span>
+<span class="s">	Delta-Eddington two--stream code (RObert&#39;s Delta-EddingtoN Two-Stream), plane-parallel.</span>
+
+<span class="s">	\undocumented{</span>
+<span class="s">	 \parameter{twostrebe}</span>
+<span class="s">	 Delta-Eddington two--stream solver by Bernhard Mayer. \code{zout_interpolate} is activated automatically.</span>
+<span class="s">	}</span>
+
+<span class="s">	\parameter{sslidar}</span>
+<span class="s">	A simple single scattering lidar simulator by Robert Buras.</span>
+
+<span class="s">	\parameter{sos}</span>
+<span class="s">	A scalar pseudospherical succesive orders of scattering code. Works</span>
+<span class="s">	for solar zenith angles smaller than 90 degrees. Can calculate</span>
+<span class="s">	azimuthally averaged radiances. Set \code{sos_nscat} to specify the order</span>
+<span class="s">	of scattering.</span>
+
+<span class="s">	\ifmystic{</span>
+<span class="s">	\parameter{montecarlo}</span>
+<span class="s">	The MYSTIC Monte Carlo code. Monte Carlo is</span>
+<span class="s">	the method of choice (1) for horizontally</span>
+<span class="s">	inhomogeneous problems; (2) whenever</span>
+<span class="s">	polarization is involved; (3) for applications</span>
+<span class="s">	where spherical geometry plays a role; and (4)</span>
+<span class="s">	whenever sharp features of the scattering</span>
+<span class="s">	phase function play a role, like for the </span>
+<span class="s">	calculation of the backscatter glory or the</span>
+<span class="s">	aureole.  </span>
+<span class="s">	\parameter{mystic}</span>
+<span class="s">	Same as \code{montecarlo}.</span>
+<span class="s">	}</span>
+
+<span class="s">	\parameter{tzs} TZS stands for &quot;thermal, zero scattering&quot; and is a</span>
+<span class="s">	very fast analytical solution for the special case of thermal emission</span>
+<span class="s">	in a non-scattering atmosphere. Please note that TZS does only</span>
+<span class="s">	radiance calculations at top of the atmosphere. &quot;Blackbody clouds&quot; may be included </span>
+<span class="s">        using the option \code{tzs_cloud_top_height}. </span>
+
+<span class="s">	\parameter{sss}</span>
+<span class="s">	SSS stands for &quot;solar, single scattering&quot; and is an analytical single</span>
+<span class="s">	scattering approximation which might be reasonable for an optically</span>
+<span class="s">	thin atmosphere. Please note that SSS does only radiance calculations</span>
+<span class="s">	at top of the atmosphere. This is an experimental solver - be careful!</span>
+
+<span class="s">	\undocumented{</span>
+<span class="s">	\parameter{sssi} Missing documentation!!!</span>
+<span class="s">	}</span>
+
+<span class="s">	\parameter{null}</span>
+<span class="s">	The NULL solver does not solve the radiative transfer</span>
+<span class="s">	equation. However, it sets up the optical properties, and does the</span>
+<span class="s">	post-processing; useful if you are either interested in the overhead</span>
+<span class="s">	time required by a particular model input or if you are simply</span>
+<span class="s">	interested in the optical properties, as output by \code{verbose}.</span>
+<span class="s">	\end{description}</span>
+<span class="s">	Default: \code{disort}</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+		<span class="s">&#39;raman&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	\fcode{</span>
+<span class="s">	raman [original]</span>
+<span class="s">	}</span>
+<span class="s">	The \code{raman} option includes single order rotational Raman scattering in </span>
+<span class="s">	the calculation. The solution treats Raman as a perturbation similar to the </span>
+<span class="s">	approaches of \citet{Vountas1998} and \citet{Spurr2008}.</span>
+<span class="s">	</span>
+<span class="s">	The \code{raman} option may only be used for spectral calculation.</span>
+
+<span class="s">	The disort radiative transfer solver with a general source is needed to solve the radiative transfer</span>
+<span class="s">	equation including Raman scattering. This solver is automagically invoked when specifying </span>
+<span class="s">	the \code{raman} option. It is thus not neccessary to set the \code{rte_solver}.</span>
+
+<span class="s">	The \code{raman} option is optimized with respect to speed. The optimized implementation</span>
+<span class="s">	should be just as accurate as the original version. To use the original version</span>
+<span class="s">	invode \code{raman original}. With the optional argument \code{original} each wavelength </span>
+<span class="s">	is treated individually and is thus accurate, but computationally very expensive. </span>
+
+<span class="s">	Please note that while the \code{raman} option has been extensively tested and verified, it </span>
+<span class="s">	is nevertheless a new option, hence, use it with care.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+		<span class="s">&#39;pseudospherical&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Invokes pseudo-spherical geometry in disort/twostr. Default is plane-parallel.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+		<span class="s">&#39;disort_spherical_albedo&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Calculate spherical albedo using \code{disort}. When this option is enabled,</span>
+<span class="s">	only the spherical albedo is calculated. The output is enabled by </span>
+<span class="s">	\fcode{output_user spher_alb}</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+		<span class="s">&#39;disort_intcor&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Intensity correction method for \code{rte_solver disort} or</span>
+<span class="s">	\code{rte_solver fdisort2}. Valid options are \code{phase}, i.e.~the</span>
+<span class="s">	phase function is used for the Nakajima intensity correction, and</span>
+<span class="s">	\code{moments}, i.e.~the Legendre moments are used for the</span>
+<span class="s">	correction. Optionally, the option \code{off} turns off the intensity</span>
+<span class="s">	correction. Default is \code{phase}.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+		<span class="s">&#39;isotropic_source_toa&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Specifies that isotropic illumination is used at top-boundary instead</span>
+<span class="s">	of beam source. Useful for those who want to calculate the reflectance </span>
+<span class="s">	for a homogeneous or inhomogeneous atmosphere. The intensity is still set by</span>
+<span class="s">	\code{source solar file}. Only works with \code{disort} and \code{twostr}.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+		<span class="s">&#39;number_of_streams&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Number of streams used to solve the radiative transfer equation.</span>
+<span class="s">	\fcode{</span>
+<span class="s">	number_of_streams value</span>
+<span class="s">	}</span>
+<span class="s">	Default is 6 for fluxes and 16 for radiances.</span>
+<span class="s">	(For \code{rte_solver fdisort1}, \code{fdisort2} and \code{disort} only</span>
+<span class="s">	even number of streams are possible.)</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+		<span class="s">&#39;polradtran_quad_type&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Type of quadrature used:</span>
+<span class="s">	\fcode{</span>
+<span class="s">	polradtran_quad_type type</span>
+<span class="s">	}</span>
+<span class="s">	where \code{type} is one of</span>
+<span class="s">	\begin{description}</span>
+<span class="s">	\item[G] (default) gaussian</span>
+<span class="s">	\item[D] double gaussian, </span>
+<span class="s">	\item[L] Lobatto</span>
+<span class="s">	\item[E] extra-angle(s), this must be used of \code{polradtran} is used in </span>
+<span class="s">	combination with \code{umu}. Will internally use Gaussian scheme (\code{G}). </span>
+<span class="s">	See also radtran documentation (\file{libsrc_f/README.polRadtran}).</span>
+<span class="s">	\end{description}</span>
+<span class="s">	Default G.                                  </span>
+<span class="s">	This option is only relevant for \code{rte_solver polradtran}.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;polradtran&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Specify polradtran values. This option is only relevant for \code{rte_solver polradtran}.</span>
+
+<span class="s">	\fcode{</span>
+<span class="s">	polradtran aziorder value</span>
+<span class="s">	}</span>
+<span class="s">	Order of Fourier azimuth series.</span>
+<span class="s">	The value \code{0} (default for irradiance) is the azimuthally symmetric case.</span>
+<span class="s">	For radiance computation a higher order is required, thus the default for radiances is 4. </span>
+
+<span class="s">	\fcode{</span>
+<span class="s">	polradtran nstokes value</span>
+<span class="s">	}</span>
+<span class="s">	Number of Stokes parameters</span>
+<span class="s">	where \code{value} is one of</span>
+<span class="s">	\begin{description}</span>
+<span class="s">	\item[1] for I (no polarization, default)</span>
+<span class="s">	\item[2] for I,Q,U (Since V is very small in the atmosphere, it makes sense</span>
+<span class="s">	           to compute only I,Q,U. This saves computation time and</span>
+<span class="s">		   memory).</span>
+<span class="s">	\item[3] for I,Q,U,V</span>
+<span class="s">	\end{description}</span>
+<span class="s">	Default is 1.</span>
+
+<span class="s">	\fcode{</span>
+<span class="s">	polrdatran src_code value</span>
+<span class="s">	}</span>
+<span class="s">	Radiation sources included</span>
+<span class="s">	which may be</span>
+<span class="s">	\begin{description}</span>
+<span class="s">	\item[0] none</span>
+<span class="s">	\item[1] solar</span>
+<span class="s">	\item[2] thermal</span>
+<span class="s">	\item[3] both</span>
+<span class="s">	\end{description}</span>
+<span class="s">	Default 1.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+		<span class="s">&#39;sos_nscat&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Set the order of scattering for \code{rte_solver sos}.</span>
+<span class="s">	\fcode{</span>
+<span class="s">	sos_nscat value</span>
+<span class="s">	}</span>
+<span class="s">	Default is 20.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+		<span class="s">&#39;sdisort&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Specify sdisort values. This option is only relevant for \code{rte_solver sdisort}.</span>
+
+<span class="s">	%CE: Commented for ESA version</span>
+<span class="s">	\undocumented{</span>
+<span class="s">	\fcode{</span>
+<span class="s">	sdisort ichapman value</span>
+<span class="s">	}</span>
+<span class="s">	Undocumented option for sdisort. Default is 1.</span>
+<span class="s">	}</span>
+
+<span class="s">	\fcode{</span>
+<span class="s">	sdisort nscat value</span>
+<span class="s">	}</span>
+<span class="s">	Set the order of scattering. </span>
+<span class="s">	If \code{value} is set to 1 \code{sdisort} will run in single scattering mode </span>
+<span class="s">	while if set to 2, \code{sdisort} runs in full multiple scattering mode.</span>
+<span class="s">	Default is 2 for \code{rte_solver sdisort}. </span>
+
+<span class="s">	\fcode{</span>
+<span class="s">	sdisort nrefrac value</span>
+<span class="s">	}</span>
+<span class="s">	Include refraction where \code{value} has the meaning</span>
+<span class="s">	\begin{description}</span>
+<span class="s">	\item[0] No refraction, default.</span>
+<span class="s">	\item[1] Refraction included using fast, but harsh method.</span>
+<span class="s">	\item[2] Refraction included using slow, but accurate method.</span>
+<span class="s">	\end{description}</span>
+<span class="s">	If refraction is included also set parameter \code{refraction_file}.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+		<span class="s">&#39;deltam&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Turn delta-M scaling on/off. Set to either \code{on} or</span>
+<span class="s">	\code{off}. Note that for the \code{rte_solver disort} and</span>
+<span class="s">	\code{rte_solver fdisort2} delta-M scaling is hardcoded to be always</span>
+<span class="s">	on.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+                <span class="s">&#39;tzs_cloud_top_height&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Define cloud top height of &quot;blackbody clouds&quot; for radiative transfer solver \code{tzs}.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+	<span class="p">}</span></div>
+</pre></div>
+
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, D Griffith, A Ramkilowan.
+    </p>
+  </div>
+
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

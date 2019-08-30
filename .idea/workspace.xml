@@ -1,0 +1,1467 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AnalysisUIOptions">
+    <option name="SCOPE_TYPE" value="3" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="6ec3b413-8c3e-4e6f-81c2-241be1119581" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/morticia/scene/snap.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MORTICIADesign/MORTICIApackages.txt" afterPath="$PROJECT_DIR$/MORTICIADesign/MORTICIApackages.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/morticia/tools/README.md" afterPath="$PROJECT_DIR$/morticia/tools/README.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/morticia/doc/index.rst" afterPath="$PROJECT_DIR$/morticia/doc/index.rst" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/morticia/doc/installation.rst" afterPath="$PROJECT_DIR$/morticia/doc/installation.rst" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/morticia/rad/librad.py" afterPath="$PROJECT_DIR$/morticia/rad/librad.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/morticia/rad/radute.py" afterPath="$PROJECT_DIR$/morticia/rad/radute.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/morticia/tools/xd.py" afterPath="$PROJECT_DIR$/morticia/tools/xd.py" />
+    </list>
+    <ignored path="MORTICIA.iws" />
+    <ignored path=".idea/workspace.xml" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
+  <component name="CreatePatchCommitExecutor">
+    <option name="PATCH_PATH" value="" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
+  <component name="FavoritesManager">
+    <favorites_list name="MORTICIA" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf>
+      <file leaf-file-name="radute.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/morticia/rad/radute.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="713" column="34" selection-start-line="713" selection-start-column="34" selection-end-line="713" selection-end-column="34" />
+              <folding>
+                <element signature="e#471#489#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="README.md" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/README.md">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="58" column="99" selection-start-line="58" selection-start-column="99" selection-end-line="58" selection-end-column="99" />
+              <folding />
+            </state>
+          </provider>
+          <provider editor-type-id="MarkdownPreviewEditor">
+            <state />
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="librad.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/morticia/rad/librad.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="137" column="75" selection-start-line="137" selection-start-column="75" selection-end-line="137" selection-end-column="75" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="xd.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/morticia/tools/xd.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="261" column="77" selection-start-line="261" selection-start-column="77" selection-end-line="261" selection-end-column="77" />
+              <folding>
+                <element signature="e#368#386#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="mitsuba.rst" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/morticia/doc/mitsuba.rst">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="135" column="31" selection-start-line="135" selection-start-column="31" selection-end-line="135" selection-end-column="31" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="README.md" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/morticia/tools/README.md">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+          <provider editor-type-id="MarkdownPreviewEditor">
+            <state />
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="installation.rst" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/morticia/doc/installation.rst">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="44" column="35" selection-start-line="44" selection-start-column="35" selection-end-line="44" selection-end-column="35" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="snap.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/morticia/scene/snap.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="23" column="67" selection-start-line="23" selection-start-column="67" selection-end-line="23" selection-end-column="67" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="mortsuba.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/morticia/scene/mortsuba.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="2225" column="119" selection-start-line="2225" selection-start-column="119" selection-end-line="2225" selection-end-column="119" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="target.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/morticia/scene/target.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="142" column="52" selection-start-line="142" selection-start-column="52" selection-end-line="142" selection-end-column="52" />
+              <folding>
+                <element signature="e#1#20#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="PREVIOUS_COMMIT_AUTHORS">
+      <list>
+        <option value="Up" />
+      </list>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="DereksBranch" />
+      </map>
+    </option>
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/librad.py" />
+        <option value="$PROJECT_DIR$/librad/libRadtranTutorial.ipynb" />
+        <option value="$PROJECT_DIR$/librad/libradtran.py" />
+        <option value="$PROJECT_DIR$/librad/aerosol_options.py" />
+        <option value="$PROJECT_DIR$/librad/mc_options.py" />
+        <option value="$PROJECT_DIR$/librad/test_librad.py" />
+        <option value="$PROJECT_DIR$/librad/README.md" />
+        <option value="$PROJECT_DIR$/librad/librad.py" />
+        <option value="$PROJECT_DIR$/sensor/ModeFPAImageTTP.py" />
+        <option value="$PROJECT_DIR$/MORTICIApackages.txt" />
+        <option value="$PROJECT_DIR$/sensor/optics.py" />
+        <option value="$PROJECT_DIR$/rad/radute.py" />
+        <option value="$PROJECT_DIR$/Notebooks/__init__.py" />
+        <option value="$PROJECT_DIR$/__init__.py" />
+        <option value="$PROJECT_DIR$/moglo.py" />
+        <option value="$PROJECT_DIR$/doc/index.rst" />
+        <option value="$PROJECT_DIR$/morticia/doc/mortapi/morticia.sensor.rst" />
+        <option value="$PROJECT_DIR$/morticia/rad/examples/README" />
+        <option value="$PROJECT_DIR$/morticia/rad/__init__.py" />
+        <option value="$PROJECT_DIR$/morticia/sensor/__init__.py" />
+        <option value="$PROJECT_DIR$/morticia/__init__.py" />
+        <option value="$PROJECT_DIR$/morticia/doc/intro.rst" />
+        <option value="$PROJECT_DIR$/morticia/sensor/README.md" />
+        <option value="$PROJECT_DIR$/morticia/tools/xd_test.py" />
+        <option value="$PROJECT_DIR$/morticia/sensor/temp.py" />
+        <option value="$PROJECT_DIR$/morticia/doc/sensorpack.rst" />
+        <option value="$PROJECT_DIR$/morticia/doc/makelatex.bat" />
+        <option value="$PROJECT_DIR$/morticia/sensor/electro.py" />
+        <option value="$PROJECT_DIR$/morticia/rad/README.md" />
+        <option value="$PROJECT_DIR$/README.md" />
+        <option value="$PROJECT_DIR$/morticia/doc/conventions.rst" />
+        <option value="$PROJECT_DIR$/morticia/doc/ChapLibRadtranODandPathRadiance.rst" />
+        <option value="$PROJECT_DIR$/morticia/doc/conf.py" />
+        <option value="$PROJECT_DIR$/morticia/doc/radpack.rst" />
+        <option value="$PROJECT_DIR$/morticia/doc/packages.rst" />
+        <option value="$PROJECT_DIR$/morticia/scene/target.py" />
+        <option value="$PROJECT_DIR$/MORTICIADesign/MORTICIApackages.txt" />
+        <option value="$PROJECT_DIR$/morticia/sensor/optics.py" />
+        <option value="$PROJECT_DIR$/morticia/moglo.py" />
+        <option value="$PROJECT_DIR$/morticia/rad/spectral_options.py" />
+        <option value="$PROJECT_DIR$/morticia/doc/index.rst" />
+        <option value="$PROJECT_DIR$/morticia/rad/mitsuba.rst" />
+        <option value="$PROJECT_DIR$/morticia/tools/README.md" />
+        <option value="$PROJECT_DIR$/morticia/scene/snap.py" />
+        <option value="$PROJECT_DIR$/morticia/rad/librad.py" />
+        <option value="$PROJECT_DIR$/morticia/scene/mitsuba.py" />
+        <option value="$PROJECT_DIR$/morticia/scene/mortsuba.py" />
+        <option value="$PROJECT_DIR$/morticia/doc/mitsuba.rst" />
+        <option value="$PROJECT_DIR$/morticia/doc/installation.rst" />
+        <option value="$PROJECT_DIR$/morticia/rad/radute.py" />
+        <option value="$PROJECT_DIR$/morticia/tools/xd.py" />
+      </list>
+    </option>
+  </component>
+  <component name="NamedScopeManager">
+    <order />
+  </component>
+  <component name="ProjectFrameBounds">
+    <option name="x" value="-9" />
+    <option name="y" value="-9" />
+    <option name="width" value="1863" />
+    <option name="height" value="1098" />
+  </component>
+  <component name="ProjectInspectionProfilesVisibleTreeState">
+    <entry key="Project Default">
+      <profile-state>
+        <expanded-state>
+          <State>
+            <id />
+          </State>
+        </expanded-state>
+        <selected-state>
+          <State>
+            <id>Buildout</id>
+          </State>
+        </selected-state>
+      </profile-state>
+    </entry>
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <OptionsSetting value="true" id="Add" />
+    <OptionsSetting value="true" id="Remove" />
+    <OptionsSetting value="true" id="Checkout" />
+    <OptionsSetting value="true" id="Update" />
+    <OptionsSetting value="true" id="Status" />
+    <OptionsSetting value="true" id="Edit" />
+    <ConfirmationsSetting value="0" id="Add" />
+    <ConfirmationsSetting value="0" id="Remove" />
+  </component>
+  <component name="ProjectView">
+    <navigator currentView="ProjectPane" proportions="" version="1">
+      <flattenPackages />
+      <showMembers />
+      <showModules />
+      <showLibraryContents />
+      <hideEmptyPackages />
+      <abbreviatePackageNames />
+      <autoscrollToSource />
+      <autoscrollFromSource />
+      <sortByType />
+    </navigator>
+    <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MORTICIA" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MORTICIA" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MORTICIA" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MORTICIA" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MORTICIA" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="morticia" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MORTICIA" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MORTICIA" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="morticia" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="tools" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MORTICIA" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MORTICIA" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="morticia" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sensor" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MORTICIA" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MORTICIA" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="morticia" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="scene" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MORTICIA" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MORTICIA" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MORTICIADesign" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="Scratches" />
+      <pane id="Scope">
+        <subPane subId="Project Files">
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT USER_OBJECT="MORTICIA">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="options.lastSelected" value="project.propVCSSupport.Mappings" />
+    <property name="options.splitter.main.proportions" value="0.3" />
+    <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../PyZDDE" />
+    <property name="FullScreen" value="false" />
+    <property name="settings.editor.selected.configurable" value="configurable.group.appearance" />
+    <property name="settings.editor.splitter.proportion" value="0.2" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth0" value="221" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder0" value="0" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth1" value="253" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder1" value="1" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth2" value="255" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder2" value="2" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth3" value="1161" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder3" value="3" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth0" value="233" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder0" value="0" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth1" value="249" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder1" value="1" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth2" value="251" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder2" value="2" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth3" value="1157" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder3" value="3" />
+    <property name="recentsLimit" value="5" />
+    <property name="restartRequiresConfirmation" value="true" />
+    <property name="full.screen.before.presentation.mode" value="false" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Projects\GitHub\MORTICIA\morticia\scene" />
+      <recent name="D:\Projects\GitHub\MORTICIA\morticia\scene\water" />
+      <recent name="D:\Projects\GitHub\nbMORTICIA\rad" />
+      <recent name="D:\Projects\GitHub\MORTICIA" />
+      <recent name="D:\Projects\GitHub\MORTICIA\morticia" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Projects\GitHub\MORTICIA\morticia\rad\radata" />
+      <recent name="D:\Projects\GitHub\MORTICIA\librad" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Python.test_librad">
+    <configuration default="false" name="test_librad" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/morticia/rad" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="MORTICIA" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/morticia/rad/test_librad.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <method />
+    </configuration>
+    <configuration default="false" name="xd_test" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/morticia/tools" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="MORTICIA" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/morticia/tools/xd_test.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <method />
+    </configuration>
+    <configuration default="false" name="Doctest Case.__init__" type="tests" factoryName="Doctests" temporary="true" nameIsGenerated="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/morticia/rad" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="MORTICIA" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/morticia/rad/librad.py" />
+      <option name="CLASS_NAME" value="Case" />
+      <option name="METHOD_NAME" value="__init__" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_METHOD" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="MORTICIA" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="docs" factoryName="Docutils task">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="MORTICIA" />
+      <option name="docutils_input_file" value="" />
+      <option name="docutils_output_file" value="" />
+      <option name="docutils_params" value="" />
+      <option name="docutils_task" value="" />
+      <option name="docutils_open_in_browser" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="docs" factoryName="Sphinx task">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="MORTICIA" />
+      <option name="docutils_input_file" value="" />
+      <option name="docutils_output_file" value="" />
+      <option name="docutils_params" value="" />
+      <option name="docutils_task" value="" />
+      <option name="docutils_open_in_browser" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Attests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="MORTICIA" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Doctests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="MORTICIA" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Nosetests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="MORTICIA" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <option name="PARAMS" value="" />
+      <option name="USE_PARAM" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="Unittests">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="MORTICIA" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <option name="PUREUNITTEST" value="true" />
+      <option name="PARAMS" value="" />
+      <option name="USE_PARAM" value="false" />
+      <method />
+    </configuration>
+    <configuration default="true" type="tests" factoryName="py.test">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="MORTICIA" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <option name="testToRun" value="" />
+      <option name="keywords" value="" />
+      <option name="params" value="" />
+      <option name="USE_PARAM" value="false" />
+      <option name="USE_KEYWORD" value="false" />
+      <method />
+    </configuration>
+    <list size="3">
+      <item index="0" class="java.lang.String" itemvalue="Python.test_librad" />
+      <item index="1" class="java.lang.String" itemvalue="Python.xd_test" />
+      <item index="2" class="java.lang.String" itemvalue="Python tests.Doctest Case.__init__" />
+    </list>
+    <recent_temporary>
+      <list size="3">
+        <item index="0" class="java.lang.String" itemvalue="Python tests.Doctest Case.__init__" />
+        <item index="1" class="java.lang.String" itemvalue="Python.xd_test" />
+        <item index="2" class="java.lang.String" itemvalue="Python.test_librad" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="ShelveChangesManager" show_recycled="false" />
+  <component name="SvnConfiguration">
+    <configuration>C:\Users\DGriffith\AppData\Roaming\Subversion</configuration>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="6ec3b413-8c3e-4e6f-81c2-241be1119581" name="Default" comment="" />
+      <created>1444141676984</created>
+      <option name="number" value="Default" />
+      <updated>1444141676984</updated>
+    </task>
+    <task id="LOCAL-00285" summary="Added sur_temperature to known libRadtran variables.">
+      <created>1484231670522</created>
+      <option name="number" value="00285" />
+      <option name="project" value="LOCAL" />
+      <updated>1484231670522</updated>
+    </task>
+    <task id="LOCAL-00286" summary="Added simple readOpenEXR() function to morticia.rad.radute.">
+      <created>1484576514962</created>
+      <option name="number" value="00286" />
+      <option name="project" value="LOCAL" />
+      <updated>1484576514963</updated>
+    </task>
+    <task id="LOCAL-00287" summary="Updates to Mitsuba doc.">
+      <created>1489497746371</created>
+      <option name="number" value="00287" />
+      <option name="project" value="LOCAL" />
+      <updated>1489497746372</updated>
+    </task>
+    <task id="LOCAL-00288" summary="Mitsuba doc updates.">
+      <created>1489501936900</created>
+      <option name="number" value="00288" />
+      <option name="project" value="LOCAL" />
+      <updated>1489501936900</updated>
+    </task>
+    <task id="LOCAL-00289" summary="Installation doc updates.">
+      <created>1489501955595</created>
+      <option name="number" value="00289" />
+      <option name="project" value="LOCAL" />
+      <updated>1489501955595</updated>
+    </task>
+    <task id="LOCAL-00290" summary="Update Mitsuba .rst.">
+      <created>1489760785467</created>
+      <option name="number" value="00290" />
+      <option name="project" value="LOCAL" />
+      <updated>1489760785468</updated>
+    </task>
+    <task id="LOCAL-00291" summary="Updated xd.py to use xarray.">
+      <created>1497868098276</created>
+      <option name="number" value="00291" />
+      <option name="project" value="LOCAL" />
+      <updated>1497868098278</updated>
+    </task>
+    <task id="LOCAL-00292" summary="Added information to installation.rst, mainly Mitsuba and Debian related.">
+      <created>1515163456828</created>
+      <option name="number" value="00292" />
+      <option name="project" value="LOCAL" />
+      <updated>1515163456829</updated>
+    </task>
+    <task id="LOCAL-00293" summary="Updates to installation.rst, mainly related to Mitsuba build on Debian 9 (Stretch).">
+      <created>1515495423487</created>
+      <option name="number" value="00293" />
+      <option name="project" value="LOCAL" />
+      <updated>1515495423488</updated>
+    </task>
+    <task id="LOCAL-00294" summary="morticia.rad.lirad now imports easygui only on demand. This is an attempt to stop ipyparallel engines from going into Qt-related blocking event loops. This may not be the cause of the problem.">
+      <created>1515655781275</created>
+      <option name="number" value="00294" />
+      <option name="project" value="LOCAL" />
+      <updated>1515655781277</updated>
+    </task>
+    <task id="LOCAL-00295" summary="Added run_dask_parallel() method to rad.librad.">
+      <created>1515674060577</created>
+      <option name="number" value="00295" />
+      <option name="project" value="LOCAL" />
+      <updated>1515674060577</updated>
+    </task>
+    <task id="LOCAL-00296" summary="Various doc additions and corrections. Added self.verbose property to librad.Case.">
+      <created>1521531903184</created>
+      <option name="number" value="00296" />
+      <option name="project" value="LOCAL" />
+      <updated>1521531903204</updated>
+    </task>
+    <task id="LOCAL-00297" summary="Updates to installation.rst. Mention of cesium.">
+      <created>1521716751768</created>
+      <option name="number" value="00297" />
+      <option name="project" value="LOCAL" />
+      <updated>1521716751769</updated>
+    </task>
+    <task id="LOCAL-00298" summary="Updates to mitsuba.st docs.">
+      <created>1522152018760</created>
+      <option name="number" value="00298" />
+      <option name="project" value="LOCAL" />
+      <updated>1522152018762</updated>
+    </task>
+    <task id="LOCAL-00299" summary="Updates to installation.rst.">
+      <created>1522158431690</created>
+      <option name="number" value="00299" />
+      <option name="project" value="LOCAL" />
+      <updated>1522158431691</updated>
+    </task>
+    <task id="LOCAL-00300" summary="Corrected input/output radiant units for Kato models, which is W rather than typically mW for other source solar files.">
+      <created>1522246262944</created>
+      <option name="number" value="00300" />
+      <option name="project" value="LOCAL" />
+      <updated>1522246262946</updated>
+    </task>
+    <task id="LOCAL-00301" summary="Used . instead of _ by mistake.">
+      <created>1522246501187</created>
+      <option name="number" value="00301" />
+      <option name="project" value="LOCAL" />
+      <updated>1522246501187</updated>
+    </task>
+    <task id="LOCAL-00302" summary="Added default filenames for librad.Case.">
+      <created>1522321114366</created>
+      <option name="number" value="00302" />
+      <option name="project" value="LOCAL" />
+      <updated>1522321114368</updated>
+    </task>
+    <task id="LOCAL-00303" summary="Start of morticia/mitusba integration module, called mortsuba to avoid masking of mistuba module.">
+      <created>1522329031494</created>
+      <option name="number" value="00303" />
+      <option name="project" value="LOCAL" />
+      <updated>1522329031494</updated>
+    </task>
+    <task id="LOCAL-00304" summary="Fixes to basic __init__ of Mitsuba object.">
+      <created>1522333213643</created>
+      <option name="number" value="00304" />
+      <option name="project" value="LOCAL" />
+      <updated>1522333213643</updated>
+    </task>
+    <task id="LOCAL-00305" summary="Added Transform class to mortsuba.py and start of Mitsuba class.">
+      <created>1522424003621</created>
+      <option name="number" value="00305" />
+      <option name="project" value="LOCAL" />
+      <updated>1522424003622</updated>
+    </task>
+    <task id="LOCAL-00306" summary="Methods to add REM and direct solar to Mitsuba scene. Basic testing.">
+      <created>1522840220564</created>
+      <option name="number" value="00306" />
+      <option name="project" value="LOCAL" />
+      <updated>1522840220583</updated>
+    </task>
+    <task id="LOCAL-00307" summary="Added function probe_mitsuba_SPECTRUM_SAMPLES. Seems to work on Windows and Linux.">
+      <created>1522853168541</created>
+      <option name="number" value="00307" />
+      <option name="project" value="LOCAL" />
+      <updated>1522853168541</updated>
+    </task>
+    <task id="LOCAL-00308" summary="Started adding Film class to mortusba. Animation transformations and reconstruction filters may not be accessible via Python, which would be a pity (particularly animations).">
+      <created>1522928090169</created>
+      <option name="number" value="00308" />
+      <option name="project" value="LOCAL" />
+      <updated>1522928090183</updated>
+    </task>
+    <task id="LOCAL-00309" summary="Added reconstruction filters and films as seperate classes in mortsuba.">
+      <created>1522938951321</created>
+      <option name="number" value="00309" />
+      <option name="project" value="LOCAL" />
+      <updated>1522938951321</updated>
+    </task>
+    <task id="LOCAL-00310" summary="Added many mortsuba classes for Mitsuba shapes, films, integrators, reconstruction filters etc.">
+      <created>1523010322684</created>
+      <option name="number" value="00310" />
+      <option name="project" value="LOCAL" />
+      <updated>1523010322686</updated>
+    </task>
+    <task id="LOCAL-00311" summary="Added Mitsuba shapes to mortsuba.">
+      <created>1523014657272</created>
+      <option name="number" value="00311" />
+      <option name="project" value="LOCAL" />
+      <updated>1523014657272</updated>
+    </task>
+    <task id="LOCAL-00312" summary="Started adding Mitsuba BSDFs in mortsuba.">
+      <created>1523019181834</created>
+      <option name="number" value="00312" />
+      <option name="project" value="LOCAL" />
+      <updated>1523019181835</updated>
+    </task>
+    <task id="LOCAL-00313" summary="Further additions of Mitsuba classes to mortsuba, including Spectrum and start of some textures.">
+      <created>1523024610581</created>
+      <option name="number" value="00313" />
+      <option name="project" value="LOCAL" />
+      <updated>1523024610581</updated>
+    </task>
+    <task id="LOCAL-00314" summary="Added more Mitsuba classes to mortsuba, including start of emitters.">
+      <created>1523096822099</created>
+      <option name="number" value="00314" />
+      <option name="project" value="LOCAL" />
+      <updated>1523096822100</updated>
+    </task>
+    <task id="LOCAL-00315" summary="Comments on MORTICIA architecture, 20151218.">
+      <created>1523101980427</created>
+      <option name="number" value="00315" />
+      <option name="project" value="LOCAL" />
+      <updated>1523101980427</updated>
+    </task>
+    <task id="LOCAL-00316" summary="Added more Mitsuba sensor classes to mortsuba.">
+      <created>1523109343110</created>
+      <option name="number" value="00316" />
+      <option name="project" value="LOCAL" />
+      <updated>1523109343110</updated>
+    </task>
+    <task id="LOCAL-00317" summary="Completed basic Mitsuba Sensor classes for mortsuba.">
+      <created>1523174023980</created>
+      <option name="number" value="00317" />
+      <option name="project" value="LOCAL" />
+      <updated>1523174023983</updated>
+    </task>
+    <task id="LOCAL-00318" summary="Added some docstrings from the Mitsuba manual.">
+      <created>1523174744690</created>
+      <option name="number" value="00318" />
+      <option name="project" value="LOCAL" />
+      <updated>1523174744690</updated>
+    </task>
+    <task id="LOCAL-00319" summary="Added another BSDF and some BASD docstrings.">
+      <created>1523176380346</created>
+      <option name="number" value="00319" />
+      <option name="project" value="LOCAL" />
+      <updated>1523176380346</updated>
+    </task>
+    <task id="LOCAL-00320" summary="Added thindielectric BSDF.">
+      <created>1523177125342</created>
+      <option name="number" value="00320" />
+      <option name="project" value="LOCAL" />
+      <updated>1523177125342</updated>
+    </task>
+    <task id="LOCAL-00321" summary="Added Shape disk and other Shape docstrings.">
+      <created>1523180336219</created>
+      <option name="number" value="00321" />
+      <option name="project" value="LOCAL" />
+      <updated>1523180336219</updated>
+    </task>
+    <task id="LOCAL-00322" summary="Added remainder of Shape docstrings in mortsuba.">
+      <created>1523180623676</created>
+      <option name="number" value="00322" />
+      <option name="project" value="LOCAL" />
+      <updated>1523180623676</updated>
+    </task>
+    <task id="LOCAL-00323" summary="Debugging and refactoring of mortsuba.py. Added render_local method. Some testing.">
+      <created>1523277898385</created>
+      <option name="number" value="00323" />
+      <option name="project" value="LOCAL" />
+      <updated>1523277898387</updated>
+    </task>
+    <task id="LOCAL-00324" summary="Debugging of mortsuba.py. Still have problems related to rendering jobs. If job name is not changed, same Mitsuba output as last is provided.">
+      <created>1523284118380</created>
+      <option name="number" value="00324" />
+      <option name="project" value="LOCAL" />
+      <updated>1523284118380</updated>
+    </task>
+    <task id="LOCAL-00325" summary="Work on integration of basic Mitusba rendering on local machine and getting numpy bitmaps.">
+      <created>1523360281147</created>
+      <option name="number" value="00325" />
+      <option name="project" value="LOCAL" />
+      <updated>1523360281160</updated>
+    </task>
+    <task id="LOCAL-00326" summary="Docstring for mortsuba.Scene.getBitmap.">
+      <created>1523360585670</created>
+      <option name="number" value="00326" />
+      <option name="project" value="LOCAL" />
+      <updated>1523360585670</updated>
+    </task>
+    <task id="LOCAL-00327" summary="Corrected mitsuba.rst on coordinate systems. Mitsuba is in fact right-handed (PBRT is left-handed). So MORTICIA is to be right-handed (+x east, +y north and +z zenith).">
+      <created>1523387453445</created>
+      <option name="number" value="00327" />
+      <option name="project" value="LOCAL" />
+      <updated>1523387453446</updated>
+    </task>
+    <task id="LOCAL-00328" summary="Corrections/additions to mitsuba.rst.">
+      <created>1523388972090</created>
+      <option name="number" value="00328" />
+      <option name="project" value="LOCAL" />
+      <updated>1523388972090</updated>
+    </task>
+    <task id="LOCAL-00329" summary="Corrections/additions to mitsuba.rst concerning coordinate frames etc.">
+      <created>1523435676391</created>
+      <option name="number" value="00329" />
+      <option name="project" value="LOCAL" />
+      <updated>1523435676398</updated>
+    </task>
+    <task id="LOCAL-00330" summary="Resumed work on morticia.rad.radute in the area of SpectralFunction, SpectralBasis and SpectralVector classes. Will try to subclass these to more general BasisFunction, FunctionalBasis and BasisVector respectively (in morticia.tools.xd).">
+      <created>1523439943424</created>
+      <option name="number" value="00330" />
+      <option name="project" value="LOCAL" />
+      <updated>1523439943424</updated>
+    </task>
+    <task id="LOCAL-00331" summary="Work on xd.py, Basis classes. Trouble with subtle bug in xd_product code.">
+      <created>1523615748361</created>
+      <option name="number" value="00331" />
+      <option name="project" value="LOCAL" />
+      <updated>1523615748420</updated>
+    </task>
+    <task id="LOCAL-00332" summary="Further progress on BasisFunction. Now discriminate uni-, bi- and multivariate cases in single class and constructor. Not sure this is the best approach.">
+      <created>1523630746296</created>
+      <option name="number" value="00332" />
+      <option name="project" value="LOCAL" />
+      <updated>1523630746321</updated>
+    </task>
+    <task id="LOCAL-00333" summary="Work on BasisFunction. If input samples are all np.nan, assume call evaluator directly.">
+      <created>1523779208995</created>
+      <option name="number" value="00333" />
+      <option name="project" value="LOCAL" />
+      <updated>1523779208997</updated>
+    </task>
+    <option name="localTasksCounter" value="334" />
+    <servers />
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="-9" y="-9" width="1863" height="1098" extended-state="6" />
+    <editor active="false" />
+    <layout>
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.1295393" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32901832" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32901832" sideWeight="0.5" order="12" side_tool="true" content_ui="tabs" />
+      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32901832" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32901832" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32901832" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Documentation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" x="91" y="91" width="1738" height="850" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.40992448" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32820514" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.399137" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+    </layout>
+    <layout-to-restore>
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32901832" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32901832" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32901832" sideWeight="0.5" order="12" side_tool="true" content_ui="tabs" />
+      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Documentation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" x="91" y="91" width="1738" height="850" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32901832" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.40992448" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32901832" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2203125" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32820514" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.399137" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+    </layout-to-restore>
+  </component>
+  <component name="Vcs.Log.UiProperties">
+    <option name="RECENTLY_FILTERED_USER_GROUPS">
+      <collection />
+    </option>
+    <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+      <collection />
+    </option>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Added reconstruction filters and films as seperate classes in mortsuba." />
+    <MESSAGE value="Added many mortsuba classes for Mitsuba shapes, films, integrators, reconstruction filters etc." />
+    <MESSAGE value="Added Mitsuba shapes to mortsuba." />
+    <MESSAGE value="Started adding Mitsuba BSDFs in mortsuba." />
+    <MESSAGE value="Further additions of Mitsuba classes to mortsuba, including Spectrum and start of some textures." />
+    <MESSAGE value="Added more Mitsuba classes to mortsuba, including start of emitters." />
+    <MESSAGE value="Comments on MORTICIA architecture, 20151218." />
+    <MESSAGE value="Added more Mitsuba sensor classes to mortsuba." />
+    <MESSAGE value="Completed basic Mitsuba Sensor classes for mortsuba." />
+    <MESSAGE value="Added some docstrings from the Mitsuba manual." />
+    <MESSAGE value="Added another BSDF and some BASD docstrings." />
+    <MESSAGE value="Added thindielectric BSDF." />
+    <MESSAGE value="Added Shape disk and other Shape docstrings." />
+    <MESSAGE value="Added remainder of Shape docstrings in mortsuba." />
+    <MESSAGE value="Debugging and refactoring of mortsuba.py. Added render_local method. Some testing." />
+    <MESSAGE value="Debugging of mortsuba.py. Still have problems related to rendering jobs. If job name is not changed, same Mitsuba output as last is provided." />
+    <MESSAGE value="Work on integration of basic Mitusba rendering on local machine and getting numpy bitmaps." />
+    <MESSAGE value="Docstring for mortsuba.Scene.getBitmap." />
+    <MESSAGE value="Corrected mitsuba.rst on coordinate systems. Mitsuba is in fact right-handed (PBRT is left-handed). So MORTICIA is to be right-handed (+x east, +y north and +z zenith)." />
+    <MESSAGE value="Corrections/additions to mitsuba.rst." />
+    <MESSAGE value="Corrections/additions to mitsuba.rst concerning coordinate frames etc." />
+    <MESSAGE value="Resumed work on morticia.rad.radute in the area of SpectralFunction, SpectralBasis and SpectralVector classes. Will try to subclass these to more general BasisFunction, FunctionalBasis and BasisVector respectively (in morticia.tools.xd)." />
+    <MESSAGE value="Work on xd.py, Basis classes. Trouble with subtle bug in xd_product code." />
+    <MESSAGE value="Further progress on BasisFunction. Now discriminate uni-, bi- and multivariate cases in single class and constructor. Not sure this is the best approach." />
+    <MESSAGE value="Work on BasisFunction. If input samples are all np.nan, assume call evaluator directly." />
+    <option name="LAST_COMMIT_MESSAGE" value="Work on BasisFunction. If input samples are all np.nan, assume call evaluator directly." />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="python-line">
+          <url>file://$PROJECT_DIR$/sensor/optics.py</url>
+          <line>28</line>
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
+      </breakpoints>
+      <option name="time" value="17" />
+    </breakpoint-manager>
+    <watches-manager />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/morticia/scene/target.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="142" column="52" selection-start-line="142" selection-start-column="52" selection-end-line="142" selection-end-column="52" />
+          <folding>
+            <element signature="e#1#20#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MORTICIADesign/MORTICIApackages.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MORTICIADesign/MORTICIApackages.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MORTICIADesign/MORTICIApackages.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MORTICIADesign/ArchComments20151218Gripen.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.08658744">
+          <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/morticia/doc/mortapi/morticia.rad.rst">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/morticia/doc/mortapi/morticia.rst">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/morticia/doc/mortapi/morticia.sensor.rst">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/morticia/doc/mortapi/modules.rst">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/morticiaAPIdoc.bat">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.03803132">
+          <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/morticia/tools/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/morticia/sensor/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.4753915">
+          <caret line="25" column="0" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/morticia/sensor/README.md">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.15813954">
+          <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+        </state>
+      </provider>
+      <provider editor-type-id="MarkdownPreviewEditor">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/morticia/tools/xd_test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.36129755">
+          <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/morticia/rad/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.01901566">
+          <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/morticia/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="2" column="29" selection-start-line="2" selection-start-column="29" selection-end-line="2" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/morticia/doc/make.bat">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.36624774">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/morticia/doc/makelatex.bat">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="24" selection-start-line="0" selection-start-column="24" selection-end-line="0" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/morticia/rad/README.md">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.68372095">
+          <caret line="41" column="0" selection-start-line="41" selection-start-column="0" selection-end-line="41" selection-end-column="0" />
+        </state>
+      </provider>
+      <provider editor-type-id="MarkdownPreviewEditor">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/morticia/doc/makehtml.bat">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/morticia/rad/test_librad.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/morticia/doc/ChapLibRadtranODandPathRadiance.rst">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.39443156">
+          <caret line="20" column="25" selection-start-line="20" selection-start-column="25" selection-end-line="20" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/morticia/doc/ChapLibRadtranODandPathRadiance.tex">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/morticia/doc/conventions.rst">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="102" column="105" selection-start-line="102" selection-start-column="105" selection-end-line="102" selection-end-column="105" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/morticia/doc/conf.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="201" column="1" selection-start-line="201" selection-start-column="1" selection-end-line="201" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MORTICIADesign/MORTICIApackages.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="10" column="3" selection-start-line="10" selection-start-column="3" selection-end-line="10" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/morticia/sensor/optics.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="217" column="1" selection-start-line="217" selection-start-column="1" selection-end-line="217" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/morticia/rad/spectral_options.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="175" column="36" selection-start-line="175" selection-start-column="36" selection-end-line="175" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/morticia/doc/intro.rst">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.36129755">
+          <caret line="19" column="0" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/morticia/doc/how_to_use.rst">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/morticia/doc/styleguide.rst">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-3.4686801">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/morticia/doc/01a-SpectralChannelsAndFilters.rst">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/morticia/rad/option_definition.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/morticia/doc/packages.rst">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.96196866">
+          <caret line="73" column="12" selection-start-line="73" selection-start-column="12" selection-end-line="73" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/morticia/doc/for_developers.rst">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/morticia/moglo.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="168" column="21" selection-start-line="168" selection-start-column="21" selection-end-line="168" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/morticia/doc/radpack.rst">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.20917226">
+          <caret line="11" column="0" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/morticia/doc/sensorpack.rst">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.58948547">
+          <caret line="31" column="12" selection-start-line="31" selection-start-column="12" selection-end-line="31" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/morticia/doc/index.rst">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="29" column="35" selection-start-line="29" selection-start-column="35" selection-end-line="29" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/morticia/sensor/electro.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="129" column="119" selection-start-line="129" selection-start-column="119" selection-end-line="129" selection-end-column="119" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/morticia/scene/snap.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="23" column="67" selection-start-line="23" selection-start-column="67" selection-end-line="23" selection-end-column="67" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/morticia/rad/librad.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="137" column="75" selection-start-line="137" selection-start-column="75" selection-end-line="137" selection-end-column="75" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/morticia/tools/README.md">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="MarkdownPreviewEditor">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/morticia/scene/mortsuba.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="2225" column="119" selection-start-line="2225" selection-start-column="119" selection-end-line="2225" selection-end-column="119" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="58" column="99" selection-start-line="58" selection-start-column="99" selection-end-line="58" selection-end-column="99" />
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="MarkdownPreviewEditor">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/morticia/doc/mitsuba.rst">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="135" column="31" selection-start-line="135" selection-start-column="31" selection-end-line="135" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/morticia/doc/installation.rst">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="44" column="35" selection-start-line="44" selection-start-column="35" selection-end-line="44" selection-end-column="35" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/morticia/rad/radute.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="713" column="34" selection-start-line="713" selection-start-column="34" selection-end-line="713" selection-end-column="34" />
+          <folding>
+            <element signature="e#471#489#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/morticia/tools/xd.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="261" column="77" selection-start-line="261" selection-start-column="77" selection-end-line="261" selection-end-column="77" />
+          <folding>
+            <element signature="e#368#386#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/morticia/scene/target.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="142" column="52" selection-start-line="142" selection-start-column="52" selection-end-line="142" selection-end-column="52" />
+          <folding>
+            <element signature="e#1#20#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>

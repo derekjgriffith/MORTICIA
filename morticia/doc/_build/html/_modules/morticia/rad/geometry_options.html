@@ -1,0 +1,1009 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>morticia.rad.geometry_options &mdash; MORTICIA 1.0 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Roboto+Slab:400,700|Inconsolata:400,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="MORTICIA 1.0 documentation" href="../../../index.html"/>
+        <link rel="up" title="morticia" href="../../morticia.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+          <a href="../../../index.html" class="fa fa-home"> MORTICIA</a>
+        
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../how_to_use.html">How to use MORTICIA</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../how_to_use.html#morticia-dependencies">MORTICIA Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../how_to_use.html#installation-and-requirements">Installation and Requirements</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../styleguide.html">The MORTICIA Style Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#to-pep-8-or-not-to-pep-8">To PEP-8 or not to PEP-8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#code-layout">Code Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#import-statements">Import Statements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#whitespace">Whitespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#comments">Comments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#documentation-strings-docstrings">Documentation Strings (docstrings)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#naming-conventions">Naming Conventions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#pep-257">PEP-257</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#from-conventions-section"><em>From</em> Conventions Section</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#general-terminology-and-conventions">General Terminology and Conventions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../for_developers.html">For the Developers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../for_developers.html#structure">Structure</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../packages.html">Packages</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../packages.html#sensor-package">Sensor Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../packages.html#radiometry-package">Radiometry Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../packages.html#scene-package">Scene Package</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ChapLibRadtranODandPathRadiance.html">Transmittance and Path Radiance in libRadtran</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../01a-SpectralChannelsAndFilters.html">IPython Notebook and Sphinx</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../01a-SpectralChannelsAndFilters.html#a-spectralchannelsandfilters-ipython-notebook">01a-SpectralChannelsAndFilters IPython Notebook</a></li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../../index.html">MORTICIA</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      
+          <li><a href="../../morticia.html">morticia</a> &raquo;</li>
+      
+    <li>morticia.rad.geometry_options</li>
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <h1>Source code for morticia.rad.geometry_options</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;--------------------------------------------------------------------</span>
+<span class="sd"> * $Id: geometry_options.py 3074 2014-10-06 12:07:00Z Claudia.Emde $</span>
+<span class="sd"> * </span>
+<span class="sd"> * This file is part of libRadtran.</span>
+<span class="sd"> * Copyright (c) 1997-2012 by Arve Kylling, Bernhard Mayer,</span>
+<span class="sd"> *                            Claudia Emde, Robert Buras</span>
+<span class="sd"> *</span>
+<span class="sd"> * ######### Contact info: http://www.libradtran.org #########</span>
+<span class="sd"> *</span>
+<span class="sd"> * This program is free software; you can redistribute it and/or </span>
+<span class="sd"> * modify it under the terms of the GNU General Public License   </span>
+<span class="sd"> * as published by the Free Software Foundation; either version 2</span>
+<span class="sd"> * of the License, or (at your option) any later version.        </span>
+<span class="sd"> * </span>
+<span class="sd"> * This program is distributed in the hope that it will be useful, </span>
+<span class="sd"> * but WITHOUT ANY WARRANTY; without even the implied warranty of  </span>
+<span class="sd"> * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the   </span>
+<span class="sd"> * GNU General Public License for more details.                    </span>
+<span class="sd"> * </span>
+<span class="sd"> * You should have received a copy of the GNU General Public License          </span>
+<span class="sd"> * along with this program; if not, write to the Free Software                </span>
+<span class="sd"> * Foundation, Inc., 59 Temple Place - Suite 330, </span>
+<span class="sd"> * Boston, MA 02111-1307, USA.</span>
+<span class="sd"> *--------------------------------------------------------------------&quot;&quot;&quot;</span>
+
+
+<span class="kn">from</span> <span class="nn">option_definition</span> <span class="kn">import</span> <span class="o">*</span>
+
+<div class="viewcode-block" id="setup_geometry_group"><a class="viewcode-back" href="../../../mortapi/morticia.rad.html#morticia.rad.geometry_options.setup_geometry_group">[docs]</a><span class="k">class</span> <span class="nc">setup_geometry_group</span><span class="p">():</span>
+
+	<span class="n">group_name</span> <span class="o">=</span> <span class="s">&#39;Geometry&#39;</span>
+
+<div class="viewcode-block" id="setup_geometry_group.__init__"><a class="viewcode-back" href="../../../mortapi/morticia.rad.html#morticia.rad.geometry_options.setup_geometry_group.__init__">[docs]</a>	<span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="n">documentation</span> <span class="o">=</span> <span class="n">get_geometry_documentation</span><span class="p">()</span>
+
+		<span class="n">sza</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;sza&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;geometry&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Solar zenith angle&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;sza&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span> <span class="o">=</span> <span class="p">[</span> <span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.atm.sza&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s">&#39;NOT_DEFINED_FLOAT&#39;</span><span class="p">,</span> <span class="n">valid_range</span><span class="o">=</span><span class="p">[</span><span class="mf">0.</span><span class="p">,</span><span class="mf">180.</span><span class="p">]),</span> 
+				<span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.atm.sza_source&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;SZA_DIRECT_INPUT&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s">&#39;SZA_BY_TIME_AND_LOCATION&#39;</span><span class="p">)</span> <span class="p">],</span> 
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+			<span class="n">non_parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;sza_file&#39;</span><span class="p">,</span><span class="s">&#39;ECHAM_sza&#39;</span><span class="p">],</span>
+		<span class="p">)</span>
+
+		<span class="n">sza_file</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;sza_file&#39;</span><span class="p">,</span> 
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;geometry&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Location of solar zenith angle file.&#39;</span><span class="p">,</span> 
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;sza_file&#39;</span><span class="p">],</span> 
+			<span class="n">tokens</span> <span class="o">=</span> <span class="p">[</span> <span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.filename[FN_SZA]&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">file</span><span class="p">),</span>
+				<span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.atm.sza_source&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;SZA_FROM_SZA_FILE&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s">&#39;SZA_BY_TIME_AND_LOCATION&#39;</span><span class="p">)</span> <span class="p">],</span> 
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+			<span class="n">non_parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;sza&#39;</span><span class="p">,</span> <span class="s">&#39;ECHAM_sza&#39;</span><span class="p">],</span>
+		<span class="p">)</span>
+
+		<span class="n">phi0</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;phi0&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;geometry&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Solar azimuth angle&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;phi0&#39;</span><span class="p">],</span> 
+			<span class="n">tokens</span><span class="o">=</span><span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.atm.phi0&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">valid_range</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">360.</span><span class="p">,</span><span class="mf">360.</span><span class="p">]),</span> 
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+		<span class="p">)</span>
+
+		<span class="n">phi</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;phi&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;geometry&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;User output azimuth angles.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;phi&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span> <span class="o">=</span> <span class="p">[</span> <span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.phi&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="n">SignedFloats</span><span class="p">),</span>
+				<span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.nphi&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;ntokens&#39;</span><span class="p">),</span>
+				<span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.maxphi&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;ntokens&#39;</span><span class="p">)</span> <span class="p">],</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+		<span class="p">)</span>
+
+		<span class="n">umu</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;umu&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;geometry&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Cosine of user output polar angles.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;umu&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span> <span class="o">=</span> <span class="p">[</span> <span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.umu&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="n">SignedFloats</span><span class="p">),</span>
+				<span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.numu&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;ntokens&#39;</span><span class="p">),</span>
+				<span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.maxumu&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;ntokens&#39;</span><span class="p">)</span> <span class="p">],</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+			<span class="n">non_parents</span><span class="o">=</span><span class="p">[],</span>
+			<span class="n">childs</span><span class="o">=</span><span class="p">[]</span>
+		<span class="p">)</span>
+
+		<span class="n">mc_bw_umu_file</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span> 
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;mc_bw_umu_file&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;geometry&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Define a different umu and phi for each pixel.&#39;</span><span class="p">,</span> 
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;mc_bw_umu_file&#39;</span><span class="p">],</span>
+			<span class="n">gui_inputs</span><span class="o">=</span><span class="p">(</span><span class="n">FileInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;filename&#39;</span><span class="p">),),</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="p">[</span> <span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&quot;Input.rte.mc.filename[FN_MC_UMU]&quot;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">file</span><span class="p">),</span>
+				<span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.allocate_umu_and_phi&#39;</span><span class="p">,</span><span class="n">setting</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> <span class="p">],</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;mc_backward&#39;</span><span class="p">],</span>
+			<span class="n">speaker</span><span class="o">=</span><span class="s">&#39;rte_solver&#39;</span><span class="p">,</span>
+			<span class="n">enable_values</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;mystic&quot;</span><span class="p">,</span><span class="s">&quot;montecarlo&quot;</span><span class="p">),</span>
+			<span class="n">threedmystic</span> <span class="o">=</span><span class="bp">True</span>
+		<span class="p">)</span>
+
+		<span class="n">earth_radius</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;earth_radius&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;geometry&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Radius of the Earth in km&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;earth_radius&#39;</span><span class="p">],</span> 
+			<span class="n">tokens</span><span class="o">=</span><span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.r_earth&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mf">6370.0</span><span class="p">),</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span> 
+		<span class="p">)</span>
+
+		<span class="n">latitude</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;latitude&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;geometry&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Specify the latitude of the location to simulate.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;latitude&#39;</span><span class="p">],</span>
+			<span class="n">gui_inputs</span><span class="o">=</span><span class="p">(</span> <span class="n">ListInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;hemisphere&#39;</span><span class="p">,</span> <span class="n">valid_range</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;n&#39;</span><span class="p">,</span><span class="s">&#39;s&#39;</span><span class="p">]),</span> <span class="n">FloatInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;degrees&#39;</span><span class="p">,</span><span class="n">valid_range</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">180</span><span class="p">]),</span> 
+				<span class="n">FloatInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;minutes&#39;</span><span class="p">,</span><span class="n">valid_range</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">60</span><span class="p">],</span><span class="n">optional</span><span class="o">=</span><span class="bp">True</span><span class="p">),</span> <span class="n">FloatInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;seconds&#39;</span><span class="p">,</span><span class="n">valid_range</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">60</span><span class="p">],</span> <span class="n">optional</span><span class="o">=</span><span class="bp">True</span><span class="p">),),</span>
+			<span class="n">tokens</span> <span class="o">=</span> <span class="p">[</span> <span class="n">addLogical</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.lat_signum&#39;</span><span class="p">,</span><span class="n">logicals</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;n&#39;</span><span class="p">,</span><span class="s">&#39;s&#39;</span><span class="p">],</span><span class="n">setting</span><span class="o">=</span><span class="s">&#39;LATITUDE_SIGNUM_&#39;</span><span class="p">),</span>
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.lat_degrees&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span>
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.lat_minutes&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="bp">True</span><span class="p">),</span>
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.lat_seconds&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> <span class="p">],</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span> 
+			<span class="n">extra_dependencies</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;latitude&#39;</span><span class="p">,</span><span class="s">&#39;longitude&#39;</span><span class="p">],</span>
+			<span class="n">showInGui</span><span class="o">=</span><span class="bp">False</span>
+		<span class="p">)</span>
+
+		<span class="n">longitude</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;longitude&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;geometry&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Specify the longitude of the location to simulate.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;longitude&#39;</span><span class="p">],</span>
+			<span class="n">gui_inputs</span><span class="o">=</span><span class="p">(</span> <span class="n">ListInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;hemisphere&#39;</span><span class="p">,</span> <span class="n">valid_range</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;e&#39;</span><span class="p">,</span><span class="s">&#39;w&#39;</span><span class="p">]),</span> <span class="n">FloatInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;degrees&#39;</span><span class="p">,</span><span class="n">valid_range</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">180</span><span class="p">]),</span> 
+				<span class="n">FloatInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;minutes&#39;</span><span class="p">,</span><span class="n">valid_range</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">60</span><span class="p">],</span><span class="n">optional</span><span class="o">=</span><span class="bp">True</span><span class="p">),</span> <span class="n">FloatInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;seconds&#39;</span><span class="p">,</span><span class="n">valid_range</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">60</span><span class="p">],</span> <span class="n">optional</span><span class="o">=</span><span class="bp">True</span><span class="p">),),</span>
+			<span class="n">tokens</span> <span class="o">=</span> <span class="p">[</span> <span class="n">addLogical</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.lon_signum&#39;</span><span class="p">,</span><span class="n">logicals</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;e&#39;</span><span class="p">,</span><span class="s">&#39;w&#39;</span><span class="p">],</span><span class="n">setting</span><span class="o">=</span><span class="s">&#39;LONGITUDE_SIGNUM_&#39;</span><span class="p">),</span>
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.lon_degrees&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span>
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.lon_minutes&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="bp">True</span><span class="p">),</span>
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.lon_seconds&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> <span class="p">],</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+			<span class="n">extra_dependencies</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;latitude&#39;</span><span class="p">,</span><span class="s">&#39;longitude&#39;</span><span class="p">],</span>
+			<span class="n">showInGui</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+		<span class="p">)</span>
+
+		<span class="n">day_of_year</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;day_of_year&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;geometry&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Correction fo sun-earth distance&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;day_of_year&#39;</span><span class="p">],</span> 
+			<span class="n">tokens</span><span class="o">=</span><span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.UTC.tm_yday&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s">&#39;NOT_DEFINED_INTEGER&#39;</span> <span class="p">),</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span> 
+		<span class="p">)</span>
+
+		<span class="n">mc_bcond</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;mc_bcond&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;geometry&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Define MYSTIC boundary conditions.&#39;</span><span class="p">,</span> 
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;mc_bcond&#39;</span><span class="p">],</span> 
+			<span class="n">tokens</span><span class="o">=</span><span class="n">addLogical</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.bcond&#39;</span><span class="p">,</span> <span class="n">logicals</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;periodic&#39;</span><span class="p">,</span><span class="s">&#39;mirror&#39;</span><span class="p">,</span><span class="s">&#39;absorb&#39;</span><span class="p">],</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;MCBCOND_&#39;</span> <span class="p">),</span> 
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span> 
+			<span class="n">speaker</span><span class="o">=</span><span class="s">&#39;rte_solver&#39;</span><span class="p">,</span>
+			<span class="n">enable_values</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;mystic&quot;</span><span class="p">,</span><span class="s">&quot;montecarlo&quot;</span><span class="p">),</span>
+			<span class="n">mystic</span> <span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+			<span class="n">developer</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+			<span class="n">showInGui</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+		<span class="p">)</span>
+
+		<span class="n">mc_sample_grid</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;mc_sample_grid&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;geometry&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Sample grid size (Nx Ny [dx dy]) for MYSTIC.&#39;</span><span class="p">,</span> 
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;mc_sample_grid&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span><span class="o">=</span> <span class="p">[</span> <span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&quot;Input.rte.mc.Nx_sample&quot;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">int</span><span class="p">),</span>
+				  <span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&quot;Input.rte.mc.Ny_sample&quot;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">int</span><span class="p">),</span>
+				  <span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&quot;Input.rte.mc.dx_sample&quot;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="n">Double</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="bp">True</span><span class="p">),</span>
+				  <span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&quot;Input.rte.mc.dy_sample&quot;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="n">Double</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> <span class="p">],</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+			<span class="n">speaker</span><span class="o">=</span><span class="s">&#39;rte_solver&#39;</span><span class="p">,</span>
+			<span class="n">enable_values</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;mystic&quot;</span><span class="p">,</span><span class="s">&quot;montecarlo&quot;</span><span class="p">),</span>
+			<span class="n">threedmystic</span> <span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+		<span class="p">)</span>
+
+		<span class="n">mc_spherical</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;mc_spherical&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;geometry&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Use MYSTIC spherical geometry.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;mc_spherical&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="p">[</span><span class="n">addLogical</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;id&#39;</span><span class="p">,</span> <span class="n">logicals</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;1D&#39;</span><span class="p">,</span><span class="s">&#39;3D&#39;</span><span class="p">],</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;DIM_&#39;</span><span class="p">),</span>
+				<span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.spherical[id]&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="p">],</span>
+			<span class="n">gui_inputs</span><span class="o">=</span><span class="p">(</span><span class="n">ListInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;dimension&#39;</span><span class="p">,</span> <span class="n">valid_range</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;1d&#39;</span><span class="p">]),),</span>
+			<span class="n">parents</span><span class="o">=</span><span class="s">&#39;mc_backward&#39;</span><span class="p">,</span>
+			<span class="n">childs</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;mc_refraction&#39;</span><span class="p">],</span>
+			<span class="n">speaker</span><span class="o">=</span><span class="s">&#39;rte_solver&#39;</span><span class="p">,</span>
+			<span class="n">enable_values</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;mystic&quot;</span><span class="p">,</span><span class="s">&quot;montecarlo&quot;</span><span class="p">),</span>
+			<span class="n">mystic</span> <span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+			<span class="c">#showInGui=False,</span>
+		<span class="p">)</span>
+
+		<span class="n">mc_spherical3D_scene</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;mc_spherical3D_scene&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;geometry&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Define scene on globe.&#39;</span><span class="p">,</span> 
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;mc_spherical3D_scene&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="p">[</span><span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.spherical3D_scene&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.spherical3D_scene_lon_min&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">gui_name</span><span class="o">=</span><span class="s">&#39;LON_W&#39;</span><span class="p">),</span>
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.spherical3D_scene_lon_max&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">gui_name</span><span class="o">=</span><span class="s">&#39;LON_E&#39;</span><span class="p">),</span>
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.spherical3D_scene_lat_min&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">gui_name</span><span class="o">=</span><span class="s">&#39;LAT_S&#39;</span><span class="p">),</span>
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.spherical3D_scene_lat_max&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">gui_name</span><span class="o">=</span><span class="s">&#39;LAT_N&#39;</span><span class="p">)</span> <span class="p">],</span>
+			<span class="n">speaker</span><span class="o">=</span><span class="s">&#39;mc_spherical&#39;</span><span class="p">,</span>
+			<span class="n">enable_values</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;3d&quot;</span><span class="p">,),</span>
+			<span class="n">islidar</span> <span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+			<span class="n">showInGui</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+		<span class="p">)</span>
+
+		<span class="n">mc_satellite_view</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;mc_satellite_view&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;geometry&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Simulate a satellite image.&#39;</span><span class="p">,</span> 
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;mc_satellite_view&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="p">[</span><span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.pan_angles&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;calloc (4, sizeof(double))&#39;</span><span class="p">),</span>
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.pan_angles[0]&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="n">Double</span><span class="p">),</span>
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.pan_angles[1]&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="n">Double</span><span class="p">),</span>
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.pan_angles[2]&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="n">Double</span><span class="p">),</span>
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.pan_angles[3]&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="n">Double</span><span class="p">),</span>
+				<span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.panorama&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;PAN_MODE_SATELLITE&#39;</span><span class="p">),</span>
+				<span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.allocate_umu_and_phi&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> <span class="p">],</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;mc_backward&#39;</span><span class="p">],</span>
+			<span class="n">non_parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;mc_panorama_view&#39;</span><span class="p">],</span>
+			<span class="n">speaker</span><span class="o">=</span><span class="s">&#39;rte_solver&#39;</span><span class="p">,</span>
+			<span class="n">enable_values</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;mystic&quot;</span><span class="p">,</span><span class="s">&quot;montecarlo&quot;</span><span class="p">),</span>
+			<span class="n">threedmystic</span> <span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+			<span class="n">islidar</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+			<span class="n">showInGui</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+		<span class="p">)</span>
+
+		<span class="n">mc_satellite_position</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;mc_satellite_position&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;geometry&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Define the position of the satellite.&#39;</span><span class="p">,</span> 
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;mc_satellite_position&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="p">[</span><span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.sensorposition&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;MC_SENSORPOSITION_SPHERICAL&#39;</span><span class="p">),</span>
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.sensorposition_lon&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span>
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.sensorposition_lat&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span>
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.sensorposition_alt&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span> <span class="p">],</span>
+			<span class="n">non_parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;mc_sensor_position&#39;</span><span class="p">],</span>
+			<span class="n">islidar</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+			<span class="n">showInGui</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+		<span class="p">)</span>
+
+		<span class="n">mc_sun_position</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;mc_sun_position&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;geometry&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Sun position&#39;</span><span class="p">,</span> 
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;mc_sun_position&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="p">[</span><span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.atm.sza_source&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;SZA_DIRECT_INPUT&#39;</span><span class="p">),</span>
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.atm.phi0_spher&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span>
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.atm.sza_spher&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span> <span class="p">],</span>
+			<span class="n">islidar</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+			<span class="n">speaker</span><span class="o">=</span><span class="s">&#39;mc_sperical&#39;</span><span class="p">,</span>
+			<span class="n">enable_values</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;3D&#39;</span><span class="p">,),</span>
+			<span class="n">showInGui</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+		<span class="p">)</span>
+
+		<span class="n">mc_sensordirection</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;mc_sensordirection&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;geometry&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Define viewing direction of an irradiance sensor.&#39;</span><span class="p">,</span> 
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;mc_sensordirection&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="p">[</span> <span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&quot;Input.rte.mc.sensordirection_dx&quot;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">gui_name</span><span class="o">=</span><span class="s">&#39;dx&#39;</span><span class="p">),</span>
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&quot;Input.rte.mc.sensordirection_dy&quot;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">gui_name</span><span class="o">=</span><span class="s">&#39;dy&#39;</span><span class="p">),</span>
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&quot;Input.rte.mc.sensordirection_dz&quot;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">gui_name</span><span class="o">=</span><span class="s">&#39;dz&#39;</span><span class="p">),</span>
+				<span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&quot;Input.rte.mc.sensordirection&quot;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="p">],</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;mc_backward&#39;</span><span class="p">],</span>
+			<span class="n">speaker</span><span class="o">=</span><span class="s">&#39;rte_solver&#39;</span><span class="p">,</span>
+			<span class="n">enable_values</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;mystic&quot;</span><span class="p">,</span><span class="s">&quot;montecarlo&quot;</span><span class="p">),</span>
+			<span class="n">threedmystic</span> <span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+		<span class="p">)</span>
+
+		<span class="n">mc_sensorposition</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;mc_sensorposition&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;geometry&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Define the position of a sensor.&#39;</span><span class="p">,</span> 
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;mc_sensorposition&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="p">[</span>  <span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&quot;Input.rte.mc.sensorposition_x&quot;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">gui_name</span><span class="o">=</span><span class="s">&#39;x&#39;</span><span class="p">),</span>
+				  <span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&quot;Input.rte.mc.sensorposition_y&quot;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">gui_name</span><span class="o">=</span><span class="s">&#39;y&#39;</span><span class="p">),</span>
+				  <span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&quot;Input.rte.mc.sensorposition_z&quot;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">gui_name</span><span class="o">=</span><span class="s">&#39;z&#39;</span><span class="p">),</span>
+				<span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&quot;Input.rte.mc.sensorposition&quot;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;MC_SENSORPOSITION_CARTESIAN&#39;</span><span class="p">)</span>  <span class="p">],</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;mc_backward&#39;</span><span class="p">],</span>
+			<span class="n">non_parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;mc_satellite_position&#39;</span><span class="p">],</span>
+			<span class="n">speaker</span><span class="o">=</span><span class="s">&#39;rte_solver&#39;</span><span class="p">,</span>
+			<span class="n">enable_values</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;mystic&quot;</span><span class="p">,</span><span class="s">&quot;montecarlo&quot;</span><span class="p">),</span>
+			<span class="n">threedmystic</span> <span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+		<span class="p">)</span>
+
+		<span class="n">mc_reference_to_nn</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;mc_reference_to_nn&#39;</span><span class="p">,</span> 
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;geometry&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;The sampled pixels correspond to he surface pixels.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;mc_reference_to_nn&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="p">[</span> <span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.reference_to_NN&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)],</span> 
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;mc_backward&#39;</span><span class="p">],</span>  
+			<span class="n">speaker</span><span class="o">=</span><span class="s">&#39;rte_solver&#39;</span><span class="p">,</span>
+			<span class="n">enable_values</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;mystic&quot;</span><span class="p">,</span><span class="s">&quot;montecarlo&quot;</span><span class="p">),</span>
+			<span class="n">threedmystic</span> <span class="o">=</span><span class="bp">True</span>
+		<span class="p">)</span>
+		
+		<span class="n">mc_panorama_view</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;mc_panorama_view&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;geometry&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Simulate a panorama.&#39;</span><span class="p">,</span> 
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;mc_panorama_view&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="p">[</span><span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.pan_angles&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;calloc (4, sizeof(double))&#39;</span><span class="p">),</span>
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.pan_angles[0]&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="n">Double</span><span class="p">),</span>
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.pan_angles[1]&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="n">Double</span><span class="p">),</span>
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.pan_angles[2]&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="n">Double</span><span class="p">),</span>
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.pan_angles[3]&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="n">Double</span><span class="p">),</span>
+				<span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.panorama&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;PAN_MODE_CAMERA&#39;</span><span class="p">),</span>
+				<span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.allocate_umu_and_phi&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> <span class="p">],</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;mc_backward&#39;</span><span class="p">],</span>
+			<span class="n">non_parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;mc_satellite_view&#39;</span><span class="p">],</span>
+			<span class="n">speaker</span><span class="o">=</span><span class="s">&#39;rte_solver&#39;</span><span class="p">,</span>
+			<span class="n">enable_values</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;mystic&quot;</span><span class="p">,</span><span class="s">&quot;montecarlo&quot;</span><span class="p">),</span>
+			<span class="n">threedmystic</span> <span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+			<span class="n">childs</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;mc_panorama_alignment&#39;</span><span class="p">,</span><span class="s">&#39;mc_panorama&#39;</span><span class="p">]</span>
+		<span class="p">)</span>
+
+		<span class="n">mc_panorama_alignment</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;mc_panorama_alignment&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;geometry&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Panorama alignment.&#39;</span><span class="p">,</span> 
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;mc_panorama_alignment&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="n">addLogical</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.pan_alignment&#39;</span><span class="p">,</span><span class="n">logicals</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;mu&#39;</span><span class="p">,</span><span class="s">&#39;sun&#39;</span><span class="p">,</span><span class="s">&#39;zenith&#39;</span><span class="p">],</span><span class="n">setting</span><span class="o">=</span><span class="s">&#39;PAN_ALIGNMENT_&#39;</span><span class="p">),</span>
+			<span class="n">threedmystic</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;mc_panorama_view&#39;</span><span class="p">],</span>
+		<span class="p">)</span>			
+
+		<span class="n">mc_panorama</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;mc_panorama&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;geometry&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Panorama settings.&#39;</span><span class="p">,</span> 
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;mc_panorama&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="p">[</span><span class="n">addLogical</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;id&#39;</span><span class="p">,</span><span class="n">logicals</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;distr_photons_over_pixel&#39;</span><span class="p">,</span><span class="s">&#39;no_pixel&#39;</span><span class="p">,</span><span class="s">&#39;quicklook&#39;</span><span class="p">,</span><span class="s">&#39;with_direct_rad&#39;</span><span class="p">,</span><span class="s">&#39;weight_with_cos&#39;</span><span class="p">,</span><span class="s">&#39;circumsolar_var_red&#39;</span><span class="p">],</span><span class="n">setting</span><span class="o">=</span><span class="s">&#39;PAN_FLAG_&#39;</span><span class="p">),</span>
+				<span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.pan[id]&#39;</span><span class="p">,</span><span class="n">setting</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="p">],</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;mc_panorama_view&#39;</span><span class="p">],</span>
+			<span class="n">threedmystic</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+			<span class="n">non_unique</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+		<span class="p">)</span>
+
+		<span class="n">mc_blitz_position</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;mc_blitz_position&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;geometry&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Define lightning as source.&#39;</span><span class="p">,</span> 
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;mc_blitz_position&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="p">[</span><span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.blitz_position&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;calloc (6, sizeof(double))&#39;</span><span class="p">),</span>
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.blitz_position[0]&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="n">Double</span><span class="p">),</span>
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.blitz_position[1]&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="n">Double</span><span class="p">),</span>
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.blitz_position[2]&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="n">Double</span><span class="p">),</span>
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.blitz_position[3]&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="n">Double</span><span class="p">),</span>
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.blitz_position[4]&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="n">Double</span><span class="p">),</span>
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.blitz_position[5]&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="n">Double</span><span class="p">),</span>
+				<span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.source&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;SRC_BLITZ&#39;</span><span class="p">),</span>
+				<span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rte.mc.allocate_umu_and_phi&#39;</span><span class="p">,</span> <span class="n">setting</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> <span class="p">],</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;mc_forward&#39;</span><span class="p">],</span>
+			<span class="n">speaker</span><span class="o">=</span><span class="s">&#39;rte_solver&#39;</span><span class="p">,</span>
+			<span class="n">enable_values</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;mystic&quot;</span><span class="p">,</span><span class="s">&quot;montecarlo&quot;</span><span class="p">),</span>
+			<span class="n">threedmystic</span> <span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+			<span class="n">showInGui</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+		<span class="p">)</span>
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">options</span> <span class="o">=</span> <span class="p">[</span><span class="n">sza</span><span class="p">,</span> <span class="n">sza_file</span><span class="p">,</span> <span class="n">phi0</span><span class="p">,</span> <span class="n">phi</span><span class="p">,</span> <span class="n">umu</span><span class="p">,</span> <span class="n">mc_bw_umu_file</span><span class="p">,</span>
+				<span class="n">earth_radius</span><span class="p">,</span>
+				<span class="n">latitude</span><span class="p">,</span><span class="n">longitude</span><span class="p">,</span>
+<span class="c"># missing time,	</span>
+				<span class="n">day_of_year</span><span class="p">,</span>
+				<span class="n">mc_bcond</span><span class="p">,</span> <span class="n">mc_sample_grid</span><span class="p">,</span> <span class="n">mc_spherical</span><span class="p">,</span> <span class="n">mc_spherical3D_scene</span><span class="p">,</span> 
+				<span class="n">mc_satellite_view</span><span class="p">,</span> <span class="n">mc_satellite_position</span><span class="p">,</span> <span class="n">mc_sun_position</span><span class="p">,</span>
+				<span class="n">mc_sensordirection</span><span class="p">,</span> <span class="n">mc_sensorposition</span><span class="p">,</span> 
+				<span class="n">mc_reference_to_nn</span><span class="p">,</span> <span class="n">mc_panorama_view</span><span class="p">,</span> 
+				<span class="n">mc_panorama_alignment</span><span class="p">,</span> <span class="n">mc_panorama</span><span class="p">,</span>
+				<span class="n">mc_blitz_position</span><span class="p">,</span>
+				<span class="p">]</span>
+</div>
+	<span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="get_geometry_documentation"><a class="viewcode-back" href="../../../mortapi/morticia.rad.html#morticia.rad.geometry_options.get_geometry_documentation">[docs]</a><span class="k">def</span> <span class="nf">get_geometry_documentation</span><span class="p">():</span>
+	<span class="k">return</span> <span class="p">{</span>
+		<span class="s">&#39;day_of_year&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Integer, to correct the calculated radiation quantities for the </span>
+<span class="s">	Sun-Earth distance for the specified Julian day (1-365). </span>
+<span class="s">	\fcode{</span>
+<span class="s">	   day_of_year value</span>
+<span class="s">	}</span>
+<span class="s">	If not specified, the Earth-Sun distance is 1 AU (i.e. equinox</span>
+<span class="s">	distance), that is, no correction is applied to the extraterrestrial</span>
+<span class="s">	irradiance \code{source solar file}. Alternatively \code{time} may be used</span>
+<span class="s">	for that purpose.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+		<span class="s">&#39;earth_radius&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Specify the earth radius in km. </span>
+<span class="s">	\fcode{</span>
+<span class="s">	    earth_radius value</span>
+<span class="s">	}</span>
+<span class="s">	This is needed by all solvers in spherical geometry\ifmystic{, e.g. \code{mystic}</span>
+<span class="s">	in combination with option \code{mc_spherical}}. The default value is 6370 km.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+		<span class="s">&#39;latitude&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	This option can be used to specify the latitude of the location to simulate.</span>
+<span class="s">	(This option only has an effects, if \code{longitude} is specified, too.)</span>
+<span class="s">	\fcode{</span>
+<span class="s">	latitude N/S deg [min] [sec]</span>
+<span class="s">	}</span>
+<span class="s">	where \code{N} and \code{S} stands for the northern and southern hemisphere, respectively.</span>
+<span class="s">	\code{deg min sec} is the position in degrees, arc minutes, and arc seconds.</span>
+<span class="s">	\code{deg} might also be a float number. \code{min} and \code{sec} may be obmitted.</span>
+<span class="s">	The \code{latitude} information will be used for the following: </span>
+<span class="s">	</span>
+<span class="s">	%\code{latitude} in combination with \code{longitude}, \code{time}, and any \code{map}-option</span>
+<span class="s">	</span><span class="si">%i</span><span class="s">s used to select the location where to read the input data.</span>
+<span class="s">	</span>
+<span class="s">	\code{latitude} in combination with \code{longitude} and \code{time} is used to calculate </span>
+<span class="s">	the solar zenith angle, if no \code{sza} is specified (see also \code{time_interval}).</span>
+<span class="s">	</span>
+<span class="s">	\code{latitude} in combination with \code{longitude} and \code{time} is used to choose a</span>
+<span class="s">	suitable default atmosphere file, if no \code{atmosphere_file} is specified. </span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;longitude&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	This option can be used to specify the longitude of the location to simulate.</span>
+<span class="s">	(This option only has an effects, if \code{latitude} is specified, too.)</span>
+<span class="s">	\fcode{</span>
+<span class="s">	longitude E/W deg [min] [sec]</span>
+<span class="s">	}</span>
+<span class="s">	where \code{E} and \code{W} stand for the eastern and western hemisphere, respectively.</span>
+<span class="s">	\code{deg min sec} is the position in degrees, arc minutes, and arc seconds.</span>
+<span class="s">	\code{deg} might also be a float number. \code{min} and \code{sec} may be obmitted.</span>
+<span class="s">	For possible usage of the \code{longitude} information, see \code{latitude}. </span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;mc_bcond&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Undocumented option to define MYSTIC boundary conditions: periodic (default),</span>
+<span class="s">	absorbing (\code{absorb}), mirror (not really supported - don&#39;t expect meaningful results). </span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;mc_blitz_position&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Define lightning as source. The position of the the lightning light</span>
+<span class="s">	source is defined as a simple line, going from [ X\_1 Y\_1 Z\_1 ] to [</span>
+<span class="s">	X\_2 Y\_2 Z\_2 ] (in units of m). Usage:</span>
+<span class="s">	\fcode{</span>
+<span class="s">	mc_blitz_position X_1 Y_1 Z_1 X_2 Y_2 Z_2</span>
+<span class="s">	}</span>
+<span class="s">	Only works in forward mode, for radiances.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;mc_bw_umu_file&#39;</span>  <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Define a different umu and phi for each pixel. You specify the file</span>
+<span class="s">	containing a two-dimensional array with umu and phi for each sample</span>
+<span class="s">	pixel. Only works in connection with \code{mc_backward}.</span>
+<span class="s">	\fcode{</span>
+<span class="s">	mc_bw_umu_file file</span>
+<span class="s">	}</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;mc_coherent_backscatter&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Switches on coherent backscattering for lidar and radar. Works only </span>
+<span class="s">	with \code{mc_lidar} or \code{mc_radar}, use only with \code{mc_polarisation}.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;mc_panorama&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Use this option only together with \code{mc_panorama_view}.</span>
+
+<span class="s">    \fcode{</span>
+<span class="s">    mc_panorama circumsolar_var_red</span>
+<span class="s">    }</span>
+<span class="s">    Variance reduction method for the calculation of circumsolar radiation.</span>
+<span class="s">    Re-distributes the initial backward photon directions according to DDIS phase\_max.</span>
+<span class="s">    Use only if you calculate the average radiance for one large FOV (at least two times of the angular radius of the sun disk, e.g. </span>
+<span class="s">    if your sensor convers 0$^\circ$ to 1$^\circ$ from the sun center or 0$^\circ$ to 5$^\circ$ from the sun</span>
+<span class="s">    center). For smaller FOVs (e.g 0$^\circ$ to 0.35$^\circ$) it may slow down convergence as this method does not yet consider</span>
+<span class="s">    the extent of the sun disk. Results should not be wrong but you may need more photons to achieve the same </span>
+<span class="s">    standard deviation. Consideration of the sun&#39;s extent in this method should be easy to implement, however.</span>
+<span class="s">    For the simulations of radiance profiles (so called sunshapes) this option should probably not be used as it will</span>
+<span class="s">    only increase computing time without any benefit. For further information see Reinhardt (2013) Sect. 3.4.2 </span>
+<span class="s">    (Dissertation, LMU, urn:nbn:de:bvb:19-164380, http://edoc.ub.uni-muenchen.de/16438/).</span>
+
+<span class="s">	\fcode{</span>
+<span class="s">	mc_panorama distr_photons_over_pixel</span>
+<span class="s">	}</span>
+<span class="s">	With only \code{mc_panorama_view} all photons for the same pixel</span>
+<span class="s">	are emitted into exactly the same direction. The finite solid angle that</span>
+<span class="s">	is covered by one pixel is not accounted for. With </span>
+<span class="s">	\code{mc_panorama distr_photons_over_pixel} the photons are distributed</span>
+<span class="s">	over the FOV covered by the pixel. </span>
+<span class="s">	</span>
+<span class="s">	\fcode{</span>
+<span class="s">	mc_panorama no_pixel</span>
+<span class="s">	}</span>
+<span class="s">	Useful for calculation of radiance distributions which shall be exactly</span>
+<span class="s">	charted. Originally \code{mc_panorama_view} was meant to calculate images</span>
+<span class="s">	like produced by a CCD camera. You set the edges of your desired image</span>
+<span class="s">	and the resolution of the sensor. MYSTIC will then calculate the</span>
+<span class="s">	radiances at the center of each pixel. This implies that values for</span>
+<span class="s">	the edges of the image as given by the input file are never</span>
+<span class="s">	computed. The border angles for which radiances are computed are</span>
+<span class="s">	shifted half a pixel to the inside of the domain. With</span>
+<span class="s">	\code{mc_panorama no_pixel} the edging values as given in the input</span>
+<span class="s">	file are directly hit. A short example: Assume you only have three</span>
+<span class="s">	pixels. You choose your edges to be at $\phi=0$ and $\phi=180$. With</span>
+<span class="s">	\code{mc_panorama no_pixel} MYSTIC will calculate radiances at</span>
+<span class="s">	$\phi=0$, $\phi=90$ and $\phi=180$. Without this option you will get</span>
+<span class="s">	values for $\phi=30$, $\phi=90$ and $\phi=150$.</span>
+<span class="s">	</span>
+<span class="s">	\fcode{</span>
+<span class="s">	mc_panorama quicklook</span>
+<span class="s">	}</span>
+<span class="s">	This option allows to do a fast calculation in order to see whether you</span>
+<span class="s">	have set your parameters right. All panorama pixels are run in a fast</span>
+<span class="s">	mode: only one photon is started per pixel, it is moved till to a</span>
+<span class="s">	fixed optical depth (0.1), and then a local estimate is performed. In</span>
+<span class="s">	case the local estimate is done scattering (i.e.~the photon has not</span>
+<span class="s">	hit a surface before reaching tau=0.1), isotropic scattering is</span>
+<span class="s">	assumed. Then the photon is killed. We suggest you turn off Rayleigh</span>
+<span class="s">	scattering and aerosols while using this option. The result lets you</span>
+<span class="s">	see roughly where your panorama is looking at surface, sunlit clouds,</span>
+<span class="s">	shaded clouds, or slanted clouds.</span>
+<span class="s">	</span>
+<span class="s">	\fcode{</span>
+<span class="s">	mc_panorama with_direct_rad</span>
+<span class="s">	} </span>
+<span class="s">	Output is direct plus diffuse radiance.</span>
+<span class="s">	Use together with \code{mc_panorama distr_photons_over_pixel}.</span>
+
+<span class="s">	\fcode{</span>
+<span class="s">	mc_panorama weight_with_cos</span>
+<span class="s">	} </span>
+<span class="s">	Output is weighted with the cosine of the angle between photon and zenith of camera.</span>
+<span class="s">	Use together with \code{mc_panorama distr_photons_over_pixel}.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;mc_panorama_alignment&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Use this option only together with \code{mc_panorama_view}. This</span>
+<span class="s">	option has been introduced to facilitate e.g.~the calculation of</span>
+<span class="s">	circum solar radiation. Three sub-options are available, \code{sun},</span>
+<span class="s">	\code{mu}, and \code{zenith}. When set \code{sun}, the camera is</span>
+<span class="s">	aligned to sun (i.e.~using the options \code{sza} and</span>
+<span class="s">	\code{phi0}). $\theta$ and $\mu$ as given by the option</span>
+<span class="s">	\code{mc_panorama_view} now relates to the sun&#39;s position. $\mu$ sets</span>
+<span class="s">	cosine of the angular distance from the center of the sun. $\mu=$-1</span>
+<span class="s">	implies looking directly into the sun. With $\phi$ we select the</span>
+<span class="s">	direction around the sun on a circle with angular distance ${\rm</span>
+<span class="s">	acos}(\mu)$ from the center of the sun. $\phi=0$ implies that the</span>
+<span class="s">	camera pixel is looking in a direction exactly below the sun, at</span>
+<span class="s">	$\phi=180$ the camera pixel will be looking exactly above the</span>
+<span class="s">	sun. Increasing $\phi$ means the direction of looking moves clock-wise</span>
+<span class="s">	around the sun-camera-line (seen from the sun). If the sun is in the</span>
+<span class="s">	zenith, the definition of $\phi$ is identical to that in \code{phi}.</span>
+<span class="s">	</span>
+<span class="s">	The sub-option \code{mu} aligns the camera geometry according to the</span>
+<span class="s">	options \code{umu} and \code{phi}. Be aware that \code{phi0} and</span>
+<span class="s">	\code{phi} are defined differently!</span>
+<span class="s">	</span>
+<span class="s">	The sub-option \code{zenith} makes only sense when using</span>
+<span class="s">	\code{mc_spherical 3D}. Then the camera is aligned to the zenith with</span>
+<span class="s">	respect to the lon-lat position of the camera.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;mc_panorama_view&#39;</span>  <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Simulate a panorama. Only works with \code{mc_sensorposition},</span>
+<span class="s">	\code{mc_sample_grid} and \code{mc_backward}. Can best be explained by</span>
+<span class="s">	following example:</span>
+
+<span class="s">	\fcode{\\</span>
+<span class="s">	mc_panorama_view PHI_1 PHI_2 THETA_1 THETA_2\\</span>
+<span class="s">	mc_sensorposition X Y Z \\</span>
+<span class="s">	mc_sample_grid NPHI NTHETA [] []\\</span>
+<span class="s">	mc_backward NPHI1 NTHETA1 NPHI2 NTHETA2\\</span>
+<span class="s">	}</span>
+
+<span class="s">	or, with numbers:</span>
+
+<span class="s">	\fcode{\\</span>
+<span class="s">	mc_panorama_view 45 135 80 180\\</span>
+<span class="s">	mc_sensorposition 3000 3000 26 \\</span>
+<span class="s">	mc_sample_grid 90 100 [] []\\</span>
+<span class="s">	mc_backward 10 0 10 99\\</span>
+<span class="s">	}</span>
+
+<span class="s">	In this example, \code{mc_panorama_view} defines the camera to cover</span>
+<span class="s">	the area between 10 degrees below the horizon (80 degrees from nadir,</span>
+<span class="s">	looking into the ground) and the zenith (180 degrees from nadir), and</span>
+<span class="s">	looking into the directions between south-west (45) and</span>
+<span class="s">	north-west (135). The camera is positioned</span>
+<span class="s">	at x=3km, y=3km and z=26m, see \code{mc_sensorposition}. The number of</span>
+<span class="s">	pixels that the camera has is defined by \code{mc_sample_grid}, hence</span>
+<span class="s">	the camera horizontal resolution is 1 degree in the</span>
+<span class="s">	horizon: (135-45)/90. The camera vertical resolution is also 1</span>
+<span class="s">	degree: (180-80)/100. This run only calculates one vertical line at</span>
+<span class="s">	phi=55.5 (see \code{mc_backward}). The square brackets in the line</span>
+<span class="s">	\code{mc_sample_grid} are usually dx and dy, they are set</span>
+<span class="s">	automatically in the presence of 3d clouds. If no clouds are present,</span>
+<span class="s">	you need to set them, if you use \code{mc_elevation_file}, you need to</span>
+<span class="s">	set them consistent with the elevation file. NOTE: If you have</span>
+<span class="s">	formerly used \code{mc_panorama}, this is what has changed: The order</span>
+<span class="s">	of the numbers has changed: Formerly, we wrote \code{mc_panorama MU_1</span>
+<span class="s">	MU_2 PHI_1 PHI_2}, where MU\_i=cos(THETA\_i). In the options</span>
+<span class="s">	\code{mc_sample_grid} and \code{mc_backward}, X and Y have been</span>
+<span class="s">	swapped. Although these changes are far from being nice, they are</span>
+<span class="s">	necessary to introduce a conform nomenclatur throughout</span>
+<span class="s">	libRadtran. Sorry for that. (CAUTION! The definition of phi for</span>
+<span class="s">	panoramas was formerly different than that of \code{phi}!  This has</span>
+<span class="s">	been changed on 19.11.2010!)</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;mc_reference_to_nn&#39;</span><span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Only works with \code{mc_backward}. The sampled pixels correspond to</span>
+<span class="s">	the surface pixels. In other words, the photons are still counted at</span>
+<span class="s">	zout, but the sample pixel which they are counted in corresponds to</span>
+<span class="s">	the pixel at sea level. In other words, the sample grid is projected</span>
+<span class="s">	from nn to zout using umu and phi.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;mc_sample_grid&#39;</span>  <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Sample grid size (Nx Ny [dx dy]) for MYSTIC.</span>
+<span class="s">	\fcode{</span>
+<span class="s">	mc_sample_grid Nx Ny [dx dy]</span>
+<span class="s">	}</span>
+<span class="s">	Only meaningful with \code{rte_solver montecarlo}.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;mc_satellite_position&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Define the position of the satellite. See \code{mc_satellite_view} for</span>
+<span class="s">	description.</span>
+<span class="s">	\fcode{</span>
+<span class="s">	mc_satellite_position longitude latitude alitude</span>
+<span class="s">	}</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+		<span class="s">&#39;mc_satellite_view&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Simulate a satellite image. Only works with</span>
+<span class="s">	\code{mc_satellite_position}/\code{mc_sensorposition},</span>
+<span class="s">	\code{mc_sample_grid}, \code{mc_backward} and</span>
+<span class="s">	\code{mc_spherical 3D}. Can best be explained by following example:</span>
+<span class="s">	</span>
+<span class="s">	\fcode{\\</span>
+<span class="s">	mc_spherical 3D \\</span>
+<span class="s">	mc_satellite_view PHI_W PHI_E THETA_S THETA_N \\</span>
+<span class="s">	mc_sample_grid N_PHI N_THETA \\</span>
+<span class="s">	mc_satellite_position SAT_LON SAT_LAT SAT_ALT \\</span>
+<span class="s">	mc_sun_position SUN_LON SUN_LAT \\</span>
+<span class="s">	mc_backward \\</span>
+<span class="s">	}</span>
+<span class="s">	</span>
+<span class="s">	In this example, the earth is a sphere (not plane parallel). The</span>
+<span class="s">	satellite is in zenith above longitude SAT\_LON degrees, latitude</span>
+<span class="s">	SAT\_LAT degrees, and at an altitude of SAT\_ALT</span>
+<span class="s">	meters. (Alternatively, you can use \code{mc_sensorposition S_X S_Y</span>
+<span class="s">	S_Z}, with [S\_X,0,0] being toward MSG, [0,S\_Y,0] being above the</span>
+<span class="s">	Maledives, and [0,0,S\_Z] being above the north pole.) The image taken</span>
+<span class="s">	has a resolution of N\_THETA times N\_PHI, and the picture (taken with</span>
+<span class="s">	a camera with spherical picture geometry) spans from PHI\_W to PHI\_E</span>
+<span class="s">	degrees (positive being east of nadir) and from THETA\_S to THETA\_N</span>
+<span class="s">	degrees (positive being north of nadir). In this example, the sun is</span>
+<span class="s">	in zenith at the latitude SUN\_LAT degrees (positive meaning north) and</span>
+<span class="s">	longitude SUN\_LON degrees (positive meaning east). See also</span>
+<span class="s">	\code{mc_panorama_view}, which is a similar option.  Example for MSG:</span>
+<span class="s">	</span>
+<span class="s">	\fcode{\\</span>
+<span class="s">	mc_spherical 3D \\</span>
+<span class="s">	mc_satellite_view -10 10 -10 10 \\</span>
+<span class="s">	mc_sample_grid 4000 4000 \\</span>
+<span class="s">	mc_satellite_position 0 0 3.6e7 \\</span>
+<span class="s">	mc_sun_position -10 23\# about 1PM UTC on mid summer \\</span>
+<span class="s">	mc_backward \\</span>
+<span class="s">	}</span>
+<span class="s">	</span>
+<span class="s">	Only meaningful with \code{rte_solver montecarlo}.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;mc_sensordirection&#39;</span>  <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Define viewing direction of an irradiance sensor in Monte Carlo backward mode. </span>
+<span class="s">	\fcode{</span>
+<span class="s">	mc_sensordirection x-value y-value z-value</span>
+<span class="s">	}</span>
+<span class="s">	Has been introduced for </span>
+<span class="s">	irradiance calculations in topography and might not properly work with all options. </span>
+<span class="s">	For radiance use the usual \code{umu} and \code{phi}. </span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;mc_sensorposition&#39;</span>  <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Define the position of a sensor. </span>
+<span class="s">	\fcode{</span>
+<span class="s">	mc_sensorposition x-value y-value z-value</span>
+<span class="s">	}</span>
+<span class="s">	Has been introduced for irradiance calculations in topography</span>
+<span class="s">	and might not properly work with all options. </span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;mc_spherical&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Spherical geometry in MYSTIC. </span>
+<span class="s">	\fcode{</span>
+<span class="s">	mc_spherical 1D</span>
+<span class="s">	}</span>
+<span class="s">	Works only in &quot;1D&quot; - \code{wc_file 3D} </span>
+<span class="s">	and \code{ic_file 3D} are not yet considered. If \code{mc_spherical} is selected</span>
+<span class="s">	\code{mc_backward} is switched on automatically. Viewing</span>
+<span class="s">	direction (\code{umu}, \code{phi}) and sun position</span>
+<span class="s">	(\code{sza}, \code{phi0}) are defined with respect to the</span>
+<span class="s">	sensor position specified by \code{zout}. For details about</span>
+<span class="s">	the implementation of spherical geometry please refer to</span>
+<span class="s">	\citet{emde2007}. </span>
+
+<span class="s">	\iflidar{</span>
+<span class="s">	\fcode{</span>
+<span class="s">	mc_spherical 3D</span>
+<span class="s">	}</span>
+<span class="s">	3D spherical geometry in MYSTIC. Only works with</span>
+<span class="s">	\code{mc_satellite_position}/\code{mc_sensorposition}, and</span>
+<span class="s">	\code{mc_satellite_view}, and only for solar backward. You have to set</span>
+<span class="s">	the sun position using \code{mc_sun_position}. Still very</span>
+<span class="s">	experimental. Does not work with \code{mc_elevation_file}.</span>
+<span class="s">	}</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;mc_spherical3D_scene&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Define scene on globe. Only works with \code{mc_spherical 3D}. Without</span>
+<span class="s">	this option, 3d clouds and 2d albedo maps are folded around the full</span>
+<span class="s">	globe when using \code{mc_spherical 3D}. This option defines the limits</span>
+<span class="s">	of the clouds and albedo maps in terms of longitude and latitude. Example:</span>
+<span class="s">	</span>
+<span class="s">	\fcode{\\</span>
+<span class="s">	mc_spherical3D_scene LON_W LON_E LAT_S LAT_N \\</span>
+<span class="s">	}</span>
+<span class="s">	</span>
+<span class="s">	The scene spans from LON\_W degrees in the west to LON\_E degrees in</span>
+<span class="s">	the east (positive values are east, negative are west of Greenwich)</span>
+<span class="s">	and from LAT\_S degrees in the south to LAT\_N degrees in the</span>
+<span class="s">	north (positive are northern hemisphere, negative are southern</span>
+<span class="s">	hemisphere).</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;mc_sun_position&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Sun position when using \code{mc_spherical 3D}. See \code{mc_satellite_view}</span>
+<span class="s">	for an example and explanation.</span>
+<span class="s">	\fcode{</span>
+<span class="s">	mc_sun_position longitude latitude</span>
+<span class="s">	}</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;phi&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Azimuth output angles (in degrees) in increasing order. </span>
+<span class="s">	\fcode{</span>
+<span class="s">	phi values</span>
+<span class="s">	}</span>
+<span class="s">	The radiance is output at \code{phi} and \code{umu}.</span>
+<span class="s">	\begin{itemize}</span>
+<span class="s">	\item Sensor in the North (looking South):  0 deg </span>
+<span class="s">	\item Sensor in the East  (looking West):   90 deg </span>
+<span class="s">	\item Sensor in the South (looking North):  180 deg </span>
+<span class="s">	\item Sensor in the West  (looking East):   270 deg </span>
+<span class="s">	\end{itemize}</span>
+<span class="s">	For all one-dimensional solvers the absolute azimuth does not matter, but only the relative azimuth \code{phi}-\code{phi0}.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;phi0&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Azimuth angle of the sun (0 to 360 degrees). </span>
+<span class="s">	\fcode{phi0 value}</span>
+<span class="s">	\begin{itemize}</span>
+<span class="s">	\item Sun in the South:    0 degrees</span>
+<span class="s">	\item Sun in the West:    90 degrees</span>
+<span class="s">	\item Sun in the North: 180 degrees</span>
+<span class="s">	\item Sun in the East: 270 degrees</span>
+<span class="s">	\end{itemize}</span>
+<span class="s">	For all one-dimensional solvers the absolute azimuth does not matter, but only the relative azimuth \code{phi}-\code{phi0}.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;sza&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	The solar zenith angle (degrees). </span>
+<span class="s">	\fcode{</span>
+<span class="s">	sza value</span>
+<span class="s">	}</span>
+<span class="s">	The default solar zenith angle is 0.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;sza_file&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Location of solar zenith angle file for wavelength-dependent solar</span>
+<span class="s">	zenith angle. </span>
+<span class="s">	\fcode{</span>
+<span class="s">	sza_file file</span>
+<span class="s">	}</span>
+<span class="s">	This option is useful if you want to simulate an instrument </span>
+<span class="s">	which scans so slowly that the solar zenith angle may change significantly during </span>
+<span class="s">	the wavelength scan. </span>
+<span class="s">	The file must have two or three columns. Column 1 is the wavelength, </span>
+<span class="s">	in nm, and column 2 the corresponding  solar zenith angle. Optionally</span>
+<span class="s">	the third column may contain the corresponding solar azimuth angle. The solar </span>
+<span class="s">	azimuth angle is only needed when calculating radiances. The wavelength </span>
+<span class="s">	grid may be freely set. The solar zenith and azimuth angle will be interpolated to </span>
+<span class="s">	the wavelength grid used for the radiation calculation.</span>
+<span class="s">	Comments start with \code{\#}. Empty lines are ignored.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;umu&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Cosine of output polar angles in increasing order, starting with </span>
+<span class="s">	negative (downwelling radiance, looking upward) values (if any) and on through </span>
+<span class="s">	positive (upwelling radiance, looking downward) values. </span>
+<span class="s">	Must not be zero.</span>
+<span class="s">	\fcode{</span>
+<span class="s">	umu values</span>
+<span class="s">	}</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+	<span class="p">}</span></div>
+</pre></div>
+
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, D Griffith, A Ramkilowan.
+    </p>
+  </div>
+
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

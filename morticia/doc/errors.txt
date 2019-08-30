@@ -1,0 +1,261 @@
+D:\Projects\GitHub\MORTICIA\morticia\doc\01a-SpectralChannelsAndFilters.rst:57: WARNING: image file not readable: 01a-SpectralChannelsAndFilters_files\01a-SpectralChannelsAndFilters_2_1.png
+D:\Projects\GitHub\MORTICIA\morticia\doc\01a-SpectralChannelsAndFilters.rst:77: WARNING: image file not readable: 01a-SpectralChannelsAndFilters_files\01a-SpectralChannelsAndFilters_3_1.png
+D:\Projects\GitHub\MORTICIA\morticia\doc\01a-SpectralChannelsAndFilters.rst:96: WARNING: image file not readable: 01a-SpectralChannelsAndFilters_files\01a-SpectralChannelsAndFilters_4_1.png
+D:\Projects\GitHub\MORTICIA\morticia\doc\01a-SpectralChannelsAndFilters.rst:113: WARNING: image file not readable: 01a-SpectralChannelsAndFilters_files\01a-SpectralChannelsAndFilters_5_1.png
+D:\Projects\GitHub\MORTICIA\morticia\doc\01a-SpectralChannelsAndFilters.rst:134: WARNING: image file not readable: 01a-SpectralChannelsAndFilters_files\01a-SpectralChannelsAndFilters_6_1.png
+D:\Projects\GitHub\MORTICIA\morticia\doc\01a-SpectralChannelsAndFilters.rst:154: WARNING: image file not readable: 01a-SpectralChannelsAndFilters_files%5C01a-SpectralChannelsAndFilters_7_1.png
+D:\Projects\GitHub\MORTICIA\morticia\doc\01a-SpectralChannelsAndFilters.rst:173: WARNING: image file not readable: 01a-SpectralChannelsAndFilters_files%5C01a-SpectralChannelsAndFilters_8_1.png
+D:\Projects\GitHub\MORTICIA\morticia\doc\01a-SpectralChannelsAndFilters.rst:192: WARNING: image file not readable: 01a-SpectralChannelsAndFilters_files%5C01a-SpectralChannelsAndFilters_9_1.png
+D:\Projects\GitHub\MORTICIA\morticia\doc\01a-SpectralChannelsAndFilters.rst:211: WARNING: image file not readable: 01a-SpectralChannelsAndFilters_files%5C01a-SpectralChannelsAndFilters_10_1.png
+D:\Projects\GitHub\MORTICIA\morticia\doc\01a-SpectralChannelsAndFilters.rst:232: WARNING: image file not readable: 01a-SpectralChannelsAndFilters_files%5C01a-SpectralChannelsAndFilters_11_1.png
+D:\Projects\GitHub\MORTICIA\morticia\doc\01a-SpectralChannelsAndFilters.rst:251: WARNING: image file not readable: 01a-SpectralChannelsAndFilters_files%5C01a-SpectralChannelsAndFilters_12_1.png
+D:\Projects\GitHub\MORTICIA\morticia\doc\01a-SpectralChannelsAndFilters.rst:271: WARNING: image file not readable: 01a-SpectralChannelsAndFilters_files%5C01a-SpectralChannelsAndFilters_13_1.png
+D:\Projects\GitHub\MORTICIA\morticia\doc\01a-SpectralChannelsAndFilters.rst:291: WARNING: image file not readable: 01a-SpectralChannelsAndFilters_files%5C01a-SpectralChannelsAndFilters_14_1.png
+D:\Projects\GitHub\MORTICIA\morticia\doc\01a-SpectralChannelsAndFilters.rst:312: WARNING: image file not readable: 01a-SpectralChannelsAndFilters_files%5C01a-SpectralChannelsAndFilters_17_0.png
+D:\Projects\GitHub\MORTICIA\morticia\doc\01a-SpectralChannelsAndFilters.rst:327: WARNING: image file not readable: 01a-SpectralChannelsAndFilters_files%5C01a-SpectralChannelsAndFilters_19_0.png
+D:\Projects\GitHub\MORTICIA\morticia\doc\01a-SpectralChannelsAndFilters.rst:359: WARNING: image file not readable: 01a-SpectralChannelsAndFilters_files%5C01a-SpectralChannelsAndFilters_22_0.png
+D:\Projects\GitHub\MORTICIA\morticia\rad\aerosol_options.py:docstring of morticia.rad.aerosol_options:1: SEVERE: Title overline & underline mismatch.
+
+--------------------------------------------------------------------
+* $Id: aerosol_options.py 3139 2015-07-15 11:15:57Z josef.gasteiger $
+*
+D:\Projects\GitHub\MORTICIA\morticia\rad\aerosol_options.py:docstring of morticia.rad.aerosol_options:24: WARNING: Bullet list ends without a blank line; unexpected unindent.
+D:\Projects\GitHub\MORTICIA\morticia\rad\aerosol_options.py:docstring of morticia.rad.aerosol_options:24: WARNING: Inline emphasis start-string without end-string.
+D:\Projects\GitHub\MORTICIA\morticia\rad\cloud_options.py:docstring of morticia.rad.cloud_options:1: SEVERE: Title overline & underline mismatch.
+
+--------------------------------------------------------------------
+* $Id: cloud_options.py 3180 2015-08-24 09:34:08Z Claudia.Emde $
+*
+D:\Projects\GitHub\MORTICIA\morticia\rad\cloud_options.py:docstring of morticia.rad.cloud_options:24: WARNING: Bullet list ends without a blank line; unexpected unindent.
+D:\Projects\GitHub\MORTICIA\morticia\rad\cloud_options.py:docstring of morticia.rad.cloud_options:24: WARNING: Inline emphasis start-string without end-string.
+D:\Projects\GitHub\MORTICIA\morticia\rad\general_atmosphere_options.py:docstring of morticia.rad.general_atmosphere_options:1: SEVERE: Title overline & underline mismatch.
+
+--------------------------------------------------------------------
+* $Id: general_atmosphere_options.py 3054 2014-07-21 09:43:44Z Claudia.Emde $
+*
+D:\Projects\GitHub\MORTICIA\morticia\rad\general_atmosphere_options.py:docstring of morticia.rad.general_atmosphere_options:24: WARNING: Bullet list ends without a blank line; unexpected unindent.
+D:\Projects\GitHub\MORTICIA\morticia\rad\general_atmosphere_options.py:docstring of morticia.rad.general_atmosphere_options:24: WARNING: Inline emphasis start-string without end-string.
+D:\Projects\GitHub\MORTICIA\morticia\rad\geometry_options.py:docstring of morticia.rad.geometry_options:1: SEVERE: Title overline & underline mismatch.
+
+--------------------------------------------------------------------
+* $Id: geometry_options.py 3074 2014-10-06 12:07:00Z Claudia.Emde $
+*
+D:\Projects\GitHub\MORTICIA\morticia\rad\geometry_options.py:docstring of morticia.rad.geometry_options:24: WARNING: Bullet list ends without a blank line; unexpected unindent.
+D:\Projects\GitHub\MORTICIA\morticia\rad\geometry_options.py:docstring of morticia.rad.geometry_options:24: WARNING: Inline emphasis start-string without end-string.
+D:\Projects\GitHub\MORTICIA\morticia\doc\mortapi\morticia.rad.rst:50: WARNING: autodoc: failed to import module u'morticia.rad.libRadtranPyExplore'; the following exception was raised:
+Traceback (most recent call last):
+  File "C:\Anaconda\envs\mordevpy27\lib\site-packages\Sphinx-1.4.1-py2.7.egg\sphinx\ext\autodoc.py", line 507, in import_object
+    __import__(self.modname)
+ImportError: No module named libRadtranPyExplore
+D:\Projects\GitHub\MORTICIA\morticia\doc\mortapi\morticia.rad.rst:58: WARNING: autodoc: failed to import module u'morticia.rad.libRadtranTutorial'; the following exception was raised:
+Traceback (most recent call last):
+  File "C:\Anaconda\envs\mordevpy27\lib\site-packages\Sphinx-1.4.1-py2.7.egg\sphinx\ext\autodoc.py", line 507, in import_object
+    __import__(self.modname)
+ImportError: No module named libRadtranTutorial
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of morticia.rad.librad.Case.del_option:5: WARNING: Field list ends without a blank line; unexpected unindent.
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of morticia.rad.librad.Case.readout:21: ERROR: Unexpected indentation.
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of morticia.rad.librad.Case.readout:27: ERROR: Unexpected indentation.
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of morticia.rad.librad.Case.readout:39: ERROR: Unexpected indentation.
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of morticia.rad.librad.Case.readout:50: ERROR: Unexpected indentation.
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of morticia.rad.librad.Case.readout:57: ERROR: Unexpected indentation.
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of morticia.rad.librad.Case.readout:73: ERROR: Unexpected indentation.
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of morticia.rad.librad.Case.readout:90: WARNING: Field list ends without a blank line; unexpected unindent.
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of morticia.rad.librad.RadEnv:30: ERROR: Unexpected indentation.
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of morticia.rad.librad.RadEnv.__init__:14: ERROR: Unexpected indentation.
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of morticia.rad.librad.RadEnv.run_ipyparallel:5: ERROR: Unexpected indentation.
+D:\Projects\GitHub\MORTICIA\morticia\rad\mc_options.py:docstring of morticia.rad.mc_options:1: SEVERE: Title overline & underline mismatch.
+
+--------------------------------------------------------------------
+* $Id: mc_options.py 3125 2015-06-09 15:52:38Z Claudia.Emde $
+*
+D:\Projects\GitHub\MORTICIA\morticia\rad\mc_options.py:docstring of morticia.rad.mc_options:24: WARNING: Bullet list ends without a blank line; unexpected unindent.
+D:\Projects\GitHub\MORTICIA\morticia\rad\mc_options.py:docstring of morticia.rad.mc_options:24: WARNING: Inline emphasis start-string without end-string.
+D:\Projects\GitHub\MORTICIA\morticia\rad\molecular_options.py:docstring of morticia.rad.molecular_options:1: SEVERE: Title overline & underline mismatch.
+
+--------------------------------------------------------------------
+* $Id: molecular_options.py 3145 2015-08-04 13:35:30Z josef.gasteiger $
+*
+D:\Projects\GitHub\MORTICIA\morticia\rad\molecular_options.py:docstring of morticia.rad.molecular_options:24: WARNING: Bullet list ends without a blank line; unexpected unindent.
+D:\Projects\GitHub\MORTICIA\morticia\rad\molecular_options.py:docstring of morticia.rad.molecular_options:24: WARNING: Inline emphasis start-string without end-string.
+D:\Projects\GitHub\MORTICIA\morticia\rad\option_definition.py:docstring of morticia.rad.option_definition:1: SEVERE: Title overline & underline mismatch.
+
+--------------------------------------------------------------------
+* $Id: option_definition.py 3112 2015-05-19 13:17:35Z robert.buras $
+*
+D:\Projects\GitHub\MORTICIA\morticia\rad\option_definition.py:docstring of morticia.rad.option_definition:24: WARNING: Bullet list ends without a blank line; unexpected unindent.
+D:\Projects\GitHub\MORTICIA\morticia\rad\option_definition.py:docstring of morticia.rad.option_definition:24: WARNING: Inline emphasis start-string without end-string.
+D:\Projects\GitHub\MORTICIA\morticia\rad\output_options.py:docstring of morticia.rad.output_options:1: SEVERE: Title overline & underline mismatch.
+
+--------------------------------------------------------------------
+* $Id: output_options.py 3125 2015-06-09 15:52:38Z Claudia.Emde $
+*
+D:\Projects\GitHub\MORTICIA\morticia\rad\output_options.py:docstring of morticia.rad.output_options:24: WARNING: Bullet list ends without a blank line; unexpected unindent.
+D:\Projects\GitHub\MORTICIA\morticia\rad\output_options.py:docstring of morticia.rad.output_options:24: WARNING: Inline emphasis start-string without end-string.
+D:\Projects\GitHub\MORTICIA\morticia\rad\profile_options.py:docstring of morticia.rad.profile_options:1: SEVERE: Title overline & underline mismatch.
+
+--------------------------------------------------------------------
+* $Id: profile_options.py 3023 2014-04-29 13:58:13Z Claudia.Emde $
+*
+D:\Projects\GitHub\MORTICIA\morticia\rad\profile_options.py:docstring of morticia.rad.profile_options:24: WARNING: Bullet list ends without a blank line; unexpected unindent.
+D:\Projects\GitHub\MORTICIA\morticia\rad\profile_options.py:docstring of morticia.rad.profile_options:24: WARNING: Inline emphasis start-string without end-string.
+D:\Projects\GitHub\MORTICIA\morticia\rad\solver_options.py:docstring of morticia.rad.solver_options:1: SEVERE: Title overline & underline mismatch.
+
+--------------------------------------------------------------------
+* $Id: solver_options.py 3166 2015-08-20 13:51:47Z Claudia.Emde $
+*
+D:\Projects\GitHub\MORTICIA\morticia\rad\solver_options.py:docstring of morticia.rad.solver_options:24: WARNING: Bullet list ends without a blank line; unexpected unindent.
+D:\Projects\GitHub\MORTICIA\morticia\rad\solver_options.py:docstring of morticia.rad.solver_options:24: WARNING: Inline emphasis start-string without end-string.
+D:\Projects\GitHub\MORTICIA\morticia\rad\special_options.py:docstring of morticia.rad.special_options:1: SEVERE: Title overline & underline mismatch.
+
+--------------------------------------------------------------------
+* $Id: special_options.py 3112 2015-05-19 13:17:35Z robert.buras $
+*
+D:\Projects\GitHub\MORTICIA\morticia\rad\special_options.py:docstring of morticia.rad.special_options:24: WARNING: Bullet list ends without a blank line; unexpected unindent.
+D:\Projects\GitHub\MORTICIA\morticia\rad\special_options.py:docstring of morticia.rad.special_options:24: WARNING: Inline emphasis start-string without end-string.
+D:\Projects\GitHub\MORTICIA\morticia\rad\spectral_options.py:docstring of morticia.rad.spectral_options:1: SEVERE: Title overline & underline mismatch.
+
+--------------------------------------------------------------------
+* $Id: spectral_options.py 3145 2015-08-04 13:35:30Z josef.gasteiger $
+*
+D:\Projects\GitHub\MORTICIA\morticia\rad\spectral_options.py:docstring of morticia.rad.spectral_options:24: WARNING: Bullet list ends without a blank line; unexpected unindent.
+D:\Projects\GitHub\MORTICIA\morticia\rad\spectral_options.py:docstring of morticia.rad.spectral_options:24: WARNING: Inline emphasis start-string without end-string.
+D:\Projects\GitHub\MORTICIA\morticia\rad\surface_options.py:docstring of morticia.rad.surface_options:1: SEVERE: Title overline & underline mismatch.
+
+--------------------------------------------------------------------
+* $Id: surface_options.py 3155 2015-08-10 10:48:25Z robert.buras $
+*
+D:\Projects\GitHub\MORTICIA\morticia\rad\surface_options.py:docstring of morticia.rad.surface_options:24: WARNING: Bullet list ends without a blank line; unexpected unindent.
+D:\Projects\GitHub\MORTICIA\morticia\rad\surface_options.py:docstring of morticia.rad.surface_options:24: WARNING: Inline emphasis start-string without end-string.
+D:\Projects\GitHub\MORTICIA\morticia\rad\writeLex.py:docstring of morticia.rad.writeLex:1: SEVERE: Title overline & underline mismatch.
+
+--------------------------------------------------------------------
+* $Id: writeLex.py 2919 2013-05-17 09:24:06Z robert.buras $
+*
+D:\Projects\GitHub\MORTICIA\morticia\rad\writeLex.py:docstring of morticia.rad.writeLex:24: WARNING: Bullet list ends without a blank line; unexpected unindent.
+D:\Projects\GitHub\MORTICIA\morticia\rad\writeLex.py:docstring of morticia.rad.writeLex:24: WARNING: Inline emphasis start-string without end-string.
+D:\Projects\GitHub\MORTICIA\morticia\sensor\electro.py:docstring of electro.Camera:28: WARNING: Field list ends without a blank line; unexpected unindent.
+D:\Projects\GitHub\MORTICIA\morticia\sensor\electro.py:docstring of electro.Camera:30: ERROR: Unexpected indentation.
+D:\Projects\GitHub\MORTICIA\morticia\sensor\electro.py:docstring of electro.Camera:31: WARNING: Block quote ends without a blank line; unexpected unindent.
+D:\Projects\GitHub\MORTICIA\morticia\sensor\electro.py:docstring of electro.Camera.__init__:21: WARNING: Field list ends without a blank line; unexpected unindent.
+D:\Projects\GitHub\MORTICIA\morticia\sensor\electro.py:docstring of electro.Camera.__init__:23: ERROR: Unexpected indentation.
+D:\Projects\GitHub\MORTICIA\morticia\sensor\electro.py:docstring of electro.Camera.__init__:24: WARNING: Block quote ends without a blank line; unexpected unindent.
+D:\Projects\GitHub\MORTICIA\morticia\sensor\electro.py:docstring of electro.FocalPlaneArray.compute_mtf:3: WARNING: Definition list ends without a blank line; unexpected unindent.
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.Case:0: WARNING: duplicate object description of librad.Case, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\radpack.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.Case.__init__:0: WARNING: duplicate object description of librad.Case.__init__, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\radpack.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.Case.alter_option:0: WARNING: duplicate object description of librad.Case.alter_option, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\radpack.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.Case.append_option:0: WARNING: duplicate object description of librad.Case.append_option, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\radpack.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.Case.del_option:0: WARNING: duplicate object description of librad.Case.del_option, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\radpack.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.Case.del_option:5: WARNING: Field list ends without a blank line; unexpected unindent.
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.Case.distribute_flux_data:0: WARNING: duplicate object description of librad.Case.distribute_flux_data, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\radpack.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.Case.irrad_units_str:0: WARNING: duplicate object description of librad.Case.irrad_units_str, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\radpack.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.Case.merge_caselist_by_wavelength:0: WARNING: duplicate object description of librad.Case.merge_caselist_by_wavelength, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\radpack.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.Case.prepare_for_keyword:0: WARNING: duplicate object description of librad.Case.prepare_for_keyword, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\radpack.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.Case.prepare_for_mol_abs_param:0: WARNING: duplicate object description of librad.Case.prepare_for_mol_abs_param, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\radpack.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.Case.prepare_for_output_process:0: WARNING: duplicate object description of librad.Case.prepare_for_output_process, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\radpack.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.Case.prepare_for_polradtran:0: WARNING: duplicate object description of librad.Case.prepare_for_polradtran, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\radpack.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.Case.prepare_for_source:0: WARNING: duplicate object description of librad.Case.prepare_for_source, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\radpack.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.Case.process_outputs:0: WARNING: duplicate object description of librad.Case.process_outputs, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\radpack.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.Case.rad_units_str:0: WARNING: duplicate object description of librad.Case.rad_units_str, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\radpack.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.Case.read:0: WARNING: duplicate object description of librad.Case.read, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\radpack.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.Case.readerr:0: WARNING: duplicate object description of librad.Case.readerr, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\radpack.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.Case.readout:0: WARNING: duplicate object description of librad.Case.readout, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\radpack.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.Case.readout:21: ERROR: Unexpected indentation.
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.Case.readout:27: ERROR: Unexpected indentation.
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.Case.readout:39: ERROR: Unexpected indentation.
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.Case.readout:50: ERROR: Unexpected indentation.
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.Case.readout:57: ERROR: Unexpected indentation.
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.Case.readout:73: ERROR: Unexpected indentation.
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.Case.readout:90: WARNING: Field list ends without a blank line; unexpected unindent.
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.Case.run:0: WARNING: duplicate object description of librad.Case.run, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\radpack.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.Case.set_option:0: WARNING: duplicate object description of librad.Case.set_option, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\radpack.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.Case.set_view_geometry:0: WARNING: duplicate object description of librad.Case.set_view_geometry, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\radpack.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.Case.set_wavelength_grid:0: WARNING: duplicate object description of librad.Case.set_wavelength_grid, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\radpack.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.Case.split_case_by_wavelength:0: WARNING: duplicate object description of librad.Case.split_case_by_wavelength, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\radpack.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.Case.unset_wavelength_grid:0: WARNING: duplicate object description of librad.Case.unset_wavelength_grid, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\radpack.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.Case.write:0: WARNING: duplicate object description of librad.Case.write, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\radpack.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.RadEnv:0: WARNING: duplicate object description of librad.RadEnv, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\radpack.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.RadEnv:30: ERROR: Unexpected indentation.
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.RadEnv.__init__:0: WARNING: duplicate object description of librad.RadEnv.__init__, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\radpack.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.RadEnv.__init__:14: ERROR: Unexpected indentation.
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.RadEnv.compute_path_radiance:0: WARNING: duplicate object description of librad.RadEnv.compute_path_radiance, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\radpack.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.RadEnv.compute_path_transmittance:0: WARNING: duplicate object description of librad.RadEnv.compute_path_transmittance, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\radpack.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.RadEnv.run_ipyparallel:0: WARNING: duplicate object description of librad.RadEnv.run_ipyparallel, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\radpack.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.RadEnv.run_ipyparallel:5: ERROR: Unexpected indentation.
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.RadEnv.run_parallel:0: WARNING: duplicate object description of librad.RadEnv.run_parallel, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\radpack.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.RadEnv.setup_trans_cases:0: WARNING: duplicate object description of librad.RadEnv.setup_trans_cases, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\radpack.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.RadEnv.sph_harm_fat:0: WARNING: duplicate object description of librad.RadEnv.sph_harm_fat, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\radpack.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.RadEnv.sph_harm_fit:0: WARNING: duplicate object description of librad.RadEnv.sph_harm_fit, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\radpack.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.angstrom_law:0: WARNING: duplicate object description of librad.angstrom_law, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\radpack.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.angstrom_law_fit:0: WARNING: duplicate object description of librad.angstrom_law_fit, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\radpack.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.king_byrne_formula:0: WARNING: duplicate object description of librad.king_byrne_formula, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\radpack.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.king_byrne_formula_fit:0: WARNING: duplicate object description of librad.king_byrne_formula_fit, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\radpack.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.koschmieder_vis:0: WARNING: duplicate object description of librad.koschmieder_vis, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\radpack.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.lookup_nearest_in_file:0: WARNING: duplicate object description of librad.lookup_nearest_in_file, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\radpack.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\doc\packages.rst:97: WARNING: autodoc: failed to import module u'target'; the following exception was raised:
+Traceback (most recent call last):
+  File "C:\Anaconda\envs\mordevpy27\lib\site-packages\Sphinx-1.4.1-py2.7.egg\sphinx\ext\autodoc.py", line 507, in import_object
+    __import__(self.modname)
+ImportError: No module named target
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.Case:0: WARNING: duplicate object description of librad.Case, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\packages.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.Case.__init__:0: WARNING: duplicate object description of librad.Case.__init__, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\packages.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.Case.alter_option:0: WARNING: duplicate object description of librad.Case.alter_option, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\packages.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.Case.append_option:0: WARNING: duplicate object description of librad.Case.append_option, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\packages.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.Case.del_option:0: WARNING: duplicate object description of librad.Case.del_option, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\packages.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.Case.del_option:5: WARNING: Field list ends without a blank line; unexpected unindent.
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.Case.distribute_flux_data:0: WARNING: duplicate object description of librad.Case.distribute_flux_data, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\packages.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.Case.irrad_units_str:0: WARNING: duplicate object description of librad.Case.irrad_units_str, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\packages.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.Case.merge_caselist_by_wavelength:0: WARNING: duplicate object description of librad.Case.merge_caselist_by_wavelength, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\packages.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.Case.prepare_for_keyword:0: WARNING: duplicate object description of librad.Case.prepare_for_keyword, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\packages.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.Case.prepare_for_mol_abs_param:0: WARNING: duplicate object description of librad.Case.prepare_for_mol_abs_param, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\packages.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.Case.prepare_for_output_process:0: WARNING: duplicate object description of librad.Case.prepare_for_output_process, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\packages.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.Case.prepare_for_polradtran:0: WARNING: duplicate object description of librad.Case.prepare_for_polradtran, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\packages.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.Case.prepare_for_source:0: WARNING: duplicate object description of librad.Case.prepare_for_source, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\packages.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.Case.process_outputs:0: WARNING: duplicate object description of librad.Case.process_outputs, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\packages.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.Case.rad_units_str:0: WARNING: duplicate object description of librad.Case.rad_units_str, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\packages.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.Case.read:0: WARNING: duplicate object description of librad.Case.read, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\packages.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.Case.readerr:0: WARNING: duplicate object description of librad.Case.readerr, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\packages.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.Case.readout:0: WARNING: duplicate object description of librad.Case.readout, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\packages.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.Case.readout:21: ERROR: Unexpected indentation.
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.Case.readout:27: ERROR: Unexpected indentation.
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.Case.readout:39: ERROR: Unexpected indentation.
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.Case.readout:50: ERROR: Unexpected indentation.
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.Case.readout:57: ERROR: Unexpected indentation.
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.Case.readout:73: ERROR: Unexpected indentation.
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.Case.readout:90: WARNING: Field list ends without a blank line; unexpected unindent.
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.Case.run:0: WARNING: duplicate object description of librad.Case.run, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\packages.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.Case.set_option:0: WARNING: duplicate object description of librad.Case.set_option, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\packages.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.Case.set_view_geometry:0: WARNING: duplicate object description of librad.Case.set_view_geometry, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\packages.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.Case.set_wavelength_grid:0: WARNING: duplicate object description of librad.Case.set_wavelength_grid, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\packages.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.Case.split_case_by_wavelength:0: WARNING: duplicate object description of librad.Case.split_case_by_wavelength, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\packages.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.Case.unset_wavelength_grid:0: WARNING: duplicate object description of librad.Case.unset_wavelength_grid, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\packages.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.Case.write:0: WARNING: duplicate object description of librad.Case.write, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\packages.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.RadEnv:0: WARNING: duplicate object description of librad.RadEnv, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\packages.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.RadEnv:30: ERROR: Unexpected indentation.
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.RadEnv.__init__:0: WARNING: duplicate object description of librad.RadEnv.__init__, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\packages.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.RadEnv.__init__:14: ERROR: Unexpected indentation.
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.RadEnv.compute_path_radiance:0: WARNING: duplicate object description of librad.RadEnv.compute_path_radiance, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\packages.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.RadEnv.compute_path_transmittance:0: WARNING: duplicate object description of librad.RadEnv.compute_path_transmittance, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\packages.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.RadEnv.run_ipyparallel:0: WARNING: duplicate object description of librad.RadEnv.run_ipyparallel, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\packages.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.RadEnv.run_ipyparallel:5: ERROR: Unexpected indentation.
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.RadEnv.run_parallel:0: WARNING: duplicate object description of librad.RadEnv.run_parallel, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\packages.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.RadEnv.setup_trans_cases:0: WARNING: duplicate object description of librad.RadEnv.setup_trans_cases, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\packages.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.RadEnv.sph_harm_fat:0: WARNING: duplicate object description of librad.RadEnv.sph_harm_fat, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\packages.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.RadEnv.sph_harm_fit:0: WARNING: duplicate object description of librad.RadEnv.sph_harm_fit, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\packages.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.angstrom_law:0: WARNING: duplicate object description of librad.angstrom_law, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\packages.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.angstrom_law_fit:0: WARNING: duplicate object description of librad.angstrom_law_fit, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\packages.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.king_byrne_formula:0: WARNING: duplicate object description of librad.king_byrne_formula, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\packages.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.king_byrne_formula_fit:0: WARNING: duplicate object description of librad.king_byrne_formula_fit, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\packages.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.koschmieder_vis:0: WARNING: duplicate object description of librad.koschmieder_vis, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\packages.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\rad\librad.py:docstring of librad.lookup_nearest_in_file:0: WARNING: duplicate object description of librad.lookup_nearest_in_file, other instance in D:\Projects\GitHub\MORTICIA\morticia\doc\packages.rst, use :noindex: for one of them
+D:\Projects\GitHub\MORTICIA\morticia\doc\radpack.rst:10: WARNING: autodoc: failed to import module u'libute'; the following exception was raised:
+Traceback (most recent call last):
+  File "C:\Anaconda\envs\mordevpy27\lib\site-packages\Sphinx-1.4.1-py2.7.egg\sphinx\ext\autodoc.py", line 507, in import_object
+    __import__(self.modname)
+ImportError: No module named libute
+D:\Projects\GitHub\MORTICIA\morticia\doc\01a-SpectralChannelsAndFilters.rst:: WARNING: document isn't included in any toctree
+D:\Projects\GitHub\MORTICIA\morticia\doc\ChapLibRadtranODandPathRadiance.rst:: WARNING: document isn't included in any toctree
+D:\Projects\GitHub\MORTICIA\morticia\doc\conventions.rst:: WARNING: document isn't included in any toctree
+D:\Projects\GitHub\MORTICIA\morticia\doc\installation.rst:: WARNING: document isn't included in any toctree
+D:\Projects\GitHub\MORTICIA\morticia\doc\mortapi\modules.rst:: WARNING: document isn't included in any toctree
+D:\Projects\GitHub\MORTICIA\morticia\doc\radpack.rst:: WARNING: document isn't included in any toctree
+D:\Projects\GitHub\MORTICIA\morticia\doc\sensorpack.rst:: WARNING: document isn't included in any toctree

@@ -1,0 +1,299 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Transmittance and Path Radiance in libRadtran &mdash; MORTICIA 1.0 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Roboto+Slab:400,700|Inconsolata:400,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="MORTICIA 1.0 documentation" href="index.html"/>
+        <link rel="next" title="IPython Notebook and Sphinx" href="01a-SpectralChannelsAndFilters.html"/>
+        <link rel="prev" title="Packages" href="packages.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+          <a href="index.html" class="fa fa-home"> MORTICIA</a>
+        
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="how_to_use.html">How to use MORTICIA</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="how_to_use.html#morticia-dependencies">MORTICIA Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="how_to_use.html#installation-and-requirements">Installation and Requirements</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="styleguide.html">The MORTICIA Style Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="styleguide.html#to-pep-8-or-not-to-pep-8">To PEP-8 or not to PEP-8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="styleguide.html#code-layout">Code Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="styleguide.html#import-statements">Import Statements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="styleguide.html#whitespace">Whitespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="styleguide.html#comments">Comments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="styleguide.html#documentation-strings-docstrings">Documentation Strings (docstrings)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="styleguide.html#naming-conventions">Naming Conventions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="styleguide.html#pep-257">PEP-257</a></li>
+<li class="toctree-l2"><a class="reference internal" href="styleguide.html#from-conventions-section"><em>From</em> Conventions Section</a></li>
+<li class="toctree-l2"><a class="reference internal" href="styleguide.html#general-terminology-and-conventions">General Terminology and Conventions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="for_developers.html">For the Developers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="for_developers.html#structure">Structure</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="packages.html">Packages</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="packages.html#sensor-package">Sensor Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="packages.html#radiometry-package">Radiometry Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="packages.html#scene-package">Scene Package</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Transmittance and Path Radiance in libRadtran</a></li>
+<li class="toctree-l1"><a class="reference internal" href="01a-SpectralChannelsAndFilters.html">IPython Notebook and Sphinx</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="01a-SpectralChannelsAndFilters.html#a-spectralchannelsandfilters-ipython-notebook">01a-SpectralChannelsAndFilters IPython Notebook</a></li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">MORTICIA</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>Transmittance and Path Radiance in libRadtran</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          <a href="_sources/ChapLibRadtranODandPathRadiance.txt" rel="nofollow"> View page source</a>
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <div class="section" id="transmittance-and-path-radiance-in-libradtran">
+<h1>Transmittance and Path Radiance in libRadtran<a class="headerlink" href="#transmittance-and-path-radiance-in-libradtran" title="Permalink to this headline">¶</a></h1>
+<p>REMs are required over the full range of SZA for all key conditions. It
+is possible to compute the path transmittance between target and sensor
+for the VZA equal to SZA (or the complement of SZA, since transmittance
+is the same in either direction) by taking the ratio of the direct solar
+irradiance at the lower height to the direct solar irradiance at the
+upper height. Transmittance for paths at angles between the SZA set will
+have to be interpolated. Horizontal paths are meaningless in this
+context, since the pathlength is infinite. Curve-fitting to the
+transmittance vector versus VZA should be considered as the relationship
+will be non-linear. It is also very dependent on wavelength.</p>
+<p>The transmittances are stored as optical depth in the REM instance to
+facilitate interpolation with range.</p>
+<p>Once the transmittance has been computed for all sightlines in the REM
+pair, the path radiance can be computed with reference to Figure
+<a class="reference internal" href="#dualpointradiancediagram">DualPointRadianceDiagram</a>. Consider two points (generally target
+and sensor) in the atmosphere at heights <span class="math">\(h_{a}\)</span> and
+<span class="math">\(h_{b}\)</span>. The two points lie on a linear slant path of a particular
+zenith angle.</p>
+<a class="reference external image-reference" href="DualPointRadianceDiagram" id="dualpointradiancediagram"><img alt="_images/DualPointRadianceDiagram.PNG" class="align-center" src="_images/DualPointRadianceDiagram.PNG" style="width: 483.5px; height: 352.5px;" /></a>
+<p>The radiance at point <span class="math">\(a\)</span> along the slant path in the downward
+direction is <span class="math">\(L_{a}^{\downarrow}\)</span> and the upward radiance along
+the slant path at point <span class="math">\(a\)</span> (towards point <span class="math">\(b\)</span>) is denoted
+<span class="math">\(L_{a}^{\uparrow}\)</span> and likewise for point <span class="math">\(b\)</span>. The path
+radiance in the upward direction from <span class="math">\(a\)</span> to <span class="math">\(b\)</span> is
+<span class="math">\(L_{ab}^{\uparrow}\)</span> (the arrow is actually redundant since the
+order of the subscripts can denote the direction) and the downward path
+radiance is <span class="math">\(L_{ba}^{\downarrow}\)</span>.The path transmittance is
+denoted using <span class="math">\(\tau\)</span> with relevant subscripts. The path
+transmittance is independent of the direction (but the path radiance
+does depend on the direction). libRadtran can be used to compute the
+upward and downward radiances along the slant path at each of the two
+altitudes. The following equations are then easily solved for the path
+radiances from the environment radiances and transmittances,</p>
+<div class="math">
+\[\begin{split}\begin{aligned}
+L_{b}^{\uparrow} &amp; = &amp; \tau_{ab}L_{a}^{\uparrow}+L_{ab}^{\uparrow}\\
+L_{a}^{\downarrow} &amp; = &amp; \tau_{ab}L_{b}^{\downarrow}+L_{ba}^{\downarrow}.\end{aligned}\end{split}\]</div>
+<p>The path radiances are simply</p>
+<div class="math">
+\[\begin{split}\begin{aligned}
+L_{ab}^{\uparrow} &amp; =L_{b}^{\uparrow}-\tau_{ab}L_{a}^{\uparrow}\\
+L_{ba}^{\downarrow} &amp; =L_{a}^{\downarrow}-\tau_{ab}L_{b}^{\downarrow}.\end{aligned}\end{split}\]</div>
+<p>Upward radiances are the radiance values in the lower hemispheres of the
+REMs and downward radiances are radiance values in the upper hemispheres
+of the REMs. The path radiances will generally comprise a half
+hemisphere, above horizon and one side of the solar principal plane for
+downwelling path radiances and sightlines looking above horizon and
+another half hemisphere, below horizon and one side of the solar
+principal plane for sightlines looking below the horizon. These path
+radiances can be incorporated into a single dataset having the same size
+as the REM. However, it is important to remember that when looking
+upward, the target is at <span class="math">\(h_{b}\)</span> and is therefore rendered using
+the REM at <span class="math">\(h_{b}\)</span> and when looking downward, the target is at
+<span class="math">\(h_{a}\)</span> and must therefore be rendered using the REM at
+<span class="math">\(h_{a}\)</span>.</p>
+<p>The at-target radiance is computed using a raytracing engine. The camera
+image of the target can then be rendered using the BOSM and inserted
+into the sensor view.</p>
+<p>The way forward in reaching this implementation was first to establish
+the runtime of a full radiant environment map with libRadtran using the
+Kato correlated-<span class="math">\(k\)</span> parametrisation. The SZA resolution for a
+specific atmosphere/surface combination is an important consideration as
+path transmittance must be interpolated between computed SZA values. On
+the Icebow compute cluster (24 processors), a full REM at 128 sightlines
+per 180<span class="math">\(^{\circ}\)</span>, with 8 Kato spectral bands, 2 heights and 12
+SZAs completes in under 1 minute. Compiling the results from the uvspec
+output files takes a further 20 seconds. This means that the scheme is
+certainly viable.</p>
+<p>If, at this stage the raytracing engine cannot be used on the cluster to
+generate correct azimuth/elevation views of the target, the above
+approach can still be used to compute target illuminance, by integrating
+the radiant environment map over the appropriate hemisphere in the
+conventional way. This is an alternative to using SMARTS (and more
+consistent, since the atmospheric models are now uniform across target
+irradiance, path radiance and transmittance computations).</p>
+<p>If targets are completely lambertian and self-shadowing of the target
+can be neglected, there are methods of reducing the REM to an Irradiance
+Environment Map (IEM) and decomposing the IEM into a small number of
+spherical harmonic coefficients. This allows very rapid rendering of
+convex, lambertian targets. Computation of spherical harmonic
+coefficients may have to be mediated through resampling to another
+directional scheme, such as <a class="reference external" href="http://healpix.jpl.nasa.gov/">HEALPix</a>.</p>
+<p>Thus, all of the radiative transfer could, in principle, be done using
+libRadtran, which is a lot easier to set up than MODTRAN and also
+faster, especially if the Kato correlated-<span class="math">\(k\)</span> approach is
+adopted. The only limitation with Kato is that the spectral sensitivity
+of the sensor can only be expressed as a linear combination of the bands
+in Table [tab:Kato-Correlated-k-Bands]. The libRadtran driver utility
+(<em>uvspec</em>) allows one to specify a sub-range of correlated-<span class="math">\(k\)</span>
+bands using the <em>wavelength_index</em> directive. Only 8 of the 32 Kato
+bands fall into the spectral region of interest in this problem. These
+are bands 13 to 20, giving a spectral coverage of 605nm to 889nm.</p>
+</div>
+
+
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="01a-SpectralChannelsAndFilters.html" class="btn btn-neutral float-right" title="IPython Notebook and Sphinx">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="packages.html" class="btn btn-neutral" title="Packages"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, D Griffith, A Ramkilowan.
+    </p>
+  </div>
+
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

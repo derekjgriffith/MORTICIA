@@ -1,0 +1,496 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>morticia.moglo &mdash; MORTICIA 1.0 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Roboto+Slab:400,700|Inconsolata:400,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="MORTICIA 1.0 documentation" href="../../index.html"/>
+        <link rel="up" title="morticia" href="../morticia.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+          <a href="../../index.html" class="fa fa-home"> MORTICIA</a>
+        
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../how_to_use.html">How to use MORTICIA</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../how_to_use.html#morticia-dependencies">MORTICIA Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how_to_use.html#installation-and-requirements">Installation and Requirements</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../styleguide.html">The MORTICIA Style Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../styleguide.html#to-pep-8-or-not-to-pep-8">To PEP-8 or not to PEP-8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../styleguide.html#code-layout">Code Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../styleguide.html#import-statements">Import Statements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../styleguide.html#whitespace">Whitespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../styleguide.html#comments">Comments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../styleguide.html#documentation-strings-docstrings">Documentation Strings (docstrings)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../styleguide.html#naming-conventions">Naming Conventions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../styleguide.html#pep-257">PEP-257</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../styleguide.html#from-conventions-section"><em>From</em> Conventions Section</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../styleguide.html#general-terminology-and-conventions">General Terminology and Conventions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../for_developers.html">For the Developers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../for_developers.html#structure">Structure</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../packages.html">Packages</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../packages.html#sensor-package">Sensor Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../packages.html#radiometry-package">Radiometry Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../packages.html#scene-package">Scene Package</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../ChapLibRadtranODandPathRadiance.html">Transmittance and Path Radiance in libRadtran</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../01a-SpectralChannelsAndFilters.html">IPython Notebook and Sphinx</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../01a-SpectralChannelsAndFilters.html#a-spectralchannelsandfilters-ipython-notebook">01a-SpectralChannelsAndFilters IPython Notebook</a></li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">MORTICIA</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      
+          <li><a href="../morticia.html">morticia</a> &raquo;</li>
+      
+    <li>morticia.moglo</li>
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <h1>Source code for morticia.moglo</h1><div class="highlight"><pre>
+<span class="n">__author__</span> <span class="o">=</span> <span class="s">&#39;DGriffith&#39;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="c"># import pandas as pd</span>
+<span class="c"># import xray</span>
+<span class="c"># import scipy.interpolate</span>
+<span class="kn">from</span> <span class="nn">morticia</span> <span class="kn">import</span> <span class="n">Q_</span>  <span class="c"># Import pint quantity class</span>
+
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="c">#  MORTICIA globals and utility functions</span>
+
+
+<span class="c"># The following are the long names that will be provided for plotting purposes and netCDF conventions</span>
+<span class="n">long_name</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">&#39;wvl&#39;</span><span class="p">:</span> <span class="s">&#39;Wavelength&#39;</span><span class="p">,</span>
+    <span class="s">&#39;wvn&#39;</span><span class="p">:</span> <span class="s">&#39;Wavenumber&#39;</span><span class="p">,</span>
+    <span class="s">&#39;trn&#39;</span><span class="p">:</span> <span class="s">&#39;Transmission&#39;</span><span class="p">,</span>
+    <span class="s">&#39;rad&#39;</span><span class="p">:</span> <span class="s">&#39;Radiance&#39;</span><span class="p">,</span>
+    <span class="s">&#39;irr&#39;</span><span class="p">:</span> <span class="s">&#39;Irradiance&#39;</span><span class="p">,</span>
+    <span class="s">&#39;specrad&#39;</span><span class="p">:</span> <span class="s">&#39;Spectral Radiance&#39;</span><span class="p">,</span>
+    <span class="s">&#39;specirr&#39;</span><span class="p">:</span> <span class="s">&#39;Spectral Irradiance&#39;</span><span class="p">,</span>
+    <span class="s">&#39;spf&#39;</span><span class="p">:</span> <span class="s">&#39;Linear Spatial Frequency&#39;</span><span class="p">,</span>
+    <span class="s">&#39;spfa&#39;</span><span class="p">:</span> <span class="s">&#39;Angular spatial Frequency&#39;</span><span class="p">,</span>
+    <span class="s">&#39;mtf&#39;</span><span class="p">:</span> <span class="s">&#39;Modulation Transfer Function&#39;</span><span class="p">,</span>
+    <span class="s">&#39;otf&#39;</span><span class="p">:</span> <span class="s">&#39;Optical Transfer Function&#39;</span><span class="p">,</span>
+    <span class="s">&#39;ptf&#39;</span><span class="p">:</span> <span class="s">&#39;Phase Transfer Function&#39;</span><span class="p">,</span>
+    <span class="s">&#39;fno&#39;</span><span class="p">:</span> <span class="s">&#39;Focal Ratio&#39;</span><span class="p">,</span>
+    <span class="s">&#39;efl&#39;</span><span class="p">:</span> <span class="s">&#39;Effective Focal Length&#39;</span><span class="p">,</span>
+    <span class="s">&#39;lum&#39;</span><span class="p">:</span> <span class="s">&#39;Luminance&#39;</span><span class="p">,</span>
+    <span class="s">&#39;ill&#39;</span><span class="p">:</span> <span class="s">&#39;Illuminance&#39;</span><span class="p">,</span>
+    <span class="s">&#39;flux&#39;</span><span class="p">:</span> <span class="s">&#39;Optical Flux&#39;</span><span class="p">,</span>
+    <span class="s">&#39;fldy&#39;</span><span class="p">:</span> <span class="s">&#39;Field Position in x&#39;</span><span class="p">,</span>
+    <span class="s">&#39;fldx&#39;</span><span class="p">:</span> <span class="s">&#39;Field Position in y&#39;</span><span class="p">,</span>
+    <span class="s">&#39;fldz&#39;</span><span class="p">:</span> <span class="s">&#39;Defocus&#39;</span><span class="p">,</span>
+    <span class="s">&#39;fldo&#39;</span><span class="p">:</span> <span class="s">&#39;Field Orientation&#39;</span><span class="p">,</span>  <span class="c"># Typically horizontal/vertical, across/along track, sagittal/tangential</span>
+    <span class="s">&#39;obs&#39;</span><span class="p">:</span> <span class="s">&#39;Obscuration Ratio&#39;</span><span class="p">,</span>
+    <span class="s">&#39;pitchx&#39;</span><span class="p">:</span> <span class="s">&#39;Pixel Pitch in x&#39;</span><span class="p">,</span>
+    <span class="s">&#39;pixapx&#39;</span><span class="p">:</span> <span class="s">&#39;Pixel Aperture in x&#39;</span><span class="p">,</span>
+    <span class="s">&#39;pixapy&#39;</span><span class="p">:</span> <span class="s">&#39;Pixel Aperture in y&#39;</span><span class="p">,</span>
+    <span class="s">&#39;pitchy&#39;</span><span class="p">:</span> <span class="s">&#39;Pixel Pitch in y&#39;</span><span class="p">,</span>
+    <span class="s">&#39;asr&#39;</span><span class="p">:</span> <span class="s">&#39;Absolute Spectral Response&#39;</span><span class="p">,</span>
+    <span class="s">&#39;sqe&#39;</span><span class="p">:</span> <span class="s">&#39;Spectral Quantum Efficiency&#39;</span><span class="p">,</span>
+    <span class="s">&#39;chn&#39;</span><span class="p">:</span> <span class="s">&#39;Spectral Channel Number&#39;</span><span class="p">,</span>
+    <span class="s">&#39;rsr&#39;</span><span class="p">:</span> <span class="s">&#39;Relative Spectral Response&#39;</span><span class="p">,</span>
+    <span class="s">&#39;srf&#39;</span><span class="p">:</span> <span class="s">&#39;Spectral Response Function&#39;</span><span class="p">,</span>
+    <span class="s">&#39;phe&#39;</span><span class="p">:</span> <span class="s">&#39;Photoelectrons&#39;</span><span class="p">,</span>
+    <span class="s">&#39;dn&#39;</span><span class="p">:</span> <span class="s">&#39;Digital Numbers&#39;</span><span class="p">,</span>
+    <span class="s">&#39;wellcap&#39;</span><span class="p">:</span> <span class="s">&#39;Pixel Well Capacity&#39;</span><span class="p">,</span>
+    <span class="s">&#39;readnoise&#39;</span><span class="p">:</span> <span class="s">&#39;RMS Readout Noise&#39;</span><span class="p">,</span>
+    <span class="s">&#39;darkcurr&#39;</span><span class="p">:</span> <span class="s">&#39;Pixel Dark Current&#39;</span><span class="p">,</span>
+    <span class="s">&#39;psnu&#39;</span><span class="p">:</span> <span class="s">&#39;Photo-Response Non-Uniformity&#39;</span><span class="p">,</span>
+    <span class="s">&#39;dsnu&#39;</span><span class="p">:</span> <span class="s">&#39;Dark Signal Non-Uniformity&#39;</span><span class="p">,</span>
+    <span class="s">&#39;tref&#39;</span><span class="p">:</span> <span class="s">&#39;Reference Temperature&#39;</span><span class="p">,</span>
+    <span class="s">&#39;temp&#39;</span><span class="p">:</span> <span class="s">&#39;Temperature&#39;</span><span class="p">,</span>
+    <span class="s">&#39;deltat&#39;</span><span class="p">:</span> <span class="s">&#39;Temperature Delta&#39;</span><span class="p">,</span>
+    <span class="s">&#39;nyqx&#39;</span><span class="p">:</span> <span class="s">&#39;Nyquist Frequency in x&#39;</span><span class="p">,</span>
+    <span class="s">&#39;nyqy&#39;</span><span class="p">:</span> <span class="s">&#39;Nyquist Frequency in y&#39;</span><span class="p">,</span>
+    <span class="s">&#39;bitdepth&#39;</span><span class="p">:</span> <span class="s">&#39;Bit Depth&#39;</span><span class="p">,</span>
+    <span class="s">&#39;dgain&#39;</span><span class="p">:</span> <span class="s">&#39;Digital Gain&#39;</span><span class="p">,</span>
+    <span class="s">&#39;doffset&#39;</span><span class="p">:</span> <span class="s">&#39;Digital Offset&#39;</span><span class="p">,</span>
+    <span class="s">&#39;dnoise&#39;</span><span class="p">:</span> <span class="s">&#39;RMS Digital-Equivalent Noise&#39;</span><span class="p">,</span>
+    <span class="s">&#39;spfcut&#39;</span><span class="p">:</span> <span class="s">&#39;Diffraction Cutoff Spatial Frequency&#39;</span><span class="p">,</span>
+    <span class="s">&#39;vza&#39;</span><span class="p">:</span> <span class="s">&#39;View Zenith Angle&#39;</span><span class="p">,</span>  <span class="c"># degrees</span>
+    <span class="s">&#39;vpa&#39;</span><span class="p">:</span> <span class="s">&#39;View Polar Angle&#39;</span><span class="p">,</span>  <span class="c"># same as vza, but in radians</span>
+    <span class="s">&#39;vea&#39;</span><span class="p">:</span> <span class="s">&#39;View Elevation Angle&#39;</span><span class="p">,</span>  <span class="c"># complement of the VZA</span>
+    <span class="s">&#39;vaz&#39;</span><span class="p">:</span> <span class="s">&#39;View Azimuth Angle&#39;</span><span class="p">,</span>
+    <span class="s">&#39;svaz&#39;</span><span class="p">:</span> <span class="s">&#39;Solar-Relative View Azimuth Angle&#39;</span><span class="p">,</span>
+    <span class="s">&#39;pza&#39;</span><span class="p">:</span> <span class="s">&#39;Propagation Zenith Angle&#39;</span><span class="p">,</span>  <span class="c"># in radians</span>
+    <span class="s">&#39;umu&#39;</span><span class="p">:</span> <span class="s">&#39;Cosine of the Propagation Zenith Angle&#39;</span><span class="p">,</span>
+    <span class="s">&#39;phi&#39;</span><span class="p">:</span> <span class="s">&#39;Propagation Azimuth Angle&#39;</span><span class="p">,</span>  <span class="c"># in unit of degrees</span>
+    <span class="s">&#39;paz&#39;</span><span class="p">:</span> <span class="s">&#39;Propagation Azimuth Angle&#39;</span><span class="p">,</span>  <span class="c"># but in units of radians</span>
+    <span class="s">&#39;phi0&#39;</span><span class="p">:</span> <span class="s">&#39;Solar Propagation Azimuth Angle&#39;</span><span class="p">,</span>
+    <span class="s">&#39;stokes&#39;</span><span class="p">:</span> <span class="s">&#39;Stokes Parameter&#39;</span><span class="p">,</span>  <span class="c"># I=0, Q=1, U=2, V=3</span>
+    <span class="s">&#39;zout&#39;</span><span class="p">:</span> <span class="s">&#39;Height Above Surface&#39;</span><span class="p">,</span>
+    <span class="s">&#39;zout_sea&#39;</span><span class="p">:</span> <span class="s">&#39;Height Above Sea Level&#39;</span><span class="p">,</span>
+    <span class="s">&#39;p&#39;</span><span class="p">:</span> <span class="s">&#39;Pressure&#39;</span><span class="p">,</span>
+    <span class="s">&#39;sph_alb&#39;</span><span class="p">:</span> <span class="s">&#39;Atmospheric Spherical Albedo&#39;</span><span class="p">,</span>
+    <span class="s">&#39;reflx&#39;</span><span class="p">:</span> <span class="s">&#39;Reflectivity&#39;</span><span class="p">,</span>
+    <span class="s">&#39;trnx&#39;</span><span class="p">:</span> <span class="s">&#39;Transmissivity&#39;</span><span class="p">,</span>
+    <span class="s">&#39;edir&#39;</span><span class="p">:</span> <span class="s">&#39;Direct Solar Horizontal Irradiance&#39;</span><span class="p">,</span>
+    <span class="s">&#39;edn&#39;</span><span class="p">:</span> <span class="s">&#39;Downwelling Diffuse Irradiance&#39;</span><span class="p">,</span>
+    <span class="s">&#39;eup&#39;</span><span class="p">:</span> <span class="s">&#39;Upwelling Diffuse Irradiance&#39;</span><span class="p">,</span>
+    <span class="s">&#39;eglo&#39;</span><span class="p">:</span> <span class="s">&#39;Total Downwelling Irradiance&#39;</span><span class="p">,</span>
+    <span class="s">&#39;enet&#39;</span><span class="p">:</span> <span class="s">&#39;Net Downward Irradiance&#39;</span><span class="p">,</span>
+    <span class="s">&#39;uavgdir&#39;</span><span class="p">:</span> <span class="s">&#39;Direct Solar Actinic Sterance&#39;</span><span class="p">,</span>
+    <span class="s">&#39;uavgdn&#39;</span><span class="p">:</span> <span class="s">&#39;Diffuse Downward Actinic Sterance&#39;</span><span class="p">,</span>
+    <span class="s">&#39;uavgup&#39;</span><span class="p">:</span> <span class="s">&#39;Diffuse Upward Actinic Sterance&#39;</span><span class="p">,</span>
+    <span class="s">&#39;uavgglo&#39;</span><span class="p">:</span> <span class="s">&#39;Global Downward Actinic Sterance&#39;</span><span class="p">,</span>
+    <span class="s">&#39;down_fluxI&#39;</span><span class="p">:</span> <span class="s">&#39;Global Downwelling Irradiance Stokes I&#39;</span><span class="p">,</span>
+    <span class="s">&#39;down_fluxQ&#39;</span><span class="p">:</span> <span class="s">&#39;Global Downwelling Irradiance Stokes Q&#39;</span><span class="p">,</span>
+    <span class="s">&#39;down_fluxU&#39;</span><span class="p">:</span> <span class="s">&#39;Global Downwelling Irradiance Stokes U&#39;</span><span class="p">,</span>
+    <span class="s">&#39;down_fluxV&#39;</span><span class="p">:</span> <span class="s">&#39;Global Downwelling Irradiance Stokes V&#39;</span><span class="p">,</span>
+    <span class="s">&#39;up_fluxI&#39;</span><span class="p">:</span> <span class="s">&#39;Global Upwelling Irradiance Stokes I&#39;</span><span class="p">,</span>
+    <span class="s">&#39;up_fluxQ&#39;</span><span class="p">:</span> <span class="s">&#39;Global Upwelling Irradiance Stokes Q&#39;</span><span class="p">,</span>
+    <span class="s">&#39;up_fluxU&#39;</span><span class="p">:</span> <span class="s">&#39;Global Upwelling Irradiance Stokes U&#39;</span><span class="p">,</span>
+    <span class="s">&#39;up_fluxV&#39;</span><span class="p">:</span> <span class="s">&#39;Global Upwelling Irradiance Stokes V&#39;</span><span class="p">,</span>
+    <span class="s">&#39;brightness&#39;</span><span class="p">:</span> <span class="s">&#39;Brightness Temperature&#39;</span><span class="p">,</span>
+    <span class="s">&#39;od&#39;</span><span class="p">:</span> <span class="s">&#39;Optical Depth&#39;</span>
+
+    <span class="c"># TODO : Include all libRadtran definitions as well from rad.librad.py</span>
+<span class="p">}</span>
+
+<span class="c"># The following are intended to be the standard names as per the Climate and Forecast (CF) convention</span>
+<span class="n">standard_names</span> <span class="o">=</span> <span class="p">{</span>
+
+<span class="p">}</span>
+
+<span class="c"># Default units are the units that are preferred and to which MORTICIA will convert if other units are given</span>
+<span class="n">default_units</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">&#39;wvl&#39;</span><span class="p">:</span> <span class="s">&#39;nm&#39;</span><span class="p">,</span>
+    <span class="s">&#39;wvn&#39;</span><span class="p">:</span> <span class="s">&#39;cm^-1&#39;</span><span class="p">,</span>
+    <span class="s">&#39;spf&#39;</span><span class="p">:</span> <span class="s">&#39;1/mm&#39;</span><span class="p">,</span>
+    <span class="s">&#39;efl&#39;</span><span class="p">:</span> <span class="s">&#39;mm&#39;</span><span class="p">,</span>
+    <span class="s">&#39;rad&#39;</span><span class="p">:</span> <span class="s">&#39;W/m^2/sr&#39;</span><span class="p">,</span>
+    <span class="s">&#39;irr&#39;</span><span class="p">:</span> <span class="s">&#39;W/m^2&#39;</span><span class="p">,</span>
+    <span class="s">&#39;specrad&#39;</span><span class="p">:</span> <span class="s">&#39;W/m^2/sr/nm&#39;</span><span class="p">,</span>
+    <span class="s">&#39;specirr&#39;</span><span class="p">:</span> <span class="s">&#39;W/m^/nm&#39;</span><span class="p">,</span>
+    <span class="s">&#39;fldx&#39;</span><span class="p">:</span> <span class="s">&#39;mm&#39;</span><span class="p">,</span>
+    <span class="s">&#39;fldy&#39;</span><span class="p">:</span> <span class="s">&#39;mm&#39;</span><span class="p">,</span>
+    <span class="s">&#39;fldz&#39;</span><span class="p">:</span> <span class="s">&#39;mm&#39;</span><span class="p">,</span>
+    <span class="s">&#39;flux&#39;</span><span class="p">:</span> <span class="s">&#39;W&#39;</span><span class="p">,</span>
+    <span class="s">&#39;asr&#39;</span><span class="p">:</span> <span class="s">&#39;A/W&#39;</span><span class="p">,</span>
+    <span class="s">&#39;sqe&#39;</span><span class="p">:</span> <span class="s">&#39;&#39;</span><span class="p">,</span>
+    <span class="s">&#39;lum&#39;</span><span class="p">:</span> <span class="s">&#39;cd/m^2&#39;</span><span class="p">,</span>
+    <span class="s">&#39;ill&#39;</span><span class="p">:</span> <span class="s">&#39;lux&#39;</span><span class="p">,</span>
+    <span class="s">&#39;fldo&#39;</span><span class="p">:</span> <span class="s">&#39;deg&#39;</span><span class="p">,</span>
+    <span class="s">&#39;phe&#39;</span><span class="p">:</span> <span class="s">&#39;e&#39;</span><span class="p">,</span>
+    <span class="s">&#39;dn&#39;</span><span class="p">:</span> <span class="s">&#39;count&#39;</span><span class="p">,</span>
+    <span class="s">&#39;pitchx&#39;</span><span class="p">:</span> <span class="s">&#39;mm&#39;</span><span class="p">,</span>
+    <span class="s">&#39;pitchy&#39;</span><span class="p">:</span> <span class="s">&#39;mm&#39;</span><span class="p">,</span>
+    <span class="s">&#39;pixapx&#39;</span><span class="p">:</span> <span class="s">&#39;mm&#39;</span><span class="p">,</span>
+    <span class="s">&#39;pixapy&#39;</span><span class="p">:</span> <span class="s">&#39;mm&#39;</span><span class="p">,</span>
+    <span class="s">&#39;wellcap&#39;</span><span class="p">:</span> <span class="s">&#39;e&#39;</span><span class="p">,</span>
+    <span class="s">&#39;readnoise&#39;</span><span class="p">:</span> <span class="s">&#39;e&#39;</span><span class="p">,</span>
+    <span class="s">&#39;darkcurr&#39;</span><span class="p">:</span> <span class="s">&#39;e/s&#39;</span><span class="p">,</span>  <span class="c"># per pixel</span>
+    <span class="s">&#39;prnu&#39;</span><span class="p">:</span> <span class="s">&#39;%&#39;</span><span class="p">,</span>  <span class="c"># Must actually be in percentage  This is a special case and needs special handling</span>
+    <span class="s">&#39;dsnu&#39;</span><span class="p">:</span> <span class="s">&#39;%&#39;</span><span class="p">,</span>  <span class="c"># Must actually be in percentage  This is a special case and needs special handling</span>
+    <span class="s">&#39;tref&#39;</span><span class="p">:</span> <span class="s">&#39;degC&#39;</span><span class="p">,</span>  <span class="c"># Reference temperature</span>
+    <span class="s">&#39;temp&#39;</span><span class="p">:</span> <span class="s">&#39;degC&#39;</span><span class="p">,</span>  <span class="c"># Operating temperautre</span>
+    <span class="s">&#39;deltat&#39;</span><span class="p">:</span> <span class="s">&#39;delta_degC&#39;</span><span class="p">,</span>  <span class="c"># Change in temperature</span>
+    <span class="s">&#39;nyqx&#39;</span><span class="p">:</span> <span class="s">&#39;1/mm&#39;</span><span class="p">,</span>  <span class="c"># Nyquist x</span>
+    <span class="s">&#39;nyqy&#39;</span><span class="p">:</span> <span class="s">&#39;1/mm&#39;</span><span class="p">,</span>  <span class="c"># Nyquist y</span>
+    <span class="s">&#39;bitdepth&#39;</span><span class="p">:</span> <span class="s">&#39;bit&#39;</span><span class="p">,</span>
+    <span class="s">&#39;dgain&#39;</span><span class="p">:</span> <span class="s">&#39;e/count&#39;</span><span class="p">,</span>
+    <span class="s">&#39;doffset&#39;</span><span class="p">:</span> <span class="s">&#39;count&#39;</span><span class="p">,</span>
+    <span class="s">&#39;dnoise&#39;</span><span class="p">:</span> <span class="s">&#39;count&#39;</span><span class="p">,</span>
+    <span class="s">&#39;mtf&#39;</span><span class="p">:</span> <span class="s">&#39;&#39;</span><span class="p">,</span>
+    <span class="s">&#39;spfcut&#39;</span><span class="p">:</span> <span class="s">&#39;1/mm&#39;</span><span class="p">,</span>
+    <span class="s">&#39;spfa&#39;</span><span class="p">:</span> <span class="s">&#39;1/mrad&#39;</span><span class="p">,</span>
+    <span class="s">&#39;vza&#39;</span><span class="p">:</span> <span class="s">&#39;deg&#39;</span><span class="p">,</span>  <span class="c"># View zenith angle</span>
+    <span class="s">&#39;vpa&#39;</span><span class="p">:</span> <span class="s">&#39;rad&#39;</span><span class="p">,</span>  <span class="c"># Same as vza, but in radians</span>
+    <span class="s">&#39;vaz&#39;</span><span class="p">:</span> <span class="s">&#39;deg&#39;</span><span class="p">,</span>  <span class="c"># View azimuth angle</span>
+    <span class="s">&#39;vea&#39;</span> <span class="p">:</span> <span class="s">&#39;deg&#39;</span><span class="p">,</span>  <span class="c"># View elevation angle (complement of the view zenith angle)</span>
+    <span class="s">&#39;pza&#39;</span><span class="p">:</span> <span class="s">&#39;rad&#39;</span><span class="p">,</span>  <span class="c"># Propagation zenith angle</span>
+    <span class="s">&#39;svaz&#39;</span><span class="p">:</span> <span class="s">&#39;deg&#39;</span><span class="p">,</span>  <span class="c"># Solar-relative view azimuth angle</span>
+    <span class="s">&#39;umu&#39;</span><span class="p">:</span> <span class="s">&#39;&#39;</span><span class="p">,</span>  <span class="c"># Cosine of the propagation zenith</span>
+    <span class="s">&#39;phi&#39;</span><span class="p">:</span> <span class="s">&#39;deg&#39;</span><span class="p">,</span>  <span class="c"># Propagation azimuth angle, same as paz, except for units</span>
+    <span class="s">&#39;paz&#39;</span> <span class="p">:</span> <span class="s">&#39;rad&#39;</span><span class="p">,</span>  <span class="c"># same as phi except for units</span>
+    <span class="s">&#39;phi0&#39;</span><span class="p">:</span> <span class="s">&#39;deg&#39;</span><span class="p">,</span>  <span class="c"># Solar propagation azimuth angle</span>
+    <span class="s">&#39;srf&#39;</span><span class="p">:</span> <span class="s">&#39;&#39;</span><span class="p">,</span>  <span class="c"># spectral response function</span>
+    <span class="s">&#39;stokes&#39;</span><span class="p">:</span> <span class="s">&#39;&#39;</span><span class="p">,</span>  <span class="c"># Stokes parameter number (not the actual stokes parameter)</span>
+    <span class="s">&#39;zout&#39;</span><span class="p">:</span> <span class="s">&#39;km&#39;</span><span class="p">,</span>  <span class="c"># Altitude above ground level</span>
+    <span class="s">&#39;zout_sea&#39;</span><span class="p">:</span> <span class="s">&#39;km&#39;</span><span class="p">,</span>  <span class="c"># Altitude above sea level</span>
+    <span class="s">&#39;p&#39;</span><span class="p">:</span> <span class="s">&#39;hPa&#39;</span><span class="p">,</span>  <span class="c"># Atmospheric pressure preferred units : hectopascals</span>
+    <span class="s">&#39;reflx&#39;</span><span class="p">:</span> <span class="s">&#39;&#39;</span><span class="p">,</span>  <span class="c"># reflectivity</span>
+    <span class="s">&#39;trnx&#39;</span><span class="p">:</span> <span class="s">&#39;&#39;</span><span class="p">,</span>  <span class="c"># transmissivity</span>
+    <span class="s">&#39;brightness&#39;</span><span class="p">:</span> <span class="s">&#39;K&#39;</span>
+<span class="p">}</span>
+
+<div class="viewcode-block" id="Scalar"><a class="viewcode-back" href="../../mortapi/morticia.html#morticia.moglo.Scalar">[docs]</a><span class="k">class</span> <span class="nc">Scalar</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; The Scalar class is for representation of scalar numeric values, together with units of measure, a</span>
+<span class="sd">    mnemonic, being one of those listed in the MORTICIA long_name vocabulary.</span>
+
+<span class="sd">    A feature of the Scalar class is that the data attribute can only be set using a.data = [value, units]</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__data</span>
+
+    <span class="nd">@data.setter</span>
+    <span class="k">def</span> <span class="nf">data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_and_units</span><span class="p">):</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">data_and_units</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">),</span> <span class="n">data_and_units</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="c"># Will blow up if units unknown to pint</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__units</span> <span class="o">=</span> <span class="n">data_and_units</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mnemonic</span> <span class="ow">in</span> <span class="n">default_units</span><span class="p">:</span>
+            <span class="c"># Convert units</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">default_units</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">mnemonic</span><span class="p">])</span>  <span class="c"># Will blow up if units cannot be converted to default</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__units</span> <span class="o">=</span> <span class="n">default_units</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">mnemonic</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__data</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">magnitude</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">units</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__units</span>
+
+    <span class="nd">@units.setter</span>
+    <span class="k">def</span> <span class="nf">units</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s">&#39;Attempt to alter scalar units ignored.&#39;</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">mnemonic</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__mnemonic</span>
+
+    <span class="nd">@mnemonic.setter</span>
+    <span class="k">def</span> <span class="nf">mnemonic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s">&#39;Attempt to alter scalar mnemonic ignored.&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Scalar.__init__"><a class="viewcode-back" href="../../mortapi/morticia.html#morticia.moglo.Scalar.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mnemonic</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">units</span><span class="p">,</span> <span class="n">attrs</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Construct a scalar value using a MORTICIA mnemonic (from the long_name vocabulary), the scalar value</span>
+<span class="sd">        and the units of measure.</span>
+
+<span class="sd">        :param mnemonic: A string such as &#39;efl&#39; for Effective Focal Length, which is defined in the MORTICIA</span>
+<span class="sd">            long_name vocabulary</span>
+<span class="sd">        :param data: The scalar numeric value to be stored</span>
+<span class="sd">        :param units: The units string of the data. This string must be known to the Python Pint package.</span>
+<span class="sd">        :param attrs: A user-defined dictionary of any other attributes for the scalar value. The mnemonic will</span>
+<span class="sd">            be looked up in moglo.long_name and the long_name will be added as an attribute.</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__mnemonic</span> <span class="o">=</span> <span class="n">mnemonic</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__units</span> <span class="o">=</span> <span class="n">units</span>
+        <span class="k">if</span> <span class="n">attrs</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">attrs</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">attrs</span> <span class="o">=</span> <span class="n">attrs</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s">&#39;long_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">long_name</span><span class="p">[</span><span class="n">mnemonic</span><span class="p">]</span>  <span class="c"># Will blow up if the mnemonic is not known</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s">&#39;Unknown scalar mnemonic &#39;</span> <span class="o">+</span> <span class="n">mnemonic</span> <span class="o">+</span> <span class="s">&#39; provided in Scalar instantiation.&#39;</span><span class="p">)</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">Q_</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">),</span> <span class="n">units</span><span class="p">)</span>  <span class="c"># Will blow up if units unknown to pint</span>
+        <span class="k">if</span> <span class="n">mnemonic</span> <span class="ow">in</span> <span class="n">default_units</span><span class="p">:</span>
+            <span class="c"># Convert units</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">default_units</span><span class="p">[</span><span class="n">mnemonic</span><span class="p">])</span>  <span class="c"># Will blow up if units cannot be converted to default</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__units</span> <span class="o">=</span> <span class="n">default_units</span><span class="p">[</span><span class="n">mnemonic</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__data</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">magnitude</span>
+</div>
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  <span class="c">#  TODO : Should we be using __repr__ or __str__</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s">&#39;long_name&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s">&#39; : &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__data</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">__units</span>
+
+    <span class="c"># TODO : Consider doing all arithmetical magic methods for Scalar class.</span>
+    <span class="c"># TODO : Problem is that of catering for multiplcation of 2 scalar values, using isinstance considered unpythonic</span>
+
+    <span class="k">def</span> <span class="nf">__pos__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">__data</span>
+
+    <span class="k">def</span> <span class="nf">__neg__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">__data</span>
+
+    <span class="k">def</span> <span class="nf">__abs__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__data</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__mul__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Scalar</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__data</span> <span class="o">*</span> <span class="n">other</span><span class="o">.</span><span class="n">__data</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__data</span> <span class="o">*</span> <span class="n">other</span>  <span class="c"># Hope that other defines multiplication with a simple scalar numeric</span>
+
+    <span class="k">def</span> <span class="nf">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Scalar</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__data</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="n">__data</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__data</span> <span class="o">+</span> <span class="n">other</span>
+
+    <span class="k">def</span> <span class="nf">__radd__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Scalar</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">other</span><span class="o">.</span><span class="n">__data</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">__data</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">other</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">__data</span>
+
+    <span class="k">def</span> <span class="nf">__sub__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Scalar</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__data</span> <span class="o">*</span> <span class="n">other</span><span class="o">.</span><span class="n">__data</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__data</span> <span class="o">*</span> <span class="n">other</span>
+
+    <span class="k">def</span> <span class="nf">__div__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="o">.</span> <span class="n">Scalar</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__data</span> <span class="o">/</span> <span class="n">other</span><span class="o">.</span><span class="n">__data</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__data</span> <span class="o">/</span> <span class="n">other</span>
+
+    <span class="k">def</span> <span class="nf">__rdiv__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">Scalar</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">other</span><span class="o">.</span><span class="n">__data</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">__data</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">other</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">__data</span>
+
+
+
+<span class="c"># Define a global exception for unit mismatch</span></div>
+<div class="viewcode-block" id="UnitMismatch"><a class="viewcode-back" href="../../mortapi/morticia.html#morticia.moglo.UnitMismatch">[docs]</a><span class="k">class</span> <span class="nc">UnitMismatch</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+<span class="c"># Define a global exception for missing units</span></div>
+<div class="viewcode-block" id="MissingUnits"><a class="viewcode-back" href="../../mortapi/morticia.html#morticia.moglo.MissingUnits">[docs]</a><span class="k">class</span> <span class="nc">MissingUnits</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="k">pass</span>
+</div>
+<div class="viewcode-block" id="MissingDataArrayAxis"><a class="viewcode-back" href="../../mortapi/morticia.html#morticia.moglo.MissingDataArrayAxis">[docs]</a><span class="k">class</span> <span class="nc">MissingDataArrayAxis</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+</pre></div>
+
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, D Griffith, A Ramkilowan.
+    </p>
+  </div>
+
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

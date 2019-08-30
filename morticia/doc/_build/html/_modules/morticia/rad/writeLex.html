@@ -1,0 +1,516 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>morticia.rad.writeLex &mdash; MORTICIA 1.0 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Roboto+Slab:400,700|Inconsolata:400,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="MORTICIA 1.0 documentation" href="../../../index.html"/>
+        <link rel="up" title="morticia" href="../../morticia.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+          <a href="../../../index.html" class="fa fa-home"> MORTICIA</a>
+        
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../how_to_use.html">How to use MORTICIA</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../how_to_use.html#morticia-dependencies">MORTICIA Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../how_to_use.html#installation-and-requirements">Installation and Requirements</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../styleguide.html">The MORTICIA Style Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#to-pep-8-or-not-to-pep-8">To PEP-8 or not to PEP-8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#code-layout">Code Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#import-statements">Import Statements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#whitespace">Whitespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#comments">Comments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#documentation-strings-docstrings">Documentation Strings (docstrings)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#naming-conventions">Naming Conventions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#pep-257">PEP-257</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#from-conventions-section"><em>From</em> Conventions Section</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#general-terminology-and-conventions">General Terminology and Conventions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../for_developers.html">For the Developers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../for_developers.html#structure">Structure</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../packages.html">Packages</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../packages.html#sensor-package">Sensor Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../packages.html#radiometry-package">Radiometry Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../packages.html#scene-package">Scene Package</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ChapLibRadtranODandPathRadiance.html">Transmittance and Path Radiance in libRadtran</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../01a-SpectralChannelsAndFilters.html">IPython Notebook and Sphinx</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../01a-SpectralChannelsAndFilters.html#a-spectralchannelsandfilters-ipython-notebook">01a-SpectralChannelsAndFilters IPython Notebook</a></li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../../index.html">MORTICIA</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      
+          <li><a href="../../morticia.html">morticia</a> &raquo;</li>
+      
+    <li>morticia.rad.writeLex</li>
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <h1>Source code for morticia.rad.writeLex</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;--------------------------------------------------------------------</span>
+<span class="sd"> * $Id: writeLex.py 2919 2013-05-17 09:24:06Z robert.buras $</span>
+<span class="sd"> * </span>
+<span class="sd"> * This file is part of libRadtran.</span>
+<span class="sd"> * Copyright (c) 1997-2012 by Arve Kylling, Bernhard Mayer,</span>
+<span class="sd"> *                            Claudia Emde, Robert Buras</span>
+<span class="sd"> *</span>
+<span class="sd"> * ######### Contact info: http://www.libradtran.org #########</span>
+<span class="sd"> *</span>
+<span class="sd"> * This program is free software; you can redistribute it and/or </span>
+<span class="sd"> * modify it under the terms of the GNU General Public License   </span>
+<span class="sd"> * as published by the Free Software Foundation; either version 2</span>
+<span class="sd"> * of the License, or (at your option) any later version.        </span>
+<span class="sd"> * </span>
+<span class="sd"> * This program is distributed in the hope that it will be useful, </span>
+<span class="sd"> * but WITHOUT ANY WARRANTY; without even the implied warranty of  </span>
+<span class="sd"> * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the   </span>
+<span class="sd"> * GNU General Public License for more details.                    </span>
+<span class="sd"> * </span>
+<span class="sd"> * You should have received a copy of the GNU General Public License          </span>
+<span class="sd"> * along with this program; if not, write to the Free Software                </span>
+<span class="sd"> * Foundation, Inc., 59 Temple Place - Suite 330, </span>
+<span class="sd"> * Boston, MA 02111-1307, USA.</span>
+<span class="sd"> *--------------------------------------------------------------------&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">option_definition</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">found_lidar</span>     <span class="o">=</span> <span class="s">&quot;no&quot;</span>
+<span class="n">found_mystic</span>    <span class="o">=</span> <span class="s">&quot;yes&quot;</span>
+<span class="n">found_mystic3d</span>  <span class="o">=</span> <span class="s">&quot;no&quot;</span>
+
+<span class="k">def</span> <span class="nf">writeLex</span><span class="p">():</span>
+<div class="viewcode-block" id="writeLex"><a class="viewcode-back" href="../../../mortapi/morticia.rad.html#morticia.rad.writeLex.writeLex">[docs]</a>	<span class="kn">import</span> <span class="nn">os</span>
+
+	<span class="n">pwd</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
+	
+	<span class="n">options</span> <span class="o">=</span> <span class="n">loadOptions</span><span class="p">()</span>					<span class="c">#load python dictionary with input options</span>
+	<span class="n">lexParser</span> <span class="o">=</span> <span class="n">loadLexStarter</span><span class="p">(</span><span class="n">pwd</span><span class="o">+</span><span class="s">&#39;/lex_starter.l&#39;</span><span class="p">)</span>	<span class="c">#load lexStarter.l</span>
+	<span class="n">lexParser</span> <span class="o">=</span> <span class="n">insertInputOption</span><span class="p">(</span><span class="n">lexParser</span><span class="p">,</span><span class="n">options</span><span class="p">)</span>	<span class="c">#add input options from python dictionary to lex parser</span>
+	<span class="n">lexParser</span> <span class="o">=</span> <span class="n">insertDocu</span><span class="p">(</span><span class="n">lexParser</span><span class="p">,</span><span class="n">options</span><span class="p">)</span>		<span class="c">#add documentation to python dictionary</span>
+	<span class="n">lexParser</span> <span class="o">=</span> <span class="n">insertInitialisations</span><span class="p">(</span><span class="n">lexParser</span><span class="p">,</span><span class="n">options</span><span class="p">)</span>	<span class="c">#add default initialisations</span>
+
+	<span class="n">writeUvspecLex</span><span class="p">(</span><span class="n">lexParser</span><span class="p">,</span><span class="n">pwd</span><span class="o">+</span><span class="s">&#39;/uvspec_lex.l&#39;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">loadOptionsHelper</span><span class="p">():</span></div>
+<div class="viewcode-block" id="loadOptionsHelper"><a class="viewcode-back" href="../../../mortapi/morticia.rad.html#morticia.rad.writeLex.loadOptionsHelper">[docs]</a>	<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">	Returns a list of all the groups.</span>
+<span class="sd">	Used in the GUI.</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+	<span class="kn">import</span> <span class="nn">aerosol_options</span><span class="o">,</span> <span class="nn">cloud_options</span><span class="o">,</span> <span class="nn">profile_options</span><span class="o">,</span> <span class="nn">geometry_options</span><span class="o">,</span> <span class="nn">special_options</span>
+	<span class="kn">import</span> <span class="nn">mc_options</span><span class="o">,</span> <span class="nn">spectral_options</span><span class="o">,</span> <span class="nn">surface_options</span><span class="o">,</span> <span class="nn">molecular_options</span><span class="o">,</span> <span class="nn">solver_options</span><span class="o">,</span> <span class="nn">output_options</span><span class="o">,</span> <span class="nn">general_atmosphere_options</span>
+
+	<span class="n">profile</span> <span class="o">=</span> <span class="n">profile_options</span><span class="o">.</span><span class="n">setup_cloud_group</span><span class="p">()</span>
+	<span class="n">cloud</span> <span class="o">=</span> <span class="n">cloud_options</span><span class="o">.</span><span class="n">setup_cloud_group</span><span class="p">()</span>
+	<span class="n">aer</span> <span class="o">=</span> <span class="n">aerosol_options</span><span class="o">.</span><span class="n">setup_aerosol_group</span><span class="p">()</span>
+	<span class="n">special</span> <span class="o">=</span> <span class="n">special_options</span><span class="o">.</span><span class="n">setup_special_group</span><span class="p">()</span>
+
+	<span class="n">mc</span> <span class="o">=</span> <span class="n">mc_options</span><span class="o">.</span><span class="n">setup_mc_group</span><span class="p">()</span>
+	<span class="n">spectral</span> <span class="o">=</span> <span class="n">spectral_options</span><span class="o">.</span><span class="n">setup_spectral_group</span><span class="p">()</span>
+	<span class="n">gen_atm</span> <span class="o">=</span> <span class="n">general_atmosphere_options</span><span class="o">.</span><span class="n">setup_general_atm_group</span><span class="p">()</span>
+	<span class="n">sur</span> <span class="o">=</span> <span class="n">surface_options</span><span class="o">.</span><span class="n">setup_surface_group</span><span class="p">()</span>
+	<span class="n">mol</span> <span class="o">=</span> <span class="n">molecular_options</span><span class="o">.</span><span class="n">setup_molecular_group</span><span class="p">()</span>
+	<span class="n">sol</span> <span class="o">=</span> <span class="n">solver_options</span><span class="o">.</span><span class="n">setup_solver_group</span><span class="p">()</span>
+	<span class="n">out</span> <span class="o">=</span> <span class="n">output_options</span><span class="o">.</span><span class="n">setup_output_group</span><span class="p">()</span>
+	<span class="n">geom</span> <span class="o">=</span> <span class="n">geometry_options</span><span class="o">.</span><span class="n">setup_geometry_group</span><span class="p">()</span>
+
+	<span class="n">list_of_groups</span><span class="o">=</span><span class="p">[</span><span class="n">spectral</span><span class="p">,</span> <span class="n">gen_atm</span><span class="p">,</span> <span class="n">mol</span><span class="p">,</span> <span class="n">aer</span><span class="p">,</span> <span class="n">profile</span><span class="p">,</span> <span class="n">cloud</span><span class="p">,</span> <span class="n">sur</span><span class="p">,</span> <span class="n">sol</span><span class="p">,</span> <span class="n">mc</span><span class="p">,</span> <span class="n">geom</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">special</span><span class="p">]</span>
+	<span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">list_of_groups</span><span class="p">:</span>
+		<span class="k">for</span> <span class="n">option</span> <span class="ow">in</span> <span class="n">group</span><span class="p">:</span>
+			<span class="k">if</span> <span class="n">found_lidar</span> <span class="o">==</span> <span class="s">&#39;no&#39;</span> <span class="ow">and</span> <span class="n">option</span><span class="p">[</span><span class="s">&#39;islidar&#39;</span><span class="p">]:</span>		<span class="n">group</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">option</span><span class="p">)</span>
+			<span class="k">elif</span> <span class="n">found_mystic</span> <span class="o">==</span> <span class="s">&#39;no&#39;</span> <span class="ow">and</span> <span class="n">option</span><span class="p">[</span><span class="s">&#39;mystic&#39;</span><span class="p">]:</span>		<span class="n">group</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">option</span><span class="p">)</span>
+			<span class="k">elif</span> <span class="n">found_mystic3d</span> <span class="o">==</span> <span class="s">&#39;no&#39;</span> <span class="ow">and</span> <span class="n">option</span><span class="p">[</span><span class="s">&#39;threedmystic&#39;</span><span class="p">]:</span>	<span class="n">group</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">option</span><span class="p">)</span>
+
+	<span class="k">return</span> <span class="n">list_of_groups</span> 
+
+<span class="k">def</span> <span class="nf">loadOptions</span><span class="p">():</span></div>
+<div class="viewcode-block" id="loadOptions"><a class="viewcode-back" href="../../../mortapi/morticia.rad.html#morticia.rad.writeLex.loadOptions">[docs]</a>	<span class="n">options</span><span class="o">=</span><span class="p">{}</span>
+	
+	<span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">loadOptionsHelper</span><span class="p">():</span>
+		<span class="k">for</span> <span class="n">option</span> <span class="ow">in</span> <span class="n">group</span><span class="p">:</span>
+			<span class="n">options</span><span class="p">[</span><span class="n">option</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;name&#39;</span><span class="p">)]</span><span class="o">=</span><span class="n">option</span>
+	<span class="k">return</span> <span class="n">options</span>	
+
+<span class="k">def</span> <span class="nf">loadLexStarter</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span></div>
+<div class="viewcode-block" id="loadLexStarter"><a class="viewcode-back" href="../../../mortapi/morticia.rad.html#morticia.rad.writeLex.loadLexStarter">[docs]</a>	<span class="kn">import</span> <span class="nn">os</span>
+
+	<span class="c">#read lex file</span>
+	<span class="n">pwd</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
+	<span class="n">lexstarter</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
+	<span class="n">text</span> <span class="o">=</span> <span class="n">lexstarter</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+	<span class="n">lexstarter</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+	<span class="k">return</span> <span class="n">text</span>
+
+<span class="k">def</span> <span class="nf">writeUvspecLex</span><span class="p">(</span><span class="n">text</span><span class="p">,</span><span class="n">filename</span><span class="p">):</span></div>
+<div class="viewcode-block" id="writeUvspecLex"><a class="viewcode-back" href="../../../mortapi/morticia.rad.html#morticia.rad.writeLex.writeUvspecLex">[docs]</a>	<span class="n">newlex</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="s">&#39;w&#39;</span><span class="p">)</span>
+	<span class="n">newlex</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+	<span class="n">newlex</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">getStr</span><span class="p">(</span><span class="n">string</span><span class="p">):</span></div>
+<div class="viewcode-block" id="getStr"><a class="viewcode-back" href="../../../mortapi/morticia.rad.html#morticia.rad.writeLex.getStr">[docs]</a>	<span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">string</span><span class="p">)</span> <span class="o">==</span> <span class="s">&#39;True&#39;</span><span class="p">:</span> <span class="k">return</span> <span class="s">&#39;TRUE&#39;</span>
+	<span class="k">elif</span> <span class="nb">str</span><span class="p">(</span><span class="n">string</span><span class="p">)</span> <span class="o">==</span> <span class="s">&#39;False&#39;</span><span class="p">:</span> <span class="k">return</span> <span class="s">&#39;FALSE&#39;</span>
+	<span class="k">else</span><span class="p">:</span> <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">string</span><span class="p">)</span>
+		
+
+<span class="k">def</span> <span class="nf">getTypeScan</span><span class="p">(</span><span class="n">dtype</span><span class="p">,</span> <span class="n">valid_range</span><span class="p">):</span></div>
+<div class="viewcode-block" id="getTypeScan"><a class="viewcode-back" href="../../../mortapi/morticia.rad.html#morticia.rad.writeLex.getTypeScan">[docs]</a>	<span class="k">if</span> <span class="n">dtype</span> <span class="o">==</span> <span class="nb">str</span> <span class="ow">or</span> <span class="n">dtype</span> <span class="o">==</span> <span class="nb">file</span><span class="p">:</span>
+		<span class="k">return</span> <span class="s">&#39;{SPACE_WORD}&#39;</span>
+	<span class="k">elif</span> <span class="n">dtype</span> <span class="o">==</span> <span class="n">Dimension</span><span class="p">:</span>
+		<span class="k">return</span> <span class="s">&#39;{SPACE}+{DIM}&#39;</span>
+	<span class="k">elif</span> <span class="n">dtype</span> <span class="o">==</span> <span class="n">ProfileType</span><span class="p">:</span>
+		<span class="k">return</span> <span class="s">&#39;{SPACE_PROFILETYPE}&#39;</span>
+	<span class="k">elif</span> <span class="n">dtype</span> <span class="o">==</span> <span class="n">SignedFloats</span> <span class="p">:</span>
+		<span class="k">return</span> <span class="s">&#39;{SIGNED_FLOATS}&#39;</span>
+	<span class="k">elif</span> <span class="n">dtype</span> <span class="o">==</span> <span class="n">Integers</span> <span class="p">:</span>
+		<span class="k">return</span> <span class="s">&#39;{INTEGERS}&#39;</span>
+	<span class="k">elif</span> <span class="n">dtype</span> <span class="o">==</span> <span class="n">CaothType</span> <span class="ow">or</span> <span class="n">dtype</span> <span class="o">==</span> <span class="n">CaothoffType</span> <span class="p">:</span>
+		<span class="k">return</span> <span class="s">&#39;{SPACE_WORD}&#39;</span>
+	<span class="k">elif</span> <span class="n">dtype</span> <span class="o">==</span> <span class="nb">int</span><span class="p">:</span>
+		<span class="k">return</span> <span class="s">&#39;{SPACE_INTEGER}&#39;</span>
+	<span class="k">elif</span> <span class="n">dtype</span> <span class="o">==</span> <span class="nb">long</span><span class="p">:</span>
+		<span class="k">return</span> <span class="s">&#39;{SPACE_FLOAT}&#39;</span>
+	<span class="k">elif</span> <span class="n">dtype</span> <span class="o">==</span> <span class="nb">float</span> <span class="ow">or</span> <span class="n">dtype</span> <span class="o">==</span> <span class="n">Double</span><span class="p">:</span>
+		<span class="k">if</span> <span class="n">valid_range</span> <span class="ow">and</span> <span class="n">valid_range</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+			<span class="k">return</span> <span class="s">&#39;{SPACE_FLOAT}&#39;</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="k">return</span> <span class="s">&#39;{SPACE_SIGNED_FLOAT}&#39;</span>
+	<span class="k">else</span><span class="p">:</span> <span class="k">print</span> <span class="s">&#39;ERROR: datatype not known: &#39;</span><span class="p">,</span> <span class="n">dtype</span>
+
+<span class="k">def</span> <span class="nf">yytext2type</span><span class="p">(</span><span class="n">dtype</span><span class="p">):</span></div>
+<div class="viewcode-block" id="yytext2type"><a class="viewcode-back" href="../../../mortapi/morticia.rad.html#morticia.rad.writeLex.yytext2type">[docs]</a>	<span class="k">if</span> <span class="n">dtype</span> <span class="o">==</span> <span class="nb">str</span> <span class="ow">or</span> <span class="n">dtype</span> <span class="o">==</span> <span class="nb">file</span> <span class="ow">or</span> <span class="n">dtype</span> <span class="o">==</span> <span class="n">ProfileType</span><span class="p">:</span>
+		<span class="k">return</span> <span class="s">&#39;yytext2string&#39;</span>
+	<span class="k">elif</span> <span class="n">dtype</span> <span class="o">==</span> <span class="nb">float</span><span class="p">:</span>
+		<span class="k">return</span> <span class="s">&#39;yytext2float&#39;</span>
+	<span class="k">elif</span> <span class="n">dtype</span> <span class="o">==</span> <span class="n">Double</span><span class="p">:</span>
+		<span class="k">return</span> <span class="s">&#39;yytext2double&#39;</span>
+	<span class="k">elif</span> <span class="n">dtype</span> <span class="o">==</span> <span class="nb">int</span><span class="p">:</span>
+		<span class="k">return</span> <span class="s">&#39;yytext2int&#39;</span>
+	<span class="k">elif</span> <span class="n">dtype</span> <span class="o">==</span> <span class="nb">long</span><span class="p">:</span>
+		<span class="k">return</span> <span class="s">&#39;(long int) yytext2double&#39;</span>
+
+<span class="k">def</span> <span class="nf">getLexOptions</span><span class="p">(</span><span class="n">group</span><span class="p">):</span></div>
+<div class="viewcode-block" id="getLexOptions"><a class="viewcode-back" href="../../../mortapi/morticia.rad.html#morticia.rad.writeLex.getLexOptions">[docs]</a>
+	<span class="n">inputOption</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+	
+	<span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">option</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">iteritems</span><span class="p">()):</span>
+		<span class="c"># Do something completly different</span>
+		<span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">option</span><span class="p">,</span> <span class="s">&quot;writeLex&quot;</span><span class="p">):</span>
+			<span class="n">inputOption</span> <span class="o">+=</span> <span class="n">option</span><span class="o">.</span><span class="n">writeLex</span><span class="p">()</span>
+		<span class="c"># Do the usual</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="n">tokens</span> <span class="o">=</span> <span class="n">option</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;tokens&#39;</span><span class="p">)</span>
+
+			<span class="c">#write input option name</span>
+			<span class="n">inputOption</span> <span class="o">+=</span> <span class="n">name</span>
+
+			<span class="n">nTokens</span><span class="p">,</span> <span class="n">rules</span><span class="p">,</span> <span class="n">optional</span> <span class="o">=</span> <span class="n">lexRules</span><span class="p">(</span><span class="n">tokens</span><span class="p">)</span>
+
+			<span class="c">#write setting of input arguments</span>
+			<span class="n">variableSetting</span> <span class="o">=</span> <span class="s">&#39;&#39;</span> 
+			<span class="n">itok</span> <span class="o">=</span> <span class="mi">1</span>
+			<span class="k">for</span> <span class="n">tok</span> <span class="ow">in</span> <span class="n">tokens</span><span class="p">:</span> 
+				<span class="k">if</span> <span class="n">tok</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;optional&#39;</span><span class="p">):</span>		<span class="n">variableSetting</span> <span class="o">+=</span> <span class="s">&#39;</span><span class="se">\t</span><span class="s">if ( ntokens &gt;= </span><span class="si">%d</span><span class="s"> )</span><span class="se">\t</span><span class="s"> {</span><span class="se">\n\t</span><span class="s">&#39;</span> <span class="o">%</span><span class="p">(</span> <span class="n">itok</span> <span class="p">)</span>
+
+				<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tok</span><span class="p">,</span> <span class="n">addSetting</span><span class="p">):</span>
+					<span class="n">variableSetting</span> <span class="o">+=</span> <span class="s">&#39;</span><span class="se">\t</span><span class="si">%s</span><span class="s"> = </span><span class="si">%s</span><span class="s">;</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">tok</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;name&#39;</span><span class="p">),</span>
+                                                                <span class="n">getStr</span><span class="p">(</span><span class="n">tok</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;setting&#39;</span><span class="p">)))</span>
+
+				<span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tok</span><span class="p">,</span><span class="n">addLogical</span><span class="p">):</span>
+					<span class="n">itok</span> <span class="o">+=</span> <span class="mi">1</span>
+					<span class="n">variableSetting</span> <span class="o">+=</span> <span class="n">getLogicals</span><span class="p">(</span><span class="n">tok</span><span class="p">,</span><span class="n">itok</span><span class="p">,</span><span class="n">nTokens</span><span class="p">)</span>
+					
+				<span class="k">else</span><span class="p">:</span>
+					<span class="k">try</span><span class="p">:</span>
+						<span class="n">itok</span> <span class="o">+=</span> <span class="mi">1</span>	
+						<span class="n">variableSetting</span> <span class="o">+=</span> <span class="n">getTokens</span><span class="p">(</span><span class="n">tok</span><span class="p">,</span><span class="n">itok</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">nTokens</span><span class="p">)</span> <span class="p">)</span>
+					<span class="k">except</span> <span class="ne">Exception</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span>
+						<span class="k">print</span> <span class="s">&#39;ERROR found in input option </span><span class="si">%s</span><span class="s"> :</span><span class="se">\n\t</span><span class="s"> Datatype </span><span class="si">%s</span><span class="s"> of variable </span><span class="si">%s</span><span class="s"> not known!&#39;</span> <span class="o">%</span> <span class="p">(</span>
+							<span class="n">option</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;name&#39;</span><span class="p">),</span> <span class="n">tok</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;datatype&#39;</span><span class="p">),</span> <span class="n">tok</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;name&#39;</span><span class="p">)</span> <span class="p">)</span>
+						<span class="k">print</span> <span class="n">e</span>
+				<span class="k">if</span>  <span class="n">tok</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;optional&#39;</span><span class="p">):</span>         <span class="n">variableSetting</span> <span class="o">+=</span> <span class="s">&#39;</span><span class="se">\t</span><span class="s">}</span><span class="se">\n</span><span class="s">&#39;</span>
+
+			<span class="n">inputOption</span> <span class="o">+=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s"> {</span><span class="se">\n</span><span class="si">%s%s</span><span class="s">}</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span><span class="p">(</span> <span class="n">rules</span><span class="p">,</span> <span class="n">optional</span><span class="p">,</span> <span class="n">variableSetting</span> <span class="p">)</span>
+
+	<span class="k">return</span> <span class="n">inputOption</span>
+
+<span class="k">def</span> <span class="nf">lexRules</span><span class="p">(</span><span class="n">tokens</span><span class="p">):</span></div>
+<div class="viewcode-block" id="lexRules"><a class="viewcode-back" href="../../../mortapi/morticia.rad.html#morticia.rad.writeLex.lexRules">[docs]</a>	<span class="n">nTokens</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span> 
+	<span class="n">tokenStr</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">;</span> <span class="n">rules</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">;</span> <span class="n">optional</span><span class="o">=</span><span class="s">&#39;&#39;</span>
+	<span class="k">for</span> <span class="n">tok</span> <span class="ow">in</span> <span class="n">tokens</span><span class="p">:</span>
+		<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tok</span><span class="p">,</span><span class="n">addSetting</span><span class="p">):</span>
+			<span class="k">continue</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="n">rules</span> <span class="o">+=</span> <span class="n">getTypeScan</span><span class="p">(</span><span class="n">tok</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;datatype&#39;</span><span class="p">),</span>	   <span class="n">tok</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;valid_range&#39;</span><span class="p">))</span>
+			<span class="n">nTokens</span> <span class="o">+=</span><span class="mi">1</span>
+			<span class="n">tokenStr</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">nTokens</span><span class="p">)</span>
+			<span class="k">if</span> <span class="n">tok</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;optional&#39;</span><span class="p">):</span>
+				<span class="n">tokenStr</span> <span class="o">=</span> <span class="s">&#39;ntokens+1&#39;</span>
+				<span class="n">optional</span> <span class="o">=</span> <span class="s">&#39;</span><span class="se">\t</span><span class="s">ntokens = yytext2ntokens(yytext);</span><span class="se">\n</span><span class="s">&#39;</span>
+				<span class="n">rules</span> <span class="o">+=</span> <span class="s">&#39;?&#39;</span>
+	<span class="k">return</span> <span class="p">[</span> <span class="n">tokenStr</span><span class="p">,</span> <span class="n">rules</span><span class="p">,</span> <span class="n">optional</span> <span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">getTokens</span><span class="p">(</span><span class="n">tok</span><span class="p">,</span><span class="n">itok</span><span class="p">,</span><span class="n">nTokens</span><span class="p">):</span></div>
+<div class="viewcode-block" id="getTokens"><a class="viewcode-back" href="../../../mortapi/morticia.rad.html#morticia.rad.writeLex.getTokens">[docs]</a>
+	<span class="n">dtype</span> <span class="o">=</span> <span class="n">tok</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;datatype&#39;</span><span class="p">)</span>
+	<span class="k">if</span> <span class="n">dtype</span> <span class="o">==</span> <span class="nb">file</span><span class="p">:</span>
+		<span class="n">inputStr</span> <span class="o">=</span> <span class="s">&#39;</span><span class="se">\t</span><span class="s">yytextCstring ( </span><span class="si">%s</span><span class="s">, yytext, </span><span class="si">%d</span><span class="s">, </span><span class="si">%s</span><span class="s">);</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span> <span class="n">tok</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;name&#39;</span><span class="p">),</span> <span class="n">itok</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">nTokens</span><span class="p">)</span> <span class="p">)</span> 
+	<span class="k">elif</span> <span class="n">dtype</span> <span class="o">==</span> <span class="n">SignedFloats</span><span class="p">:</span>
+		<span class="n">inputStr</span> <span class="o">=</span> <span class="s">&#39;</span><span class="se">\t</span><span class="s">ntokens = yytext2ntokens(yytext);</span><span class="se">\n\t</span><span class="si">%s</span><span class="s"> =  yytext2floats(yytext, ntokens);</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span> <span class="n">tok</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;name&#39;</span><span class="p">)</span> <span class="p">)</span>
+	<span class="k">elif</span> <span class="n">dtype</span> <span class="o">==</span> <span class="n">Integers</span><span class="p">:</span>
+		<span class="n">inputStr</span> <span class="o">=</span> <span class="s">&#39;</span><span class="se">\t</span><span class="s">ntokens = yytext2ntokens(yytext);</span><span class="se">\n\t</span><span class="si">%s</span><span class="s"> =  yytext2integers(yytext, ntokens);</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span> <span class="n">tok</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;name&#39;</span><span class="p">)</span> <span class="p">)</span>
+	<span class="k">elif</span> <span class="n">dtype</span> <span class="o">==</span> <span class="n">CaothType</span><span class="p">:</span>
+		<span class="n">inputStr</span> <span class="o">=</span> <span class="s">&#39;</span><span class="se">\t</span><span class="si">%s</span><span class="s"> = get_caoth_index(&amp;Input.caoth,&amp;Input.n_caoth, yytext2string(yytext, </span><span class="si">%d</span><span class="s">, </span><span class="si">%s</span><span class="s">),0);</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span>  <span class="n">tok</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;name&#39;</span><span class="p">),</span> <span class="n">itok</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">nTokens</span><span class="p">)</span> <span class="p">)</span>
+	<span class="k">elif</span> <span class="n">dtype</span> <span class="o">==</span> <span class="n">CaothoffType</span><span class="p">:</span>
+		<span class="n">inputStr</span> <span class="o">=</span> <span class="s">&#39;</span><span class="se">\t</span><span class="si">%s</span><span class="s"> = get_caothoff_index(&amp;Input.caothoff,&amp;Input.n_caothoff, yytext2string(yytext, </span><span class="si">%d</span><span class="s">, </span><span class="si">%s</span><span class="s">));</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span>  <span class="n">tok</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;name&#39;</span><span class="p">),</span> <span class="n">itok</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">nTokens</span><span class="p">)</span> <span class="p">)</span>
+	<span class="k">else</span><span class="p">:</span>
+		<span class="n">inputStr</span> <span class="o">=</span> <span class="s">&#39;</span><span class="se">\t</span><span class="si">%s</span><span class="s"> = </span><span class="si">%s</span><span class="s">(yytext, </span><span class="si">%d</span><span class="s">, </span><span class="si">%s</span><span class="s">);</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span> <span class="n">tok</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;name&#39;</span><span class="p">),</span>
+			  <span class="n">yytext2type</span><span class="p">(</span><span class="n">tok</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;datatype&#39;</span><span class="p">)),</span>
+			  <span class="n">itok</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">nTokens</span><span class="p">)</span> <span class="p">)</span>
+	<span class="k">return</span> <span class="n">inputStr</span>
+
+
+
+<span class="k">def</span> <span class="nf">getLogicals</span><span class="p">(</span><span class="n">tok</span><span class="p">,</span><span class="n">itok</span><span class="p">,</span><span class="n">nTokens</span><span class="p">):</span></div>
+<div class="viewcode-block" id="getLogicals"><a class="viewcode-back" href="../../../mortapi/morticia.rad.html#morticia.rad.writeLex.getLogicals">[docs]</a>	<span class="kn">import</span> <span class="nn">re</span>
+
+	<span class="c">#dictionary to subsitute charakters like + - . to underscore _ for matching definition in C code</span>
+	<span class="n">rdict</span><span class="o">=</span><span class="p">{</span><span class="s">&#39;-&#39;</span><span class="p">:</span> <span class="s">&#39;_&#39;</span><span class="p">,</span>  <span class="s">&#39;.&#39;</span><span class="p">:</span> <span class="s">&#39;_&#39;</span><span class="p">,</span>  <span class="s">&#39;+&#39;</span><span class="p">:</span><span class="s">&#39;_&#39;</span> <span class="p">}</span>
+	<span class="n">regex</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">&quot;(</span><span class="si">%s</span><span class="s">)&quot;</span> <span class="o">%</span> <span class="s">&quot;|&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">escape</span><span class="p">,</span> <span class="n">rdict</span><span class="o">.</span><span class="n">keys</span><span class="p">())))</span>
+
+	<span class="c">#uvspec_lex.l : read token for string comparison</span>
+	<span class="n">inputStr</span> <span class="o">=</span> <span class="s">&#39;</span><span class="se">\t</span><span class="s">s = yytext2string(yytext, {0}, {1});</span><span class="se">\n\t</span><span class="s">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">itok</span><span class="p">,</span><span class="n">nTokens</span><span class="p">)</span>
+
+	<span class="c">#string comparison to set logical values</span>
+	<span class="n">logicals</span> <span class="o">=</span> <span class="n">tok</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;logicals&#39;</span><span class="p">)</span>
+	<span class="k">for</span> <span class="n">ilog</span><span class="p">,</span><span class="n">log</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">logicals</span><span class="p">)):</span>
+		<span class="k">if</span> <span class="n">ilog</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>	<span class="n">inputStr</span> <span class="o">+=</span> <span class="s">&#39;if&#39;</span>
+		<span class="k">else</span><span class="p">:</span>		<span class="n">inputStr</span> <span class="o">+=</span> <span class="s">&#39;else if&#39;</span>
+		<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">logicals</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>  <span class="c"># one logical -&gt; destination = 1</span>
+			<span class="n">inputStr</span> <span class="o">+=</span> <span class="s">&#39; ( strcasecmp(&quot;{0}&quot;, s)==0 )</span><span class="se">\t</span><span class="s">{{ {1} = 1; }}</span><span class="se">\n\t</span><span class="s">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">log</span><span class="p">,</span><span class="n">tok</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;destination&#39;</span><span class="p">))</span>
+		<span class="k">else</span><span class="p">:</span> <span class="c">#more logicals -&gt; destination is logical in uppercase, this variable should be defined in uvspec.h!</span>
+			<span class="n">inputStr</span> <span class="o">+=</span> <span class="s">&#39; ( strcasecmp(&quot;{0}&quot;, s)==0 )</span><span class="se">\t</span><span class="s">{{ {1} = {2}{3}; }}</span><span class="se">\n\t</span><span class="s">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">log</span><span class="p">,</span><span class="n">tok</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;destination&#39;</span><span class="p">),</span> <span class="n">tok</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;setting&#39;</span><span class="p">),</span> <span class="p">(</span> <span class="n">regex</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="k">lambda</span> <span class="n">mo</span><span class="p">:</span> <span class="n">rdict</span><span class="p">[</span><span class="n">mo</span><span class="o">.</span><span class="n">string</span><span class="p">[</span><span class="n">mo</span><span class="o">.</span><span class="n">start</span><span class="p">():</span><span class="n">mo</span><span class="o">.</span><span class="n">end</span><span class="p">()]],</span> <span class="nb">str</span><span class="p">(</span><span class="n">log</span><span class="p">))</span> <span class="p">)</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="p">)</span> 
+	<span class="k">if</span> <span class="n">tok</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;logical_file&#39;</span><span class="p">):</span>  <span class="c">#save token to destination_filename</span>
+		<span class="n">inputStr</span> <span class="o">+=</span> <span class="s">&#39;else</span><span class="se">\t</span><span class="s">{{ {0} = {1}FILE;</span><span class="se">\n\t\t</span><span class="s"> strcpy ( {0}_filename, s ); }}</span><span class="se">\n\t</span><span class="s">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tok</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;destination&#39;</span><span class="p">),</span> <span class="n">tok</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;setting&#39;</span><span class="p">))</span>
+	<span class="k">else</span><span class="p">:</span>	<span class="c">#raise error</span>
+		<span class="n">inputStr</span> <span class="o">+=</span> <span class="s">r&#39;else\t{{fprintf(stderr,&quot;Option </span><span class="si">%s</span><span class="s">  has an invalid argument {0} on line </span><span class="si">%d</span><span class="s">: </span><span class="si">%s</span><span class="se">\\</span><span class="s">n&quot;, yytext, line_number+1, s); ierror++;}} \n\t&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">itok</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+	<span class="n">inputStr</span> <span class="o">+=</span> <span class="s">&#39;free(s); </span><span class="se">\n</span><span class="s">&#39;</span>
+	<span class="k">return</span> <span class="n">inputStr</span>
+
+
+<span class="k">def</span> <span class="nf">insertInputOption</span><span class="p">(</span><span class="n">text</span><span class="p">,</span><span class="n">options</span><span class="p">):</span></div>
+<div class="viewcode-block" id="insertInputOption"><a class="viewcode-back" href="../../../mortapi/morticia.rad.html#morticia.rad.writeLex.insertInputOption">[docs]</a>	<span class="kn">import</span> <span class="nn">re</span>
+
+	<span class="c">#insert input options to lexfile</span>
+	<span class="n">groupInput</span> <span class="o">=</span> <span class="n">getLexOptions</span><span class="p">(</span><span class="n">options</span><span class="p">)</span>
+	<span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">.*PYTHON_OPTIONS.*</span><span class="se">\n</span><span class="s">&#39;</span> <span class="p">,</span> <span class="s">&#39;</span><span class="se">\n</span><span class="si">%s</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">groupInput</span><span class="p">),</span> <span class="n">text</span><span class="p">,</span> <span class="n">count</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+	<span class="k">return</span> <span class="n">text</span>
+
+<span class="k">def</span> <span class="nf">insertDocu</span><span class="p">(</span><span class="n">text</span><span class="p">,</span><span class="n">options</span><span class="p">):</span></div>
+<div class="viewcode-block" id="insertDocu"><a class="viewcode-back" href="../../../mortapi/morticia.rad.html#morticia.rad.writeLex.insertDocu">[docs]</a>	<span class="kn">import</span> <span class="nn">re</span>
+
+	<span class="c">#get new documentation</span>
+	<span class="n">docu</span><span class="o">=</span><span class="p">{}</span>
+	<span class="k">for</span> <span class="n">key</span><span class="p">,</span><span class="n">val</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">options</span><span class="o">.</span><span class="n">iteritems</span><span class="p">()):</span>                  
+		<span class="n">docu</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">=</span><span class="n">val</span><span class="p">[</span><span class="s">&#39;documentation&#39;</span><span class="p">]</span>
+	
+	<span class="c">#get whole documentation</span>
+	<span class="n">doclist</span> <span class="o">=</span> <span class="n">docu</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="o">+</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s">&#39;(?&lt;=option{)\w+&#39;</span><span class="p">,</span><span class="n">text</span><span class="p">)</span>
+	<span class="n">doclist</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span> <span class="n">key</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">member</span><span class="p">:</span> <span class="n">member</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="p">)</span>
+	
+	<span class="c">#insert documentation to lexfile</span>
+	<span class="k">for</span> <span class="n">iopt</span><span class="p">,</span> <span class="n">option</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="n">doclist</span><span class="p">)):</span>
+		<span class="n">i</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">doclist</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">iopt</span>
+		<span class="k">if</span> <span class="n">docu</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="n">option</span><span class="p">)</span> <span class="ow">and</span> <span class="n">doclist</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">option</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+			<span class="k">if</span> <span class="n">i</span><span class="o">&lt;</span><span class="nb">len</span><span class="p">(</span><span class="n">doclist</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+				<span class="k">if</span>   <span class="n">text</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\\</span><span class="s">ifthreedmystic{</span><span class="se">\n\\</span><span class="s">option{</span><span class="si">%s</span><span class="s">}&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">doclist</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]))</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span> <span class="n">n</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\\</span><span class="s">ifthreedmystic{</span><span class="se">\n\\</span><span class="s">option{</span><span class="si">%s</span><span class="s">}&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">doclist</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]))</span> 
+				<span class="k">elif</span> <span class="n">text</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\\</span><span class="s">ifmystic{</span><span class="se">\n\\</span><span class="s">option{</span><span class="si">%s</span><span class="s">}&#39;</span>	 <span class="o">%</span><span class="p">(</span><span class="n">doclist</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]))</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span> <span class="n">n</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\\</span><span class="s">ifmystic{</span><span class="se">\n\\</span><span class="s">option{</span><span class="si">%s</span><span class="s">}&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">doclist</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]))</span> 
+				<span class="k">elif</span> <span class="n">text</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\\</span><span class="s">iflidar{</span><span class="se">\n\\</span><span class="s">option{</span><span class="si">%s</span><span class="s">}&#39;</span> 	 <span class="o">%</span><span class="p">(</span><span class="n">doclist</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]))</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span> <span class="n">n</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\\</span><span class="s">iflidar{</span><span class="se">\n\\</span><span class="s">option{</span><span class="si">%s</span><span class="s">}&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">doclist</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]))</span>
+				<span class="k">elif</span> <span class="n">text</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\\</span><span class="s">undocumented{</span><span class="se">\n\\</span><span class="s">option{</span><span class="si">%s</span><span class="s">}&#39;</span> 	 <span class="o">%</span><span class="p">(</span><span class="n">doclist</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]))</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span> <span class="n">n</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\\</span><span class="s">undocumented{</span><span class="se">\n\\</span><span class="s">option{</span><span class="si">%s</span><span class="s">}&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">doclist</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]))</span> 
+				<span class="k">elif</span> <span class="n">text</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\\</span><span class="s">option{</span><span class="si">%s</span><span class="s">}&#39;</span> 			 <span class="o">%</span><span class="p">(</span><span class="n">doclist</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]))</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span> <span class="n">n</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\\</span><span class="s">option{</span><span class="si">%s</span><span class="s">}&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">doclist</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]))</span>
+				<span class="k">else</span><span class="p">:</span> <span class="n">n</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&#39;%DOCUMENTATION END&#39;</span><span class="p">)</span>
+			<span class="k">else</span><span class="p">:</span> <span class="n">n</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&#39;%DOCUMENTATION END&#39;</span><span class="p">)</span>
+
+			<span class="k">if</span> <span class="n">options</span><span class="p">[</span><span class="n">option</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;developer&#39;</span><span class="p">):</span>
+				<span class="n">text</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="se">\\</span><span class="s">undocumented{</span><span class="se">\n\\</span><span class="s">option{</span><span class="si">%s</span><span class="s">}</span><span class="si">%s</span><span class="s">}</span><span class="se">\n</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">text</span><span class="p">[:</span><span class="n">n</span><span class="p">],</span> <span class="n">option</span><span class="p">,</span> <span class="n">docu</span><span class="p">[</span><span class="n">option</span><span class="p">],</span> <span class="n">text</span><span class="p">[</span><span class="n">n</span><span class="p">:])</span>
+			<span class="k">elif</span> <span class="n">options</span><span class="p">[</span><span class="n">option</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;islidar&#39;</span><span class="p">):</span>
+				<span class="n">text</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="se">\\</span><span class="s">iflidar{</span><span class="se">\n\\</span><span class="s">option{</span><span class="si">%s</span><span class="s">}</span><span class="si">%s</span><span class="s">}</span><span class="se">\n</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">text</span><span class="p">[:</span><span class="n">n</span><span class="p">],</span> <span class="n">option</span><span class="p">,</span> <span class="n">docu</span><span class="p">[</span><span class="n">option</span><span class="p">],</span> <span class="n">text</span><span class="p">[</span><span class="n">n</span><span class="p">:])</span>
+			<span class="k">elif</span> <span class="n">options</span><span class="p">[</span><span class="n">option</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;threedmystic&#39;</span><span class="p">):</span>
+				<span class="n">text</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="se">\\</span><span class="s">ifthreedmystic{</span><span class="se">\n\\</span><span class="s">option{</span><span class="si">%s</span><span class="s">}</span><span class="si">%s</span><span class="s">}</span><span class="se">\n</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">text</span><span class="p">[:</span><span class="n">n</span><span class="p">],</span> <span class="n">option</span><span class="p">,</span> <span class="n">docu</span><span class="p">[</span><span class="n">option</span><span class="p">],</span> <span class="n">text</span><span class="p">[</span><span class="n">n</span><span class="p">:])</span>
+			<span class="k">elif</span> <span class="n">options</span><span class="p">[</span><span class="n">option</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;mystic&#39;</span><span class="p">):</span>
+				<span class="n">text</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="se">\\</span><span class="s">ifmystic{</span><span class="se">\n\\</span><span class="s">option{</span><span class="si">%s</span><span class="s">}</span><span class="si">%s</span><span class="s">}</span><span class="se">\n</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">text</span><span class="p">[:</span><span class="n">n</span><span class="p">],</span> <span class="n">option</span><span class="p">,</span> <span class="n">docu</span><span class="p">[</span><span class="n">option</span><span class="p">],</span> <span class="n">text</span><span class="p">[</span><span class="n">n</span><span class="p">:])</span>
+			<span class="k">else</span><span class="p">:</span>
+				<span class="n">text</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="se">\\</span><span class="s">option{</span><span class="si">%s</span><span class="s">}</span><span class="si">%s</span><span class="se">\n</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">text</span><span class="p">[:</span><span class="n">n</span><span class="p">],</span> <span class="n">option</span><span class="p">,</span> <span class="n">docu</span><span class="p">[</span><span class="n">option</span><span class="p">],</span> <span class="n">text</span><span class="p">[</span><span class="n">n</span><span class="p">:])</span>
+
+	<span class="k">return</span> <span class="n">text</span>
+
+<span class="k">def</span> <span class="nf">insertInitialisations</span><span class="p">(</span><span class="n">text</span><span class="p">,</span><span class="n">options</span><span class="p">):</span></div>
+<div class="viewcode-block" id="insertInitialisations"><a class="viewcode-back" href="../../../mortapi/morticia.rad.html#morticia.rad.writeLex.insertInitialisations">[docs]</a>	<span class="kn">import</span> <span class="nn">re</span>
+
+	<span class="c">#get sorted initialisations</span>
+	<span class="n">inits</span> <span class="o">=</span> <span class="p">{}</span>
+	<span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">options</span><span class="o">.</span><span class="n">itervalues</span><span class="p">():</span>
+		<span class="c">#get default initialisation of tokens</span>
+		<span class="k">for</span> <span class="n">initialize</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&#39;tokens&#39;</span><span class="p">,</span> <span class="s">&#39;settings&#39;</span><span class="p">]:</span>
+			<span class="k">if</span> <span class="n">val</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">initialize</span><span class="p">):</span>
+				<span class="k">for</span> <span class="n">tok</span> <span class="ow">in</span> <span class="n">val</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">initialize</span><span class="p">):</span>
+					<span class="k">if</span> <span class="n">tok</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;default&#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="bp">None</span><span class="p">:</span> 
+						<span class="k">if</span> <span class="n">inits</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="n">tok</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;name&#39;</span><span class="p">))</span> <span class="ow">and</span> <span class="n">inits</span><span class="p">[</span><span class="n">tok</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;name&#39;</span><span class="p">)]</span> <span class="o">!=</span> <span class="n">tok</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;default&#39;</span><span class="p">):</span> 
+
+							<span class="k">print</span> <span class="s">&#39;ERROR: </span><span class="se">\n</span><span class="s">variable </span><span class="si">%s</span><span class="s"> has different initialisations: </span><span class="si">%s</span><span class="s"> and </span><span class="si">%s</span><span class="se">\n</span><span class="s"> Please check your option definitions again.</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span><span class="p">(</span>
+								<span class="n">tok</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;name&#39;</span><span class="p">),</span> <span class="n">getStr</span><span class="p">(</span><span class="n">inits</span><span class="p">[</span><span class="n">tok</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;name&#39;</span><span class="p">)]),</span> <span class="n">getStr</span><span class="p">(</span><span class="n">tok</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;default&#39;</span><span class="p">))</span> <span class="p">)</span>
+						<span class="k">else</span><span class="p">:</span> <span class="n">inits</span><span class="p">[</span><span class="n">tok</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;name&#39;</span><span class="p">)]</span> <span class="o">=</span> <span class="n">tok</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;default&#39;</span><span class="p">)</span>
+	
+	<span class="n">initialisation</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+	<span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">inits</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+		<span class="n">initialisation</span> <span class="o">+=</span> <span class="s">&#39;  </span><span class="si">%s</span><span class="s"> = </span><span class="si">%s</span><span class="s">;</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">key</span><span class="p">,</span><span class="n">getStr</span><span class="p">(</span><span class="n">inits</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">))</span> <span class="p">)</span>
+	<span class="n">text</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">.*PYTHON INITIALISATIONS.*</span><span class="se">\n</span><span class="s">&#39;</span> <span class="p">,</span> <span class="s">&#39;</span><span class="se">\n</span><span class="si">%s</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">initialisation</span><span class="p">),</span> <span class="n">text</span><span class="p">,</span> <span class="n">count</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+	<span class="k">return</span> <span class="n">text</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span></div>
+	<span class="n">writeLex</span><span class="p">()</span>
+</pre></div>
+
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, D Griffith, A Ramkilowan.
+    </p>
+  </div>
+
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

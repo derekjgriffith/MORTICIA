@@ -1,0 +1,336 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>morticia.rad.profile_options &mdash; MORTICIA 1.0 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Roboto+Slab:400,700|Inconsolata:400,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="MORTICIA 1.0 documentation" href="../../../index.html"/>
+        <link rel="up" title="morticia" href="../../morticia.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+          <a href="../../../index.html" class="fa fa-home"> MORTICIA</a>
+        
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../how_to_use.html">How to use MORTICIA</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../how_to_use.html#morticia-dependencies">MORTICIA Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../how_to_use.html#installation-and-requirements">Installation and Requirements</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../styleguide.html">The MORTICIA Style Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#to-pep-8-or-not-to-pep-8">To PEP-8 or not to PEP-8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#code-layout">Code Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#import-statements">Import Statements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#whitespace">Whitespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#comments">Comments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#documentation-strings-docstrings">Documentation Strings (docstrings)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#naming-conventions">Naming Conventions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#pep-257">PEP-257</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#from-conventions-section"><em>From</em> Conventions Section</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#general-terminology-and-conventions">General Terminology and Conventions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../for_developers.html">For the Developers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../for_developers.html#structure">Structure</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../packages.html">Packages</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../packages.html#sensor-package">Sensor Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../packages.html#radiometry-package">Radiometry Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../packages.html#scene-package">Scene Package</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ChapLibRadtranODandPathRadiance.html">Transmittance and Path Radiance in libRadtran</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../01a-SpectralChannelsAndFilters.html">IPython Notebook and Sphinx</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../01a-SpectralChannelsAndFilters.html#a-spectralchannelsandfilters-ipython-notebook">01a-SpectralChannelsAndFilters IPython Notebook</a></li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../../index.html">MORTICIA</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      
+          <li><a href="../../morticia.html">morticia</a> &raquo;</li>
+      
+    <li>morticia.rad.profile_options</li>
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <h1>Source code for morticia.rad.profile_options</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;--------------------------------------------------------------------</span>
+<span class="sd"> * $Id: profile_options.py 3023 2014-04-29 13:58:13Z Claudia.Emde $</span>
+<span class="sd"> * </span>
+<span class="sd"> * This file is part of libRadtran.</span>
+<span class="sd"> * Copyright (c) 1997-2012 by Arve Kylling, Bernhard Mayer,</span>
+<span class="sd"> *                            Claudia Emde, Robert Buras</span>
+<span class="sd"> *</span>
+<span class="sd"> * ######### Contact info: http://www.libradtran.org #########</span>
+<span class="sd"> *</span>
+<span class="sd"> * This program is free software; you can redistribute it and/or </span>
+<span class="sd"> * modify it under the terms of the GNU General Public License   </span>
+<span class="sd"> * as published by the Free Software Foundation; either version 2</span>
+<span class="sd"> * of the License, or (at your option) any later version.        </span>
+<span class="sd"> * </span>
+<span class="sd"> * This program is distributed in the hope that it will be useful, </span>
+<span class="sd"> * but WITHOUT ANY WARRANTY; without even the implied warranty of  </span>
+<span class="sd"> * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the   </span>
+<span class="sd"> * GNU General Public License for more details.                    </span>
+<span class="sd"> * </span>
+<span class="sd"> * You should have received a copy of the GNU General Public License          </span>
+<span class="sd"> * along with this program; if not, write to the Free Software                </span>
+<span class="sd"> * Foundation, Inc., 59 Temple Place - Suite 330, </span>
+<span class="sd"> * Boston, MA 02111-1307, USA.</span>
+<span class="sd"> *--------------------------------------------------------------------&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">option_definition</span> <span class="kn">import</span> <span class="o">*</span>
+
+<div class="viewcode-block" id="setup_cloud_group"><a class="viewcode-back" href="../../../mortapi/morticia.rad.html#morticia.rad.profile_options.setup_cloud_group">[docs]</a><span class="k">class</span> <span class="nc">setup_cloud_group</span><span class="p">():</span>
+
+	<span class="n">group_name</span> <span class="o">=</span> <span class="s">&#39;Profile&#39;</span>
+
+<div class="viewcode-block" id="setup_cloud_group.__init__"><a class="viewcode-back" href="../../../mortapi/morticia.rad.html#morticia.rad.profile_options.setup_cloud_group.__init__">[docs]</a>	<span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="n">documentation</span> <span class="o">=</span> <span class="n">get_profile_documentation</span><span class="p">()</span>
+
+		<span class="n">profile_file</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span> 	<span class="c">#TODO: option 3D only ifthreedmystic</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;profile_file&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;profile&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Location of file defining profile properties.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;profile_file&#39;</span><span class="p">],</span>
+			<span class="n">gui_inputs</span><span class="o">=</span><span class="p">(</span><span class="n">TextInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;name&#39;</span><span class="p">),</span><span class="n">ListInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;source&#39;</span><span class="p">,</span> <span class="n">valid_range</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;1D&#39;</span><span class="p">,</span> <span class="s">&#39;3D&#39;</span><span class="p">,</span> <span class="s">&#39;moments&#39;</span><span class="p">,</span> <span class="s">&#39;ipa&#39;</span><span class="p">,</span> <span class="s">&#39;ipa_files&#39;</span><span class="p">],</span> <span class="n">optional</span><span class="o">=</span><span class="bp">False</span><span class="p">),</span> <span class="n">FileInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.caoth[isp].filename&#39;</span><span class="p">),),</span>
+			<span class="n">tokens</span> <span class="o">=</span> <span class="p">[</span> <span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;isp&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="n">CaothType</span><span class="p">),</span> 
+				<span class="n">addLogical</span><span class="p">(</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.caoth[isp].source&#39;</span><span class="p">,</span> <span class="n">logicals</span><span class="o">=</span><span class="n">ProfileType</span><span class="p">()</span><span class="o">.</span><span class="n">get_valid_range</span><span class="p">(),</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;CAOTH_FROM_&#39;</span><span class="p">),</span> 
+				<span class="n">addToken</span><span class="p">(</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.caoth[isp].filename&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">file</span> <span class="p">)</span> <span class="p">],</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+			<span class="n">childs</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;profile_properties&#39;</span><span class="p">,</span><span class="s">&#39;profile_modify&#39;</span><span class="p">,</span><span class="s">&#39;interpret_as_level&#39;</span><span class="p">],</span>
+			<span class="n">plot</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;plot_type&#39;</span><span class="p">:</span> <span class="s">&#39;2D&#39;</span><span class="p">,</span>
+				<span class="s">&#39;optional_args&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;column_names&#39;</span><span class="p">:</span> <span class="p">(</span>
+						<span class="s">&quot;altitude&quot;</span><span class="p">,</span>
+						<span class="s">&quot;liquid water content&quot;</span><span class="p">,</span>
+						<span class="s">&quot;effective radius&quot;</span><span class="p">,)</span>
+						  <span class="p">}</span>
+				<span class="p">},</span>
+			<span class="n">non_unique</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+			<span class="p">)</span>
+
+		<span class="n">profile_properties</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;profile_properties&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;profile&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Define profile optical properties. &#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;profile_properties&#39;</span><span class="p">],</span>
+<span class="c">#			gui_inputs=(ListInput(name=&#39;Input.caoth[isp].properties&#39;, valid_range=[&#39;hu&#39;, &#39;echam4&#39;, &#39;mie&#39;, &#39;fu&#39;, &#39;yang&#39;, &#39;key&#39;, &#39;baum_hufit&#39;, &#39;baum&#39;, &#39;hey&#39;, &#39;ic_mie&#39;], optional=False), ListInput(name=&#39;Input.caoth[isp].interpolate&#39;, valid_range=[&#39;&#39;,&#39;interpolate&#39;], optional=True),),</span>
+			<span class="n">tokens</span> <span class="o">=</span> <span class="p">[</span> <span class="n">addToken</span><span class="p">(</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;isp&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="n">CaothType</span> <span class="p">),</span>
+				<span class="n">addLogical</span><span class="p">(</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.caoth[isp].properties&#39;</span><span class="p">,</span> <span class="n">logicals</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;hu&#39;</span><span class="p">,</span> <span class="s">&#39;echam4&#39;</span><span class="p">,</span> <span class="s">&#39;mie&#39;</span><span class="p">,</span> <span class="s">&#39;fu&#39;</span><span class="p">,</span> <span class="s">&#39;yang&#39;</span><span class="p">,</span> <span class="s">&#39;key&#39;</span><span class="p">,</span> <span class="s">&#39;baum_v36&#39;</span><span class="p">,</span> <span class="s">&#39;baum&#39;</span><span class="p">,</span> <span class="s">&#39;hey&#39;</span><span class="p">,</span> <span class="nb">file</span><span class="p">],</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;PROP_&#39;</span> <span class="p">),</span>
+				<span class="n">addLogical</span><span class="p">(</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.caoth[isp].interpolate&#39;</span> <span class="p">,</span> <span class="n">logicals</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;interpolate&#39;</span><span class="p">],</span> <span class="n">optional</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> <span class="p">],</span>	<span class="c">#TODO: BUTTON in GUI, not str!</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;profile_file&#39;</span><span class="p">],</span>
+			<span class="n">non_unique</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+			<span class="p">)</span>
+
+		<span class="n">profile_modify</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>	<span class="c">#TODO: valid_ranges for GUI!!</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;profile_modify&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;profile&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Modify profile properties.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;profile_modify&#39;</span><span class="p">],</span>
+<span class="c">#			gui_inputs=(ListInput(name=&#39;id1&#39;, valid_range=[&#39;gg&#39;, &#39;ssa&#39;, &#39;tau&#39;, &#39;tau550&#39;], optional=False), ListInput(name=&#39;id2&#39;, valid_range=[&#39;set&#39;, &#39;scale&#39;], optional=False), FloatInput(name=&#39;Input.caoth[isp].modify[id1][id2]&#39;),),</span>
+			<span class="n">tokens</span> <span class="o">=</span> <span class="p">[</span> <span class="n">addToken</span><span class="p">(</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;isp&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="n">CaothType</span> <span class="p">),</span>
+				<span class="n">addLogical</span><span class="p">(</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;id1&#39;</span><span class="p">,</span> <span class="n">logicals</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;gg&#39;</span><span class="p">,</span><span class="s">&#39;ssa&#39;</span><span class="p">,</span> <span class="s">&#39;tau&#39;</span><span class="p">,</span> <span class="s">&#39;tau550&#39;</span><span class="p">],</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;MODIFY_VAR_&#39;</span> <span class="p">),</span>
+				<span class="n">addLogical</span><span class="p">(</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;id2&#39;</span><span class="p">,</span> <span class="n">logicals</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;set&#39;</span><span class="p">,</span> <span class="s">&#39;scale&#39;</span> <span class="p">],</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;MODIFY_TYPE_&#39;</span> <span class="p">),</span>
+				<span class="n">addToken</span><span class="p">(</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.caoth[isp].modify[id1][id2]&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">float</span> <span class="p">)</span> <span class="p">],</span> 
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;profile_file&#39;</span><span class="p">],</span>
+			<span class="n">non_unique</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+		<span class="p">)</span>
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">options</span> <span class="o">=</span> <span class="p">[</span><span class="n">profile_file</span><span class="p">,</span> <span class="n">profile_properties</span><span class="p">,</span> <span class="n">profile_modify</span><span class="p">]</span>
+		</div>
+	<span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="get_profile_documentation"><a class="viewcode-back" href="../../../mortapi/morticia.rad.html#morticia.rad.profile_options.get_profile_documentation">[docs]</a><span class="k">def</span> <span class="nf">get_profile_documentation</span><span class="p">():</span>
+	<span class="k">return</span> <span class="p">{</span>
+		<span class="s">&#39;profile_file&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Define file containing properties of clouds, aerosols, hydrometeors, etc. </span>
+<span class="s">	This option is a generalization of the options \code{wc\_file} and \code{ic\_file}.</span>
+<span class="s">	</span>
+<span class="s">	Usage:</span>
+<span class="s">	\fcode{</span>
+<span class="s">	profile\_file typename type file</span>
+<span class="s">	}</span>
+<span class="s">	</span>
+<span class="s">	\code{typename} describes the name of the profile; typically this </span>
+<span class="s">	describes what kind of particles are dealt with here. Examples</span>
+<span class="s">	are \code{wc} (water clouds), \code{ic} (ice clouds), \code{aer} (aerosols), drizzle. </span>
+<span class="s">	The \code{typename} is needed to refer to this profile when using other options, </span>
+<span class="s">	such as \code{profile\_properties}. Note that \code{typename} &quot;wc&quot; and &quot;ic&quot;</span>
+<span class="s">	have special effects (i.e.~default properties, and &quot;ic&quot; properties are</span>
+<span class="s">	not allowed with &quot;wc&quot; files, and vice versa).</span>
+<span class="s">	</span>
+<span class="s">	\code{type} defines the file type, which is identical to \code{wc\_file type}.</span>
+<span class="s">	Please refer to \code{wc\_file} for choises of \code{type} and a detailed description </span>
+<span class="s">	on the file structures.	</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;profile_properties&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Define how liquid/ice water content/mass concentration and effective</span>
+<span class="s">	particle radius are translated to optical properties for profile</span>
+<span class="s">	\code{typename}. This option is a generalization of the options</span>
+<span class="s">	\code{wc\_properties} and \code{ic\_properties}.</span>
+<span class="s">	</span>
+<span class="s">	Usage:</span>
+<span class="s">	\fcode{</span>
+<span class="s">	profile\_properties typename property [interpolate]</span>
+<span class="s">	}</span>
+<span class="s">	</span>
+<span class="s">	\code{typename} describes the name of the profile; it must be identical</span>
+<span class="s">	to the one defined in \code{profile\_file}.</span>
+<span class="s">	</span>
+<span class="s">	Please refer to \code{wc\_properties} and \code{ic\_properties} for possible choices for \code{property}.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+		<span class="s">&#39;profile_modify&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Modify profile optical properties.</span>
+<span class="s">	\fcode{</span>
+<span class="s">	profile typename variable scale/set value</span>
+<span class="s">	}</span>
+<span class="s">	\code{typename} describes the name of the profile; it must be identical</span>
+<span class="s">	to the one defined in \code{profile\_file}.</span>
+
+<span class="s">	This option is identical to \code{wc\_modify}.</span>
+<span class="s">	Please refer to \code{wc\_modify} for a detailed description of \code{variable}.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>	
+	<span class="p">}</span>
+</pre></div></div>
+
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, D Griffith, A Ramkilowan.
+    </p>
+  </div>
+
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

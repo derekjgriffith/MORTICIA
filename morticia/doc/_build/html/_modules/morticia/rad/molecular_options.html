@@ -1,0 +1,888 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>morticia.rad.molecular_options &mdash; MORTICIA 1.0 documentation</title>
+  
+
+  
+  
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Roboto+Slab:400,700|Inconsolata:400,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="MORTICIA 1.0 documentation" href="../../../index.html"/>
+        <link rel="up" title="morticia" href="../../morticia.html"/> 
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+          <a href="../../../index.html" class="fa fa-home"> MORTICIA</a>
+        
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../how_to_use.html">How to use MORTICIA</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../how_to_use.html#morticia-dependencies">MORTICIA Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../how_to_use.html#installation-and-requirements">Installation and Requirements</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../styleguide.html">The MORTICIA Style Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#to-pep-8-or-not-to-pep-8">To PEP-8 or not to PEP-8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#code-layout">Code Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#import-statements">Import Statements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#whitespace">Whitespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#comments">Comments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#documentation-strings-docstrings">Documentation Strings (docstrings)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#naming-conventions">Naming Conventions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#pep-257">PEP-257</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#from-conventions-section"><em>From</em> Conventions Section</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../styleguide.html#general-terminology-and-conventions">General Terminology and Conventions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../for_developers.html">For the Developers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../for_developers.html#structure">Structure</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../packages.html">Packages</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../packages.html#sensor-package">Sensor Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../packages.html#radiometry-package">Radiometry Package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../packages.html#scene-package">Scene Package</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ChapLibRadtranODandPathRadiance.html">Transmittance and Path Radiance in libRadtran</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../01a-SpectralChannelsAndFilters.html">IPython Notebook and Sphinx</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../01a-SpectralChannelsAndFilters.html#a-spectralchannelsandfilters-ipython-notebook">01a-SpectralChannelsAndFilters IPython Notebook</a></li>
+</ul>
+</li>
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../../index.html">MORTICIA</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      
+          <li><a href="../../morticia.html">morticia</a> &raquo;</li>
+      
+    <li>morticia.rad.molecular_options</li>
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <h1>Source code for morticia.rad.molecular_options</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;--------------------------------------------------------------------</span>
+<span class="sd"> * $Id: molecular_options.py 3145 2015-08-04 13:35:30Z josef.gasteiger $</span>
+<span class="sd"> * </span>
+<span class="sd"> * This file is part of libRadtran.</span>
+<span class="sd"> * Copyright (c) 1997-2012 by Arve Kylling, Bernhard Mayer,</span>
+<span class="sd"> *                            Claudia Emde, Robert Buras</span>
+<span class="sd"> *</span>
+<span class="sd"> * ######### Contact info: http://www.libradtran.org #########</span>
+<span class="sd"> *</span>
+<span class="sd"> * This program is free software; you can redistribute it and/or </span>
+<span class="sd"> * modify it under the terms of the GNU General Public License   </span>
+<span class="sd"> * as published by the Free Software Foundation; either version 2</span>
+<span class="sd"> * of the License, or (at your option) any later version.        </span>
+<span class="sd"> * </span>
+<span class="sd"> * This program is distributed in the hope that it will be useful, </span>
+<span class="sd"> * but WITHOUT ANY WARRANTY; without even the implied warranty of  </span>
+<span class="sd"> * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the   </span>
+<span class="sd"> * GNU General Public License for more details.                    </span>
+<span class="sd"> * </span>
+<span class="sd"> * You should have received a copy of the GNU General Public License          </span>
+<span class="sd"> * along with this program; if not, write to the Free Software                </span>
+<span class="sd"> * Foundation, Inc., 59 Temple Place - Suite 330, </span>
+<span class="sd"> * Boston, MA 02111-1307, USA.</span>
+<span class="sd"> *--------------------------------------------------------------------&quot;&quot;&quot;</span>
+
+
+<span class="kn">from</span> <span class="nn">option_definition</span> <span class="kn">import</span> <span class="o">*</span>
+
+<div class="viewcode-block" id="setup_molecular_group"><a class="viewcode-back" href="../../../mortapi/morticia.rad.html#morticia.rad.molecular_options.setup_molecular_group">[docs]</a><span class="k">class</span> <span class="nc">setup_molecular_group</span><span class="p">():</span>
+
+	<span class="n">group_name</span> <span class="o">=</span> <span class="s">&#39;Molecular atmosphere&#39;</span>
+
+<div class="viewcode-block" id="setup_molecular_group.__init__"><a class="viewcode-back" href="../../../mortapi/morticia.rad.html#morticia.rad.molecular_options.setup_molecular_group.__init__">[docs]</a>	<span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="n">documentation</span> <span class="o">=</span> <span class="n">get_molecular_documentation</span><span class="p">()</span>
+
+		<span class="n">atmosphere_file</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;atmosphere_file&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;atmosphere&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Location of the atmosphere data file.&#39;</span><span class="p">,</span> 
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;atmosphere_file&#39;</span><span class="p">],</span> 
+			<span class="n">tokens</span><span class="o">=</span> <span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.atmosphere_filename&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">valid_range</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;subarctic_winter&#39;</span><span class="p">,</span> <span class="s">&#39;subarctic_summer&#39;</span><span class="p">,</span> <span class="s">&#39;midlatitude_summer&#39;</span><span class="p">,</span> <span class="s">&#39;midlatitude_winter&#39;</span><span class="p">,</span> <span class="s">&#39;tropics&#39;</span><span class="p">,</span> <span class="s">&#39;US-standard&#39;</span><span class="p">,</span> <span class="nb">file</span><span class="p">]),</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span> 
+			<span class="n">plot</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;plot_type&#39;</span><span class="p">:</span> <span class="s">&#39;2D&#39;</span><span class="p">,</span>
+				<span class="s">&#39;optional_args&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s">&#39;column_names&#39;</span><span class="p">:</span> <span class="p">(</span>
+						<span class="s">&quot;altitude&quot;</span><span class="p">,</span>
+						<span class="s">&quot;pressure&quot;</span><span class="p">,</span>
+						<span class="s">&quot;temperature&quot;</span><span class="p">,</span>
+						<span class="s">&quot;air&quot;</span><span class="p">,</span>
+						<span class="s">&quot;ozone&quot;</span><span class="p">,</span>
+						<span class="s">&quot;oxygen&quot;</span><span class="p">,</span>
+						<span class="s">&quot;water vapour&quot;</span><span class="p">,</span>
+						<span class="s">&quot;CO2&quot;</span><span class="p">,</span>
+						<span class="s">&quot;NO2&quot;</span><span class="p">,)</span>
+						  <span class="p">}</span>
+				<span class="p">},</span>
+			<span class="n">mandatory</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+		<span class="p">)</span>
+
+		<span class="n">radiosonde</span> <span class="o">=</span> <span class="n">not_yet_lex2py_option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;radiosonde&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;atmosphere&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Specify density profiles.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;radiosonde&#39;</span><span class="p">],</span>
+			<span class="n">gui_inputs</span><span class="o">=</span><span class="p">(</span><span class="n">TextInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">),),</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+		<span class="p">)</span>
+
+		<span class="n">radiosonde_levels_only</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;radiosonde_levels_only&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;atmosphere&#39;</span><span class="p">,</span> 
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span> 
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;radiosonde_levels_only&#39;</span><span class="p">],</span> 
+			<span class="n">tokens</span><span class="o">=</span><span class="n">addSetting</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.atm.rs_add_upper_levels&#39;</span><span class="p">,</span><span class="n">setting</span><span class="o">=</span><span class="s">&#39;FALSE&#39;</span><span class="p">),</span> 
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+		<span class="p">)</span>
+
+		<span class="n">mol_file</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;mol_file&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;molecular&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;mol_file&#39;</span><span class="p">],</span>
+			<span class="n">gui_inputs</span><span class="o">=</span><span class="p">(</span><span class="n">ListInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;mol_id&#39;</span><span class="p">,</span>
+					      <span class="n">valid_range</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;O3&#39;</span><span class="p">,</span> <span class="s">&#39;O2&#39;</span><span class="p">,</span> <span class="s">&#39;H2O&#39;</span><span class="p">,</span>
+							   <span class="s">&#39;CO2&#39;</span><span class="p">,</span> <span class="s">&#39;NO2&#39;</span><span class="p">,</span> <span class="s">&#39;BRO&#39;</span><span class="p">,</span>
+							   <span class="s">&#39;OCLO&#39;</span><span class="p">,</span> <span class="s">&#39;HCHO&#39;</span><span class="p">,</span> <span class="s">&#39;O4&#39;</span><span class="p">,</span>
+							   <span class="s">&#39;SO2&#39;</span><span class="p">,</span> <span class="s">&#39;CH4&#39;</span><span class="p">,</span> <span class="s">&#39;N2O&#39;</span><span class="p">,</span>
+							   <span class="s">&#39;CO&#39;</span><span class="p">,</span> <span class="s">&#39;N2&#39;</span><span class="p">],</span>
+					      <span class="n">optional</span><span class="o">=</span><span class="bp">False</span><span class="p">),</span>
+				    <span class="n">FileInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.atm.filename[mol_id]&#39;</span><span class="p">),</span>
+				    <span class="n">ListInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.atm.unit_profile[mol_id]&#39;</span><span class="p">,</span> <span class="n">valid_range</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;&#39;</span><span class="p">,</span><span class="s">&#39;cm_3&#39;</span><span class="p">,</span> <span class="s">&#39;m_3&#39;</span><span class="p">,</span> <span class="s">&#39;MMR&#39;</span><span class="p">,</span> <span class="s">&#39;VMR&#39;</span><span class="p">,</span> <span class="s">&#39;RH&#39;</span><span class="p">],</span> <span class="n">optional</span><span class="o">=</span><span class="bp">True</span><span class="p">),),</span>
+			<span class="n">tokens</span> <span class="o">=</span> <span class="p">[</span> <span class="n">addLogical</span><span class="p">(</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;mol_id&#39;</span><span class="p">,</span> <span class="n">logicals</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;O3&#39;</span><span class="p">,</span> <span class="s">&#39;O2&#39;</span><span class="p">,</span> <span class="s">&#39;H2O&#39;</span><span class="p">,</span> <span class="s">&#39;CO2&#39;</span><span class="p">,</span> <span class="s">&#39;NO2&#39;</span><span class="p">,</span> <span class="s">&#39;BRO&#39;</span><span class="p">,</span> <span class="s">&#39;OCLO&#39;</span><span class="p">,</span> <span class="s">&#39;HCHO&#39;</span><span class="p">,</span> <span class="s">&#39;O4&#39;</span><span class="p">,</span> <span class="s">&#39;SO2&#39;</span><span class="p">,</span> <span class="s">&#39;CH4&#39;</span><span class="p">,</span> <span class="s">&#39;N2O&#39;</span><span class="p">,</span> <span class="s">&#39;CO&#39;</span><span class="p">,</span> <span class="s">&#39;N2&#39;</span><span class="p">],</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;MOL_&#39;</span> <span class="p">)</span> <span class="p">,</span>
+				<span class="n">addToken</span><span class="p">(</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.atm.filename[mol_id]&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">file</span> <span class="p">),</span>
+				<span class="n">addLogical</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.atm.unit_profile[mol_id]&#39;</span><span class="p">,</span> <span class="n">logicals</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;cm_3&#39;</span><span class="p">,</span> <span class="s">&#39;m_3&#39;</span><span class="p">,</span> <span class="s">&#39;MMR&#39;</span><span class="p">,</span> <span class="s">&#39;VMR&#39;</span><span class="p">,</span> <span class="s">&#39;RH&#39;</span><span class="p">],</span> <span class="n">optional</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> <span class="p">],</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+			<span class="n">non_unique</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+		<span class="p">)</span>
+
+		<span class="n">pressure</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;pressure&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;atmosphere&#39;</span><span class="p">,</span> 
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Surface pressure&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;pressure&#39;</span><span class="p">],</span> 
+			<span class="n">gui_inputs</span><span class="o">=</span><span class="p">(</span><span class="n">FloatInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.pressure&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s">&#39;NOT_DEFINED_FLOAT&#39;</span><span class="p">,</span> <span class="n">valid_range</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1000000.0</span><span class="p">]),),</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.pressure&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s">&#39;NOT_DEFINED_FLOAT&#39;</span><span class="p">,</span> <span class="n">valid_range</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mf">1e6</span><span class="p">]),</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+		<span class="p">)</span>
+
+		<span class="n">refractive_index_file</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;refractive_index_file&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;atmosphere&#39;</span><span class="p">,</span> 
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span> 
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;refractive_index_file&#39;</span><span class="p">],</span> 
+			<span class="n">gui_inputs</span><span class="o">=</span><span class="p">(</span><span class="n">TextInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.filename[FN_REFIND]&#39;</span><span class="p">),),</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.filename[FN_REFIND]&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">str</span><span class="p">),</span> 
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+		<span class="p">)</span>
+
+		<span class="n">crs_model</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;crs_model&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;molecular&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Specify cross section.&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;crs_model&#39;</span><span class="p">],</span>
+			<span class="n">gui_inputs</span><span class="o">=</span><span class="p">(</span><span class="n">ListInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;mol_id&#39;</span><span class="p">,</span> <span class="n">valid_range</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;no2&#39;</span><span class="p">,</span> <span class="s">&#39;o3&#39;</span><span class="p">,</span> <span class="s">&#39;rayleigh&#39;</span><span class="p">],</span> <span class="n">optional</span><span class="o">=</span><span class="bp">False</span><span class="p">),</span> <span class="n">ListInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;crs_model&#39;</span><span class="p">,</span> <span class="n">valid_range</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;Bass_and_Paur&#39;</span><span class="p">,</span> <span class="s">&#39;Molina&#39;</span><span class="p">,</span> <span class="s">&#39;Daumont&#39;</span><span class="p">,</span> <span class="s">&#39;Bogumil&#39;</span><span class="p">,</span> <span class="s">&#39;Bodhaine&#39;</span><span class="p">,</span> <span class="s">&#39;Bodhaine29&#39;</span><span class="p">,</span> <span class="s">&#39;Nicolet&#39;</span><span class="p">,</span> <span class="s">&#39;Penndorf&#39;</span><span class="p">,</span> <span class="s">&#39;Burrows&#39;</span><span class="p">],</span> <span class="n">optional</span><span class="o">=</span><span class="bp">False</span><span class="p">),),</span>
+			<span class="n">tokens</span><span class="o">=</span> <span class="p">[</span> <span class="n">addLogical</span><span class="p">(</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;mol_id&#39;</span><span class="p">,</span> <span class="n">logicals</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;no2&#39;</span><span class="p">,</span> <span class="s">&#39;o3&#39;</span><span class="p">,</span> <span class="s">&#39;rayleigh&#39;</span><span class="p">],</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;CRS_MOL_&#39;</span> <span class="p">),</span>
+				<span class="n">addLogical</span><span class="p">(</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.crs_model[mol_id]&#39;</span><span class="p">,</span>  <span class="n">logicals</span><span class="o">=</span><span class="p">[</span> <span class="s">&#39;Bodhaine&#39;</span><span class="p">,</span> <span class="s">&#39;Nicolet&#39;</span><span class="p">,</span> <span class="s">&#39;Penndorf&#39;</span><span class="p">,</span> <span class="s">&#39;Bodhaine29&#39;</span><span class="p">,</span> <span class="s">&#39;Bass_and_Paur&#39;</span><span class="p">,</span> <span class="s">&#39;Molina&#39;</span><span class="p">,</span> <span class="s">&#39;Daumont&#39;</span><span class="p">,</span> <span class="s">&#39;Bogumil&#39;</span><span class="p">,</span> <span class="s">&#39;Burrows&#39;</span><span class="p">],</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;CRS_MODEL_&#39;</span><span class="p">)</span> <span class="p">],</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+			<span class="n">non_unique</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+		<span class="p">)</span>
+
+		<span class="n">crs_file</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;crs_file&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;molecular&#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;crs_file&#39;</span><span class="p">],</span>
+			<span class="n">gui_inputs</span><span class="o">=</span><span class="p">(</span><span class="n">ListInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;mol_id&#39;</span><span class="p">,</span> <span class="n">valid_range</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;O3&#39;</span><span class="p">,</span> <span class="s">&#39;O2&#39;</span><span class="p">,</span> <span class="s">&#39;H2O&#39;</span><span class="p">,</span> <span class="s">&#39;CO2&#39;</span><span class="p">,</span> <span class="s">&#39;NO2&#39;</span><span class="p">,</span> <span class="s">&#39;BRO&#39;</span><span class="p">,</span> <span class="s">&#39;OCLO&#39;</span><span class="p">,</span> <span class="s">&#39;HCHO&#39;</span><span class="p">,</span> <span class="s">&#39;O4&#39;</span><span class="p">,</span> <span class="s">&#39;SO2&#39;</span><span class="p">,</span> <span class="s">&#39;CH4&#39;</span><span class="p">,</span> <span class="s">&#39;N2O&#39;</span><span class="p">,</span> <span class="s">&#39;CO&#39;</span><span class="p">,</span> <span class="s">&#39;N2&#39;</span><span class="p">],</span> <span class="n">optional</span><span class="o">=</span><span class="bp">False</span><span class="p">),</span> <span class="n">FileInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Output.crs.filename[mol_id]&#39;</span><span class="p">),),</span>
+			<span class="n">tokens</span> <span class="o">=</span> <span class="p">[</span> <span class="n">addLogical</span><span class="p">(</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;mol_id&#39;</span><span class="p">,</span> <span class="n">logicals</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;O3&#39;</span><span class="p">,</span> <span class="s">&#39;O2&#39;</span><span class="p">,</span> <span class="s">&#39;H2O&#39;</span><span class="p">,</span> <span class="s">&#39;CO2&#39;</span><span class="p">,</span> <span class="s">&#39;NO2&#39;</span><span class="p">,</span> <span class="s">&#39;BRO&#39;</span><span class="p">,</span> <span class="s">&#39;OCLO&#39;</span><span class="p">,</span> <span class="s">&#39;HCHO&#39;</span><span class="p">,</span> <span class="s">&#39;O4&#39;</span><span class="p">,</span> <span class="s">&#39;SO2&#39;</span><span class="p">,</span> <span class="s">&#39;CH4&#39;</span><span class="p">,</span> <span class="s">&#39;N2O&#39;</span><span class="p">,</span> <span class="s">&#39;CO&#39;</span><span class="p">,</span> <span class="s">&#39;N2&#39;</span><span class="p">],</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;MOL_&#39;</span> <span class="p">)</span> <span class="p">,</span>
+				<span class="n">addToken</span><span class="p">(</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;Output.crs.filename[mol_id]&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">file</span> <span class="p">)</span> <span class="p">],</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+			<span class="n">non_unique</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+		<span class="p">)</span>
+
+		<span class="n">rayleigh_depol</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;rayleigh_depol&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;atmosphere&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Rayleigh depolarization factor.&#39;</span><span class="p">,</span> 
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;rayleigh_depol&#39;</span><span class="p">],</span> 
+			<span class="n">gui_inputs</span><span class="o">=</span><span class="p">(</span><span class="n">FloatInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rayleigh_depol&#39;</span><span class="p">),),</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.rayleigh_depol&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s">&#39;NOT_DEFINED_FLOAT&#39;</span><span class="p">),</span> 
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+		<span class="p">)</span>
+
+		<span class="n">mol_abs_param</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;mol_abs_param&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;spectral&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Set correlated_k scheme. &#39;</span><span class="p">,</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;mol_abs_param&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span> <span class="o">=</span> <span class="p">[</span> <span class="n">addLogical</span><span class="p">(</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.ck_scheme&#39;</span><span class="p">,</span> <span class="n">logicals</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;kato&#39;</span><span class="p">,</span> <span class="s">&#39;kato2&#39;</span><span class="p">,</span> <span class="s">&#39;kato2.96&#39;</span><span class="p">,</span><span class="s">&#39;fu&#39;</span><span class="p">,</span><span class="s">&#39;avhrr_kratz&#39;</span><span class="p">,</span><span class="s">&#39;sbdart&#39;</span><span class="p">,</span><span class="s">&#39;lowtran&#39;</span><span class="p">,</span><span class="s">&#39;reptran&#39;</span><span class="p">,</span><span class="s">&#39;reptran_channel&#39;</span><span class="p">,</span><span class="s">&#39;crs&#39;</span><span class="p">,</span><span class="nb">file</span><span class="p">],</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;CK_&#39;</span><span class="p">),</span>
+				<span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.ck_reptran_arg&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">optional</span><span class="o">=</span><span class="bp">True</span><span class="p">)],</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+			<span class="n">childs</span><span class="o">=</span> <span class="p">[</span><span class="s">&#39;ck_lowtran_absorption&#39;</span><span class="p">,</span><span class="s">&#39;ck_fu_h2o_continuum&#39;</span><span class="p">],</span>
+			<span class="n">continious_update</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+		<span class="p">)</span>
+                
+                <span class="n">reptran_file</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+                        <span class="n">name</span><span class="o">=</span><span class="s">&#39;reptran_file&#39;</span><span class="p">,</span>
+                        <span class="n">group</span><span class="o">=</span><span class="s">&#39;spectral&#39;</span><span class="p">,</span>
+                        <span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;File containing representative wavelengths.&#39;</span><span class="p">,</span>
+                        <span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;reptran_file&#39;</span><span class="p">],</span>
+                        <span class="n">tokens</span><span class="o">=</span><span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.filename[FN_REPTRAN]&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">file</span><span class="p">),</span> 
+                        <span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+			<span class="n">showInGui</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+                <span class="p">)</span>
+
+		<span class="n">ck_lowtran_absorption</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;ck_lowtran_absorption&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;molecular&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Switch off absorption by individual minor trace gases.&#39;</span><span class="p">,</span> 
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;ck_lowtran_absorption&#39;</span><span class="p">],</span>
+			<span class="n">gui_inputs</span><span class="o">=</span><span class="p">(</span><span class="n">ListInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.absorption_gas&#39;</span><span class="p">,</span> <span class="n">valid_range</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;O4&#39;</span><span class="p">,</span> <span class="s">&#39;N2&#39;</span><span class="p">,</span> <span class="s">&#39;CO&#39;</span><span class="p">,</span> <span class="s">&#39;SO2&#39;</span><span class="p">,</span> <span class="s">&#39;NH3&#39;</span><span class="p">,</span> <span class="s">&#39;NO&#39;</span><span class="p">,</span> <span class="s">&#39;HNO3&#39;</span><span class="p">]),</span>
+			<span class="n">ListInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;On/Off&#39;</span><span class="p">,</span><span class="n">valid_range</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;on&#39;</span><span class="p">,</span><span class="s">&#39;off&#39;</span><span class="p">],</span> <span class="n">default</span><span class="o">=</span><span class="s">&#39;On&#39;</span><span class="p">),),</span>
+			<span class="n">tokens</span> <span class="o">=</span> <span class="p">[</span> <span class="n">addLogical</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;mol_id&#39;</span><span class="p">,</span> <span class="n">logicals</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;O4&#39;</span><span class="p">,</span><span class="s">&#39;N2&#39;</span><span class="p">,</span><span class="s">&#39;CO&#39;</span><span class="p">,</span><span class="s">&#39;SO2&#39;</span><span class="p">,</span><span class="s">&#39;NH3&#39;</span><span class="p">,</span><span class="s">&#39;NO&#39;</span><span class="p">,</span><span class="s">&#39;HNO3&#39;</span><span class="p">],</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;CK_ABS_&#39;</span> <span class="p">)</span> <span class="p">,</span>
+				<span class="n">addLogical</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.ck_abs[mol_id]&#39;</span><span class="p">,</span> <span class="n">logicals</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;on&#39;</span><span class="p">,</span><span class="s">&#39;off&#39;</span><span class="p">],</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;SWITCH_&#39;</span><span class="p">)</span> <span class="p">],</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;mol_abs_param&#39;</span><span class="p">],</span>
+			<span class="n">speaker</span><span class="o">=</span><span class="s">&quot;mol_abs_param&quot;</span><span class="p">,</span>
+			<span class="n">enable_values</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;lowtran&quot;</span><span class="p">,),</span>
+			<span class="n">non_unique</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+		<span class="p">)</span>
+
+		<span class="n">ck_fu_h2o_continuum</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;ck_fu_h2o_continuum&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;molecular&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="c">#TODO</span>
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;ck_fu_h2o_continuum&#39;</span><span class="p">],</span>
+			<span class="n">tokens</span><span class="o">=</span><span class="n">addLogical</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.ck_h2ocont&#39;</span><span class="p">,</span><span class="n">logicals</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;on&#39;</span><span class="p">,</span><span class="s">&#39;off&#39;</span><span class="p">,</span><span class="s">&#39;v2.1&#39;</span><span class="p">,</span><span class="s">&#39;v2.4&#39;</span><span class="p">],</span><span class="n">setting</span><span class="o">=</span><span class="s">&#39;CK_H2OCONT_&#39;</span><span class="p">),</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+			<span class="n">speaker</span><span class="o">=</span><span class="s">&#39;mol_abs_param&#39;</span><span class="p">,</span>
+			<span class="n">enable_values</span><span class="o">=</span><span class="p">(</span><span class="s">&#39;fu&#39;</span><span class="p">,),</span> <span class="c">#TODO:stimmt das?</span>
+			<span class="n">developer</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+		<span class="p">)</span>
+
+		<span class="n">mol_tau_file</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;mol_tau_file&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;molecular&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Location of Molecular optical depth file.&#39;</span><span class="p">,</span> 
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;mol_tau_file&#39;</span><span class="p">],</span>
+			<span class="n">gui_inputs</span><span class="o">=</span><span class="p">(</span><span class="n">ListInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;id&#39;</span><span class="p">,</span> <span class="n">valid_range</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;sca&#39;</span><span class="p">,</span> <span class="s">&#39;abs&#39;</span><span class="p">],</span> <span class="n">optional</span><span class="o">=</span><span class="bp">False</span><span class="p">),</span> <span class="n">FileInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.filename[id]&#39;</span><span class="p">),),</span>
+			<span class="n">tokens</span> <span class="o">=</span> <span class="p">[</span> <span class="n">addLogical</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;id&#39;</span><span class="p">,</span> <span class="n">logicals</span><span class="o">=</span><span class="p">[</span> <span class="s">&#39;sca&#39;</span><span class="p">,</span><span class="s">&#39;abs&#39;</span> <span class="p">],</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;FN_MOL_TAU_&#39;</span><span class="p">),</span>
+				   <span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.filename[id]&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">file</span><span class="p">)</span> <span class="p">],</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+			<span class="n">non_unique</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+		<span class="p">)</span>
+
+		<span class="n">mol_modify</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;mol_modify&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;molecular&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Modify column of molecular specie&#39;</span><span class="p">,</span> 
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;mol_modify&#39;</span><span class="p">],</span>
+			<span class="n">gui_inputs</span> <span class="o">=</span> <span class="p">(</span> <span class="n">ListInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;moltype&#39;</span><span class="p">,</span> <span class="n">valid_range</span><span class="o">=</span><span class="p">[</span> <span class="s">&#39;O3&#39;</span><span class="p">,</span><span class="s">&#39;O2&#39;</span><span class="p">,</span><span class="s">&#39;H2O&#39;</span><span class="p">,</span><span class="s">&#39;CO2&#39;</span><span class="p">,</span><span class="s">&#39;NO2&#39;</span><span class="p">,</span><span class="s">&#39;BRO&#39;</span><span class="p">,</span><span class="s">&#39;OCLO&#39;</span><span class="p">,</span><span class="s">&#39;HCHO&#39;</span><span class="p">,</span><span class="s">&#39;O4&#39;</span><span class="p">,</span><span class="s">&#39;SO2&#39;</span><span class="p">,</span><span class="s">&#39;CH4&#39;</span><span class="p">,</span><span class="s">&#39;N2O&#39;</span><span class="p">,</span><span class="s">&#39;CO&#39;</span><span class="p">,</span><span class="s">&#39;N2&#39;</span> <span class="p">],</span> <span class="n">optional</span><span class="o">=</span><span class="bp">False</span><span class="p">),</span>
+				       <span class="n">FloatInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;value&#39;</span><span class="p">,</span>  <span class="n">valid_range</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1000000.0</span><span class="p">]),</span>
+				       <span class="n">ListInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;unit&#39;</span><span class="p">,</span> <span class="n">valid_range</span><span class="o">=</span><span class="p">[</span> <span class="s">&#39;DU&#39;</span><span class="p">,</span> <span class="s">&#39;CM_2&#39;</span><span class="p">,</span> <span class="s">&#39;MM&#39;</span> <span class="p">],</span> <span class="n">optional</span><span class="o">=</span><span class="bp">False</span><span class="p">)),</span>
+			<span class="n">tokens</span> <span class="o">=</span> <span class="p">[</span> <span class="n">addLogical</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;id&#39;</span><span class="p">,</span> <span class="n">logicals</span><span class="o">=</span><span class="p">[</span> <span class="s">&#39;O3&#39;</span><span class="p">,</span><span class="s">&#39;O2&#39;</span><span class="p">,</span><span class="s">&#39;H2O&#39;</span><span class="p">,</span><span class="s">&#39;CO2&#39;</span><span class="p">,</span><span class="s">&#39;NO2&#39;</span><span class="p">,</span><span class="s">&#39;BRO&#39;</span><span class="p">,</span><span class="s">&#39;OCLO&#39;</span><span class="p">,</span><span class="s">&#39;HCHO&#39;</span><span class="p">,</span><span class="s">&#39;O4&#39;</span><span class="p">,</span><span class="s">&#39;SO2&#39;</span><span class="p">,</span><span class="s">&#39;CH4&#39;</span><span class="p">,</span><span class="s">&#39;N2O&#39;</span><span class="p">,</span><span class="s">&#39;CO&#39;</span><span class="p">,</span><span class="s">&#39;N2&#39;</span> <span class="p">],</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;MOL_&#39;</span><span class="p">),</span>
+				   <span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.atm.column[id]&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span>
+				   <span class="n">addLogical</span><span class="p">(</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.atm.unit_column[id]&#39;</span><span class="p">,</span> <span class="n">logicals</span><span class="o">=</span><span class="p">[</span> <span class="s">&#39;DU&#39;</span><span class="p">,</span> <span class="s">&#39;CM_2&#39;</span><span class="p">,</span> <span class="s">&#39;MM&#39;</span> <span class="p">],</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;MOL_UNIT_&#39;</span><span class="p">)</span> <span class="p">],</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+			<span class="n">non_unique</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+		<span class="p">)</span>
+
+		<span class="n">mixing_ratio</span> <span class="o">=</span> <span class="n">option</span><span class="p">(</span>
+			<span class="n">name</span><span class="o">=</span><span class="s">&#39;mixing_ratio&#39;</span><span class="p">,</span>
+			<span class="n">group</span><span class="o">=</span><span class="s">&#39;molecular&#39;</span><span class="p">,</span>
+			<span class="n">helpstr</span><span class="o">=</span><span class="s">&#39;Mixing ratio of molecular specie&#39;</span><span class="p">,</span> 
+			<span class="n">documentation</span><span class="o">=</span><span class="n">documentation</span><span class="p">[</span><span class="s">&#39;mixing_ratio&#39;</span><span class="p">],</span>
+			<span class="n">gui_inputs</span> <span class="o">=</span> <span class="p">(</span> <span class="n">ListInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;moltype&#39;</span><span class="p">,</span> <span class="n">valid_range</span><span class="o">=</span><span class="p">[</span> <span class="s">&#39;O2&#39;</span><span class="p">,</span><span class="s">&#39;H2O&#39;</span><span class="p">,</span><span class="s">&#39;CO2&#39;</span><span class="p">,</span><span class="s">&#39;NO2&#39;</span><span class="p">,</span><span class="s">&#39;CH4&#39;</span><span class="p">,</span><span class="s">&#39;N2O&#39;</span><span class="p">,</span><span class="s">&#39;F11&#39;</span><span class="p">,</span><span class="s">&#39;F12&#39;</span><span class="p">,</span><span class="s">&#39;F22&#39;</span> <span class="p">],</span> <span class="n">optional</span><span class="o">=</span><span class="bp">False</span><span class="p">),</span>
+				       <span class="n">FloatInput</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;value&#39;</span><span class="p">,</span>  <span class="n">valid_range</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1000000.0</span><span class="p">])),</span>
+			<span class="n">tokens</span> <span class="o">=</span> <span class="p">[</span> <span class="n">addLogical</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;id&#39;</span><span class="p">,</span> <span class="n">logicals</span><span class="o">=</span><span class="p">[</span> <span class="s">&#39;O2&#39;</span><span class="p">,</span><span class="s">&#39;H2O&#39;</span><span class="p">,</span><span class="s">&#39;CO2&#39;</span><span class="p">,</span><span class="s">&#39;NO2&#39;</span><span class="p">,</span><span class="s">&#39;CH4&#39;</span><span class="p">,</span><span class="s">&#39;N2O&#39;</span><span class="p">,</span><span class="s">&#39;F11&#39;</span><span class="p">,</span><span class="s">&#39;F12&#39;</span><span class="p">,</span><span class="s">&#39;F22&#39;</span> <span class="p">],</span> <span class="n">setting</span><span class="o">=</span><span class="s">&#39;MX_&#39;</span><span class="p">),</span>
+				   <span class="n">addToken</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;Input.mixing_ratio[id]&#39;</span><span class="p">,</span> <span class="n">datatype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">valid_range</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mf">1e6</span><span class="p">])</span> <span class="p">],</span>
+			<span class="n">parents</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;uvspec&#39;</span><span class="p">],</span>
+			<span class="n">non_unique</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+		<span class="p">)</span>
+
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">options</span> <span class="o">=</span> <span class="p">[</span><span class="n">atmosphere_file</span><span class="p">,</span> <span class="n">radiosonde</span><span class="p">,</span> <span class="n">radiosonde_levels_only</span><span class="p">,</span>
+				<span class="n">mol_file</span><span class="p">,</span> <span class="n">mixing_ratio</span><span class="p">,</span> <span class="n">mol_modify</span><span class="p">,</span>
+				<span class="n">pressure</span><span class="p">,</span>
+				<span class="n">refractive_index_file</span><span class="p">,</span>
+				<span class="n">crs_model</span><span class="p">,</span>
+				<span class="n">crs_file</span><span class="p">,</span>
+				<span class="n">rayleigh_depol</span><span class="p">,</span>
+				<span class="n">mol_abs_param</span><span class="p">,</span>
+				<span class="n">ck_lowtran_absorption</span><span class="p">,</span>
+				<span class="n">ck_fu_h2o_continuum</span><span class="p">,</span>
+				<span class="n">mol_tau_file</span><span class="p">,</span>
+                                <span class="n">reptran_file</span><span class="p">,</span>
+				<span class="p">]</span>
+</div>
+	<span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="get_molecular_documentation"><a class="viewcode-back" href="../../../mortapi/morticia.rad.html#morticia.rad.molecular_options.get_molecular_documentation">[docs]</a><span class="k">def</span> <span class="nf">get_molecular_documentation</span><span class="p">():</span>
+	<span class="k">return</span> <span class="p">{</span>
+		<span class="s">&#39;ck_lowtran_absorption&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Switch off absorption by individual minor trace gases which are currently only</span>
+<span class="s">	included when \code{mol\_abs\_param lowtran} is chosen. The syntax is</span>
+<span class="s">	\fcode{</span>
+<span class="s">	  ck\_lowtran\_absorption species on/off</span>
+<span class="s">	}</span>
+<span class="s">	where species may be one of O4, N2, CO, SO2, NH3, NO, HNO3. By default all</span>
+<span class="s">	are switched on. </span>
+<span class="s">	</span>
+<span class="s">	This option may also be used to turn on/off absorption by O4 in spectral </span>
+<span class="s">	resolution. It is on by default.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+		<span class="s">&#39;atmosphere_file&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Location of the atmospheric data file. </span>
+<span class="s">	\fcode{</span>
+<span class="s">	atmosphere\_file file</span>
+<span class="s">	}</span>
+<span class="s">	The file must have at least three columns containing the altitude,</span>
+<span class="s">	pressure, and temperature. Missing profiles are filled with 0 (e.g., if you did not specify </span>
+<span class="s">	the ozone profile, there will be no ozone absorption!), with exception of the air density which </span>
+<span class="s">	is calculated from pressure and temperature. Other trace gases may be set by \code{mol\_file}.  </span>
+<span class="s">	The columns are interpreted as follows:</span>
+<span class="s">	\begin{description}</span>
+<span class="s">	\item[1] Altitude above sea level in km</span>
+<span class="s">	\item[2] Pressure in hPa</span>
+<span class="s">	\item[3] Temperature in K</span>
+<span class="s">	\item[4] air density in cm$^{-3}$</span>
+<span class="s">	\item[5] Ozone density in cm$^{-3}$</span>
+<span class="s">	\item[6] Oxygen density in cm$^{-3}$</span>
+<span class="s">	\item[7] Water vapour density in cm$^{-3}$</span>
+<span class="s">	\item[8] CO2 density in cm$^{-3}$</span>
+<span class="s">	\item[9] NO2 density in cm$^{-3}$</span>
+<span class="s">	\end{description}</span>
+<span class="s">	The atmosphere is specified</span>
+<span class="s">	top-down, that is, the top level is the first line in the file, the bottom</span>
+<span class="s">	(surface) level the last line. All properties refer to model \emph{level} z,</span>
+<span class="s">	not to model \emph{layer}. It is important that the correct units are </span>
+<span class="s">	used, otherwise unpredictable results are guaranteed.</span>
+<span class="s">	Comments start with \code{\#}. Empty lines are ignored. Please note that there </span>
+<span class="s">	is some redundancy: For air as an ideal gas the density $\rho$, can be</span>
+<span class="s">	calculated from pressure and temperature, $\rho = p / kT$. \code{uvspec} will check </span>
+<span class="s">	if this relation is fulfilled and will stop if it is not. </span>
+<span class="s">	{\sl libRadtran} provides the six standard atmospheres by \citet{Anderson1986}:</span>
+<span class="s">	\begin{description}</span>
+<span class="s">	\item[afglt]   Tropical            (\code{tropics})                                           </span>
+<span class="s">       	\item[afglms]  Midlatitude Summer  (\code{midlatitude\_summer})</span>
+<span class="s">	\item[afglmw]  Midlatitude Winter  (\code{midlatitude\_winter})</span>
+<span class="s">	\item[afglss]  Subarctic Summer    (\code{subarctic\_summer})</span>
+<span class="s">	\item[afglsw]  Subarctic Winter    (\code{subarctic\_winter})</span>
+<span class="s">	\item[afglus]  U.S. Standard       (\code{US-standard})                   </span>
+<span class="s">	\end{description}</span>
+<span class="s">	which may be chosen by for example</span>
+<span class="s">	\fcode{</span>
+<span class="s">	atmosphere\_file tropics</span>
+<span class="s">	}</span>
+<span class="s">	or by specifying the full file name. These atmosphere files are found in </span>
+<span class="s">	\file{data/atmmod}.</span>
+<span class="s">	If no \code{atmosphere\_file} is defined, {\sl uvspec} will automatically select one. </span>
+<span class="s">	If the information  \code{time}, \code{latitude} and \code{longitude} are provided in </span>
+<span class="s">	the input file {\sl uvspec} will choose from the first 5 files, otherwise it takes </span>
+<span class="s">	the U.S. Standard atmosphere.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;radiosonde&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	This option allows to change the temperature and pressure profile, and optionally to </span>
+<span class="s">	specify one or more density profiles. The entry in the input file looks like this:</span>
+<span class="s">	\fcode{</span>
+<span class="s">	radiosonde filename [gas\_species] [unit] ...</span>
+<span class="s">	}</span>
+<span class="s">	Currently the following gas\_species are included: ozone (O3), nitrogen dioxide (NO2), </span>
+<span class="s">	water vapor (H2O), bromine oxide (BRO), chlorine dioxide (OCLO), formaldehyde (HCHO), </span>
+<span class="s">	carbon dioxide (CO2), sulphur dioxide (SO2), and the oxygen dimer (O4). </span>
+<span class="s">	Each gas species is identified by its abbrevations given in parentheses above.</span>
+<span class="s">	Unit is an optional argument to defines the unit of the density. The profiles can</span>
+<span class="s">	be given in particles per cm$^3$ (CM-3), in particles per m$^3$ (M-3), as volume </span>
+<span class="s">	mixing ratio (VMR), as mass mixing ratio in kg/kg (MMR), or as relative humidity </span>
+<span class="s">	(RH) (only for water). The default unit is RH for water vapour, </span>
+<span class="s">	MMR for ozone, and CM3 for all other gases.</span>
+<span class="s">	The radiosonde file must have (2 + number of gases) columns:</span>
+<span class="s">	\begin{description}</span>
+<span class="s">	\item[1] pressure in hPa</span>
+<span class="s">	\item[2] temperature in Kelvin</span>
+<span class="s">	\item[3, 4, ...] density of trace gas in the specified unit</span>
+<span class="s">	\end{description}</span>
+<span class="s">	A new z-grid will be calculated, starting at \code{altitude} and assuming a linear temperature variation</span>
+<span class="s">	between levels. The air density will be recalculated according to the ideal gas law, and the density of </span>
+<span class="s">	the well mixed gases O2 and CO2 will be scaled accordingly.</span>
+<span class="s">	The atmospheric data above the radiosonde data is taken from the \code{atmosphere\_file} level by level, starting </span>
+<span class="s">	at the first pressure level above the radiosonde data. The z-grid of the \code{atmosphere\_file} in </span>
+<span class="s">	this height region is shifted accordingly.</span>
+<span class="s">	Also if the density in the radiosonde file is specified as -1 at a level, </span>
+<span class="s">	the value from the \code{atmosphere\_file} is used.</span>
+<span class="s">	Possible calls are</span>
+<span class="s">	\fcode{</span>
+<span class="s">	radiosonde ../examples/radiosonde.dat</span>
+<span class="s">	}</span>
+<span class="s">	just in order to change the temperature and pressure profile, or</span>
+<span class="s">	\fcode{</span>
+<span class="s">	radiosonde ../examples/radiosonde2.dat H2O RH O3 MMR NO2</span>
+<span class="s">	}</span>
+<span class="s">	where water vapour density will be given as relative humidity, ozone as mass mixing ratio, </span>
+<span class="s">	and NO2 in cm$^{-3}$ (default).</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;radiosonde_levels_only&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	The atmosphere considered in the simulation has the same height range as the data in </span>
+<span class="s">	the \code{radiosonde}-file. No further levels are added above those.</span>
+<span class="s">	This option has only an effect in combination with \code{radiosonde}.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;mol_file&#39;</span> <span class="p">:</span>	<span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Specify density profiles (or matrix, see below) of various trace gases to be included in the radiative </span>
+<span class="s">	transfer calculation.</span>
+<span class="s">	\fcode{</span>
+<span class="s">	mol\_file gas\_species filename [unit]</span>
+<span class="s">	}</span>
+<span class="s">	At the moment following \code{gas\_species} are included: ozone (O3), nitrogen dioxide (NO2), water vapor (H2O),</span>
+<span class="s">	bromine oxide (BRO), chlorine dioxide (OCLO), formaldehyde (HCHO), carbon dioxide (CO2), </span>
+<span class="s">	sulphur dioxide (SO2), oxygen (O2), the oxygen dimer (O4), methane (CH4), nitrous oxide (N20), </span>
+<span class="s">        carbon monoxide (CO), and nitrogen (N2). </span>
+<span class="s">	The gas species is identified </span>
+<span class="s">	by their abbrevations given in the parenthesis above.</span>
+
+<span class="s">	The model expects a density file with two columns:</span>
+<span class="s">	\begin{description}</span>
+<span class="s">	\item[1] Altitude above sea level in km.</span>
+<span class="s">	\item[2] The density of trace gas [in the specified unit]</span>
+<span class="s">	\end{description}</span>
+<span class="s">	The altitude grid may be different from that in \code{atmosphere\_file}. All densities inside the range </span>
+<span class="s">	of the \code{mol\_file} are replaced. For all other altitudes the values from the </span>
+<span class="s">	\code{atmosphere\_file} are used. If the density is specified as -1 at a level, </span>
+<span class="s">	the value from \code{atmosphere\_file} is used.</span>
+<span class="s">        Altitude ranges not covered by the \code{atmosphere\_file} are ignored.</span>
+
+<span class="s">	\code{unit} is an optional argument to define the unit of the density. The profiles can</span>
+<span class="s">	be given in particles per cm$^{3}$ (\code{cm\_3}), in particles per m$^{3}$ (\code{m\_3}), as volume mixing ratio (\code{vmr}), as mass mixing </span>
+<span class="s">	ratio (\code{mmr}), or as relative humidity (\code{rh}) (only for water). The default for \code{unit} is cm$^{-3}$.</span>
+<span class="s">	</span>
+<span class="s">	To scale the profile to a total column value use \code{mol\_modify}.</span>
+<span class="s">	</span>
+<span class="s">	For airmass factor calculations it is for some species necessary to account for the </span>
+<span class="s">	variation of the profile with sza. This may be accomplished by specifying a \code{mol\_file} </span>
+<span class="s">	in the following format:</span>
+<span class="s">	\fcode{</span>
+<span class="s">	0.0       SZA1      SZA2 ...\\</span>
+<span class="s">	z(1)    dens(1,1)    ...\\</span>
+<span class="s">	z(2)      .           .\\</span>
+<span class="s">	 .        .           .</span>
+<span class="s">	}</span>
+<span class="s">	where z(i) are the altitude levels above sea level in km, SZA is the solar zenith </span>
+<span class="s">	angle in degrees, and dens is the density [in the specified unit] of the trace gases as </span>
+<span class="s">	function of solar zenith angle and altitude. </span>
+<span class="s">	The matrix may only be specified for one species. It may however be combined with profiles</span>
+<span class="s">	of other species. </span>
+<span class="s">	A density matrix can only be used in connection with \code{rte\_solver sdisort}!</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span> 
+
+		<span class="s">&#39;pressure&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	The surface pressure (at the user-defined \code{altitude}) in hPa. </span>
+<span class="s">	\fcode{</span>
+<span class="s">	pressure value</span>
+<span class="s">	}</span>
+<span class="s">	The pressure profile as well as air, O2 and CO2 density profiles </span>
+<span class="s">	are scaled accordingly.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;refractive_index_file&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;crs_model&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Choose between various cross sections.</span>
+<span class="s">	\fcode{</span>
+<span class="s">	crs\_model species crs</span>
+<span class="s">	}</span>
+<span class="s">	Following \code{species} are included:</span>
+<span class="s">	\begin{description}</span>
+
+<span class="s">	\parameter{rayleigh} Specify the Rayleigh cross section.</span>
+<span class="s">	Choose between the following Rayleigh scattering cross sections (\code{crs}):</span>
+<span class="s">	\begin{description}</span>
+<span class="s">	\item[Bodhaine]		\citet{Bodhaine1999} Rayleigh scattering cross section using their Eqs. 22-23.</span>
+<span class="s">	\item[Bodhaine29]	\citet{Bodhaine1999} Rayleigh scattering cross section using their Eq. 29.</span>
+<span class="s">	\item[Nicolet] 		\citet{Nicolet1984} Rayleigh scattering cross section.</span>
+<span class="s">	\item[Penndorf]		\citet{Penndorf1957} Rayleigh scattering cross section.</span>
+<span class="s">	\end{description}</span>
+<span class="s">	\citet{Bodhaine1999} is default.</span>
+
+<span class="s">	\parameter{o3} Choose ozone cross section. </span>
+<span class="s">	\code{crs} can be one of the following:</span>
+<span class="s">	\begin{description}</span>
+<span class="s">	\item[Bass\_and\_Paur]	\citet{Bass1985} ozone cross section.</span>
+<span class="s">	\item[Molina] 		\citet{Molina1986} ozone cross section.</span>
+<span class="s">	\item[Daumont]		Ozone cross section by \citet{Daumont1992}, \citet{Malicet1995}.</span>
+<span class="s">	\item[Bogumil]		Ozone cross section from \citet{Bogumil2003}.</span>
+<span class="s">	\end{description}</span>
+<span class="s">	\citet{Molina1986} is default.</span>
+
+<span class="s">	\parameter{no2} Choose between the various no2 cross sections.</span>
+<span class="s">	\code{crs} is one of:</span>
+<span class="s">	\begin{description}</span>
+<span class="s">	\item[Burrows]		\citet{Burrows1998} no2 cross section.</span>
+<span class="s">	\item[Bogumil]		no2 cross section from \citet{Bogumil2003}.</span>
+<span class="s">	\end{description}</span>
+<span class="s">	\citet{Burrows1998} is default.</span>
+
+<span class="s">	\end{description}</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;crs_file&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	May be used to specify cross sections of O3, O2, H2O, CO2, NO2, BRO, OCLO, HCHO, </span>
+<span class="s">        O4, SO2, CH4, N2O, CO, or N2 to be used instead of those supplied with </span>
+<span class="s">	{\sl libRadtran}. No temperature dependence may be specified. Use as follows:</span>
+<span class="s">	\fcode{</span>
+<span class="s">	crs\_file NO2 ../examples/no2\_crs.dat</span>
+<span class="s">	}</span>
+<span class="s">	The species, e.g. \code{NO2}, must be specified to identify the</span>
+<span class="s">	species for which the cross section applies.</span>
+<span class="s">	The cross section file has two columns:</span>
+<span class="s">	\begin{description}</span>
+<span class="s">	\item[1] wavelength (nm)</span>
+<span class="s">	\item[2] cross section (cm$^2$)</span>
+<span class="s">	\end{description}</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;rh_file&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	File that defines a profile of relative humidity. </span>
+<span class="s">	\fcode{</span>
+<span class="s">	rh\_file file</span>
+<span class="s">	}</span>
+<span class="s">	If specified, the water vapour </span>
+<span class="s">	profile in \code{atmosphere\_file} is over-written. If -1 is specified at a level, the value </span>
+<span class="s">	from \code{atmosphere\_file} is used. </span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;ck_fu_h2o_continuum&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Undocumented option to switch the H2O continuum on or off or select a specific </span>
+<span class="s">	version of the continuum.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;mixing_ratio&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Mixing ratio in ppm.</span>
+<span class="s">	\fcode{</span>
+<span class="s">	mixing\_ratio species value</span>
+<span class="s">	}</span>
+<span class="s">	\code{species} can be one of the following:</span>
+<span class="s">	\begin{description}</span>
+<span class="s">	\item[O2] The mixing ratio of O2 in ppm. Scale the profile so that the mixing</span>
+<span class="s">        ratio at the user-defined \code{altitude} assumes the specified value.</span>
+<span class="s">	\item[H2O] The mixing ratio of H2O in ppm. Scale the profile so that the mixing</span>
+<span class="s">        ratio at the user-define \code{altitude} assumes the specified value.</span>
+<span class="s">        \item[CO2] The mixing ratio of CO2 in ppm. Scale the profile so that the mixing</span>
+<span class="s">        ratio at the user-defined \code{altitude} assumes the specified value.</span>
+<span class="s">	\item[NO2] The mixing ratio of NO2 in ppm. Scale the profile so that the mixing</span>
+<span class="s">        ratio at the user-defined \code{altitude} assumes the specified value.</span>
+<span class="s">        \item[CH4] The mixing ratio of CH4 in ppm (default: 1.6 ppm). </span>
+<span class="s">	\item[N2O] The mixing ratio of N2O in ppm (default: 0.28 ppm).</span>
+<span class="s">	\item[F11] The mixing ratio of F11 in ppm (default: 0.000268 ppm).</span>
+<span class="s">	\item[F12] The mixing ratio of F12 in ppm (default: 0.000503 ppm).</span>
+<span class="s">	\item[F22] The mixing ratio of F22 in ppm (default: 0.000105 ppm).</span>
+<span class="s">	\end{description}</span>
+<span class="s">        The \code{mixing_ratio} of F11, F12, and F22 and the default values for CH4 and N2O are ignored in case of \code{mol_abs_param reptran}.</span>
+
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;mol_modify&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Set the total column of a density profile. The column is integrated between the </span>
+<span class="s">	user-defined \code{altitude} and TOA (top of atmosphere). The syntax is</span>
+<span class="s">	\fcode{</span>
+<span class="s">	mol\_modify species column unit</span>
+<span class="s">	}</span>
+<span class="s">	where \code{species} is one of O3, O2, H2O, CO2, NO2, BRO, OCLO, HCHO, O4, SO2, </span>
+<span class="s">        CH4, N2O, CO, or N2, see also \code{mol\_file}.</span>
+<span class="s">	The second argument is the total column value, and the third argument is the unit, </span>
+<span class="s">	in which the column is given. The unit can be DU (Dobson units), CM\_2 (molecules/cm$^2$) or MM.</span>
+
+<span class="s">	Please note that the unit MM is only valid for species H2O and specifies the precipitable water </span>
+<span class="s">	in kg / m2 (which is approximately 1mm).The water vapor profile is scaled accordingly. The precipitable water </span>
+<span class="s">        is integrated from the user-defined \code{altitude} to TOA (top of atmosphere).</span>
+
+<span class="s">	The default units are DU for O3, and CM\_2 for all other gases. It is possible to have</span>
+<span class="s">	several \code{mol\_modify} commands in the input file (maximum one per species). The following sets</span>
+<span class="s">	the NO$_2$ total column to 1.2 DU.</span>
+<span class="s">	\fcode{</span>
+<span class="s">	mol\_modify NO2 1.2 DU</span>
+<span class="s">	}</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;rayleigh_depol&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Rayleigh depolarization factor.</span>
+<span class="s">	\fcode{</span>
+<span class="s">	rayleigh\_depol value</span>
+<span class="s">	}</span>
+<span class="s">	The Rayleigh scattering phase function is</span>
+<span class="s">	$p(\mu) = a + b  \mu^2$ where $a = 1.5{(1+\texttt{depol})/(2+\texttt{depol})}$ and  </span>
+<span class="s">	$b = 1.5{(1-\texttt{depol})/(2+\texttt{depol})}$. By default the depolarization is calculated</span>
+<span class="s">	using the expressions from \citet{Bodhaine1999}.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;mol_abs_param&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	To calculate integrated shortwave or longwave irradiance, or to simulate </span>
+<span class="s">	satellite instrument channels, use</span>
+<span class="s">	\fcode{</span>
+<span class="s">	   mol\_abs\_param type</span>
+<span class="s">	}</span>
+<span class="s">	to choose between the following types of schemes:</span>
+<span class="s">	\begin{description}</span>
+<span class="s">        \item[reptran]</span>
+<span class="s">        Representative wavelengths parameterization adapted for spectral bands.</span>
+<span class="s">        This parameterization is used by default if no \code{mol\_abs\_param} option is given </span>
+<span class="s">        in the {\sl uvspec} input file.</span>
+<span class="s">        Different band widths may be selected by</span>
+<span class="s">        \fcode{</span>
+<span class="s">          mol\_abs\_param reptran [fine|medium|coarse]</span>
+<span class="s">        } </span>
+<span class="s">        (fine: 1cm$^{-1}$; medium: 5cm$^{-1}$; coarse: 15cm$^{-1}$; coarse is default).</span>
+<span class="s">        The data files for coarse resolution are included in the libRadtran package.</span>
+<span class="s">        The files required for fine and medium resolution can be downloaded from the libRadtran homepage.</span>
+<span class="s">        Absorption data is mainly based on HITRAN 2004. Absorption by H2O, CO2, O3, N2O, CO, CH4, O2, N2, and NO2 </span>
+<span class="s">        is considered, and absorption by all other gases is zero. </span>
+<span class="s">        By default volume mixing ratios of N2O, CO, CH4, and N2 (those are not in the </span>
+<span class="s">        \code{atmosphere\_file}) from the US standard atmosphere are applied. </span>
+<span class="s">        Use \code{mol\_file} or \code{mol\_modify} to change the gas profiles.</span>
+<span class="s">        In case of radiative transfer problems with solar source, the extraterrestrial spectrum from</span>
+<span class="s">        Kurudz is applied by default. This parameterization is described in detail by \citet{gasteiger2014}.</span>
+<span class="s">        \item[reptran\_channel]</span>
+<span class="s">        Representative wavelengths parameterization for satellite channels. Usage </span>
+<span class="s">        \fcode{</span>
+<span class="s">          mol\_abs\_param reptran\_channel channel\_name</span>
+<span class="s">        }</span>
+<span class="s">        Channel-integrated quantities are obtained using \code{output\_process per\_band}.</span>
+<span class="s">        The file \file{data/correlated\_k/reptran/channel\_list.txt} provides a list of available channels; </span>
+<span class="s">        more information on the channels is provided in \file{data/filter/}. </span>
+<span class="s">        See \citet{gasteiger2014} for details about the approach.</span>
+<span class="s">        \item[crs]</span>
+<span class="s">        Switch off spectral parameterizations. Only molecular absorption cross sections from </span>
+<span class="s">        \code{crs_file} (including the default ones) are considered.</span>
+<span class="s">	\item[kato] </span>
+<span class="s">	\citet{Kato1999b} correlated-k distribution, shortwave; based on HITRAN 96. Please note that the </span>
+<span class="s">	bands above 2.5 micrometer are not very reliable which, however, this has only little impact</span>
+<span class="s">	on integrated shortwave radiation.</span>
+<span class="s">	\item[kato2] </span>
+<span class="s">	\citet{Kato1999b}, shortwave; optimized version (Seiji Kato, personal communication, 2003);</span>
+<span class="s">	please note that \code{kato2} only has 148 subbands (that is, calls to the \code{rte\_solver}) </span>
+<span class="s">	compared to 575 for \code{kato} which translates to a increase in computational speed by </span>
+<span class="s">	up to a factor of 4 with only little increase in uncertainty. The absorption data are</span>
+<span class="s">	based on HITRAN 2000. Please note that the bands above 2.5 micrometer are not very reliable which, </span>
+<span class="s">	however, this has only little impact on integrated shortwave radiation.</span>
+<span class="s">	\item[kato2.96]</span>
+<span class="s">	\citet{Kato1999b}, shortwave; optimized version (Seiji Kato, personal communication, 2003);</span>
+<span class="s">	similar to \code{kato2} but based on HITRAN96. Please note that the bands above 2.5 micrometer </span>
+<span class="s">	are not very reliable which, however, has only little impact on integrated shortwave radiation.</span>
+<span class="s">	\item[fu]</span>
+<span class="s">	\citet{fu92,fu93}, shortwave and longwave; fast parameterization, developed for climate models.</span>
+<span class="s">	\item[avhrr\_kratz] </span>
+<span class="s">	\citet{Kratz1995}, AVHRR instrument channels</span>
+<span class="s">	\item[lowtran]</span>
+<span class="s">	Gas absorption parameterization from LOWTRAN; code adopted from SBDART \citep{Ricchiazzi1998b}; </span>
+<span class="s">	please see the section on &quot;Spectral resolution&quot;.</span>
+<span class="s">	\item[sbdart]</span>
+<span class="s">	Identical to LOWTRAN.</span>
+<span class="s">	\end{description}</span>
+<span class="s">	If \code{mol\_abs\_param} kato/kato2/kato2.96/fu/avhrr\_kratz is specified, the extraterrestrial </span>
+<span class="s">	flux is taken from</span>
+<span class="s">	internally defined files specific for each parameterization, not </span>
+<span class="s">	from \code{source solar file}. The output is the integrated irradiance for </span>
+<span class="s">	each band. To get e.g. integrated shortwave irradiance, simply add all </span>
+<span class="s">	bands of the \citet{Kato1999b} or the \citet{fu92,fu93}</span>
+<span class="s">	parameterization. The five AVHRR channels are weighted sums of the</span>
+<span class="s">	libRadtran output. Examples how to integrate the output in the</span>
+<span class="s">	\code{avhrr\_kratz} case are included in the {\sl uvspec} self check</span>
+<span class="s">	which is initiated with  </span>
+<span class="s">	\code{make check}.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+                 <span class="s">&#39;reptran_file&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">        Location of the representative wavelengths file. </span>
+<span class="s">        \fcode{</span>
+<span class="s">          reptran\_file file</span>
+<span class="s">        }</span>
+<span class="s">        This option is useful together with &#39;mol\_abs\_param reptran&#39; and &#39;mol\_abs\_param reptran\_channel&#39; </span>
+<span class="s">        options, if you want to use your own representative wavelengths parameterization.</span>
+<span class="s">        &#39;&#39;&#39;</span><span class="p">,</span>
+
+		<span class="s">&#39;mol_tau_file&#39;</span> <span class="p">:</span> <span class="s">r&#39;&#39;&#39;</span>
+<span class="s">	Location of molecular scattering or absorption optical depth file.</span>
+<span class="s">	\fcode{</span>
+<span class="s">	mol\_tau\_file sca/abs filename</span>
+<span class="s">	}</span>
+<span class="s">	\begin{description}</span>
+<span class="s">	\parameter{sca}	Usually, the Rayleigh scattering</span>
+<span class="s">	cross section is calculated from the air pressure provided in \code{atmosphere\_file}</span>
+<span class="s">	(scaled with \code{pressure}). Use this parameter only if you really want to specify</span>
+<span class="s">	the optical depth directly (e.g. for a model intercomparison). The</span>
+<span class="s">	optical thickness profile may be either monochromatic or spectral. </span>
+<span class="s">	\parameter{abs} Usually, molecular absorption</span>
+<span class="s">	is calculated from trace gas concentrations provided in \code{atmosphere\_file}</span>
+<span class="s">	(scaled with \code{mol\_modify O3}, etc.). Use this option only if you want to specify</span>
+<span class="s">	the optical depth directly (e.g. for a model intercomparison) or for a line-by-line</span>
+<span class="s">	calculation. If a spectral \code{mol\_tau\_file} is specified, the wavelength </span>
+<span class="s">	grid defined there is used as the internal wavelength grid for the radiative transfer</span>
+<span class="s">	calculation, if not defined otherwise with \code{wavelength\_grid\_file}.</span>
+<span class="s">	\end{description}</span>
+
+<span class="s">	The file can be either of the following three formats:</span>
+<span class="s">	\begin{description}</span>
+<span class="s">	\parameter{Monochromatic} </span>
+<span class="s">	Column 1 is the altitude in km </span>
+<span class="s">	%AK: This is probably old stuff prior to redistribute</span>
+<span class="s">	%where the altitude grid must be exactly equal </span>
+<span class="s">	%to the altitude grid specified in \code{atmosphere\_file}. </span>
+<span class="s">	Column 2 is the absorption optical depth of each layer.</span>
+<span class="s">	\parameter{Spectral, ASCII}</span>
+<span class="s">	The first line contains the level altitudes in decreasing order; the following lines </span>
+<span class="s">	contain the wavelength [nm] in the first column and then the absorption optical depths</span>
+<span class="s">	of each layer. </span>
+<span class="s">	\parameter{Spectral,  netcdf}</span>
+<span class="s">	An example is available at the libRadtran homepage, </span>
+<span class="s">	the file \file{UVSPEC.O2A.afglms.cdf} is a line-by-line spectrum of the oxygen A-Band </span>
+<span class="s">	around 760nm, calculated for the mid-latitude summer </span>
+<span class="s">	atmosphere. The advantage of</span>
+<span class="s">	netcdf compared to ASCII is that it is much faster to read, and that the file </span>
+<span class="s">	is a self-contained, including data and a description of the variables and arrays.</span>
+<span class="s">	It is therefore particularly useful for line-by-line calculations where usually </span>
+<span class="s">	many spectral data points are involved. </span>
+<span class="s">	%netcdf is a common platform independent format; the description, a library to read and </span>
+<span class="s">	%write netcdf including some tools to generate netcdf is available at </span>
+<span class="s">	%http://www.unidata.ucar.edu/packages/netcdf/. A \code{mol\_tau\_file abs} must obey </span>
+<span class="s">	</span><span class="si">%c</span><span class="s">ertain rules; </span>
+<span class="s">	\end{description}</span>
+<span class="s">	Comments start with \code{\#}. Empty lines are ignored.</span>
+<span class="s">		&#39;&#39;&#39;</span><span class="p">,</span>
+
+<span class="p">}</span></div>
+</pre></div>
+
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, D Griffith, A Ramkilowan.
+    </p>
+  </div>
+
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
